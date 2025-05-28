@@ -9,9 +9,18 @@
 
 #include "Vector4O.h"
 
+#include <vector>
+
 class Renderer
 {
 private:
+	struct Texture {
+		std::wstring filename;
+		ID3D11ShaderResourceView* shader_resource_view;
+		int width;
+		int height;
+	};
+
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
 	IDXGISwapChain* m_pSwapChain;
@@ -32,6 +41,15 @@ private:
 	ID3D11SamplerState* m_pSamplerState = NULL;
 
 
+	ID3D11Buffer* m_pWorldBuffer = NULL;
+	ID3D11Buffer* m_pViewBuffer = NULL;
+	ID3D11Buffer* m_pProjectionBuffer = NULL;
+	ID3D11Buffer* m_pMaterialBuffer = NULL;
+	ID3D11Buffer* m_pLightBuffer = NULL;
+	ID3D11Buffer* m_pCameraBuffer = NULL;
+	ID3D11Buffer* m_pParameterBuffer = NULL;
+
+
 	Vector4O m_ClientSize{ SCREEN_WIDTH_DEFAULT,SCREEN_HEIGHT_DEFAULT };
 
 	HWND m_Handle;
@@ -44,6 +62,11 @@ private:
 	std::string m_CurrentPixelShaderKey;
 
 	ID3D11Buffer* m_pConstantBuffer = NULL;
+
+
+	int m_TextureCount = 0;
+	std::vector<Texture> m_Textures;
+
 
 	/// @brief レンダーターゲットビューの生成
 	void CreateRenderTargetView();
@@ -86,16 +109,38 @@ public:
 	std::string CreateVertexShader(std::string filename, std::string key);
 	std::string CreatePixelShader(std::string filename, std::string key);
 	ID3D11InputLayout* CreateInputLayout(unsigned char* pByteCode, long byteCodeLength);
+	ID3D11InputLayout* GetInputLayout() { return m_pInputLayout; }
 	void CreateConstantBuffer();
+
+	ID3D11ShaderResourceView* TextureLoad(const std::wstring& filename);
+	ID3D11ShaderResourceView* GetTexture(int index);
+	int GetTextureWidth(int index);
+	int GetTextureHeight(int index);
 
 	void SetVertexShader(std::string key);
 	void SetPixelShader(std::string key);
 
-	void SetConstantBuffer(const ConstantBuffer* matrix);
+	void SetConstantBuffer(const CONSTANTBUFFER* matrix);
 
 	void SetRenderTargetView(ID3D11RenderTargetView* renderTargetView)
 	{
 		m_pDeviceContext->OMSetRenderTargets(1, &renderTargetView, m_pDepthStencilView);
 	}
+
+	void SetShaderResourceView(ID3D11ShaderResourceView* shaderResourceView, UINT slot = 0)
+	{
+		m_pDeviceContext->PSSetShaderResources(slot, 1, &shaderResourceView);
+	}
+
+	void SetWorldViewProjection2D();
+	void ResetWorldViewProjection3D();
+	void SetWorldMatrix(XMMATRIX world);
+	void SetViewMatrix(XMMATRIX view);
+	void SetProjectionMatrix(XMMATRIX projection);
+	void SetMaterial(MATERIAL material);
+	void SetLight(LIGHT light);
+	void SetCamera(Vector4O position);
+	void SetParameter(Vector4O position);
+
 };
 

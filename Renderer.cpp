@@ -316,7 +316,7 @@ ID3D11InputLayout* Renderer::CreateInputLayout(unsigned char* pByteCode, long by
 void Renderer::CreateConstantBuffer()
 {
 	D3D11_BUFFER_DESC hBufferDesc = {};
-	hBufferDesc.ByteWidth = sizeof(ConstantBuffer);
+	hBufferDesc.ByteWidth = sizeof(CONSTANTBUFFER);
 	hBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	hBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	hBufferDesc.CPUAccessFlags = 0;
@@ -325,7 +325,98 @@ void Renderer::CreateConstantBuffer()
 
 	//定?バッファ
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pConstantBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 
+	//================================================
+// WorldViewProjection行列用定数バッファ生成
+	//行列オブジェクトをシェーダーへ接続　b0をつかう
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pWorldBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pWorldBuffer);
+
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pViewBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pViewBuffer);
+
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pProjectionBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pProjectionBuffer);
+
+	//マテリアル用定数バッファ生成
+	hBufferDesc.ByteWidth = sizeof(MATERIAL);
+	hBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	hBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	hBufferDesc.CPUAccessFlags = 0;
+	hBufferDesc.MiscFlags = 0;
+	hBufferDesc.StructureByteStride = sizeof(float);
+	//マテリアルオブジェクトをシェーダーへ接続　b1を使う
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pMaterialBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pMaterialBuffer);
+
+	hBufferDesc.ByteWidth = sizeof(LIGHT);
+
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pLightBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(4, 1, &m_pLightBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(4, 1, &m_pLightBuffer);
+
+	hBufferDesc.ByteWidth = sizeof(XMFLOAT4);
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pCameraBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(5, 1, &m_pCameraBuffer);
+
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pParameterBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(6, 1, &m_pParameterBuffer);
+
+	MATERIAL material;
+	ZeroMemory(&material, sizeof(material));
+	material.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	SetMaterial(material);
+
+}
+
+ID3D11ShaderResourceView* Renderer::TextureLoad(const std::wstring& filename)
+{
+	// すでに同名のテクスチャが読み込まれていないか確認する
+	{
+		int count = 0;
+		for (auto it : m_Textures) {
+			if (it.filename == filename) {
+				return it.shader_resource_view; // すでに読み込まれていたのでidをわたす
+			}
+			count++;
+		}
+
+	}
+	// テクスチャ読み込み
+	TexMetadata metadata;
+	ScratchImage image;
+	LoadFromWICFile(filename.c_str(), WIC_FLAGS_NONE, &metadata, image);
+
+	Texture texture;
+	CreateShaderResourceView(m_pDevice, image.GetImages(), image.GetImageCount(), metadata, &texture.shader_resource_view);
+	texture.width = (int)metadata.width;
+	texture.height = (int)metadata.height;
+
+	if (!texture.shader_resource_view) {
+		MessageBoxW(NULL, L"ファイルが読み込めなかった", filename.c_str(), MB_ICONEXCLAMATION | MB_OK);
+		return nullptr;
+	}
+
+	m_Textures.push_back(texture);
+
+	return texture.shader_resource_view; // 新しく読み込んだテクスチャのIDを返す
+}
+
+ID3D11ShaderResourceView* Renderer::GetTexture(int index)
+{
+	return m_Textures[index].shader_resource_view;
+}
+
+int Renderer::GetTextureWidth(int index)
+{
+	return m_Textures[index].width;
+}
+
+int Renderer::GetTextureHeight(int index)
+{
+	return m_Textures[index].height;
 }
 
 void Renderer::SetVertexShader(std::string key)
@@ -342,7 +433,7 @@ void Renderer::SetPixelShader(std::string key)
 	m_CurrentPixelShaderKey = key;
 }
 
-void Renderer::SetConstantBuffer(const ConstantBuffer* matrix)
+void Renderer::SetConstantBuffer(const CONSTANTBUFFER* matrix)
 {
 	m_pDeviceContext->UpdateSubresource(
 		m_pConstantBuffer,
@@ -351,5 +442,95 @@ void Renderer::SetConstantBuffer(const ConstantBuffer* matrix)
 		matrix,
 		0,
 		0);
-	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+
+
 }
+
+void Renderer::SetWorldViewProjection2D() {
+	//2D用正射影行列をセット
+	XMMATRIX projectionMatrix = XMMatrixOrthographicOffCenterLH(0.0f, m_ClientSize.x, m_ClientSize.y, 0.0f, 0.0f, 1.0f);
+	SetProjectionMatrix(projectionMatrix);
+	//行列を単位行列にして初期化
+	SetViewMatrix(XMMatrixIdentity());
+	SetWorldMatrix(XMMatrixIdentity());
+
+}
+
+void Renderer::ResetWorldViewProjection3D()
+{
+
+}
+
+void Renderer::SetWorldMatrix(XMMATRIX world)
+{
+	XMMATRIX worldMatrix;
+	worldMatrix = XMMatrixTranspose(world);
+	XMFLOAT4X4 matrix;
+	XMStoreFloat4x4(&matrix, worldMatrix);
+	m_pDeviceContext->UpdateSubresource(
+		m_pWorldBuffer,
+		0,
+		NULL,
+		&matrix,
+		0,
+		0);
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pWorldBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pWorldBuffer);
+}
+
+void Renderer::SetViewMatrix(XMMATRIX view)
+{
+	XMMATRIX viewMatrix;
+	viewMatrix = XMMatrixTranspose(view);
+	XMFLOAT4X4 matrix;
+	XMStoreFloat4x4(&matrix, viewMatrix);
+	m_pDeviceContext->UpdateSubresource(
+		m_pViewBuffer,
+		0,
+		NULL,
+		&matrix,
+		0,
+		0);
+	m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pViewBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pViewBuffer);
+}
+
+void Renderer::SetProjectionMatrix(XMMATRIX projection)
+{
+	XMMATRIX projectionMatrix;
+	projectionMatrix = XMMatrixTranspose(projection);
+	XMFLOAT4X4 matrix;
+	XMStoreFloat4x4(&matrix, projectionMatrix);
+	m_pDeviceContext->UpdateSubresource(
+		m_pProjectionBuffer,
+		0,
+		NULL,
+		&matrix,
+		0,
+		0);
+	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pProjectionBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(2, 1, &m_pProjectionBuffer);
+}
+
+void Renderer::SetMaterial(MATERIAL material)
+{
+	GetDeviceContext()->UpdateSubresource(m_pMaterialBuffer, 0, NULL, &material, 0, 0);
+	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pMaterialBuffer);
+}
+
+void Renderer::SetLight(LIGHT light)
+{
+	GetDeviceContext()->UpdateSubresource(m_pLightBuffer, 0, NULL, &light, 0, 0);
+}
+
+void Renderer::SetCamera(Vector4O position)
+{
+	XMFLOAT4	temp = XMFLOAT4(position.x, position.y, position.z, 0.0f);
+	GetDeviceContext()->UpdateSubresource(m_pCameraBuffer, 0, NULL, &temp, 0, 0);
+}
+
+void Renderer::SetParameter(Vector4O position)
+{
+	GetDeviceContext()->UpdateSubresource(m_pCameraBuffer, 0, NULL, &position, 0, 0);
+}
+

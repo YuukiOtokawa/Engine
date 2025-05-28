@@ -5,7 +5,7 @@
 
 #include "FrameWork.h"
 
-class Component_Camera :
+class Camera :
     public Component
 {
 private:
@@ -15,18 +15,27 @@ private:
 
     float m_Fov = 90.0f;
 
-    XMMATRIX m_ProjectionMatrix;
-	XMMATRIX m_ViewMatrix;
+    XMMATRIX m_Projection;
+	XMMATRIX m_View;
+
+	float m_Near = 0.1f;
+    float m_Far = 1000.0f;
 
 	Vector4O m_Up = Vector4O::Up();
 
 public:
-    Component_Camera() = default;
+    Camera();
 
-	XMMATRIX GetProjectionMatrix() const { return m_ProjectionMatrix; }
-	XMMATRIX GetViewMatrix() const { return m_ViewMatrix; }
+	XMMATRIX GetProjection() const { return m_Projection; }
+	XMMATRIX GetView() const { return m_View; }
 	Vector4O GetAngle() const { return m_Angle; }
 
     void Update() override;
+	void Draw() override;
+    void InitializeTag() override;
+
+	void SetTarget(Vector4O target) { m_Target = target; }
+	void SetAngle(Vector4O angle) { m_Angle = angle; }
+	void SetFov(float fov) { m_Fov = fov; }
 };
 

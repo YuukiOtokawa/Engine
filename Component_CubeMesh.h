@@ -9,6 +9,5 @@ private:
 public:
     CubeMesh();
 
-    void Draw() override;
 };
 

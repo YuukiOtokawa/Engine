@@ -16,8 +16,11 @@
 
 #include <string>
 
+
 #include <DirectXMath.h>
 using namespace DirectX;
+
+#undef GetObject
 
 //==========================================================================
 // íËêî
@@ -43,35 +46,62 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 // ç\ë¢ëÃíËã`
 //==========================================================================
 
-struct ConstantBuffer {
+struct CONSTANTBUFFER {
 	XMFLOAT4X4 wvp;
+	XMFLOAT4X4 world;
 };
 
-struct Vertex {
-	Vector4O position;
-	Vector4O normal;
-	Vector4O color;
-	Vector4O texcoord;
+struct VERTEX {
+	XMFLOAT3 position;
+	XMFLOAT3 normal;
+	XMFLOAT4 color;
+	XMFLOAT2 texcoord;
 };
 
-enum GameObjectTag {
-	SystemTag,
+struct MATERIAL
+{
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;
+	XMFLOAT4 specular;
+	XMFLOAT4 emissive;
+	float shininess;
+	float dummy[3]; // Padding to make it 16 bytes
 };
 
-enum GameObjectLayer {
-	SystemLayer,
+struct LIGHT {
+	short Enable = true;
+	BOOL Dummy[3]; // Padding to make it 16 bytes
+	XMFLOAT4 Direction;
+	XMFLOAT4 Diffuse;
+	XMFLOAT4 Ambient;
+
+	XMFLOAT4 Position;
+	XMFLOAT4 PointLightParam;
 };
 
+namespace GameObjectTagLayer {
+	enum GameObjectTag {
+		SystemTag,
+		CameraTag,
+		ObjectTag,
+	};
 
-enum ComponentTag {
-	TransformTag,
-	MeshTag,
-	TextureTag,
-	MaterialTag,
-	CameraTag,
-	LightTag,
-	ParticleTag,
-	SoundTag,
-	ScriptTag,
-	InputSystemTag,
-};
+	enum GameObjectLayer {
+		SystemLayer,
+	};
+}
+
+namespace ComponentTag {
+	enum Tag {
+		TransformTag,
+		MeshTag,
+		TextureTag,
+		MaterialTag,
+		CameraTag,
+		LightTag,
+		ParticleTag,
+		SoundTag,
+		ScriptTag,
+		InputSystemTag,
+	};
+}

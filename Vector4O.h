@@ -31,9 +31,9 @@ public:
 	Vector4O(const float x, const float y = 0.0f, const float z = 0.0f, const float w = 0.0f) : x(x), y(y), z(z), w(w) {}
 	Vector4O(const int x, const int y = 0, const int z = 0, const int w = 0) : x((float)x), y((float)y), z((float)z), w((float)w) {}
 
-	XMFLOAT2 ToFloat2() const { return XMFLOAT2(x, y); }
-	XMFLOAT3 ToFloat3() const { return XMFLOAT3(x, y, z); }
-	XMFLOAT4 ToFloat4() const { return XMFLOAT4(x, y, z, w); }
+	XMFLOAT2* ToFloat2() const { return new XMFLOAT2(x, y); }
+	XMFLOAT3* ToFloat3() const { return new XMFLOAT3(x, y, z); }
+	XMFLOAT4* ToFloat4() const { return new XMFLOAT4(x, y, z, w); }
 	XMINT2 ToInt2() const { return XMINT2((int)x, (int)y); }
 	XMINT3 ToInt3() const { return XMINT3((int)x, (int)y, (int)z); }
 	XMINT4 ToInt4() const { return XMINT4((int)x, (int)y, (int)z, (int)w); }

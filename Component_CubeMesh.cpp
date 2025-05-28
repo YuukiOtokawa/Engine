@@ -2,200 +2,201 @@
 
 #include "MainEngine.h"
 
-CubeMesh::CubeMesh()
+CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 {
+
 	// 頂点情報の作成
-	Vertex vertex[NUM_CUBE_VERTEX];
+	VERTEX vertex[NUM_CUBE_VERTEX];
 
 	//上
 
 	vertex[0] = {
-		Vector4O(-1.0f, 1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 0.0f),
+		XMFLOAT3(-1.0f, 1.0f, 1.0f),
+		XMFLOAT3(0.0f,1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 0.0f),
 	};
 
 	vertex[1] = {
-		Vector4O(1.0f, 1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 0.0f),
+		XMFLOAT3(1.0f, 1.0f, 1.0f),
+		XMFLOAT3(0.0f,1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 0.0f),
 	};
 
 	vertex[2] = {
-		Vector4O(-1.0f, 1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 1.0f),
+		XMFLOAT3(-1.0f, 1.0f, -1.0f),
+		XMFLOAT3(0.0f,1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 1.0f),
 	};
 
 	vertex[3] = {
-		Vector4O(1.0f, 1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 1.0f),
+		XMFLOAT3(1.0f, 1.0f, -1.0f),
+		XMFLOAT3(0.0f,1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 1.0f),
 	};
 
 	//手前
 
 	vertex[4] = {
-		Vector4O(-1.0f, 1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 0.0f),
+		XMFLOAT3(-1.0f, 1.0f, -1.0f),
+		XMFLOAT3(0.0f,0.0f,-1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 0.0f),
 	};
 
 	vertex[5] = {
-		Vector4O(1.0f, 1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 0.0f),
+		XMFLOAT3(1.0f, 1.0f, -1.0f),
+		XMFLOAT3(0.0f,0.0f,-1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 0.0f),
 	};
 
 
 	vertex[6] = {
-		Vector4O(-1.0f, -1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 1.0f),
+		XMFLOAT3(-1.0f, -1.0f, -1.0f),
+		XMFLOAT3(0.0f,0.0f,-1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 1.0f),
 	};
 
 
 	vertex[7] = { 
-		Vector4O(1.0f, -1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 1.0f),
+		XMFLOAT3(1.0f, -1.0f, -1.0f),
+		XMFLOAT3(0.0f,0.0f,-1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 1.0f),
 	};
 
 	//右
 
 	vertex[8] = {
-		Vector4O(1.0f, 1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 0.0f),
+		XMFLOAT3(1.0f, 1.0f, -1.0f),
+		XMFLOAT3(1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 0.0f),
 	};
 
 	vertex[9] = {
-		Vector4O(1.0f, 1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 0.0f),
+		XMFLOAT3(1.0f, 1.0f, 1.0f),
+		XMFLOAT3(1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 0.0f),
 	};
 
 	vertex[10] = {
-		Vector4O(1.0f, -1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 1.0f),
+		XMFLOAT3(1.0f, -1.0f, -1.0f),
+		XMFLOAT3(1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 1.0f),
 	};
 
 	vertex[11] = {
-		Vector4O(1.0f, -1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 1.0f),
+		XMFLOAT3(1.0f, -1.0f, 1.0f),
+		XMFLOAT3(1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 1.0f),
 	};
 
 	//奥
 
 	vertex[12] = {
-		Vector4O(1.0f, 1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 0.0f),
+		XMFLOAT3(1.0f, 1.0f, 1.0f),
+		XMFLOAT3(0.0f,0.0f,1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 0.0f),
 	};
 
 	vertex[13] = {
-		Vector4O(-1.0f, 1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 0.0f),
+		XMFLOAT3(-1.0f, 1.0f, 1.0f),
+		XMFLOAT3(0.0f,0.0f,1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 0.0f),
 	};
 
 	vertex[14] = {
-		Vector4O(1.0f, -1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 1.0f),
+		XMFLOAT3(1.0f, -1.0f, 1.0f),
+		XMFLOAT3(0.0f,0.0f,1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 1.0f),
 	};
 
 	vertex[15] = {
-		Vector4O(-1.0f, -1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 1.0f),
+		XMFLOAT3(-1.0f, -1.0f, 1.0f),
+		XMFLOAT3(0.0f,0.0f,1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 1.0f),
 	};
 
 	//左
 
 	vertex[16] = {
-		Vector4O(-1.0f, 1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 0.0f),
+		XMFLOAT3(-1.0f, 1.0f, 1.0f),
+		XMFLOAT3(-1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 0.0f),
 	};
 
 	vertex[17] = {
-		Vector4O(-1.0f, 1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 0.0f),
+		XMFLOAT3(-1.0f, 1.0f, -1.0f),
+		XMFLOAT3(-1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 0.0f),
 	};
 
 	vertex[18] = {
-		Vector4O(-1.0f, -1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 1.0f),
+		XMFLOAT3(-1.0f, -1.0f, 1.0f),
+		XMFLOAT3(-1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 1.0f),
 	};
 
 	vertex[19] = {
-		Vector4O(-1.0f, -1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 1.0f),
+		XMFLOAT3(-1.0f, -1.0f, -1.0f),
+		XMFLOAT3(-1.0f,0.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 1.0f),
 	};
 
 	//下
 
 	vertex[20] = {
-		Vector4O(-1.0f, -1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 0.0f),
+		XMFLOAT3(-1.0f, -1.0f, -1.0f),
+		XMFLOAT3(0.0f,-1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 0.0f),
 	};
 
 	vertex[21] = {
-		Vector4O(1.0f, -1.0f, -1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 0.0f),
+		XMFLOAT3(1.0f, -1.0f, -1.0f),
+		XMFLOAT3(0.0f,-1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 0.0f),
 	};
 
 	vertex[22] = {
-		Vector4O(-1.0f, -1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 1.0f),
+		XMFLOAT3(-1.0f, -1.0f, 1.0f),
+		XMFLOAT3(0.0f,-1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(0.0f, 1.0f),
 	};
 
 	vertex[23] = {
-		Vector4O(1.0f, -1.0f, 1.0f),
-		{},
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 1.0f),
+		XMFLOAT3(1.0f, -1.0f, 1.0f),
+		XMFLOAT3(0.0f,-1.0f,0.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT2(1.0f, 1.0f),
 	};
 
-
+	HRESULT hr;
 	{
 		// 頂点バッファ生成
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(Vertex) * NUM_CUBE_VERTEX; // 頂点バッファの量
+		bd.ByteWidth = sizeof(VERTEX) * NUM_CUBE_VERTEX; // 頂点バッファの量
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
@@ -203,7 +204,7 @@ CubeMesh::CubeMesh()
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = vertex;
 
-		MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
+		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
 	}
 
 	// インデックス設定
@@ -242,13 +243,3 @@ CubeMesh::CubeMesh()
 
 }
 
-void CubeMesh::Draw() {
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-}

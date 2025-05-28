@@ -17,6 +17,7 @@ void GUI::Start() {
 
 	Begin("my Window");
 }
+
 void GUI::End() {
 	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(0.0f, 0.0f), ImVec2(1920.0f, 1080.0f),1);
 	ImGui::End();
@@ -29,11 +30,12 @@ void GUI::End() {
 	//System::GetDirectXManager()->GetDeviceContext()->ClearRenderTargetView(m_mainRenderTargetView, clear_color_with_alpha);
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
+
 void GUI::Draw() {
 
 	bool SwapChainOccluded = false;
 
-	auto windowSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
+	//auto windowSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
 
 	//if (windowSize.x != 0 && windowSize.y != 0) {
 	//	CleanupRenderTarget();

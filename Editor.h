@@ -41,5 +41,16 @@ public:
 	void Finalize();
 
 	void AddObject(Object* object);
+	Object* GetObject(const std::string& name)
+	{
+		for (auto object : m_Objects)
+		{
+			if (object->GetName() == name)
+			{
+				return object;
+			}
+		}
+		return nullptr;
+	}
 };
 

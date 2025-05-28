@@ -2,6 +2,8 @@
 
 #include "Component.h"
 
+#include "MainEngine.h"
+
 void Object::Initialize() {}
 void Object::Update() {
 	for (auto& component : m_Components) {
@@ -12,10 +14,14 @@ void Object::Draw() {
 	for (auto& component : m_Components) {
 		component->Draw();
 	}
+	if (m_IsDrawable == false) return;
+	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->DrawIndexed(m_iIndexCount, 0, 0);
+
 }
 void Object::Finalize() {}
 
-void Object::AddComponent(Component* component) {
-	m_Components.push_back(component);
+void Object::AddComponentClass(Component* component) {
 	component->SetOwner(this);
+	component->InitializeTag();
+	m_Components.push_back(component);
 }
