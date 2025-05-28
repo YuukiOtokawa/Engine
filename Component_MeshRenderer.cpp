@@ -9,11 +9,6 @@ MeshRenderer::MeshRenderer()
 {
 	m_pMaterial = new Material();
 
-	m_pMaterial->SetVertexShaderKey(MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("vertexDirectionalLightingVS.cso", "directional"));
-	m_pMaterial->SetPixelShaderKey(MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("vertexDirectionalLightingPS.cso", "directional"));
-
-	m_pMaterial->SetTexture(MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/ThisIsPicture.png"));
-
 	m_pMaterial->DrawMaterial();
 }
 

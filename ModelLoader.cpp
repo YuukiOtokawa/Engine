@@ -101,7 +101,7 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 		model->Texture[aitexture->mFilename.data] = texture;
 	}
 
-	object->GetComponent<MeshFilter>()->SetVertexBuffer(*model->VertexBuffer, model->AiScene->mNumMeshes);
-	object->GetComponent<MeshFilter>()->SetIndexBuffer(*model->IndexBuffer, model->AiScene->mNumMeshes);
+	object->GetComponent<MeshFilter>()->SetVertexBuffer(*model->VertexBuffer, model->AiScene->mMeshes[0]->mNumVertices);
+	object->GetComponent<MeshFilter>()->SetIndexBuffer(*model->IndexBuffer, model->AiScene->mMeshes[0]->mNumFaces * 3);
 	object->GetComponent<AssimpMeshRenderer>()->SetMesh(model->Texture);
 }

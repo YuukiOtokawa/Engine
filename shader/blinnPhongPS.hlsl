@@ -14,18 +14,19 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     outDiffuse.rgb *= In.Diffuse.rgb * light; //明るさを乗算
     outDiffuse.a *= In.Diffuse.a; //αに明るさは関係ないので別計算
 
-	//カメラからピクセルへ向かうベクトル
-    float3 eyev = CameraPosition.xyz - In.WorldPosition.xyz;
-    eyev = normalize(eyev); //正規化する
-
-	//ハーフベクトルを作成
+    //カメラからピクセルに向かうベクトル
+    float3 eyev = In.WorldPosition.xyz - CameraPosition.xyz;
+    eyev = normalize(eyev);
     
-
-    //float specular = -dot(eyev, refv); //鏡面反射の計算
-    //specular = saturate(specular); //値をサチュレート
-    //specular = pow(specular, 30); //ここでは３０乗してみる
+    //ハーフベクトル
+    float3 halfv = eyev + normalize(Light.Direction.xyz);
+    halfv = normalize(halfv);
+    float specular = -dot(halfv, normal.xyz);
+    specular = saturate(specular);
+    specular = pow(specular, 30);
+    
 	
-    //outDiffuse.rgb += specular; //スペキュラ値をデフューズとして足しこむ
+    outDiffuse.rgb += specular; //スペキュラ値をデフューズとして足しこむ
 
 
 

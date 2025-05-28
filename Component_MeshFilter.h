@@ -11,6 +11,8 @@ protected:
 	ID3D11Buffer* m_pVertexBuffer = nullptr;
 	ID3D11Buffer* m_pIndexBuffer = nullptr;
 
+	D3D11_PRIMITIVE_TOPOLOGY m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
 public:
 	MeshFilter() = default;
 	MeshFilter(int vertexCount, int indexCount);
@@ -31,6 +33,7 @@ public:
 	void SetIndexBuffer(ID3D11Buffer* indexBuffer, int indexCount) {
 		m_pIndexBuffer = indexBuffer;
 		m_iIndexCount = indexCount;
+		owner->SetIndexCount(indexCount);
 	}
 };
 

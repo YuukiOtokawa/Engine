@@ -20,6 +20,7 @@ void Object::Draw() {
 }
 void Object::Finalize() {}
 
+
 void Object::AddComponentClass(Component* component) {
 	component->SetOwner(this);
 	component->InitializeTag();

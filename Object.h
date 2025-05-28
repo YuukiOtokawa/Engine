@@ -33,7 +33,7 @@ public:
 		}
 	}
 
-	void Initialize();
+	virtual void Initialize();
 	void Update();
 	void Draw();
 	void Finalize();

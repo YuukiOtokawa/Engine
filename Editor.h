@@ -54,3 +54,4 @@ public:
 	}
 };
 
+void Main();

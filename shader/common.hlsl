@@ -38,6 +38,11 @@ struct LIGHT
     float4 Direction;
     float4 Diffuse;
     float4 Ambient;
+    
+    float4 SkyColor;
+    float4 GroundColor;
+    float4 GroundNormal;
+    
     float4 Position;
     float4 PointLightParam;
    

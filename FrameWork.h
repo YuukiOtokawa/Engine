@@ -75,6 +75,10 @@ struct LIGHT {
 	XMFLOAT4 Diffuse;
 	XMFLOAT4 Ambient;
 
+	XMFLOAT4 SkyColor;
+	XMFLOAT4 GroundColor;
+	XMFLOAT4 GroundNormal;
+
 	XMFLOAT4 Position;
 	XMFLOAT4 PointLightParam;
 };
