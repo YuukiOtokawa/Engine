@@ -157,6 +157,7 @@
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="PlaneMesh.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Vector4O.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="PlaneMesh.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>

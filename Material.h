@@ -16,6 +16,9 @@ private:
 
 	ID3D11ShaderResourceView* m_Texture;
 
+	unsigned int	StartIndex;
+	unsigned int	IndexNum;
+
 public:
 	Material() = default;
 	~Material() = default;
@@ -25,6 +28,8 @@ public:
 	void SetVertexShaderKey(std::string key);
 	void SetPixelShaderKey(std::string key);
 
+	void SetShader();
+
 	void SetMaterial(MATERIAL material) { m_Material = material; }
 
 	void SetLight(LIGHT light) { m_Light = light; }
@@ -33,6 +38,14 @@ public:
 
 	std::string GetVertexShader() const { return m_VertexShader; }
 	std::string GetPixelShader() const { return m_PixelShader; }
+
+	void SetStartIndex(unsigned int startIndex) { StartIndex = startIndex; }
+	void SetIndexNum(unsigned int indexNum) { IndexNum = indexNum; }
+
+	unsigned int GetStartIndex() const { return StartIndex; }
+	unsigned int GetIndexNum() const { return IndexNum; }
+
+	void SetTextureEnable(bool enable) { m_Material.textureEnable = enable; }
 
 	MATERIAL GetMaterial() const { return m_Material; }
 	LIGHT GetLight() const { return m_Light; }
