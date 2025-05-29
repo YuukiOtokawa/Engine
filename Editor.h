@@ -1,4 +1,16 @@
+// ========================================================
+//
+// エディター管理クラス
+// 
+//									Date:20250520
+//									Author:Yuuki Otokawa
+// ========================================================
+
 #pragma once
+
+//==========================================================================
+// ヘッダーインクルード
+//==========================================================================
 
 #include <list>
 #include <map>
@@ -9,23 +21,32 @@
 
 #include "GUI.h"
 
+//==========================================================================
+// クラス定義
+//==========================================================================
+
 class Editor
 {
 private:
-
+	// オブジェクトのリスト
 	std::list<Object*> m_Objects;
-
+	// エディターウィンドウのリスト
 	std::list<EditorWindow*> m_EditorWindows;
 
+	// GUIのポインタ
 	GUI* m_pGUI = nullptr;
 
+	/// @brief Editor クラスのシングルトンパターンデフォルトコンストラクタです。
 	Editor() = default;
 	Editor(const Editor&) = delete;
 	Editor& operator=(const Editor&) = delete;
 
+	// Editor クラスのシングルトンパターンインスタンス
 	static Editor* m_pInstance;
 
 public:
+	/// @brief エディタークラスのシングルトンインスタンスを取得します。
+	/// @return Editor クラスの唯一のインスタンスへのポインタ。
 	static Editor* GetInstance()
 	{
 		if (m_pInstance == nullptr)
@@ -35,12 +56,21 @@ public:
 		return m_pInstance;
 	}
 	
+	/// @brief エディターの初期化処理を実行します。
 	void Initialize();
+	/// @brief オブジェクトとシステムの状態を更新します。
 	void Update();
+	/// @brief オブジェクトの描画処理を実行します。
 	void Draw();
+	/// @brief オブジェクトやリソースの後処理を行います。
 	void Finalize();
 
+	/// @brief オブジェクトを追加します。
+	/// @param object 追加するオブジェクトへのポインタ。
 	void AddObject(Object* object);
+	/// @brief 指定された名前のオブジェクトを検索して返します。
+	/// @param name 検索するオブジェクトの名前。
+	/// @return 見つかった場合は対応するObjectポインタ、見つからない場合はnullptrを返します。
 	Object* GetObject(const std::string& name)
 	{
 		for (auto object : m_Objects)
