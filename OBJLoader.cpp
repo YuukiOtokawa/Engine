@@ -52,6 +52,10 @@ void OBJLoader::UnloadAll()
 
 void OBJLoader::Load(const char* FileName, Object* object)
 {
+	//コンポーネントが不足しているエラー表示
+
+
+
 	if (m_ModelPool.count(FileName) > 0)
 	{
 		m_Model = m_ModelPool[FileName];
@@ -418,8 +422,10 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 
 	char str[256];
 
+
 	FILE* file;
-	file = fopen(FileName, "rt");
+	file = fopen(
+		FileName, "rt");
 	assert(file);
 
 	MODEL_MATERIAL* materialArray;

@@ -5,24 +5,29 @@
 #include "Mouse.h"
 #include "Gamepad.h"
 
-class Component_InputSystem :
+class InputSystem :
     public Component
 {
 private:
-	GamePad* m_pGamePad;
-	Keyboard* m_pKeyboard;
-	Mouse* m_pMouse;
+	static GamePad* m_pGamePad;
+	static Keyboard* m_pKeyboard;
+	static Mouse* m_pMouse;
 
 public:
-	Component_InputSystem();
+	InputSystem();
 
 	//各デバイスの入力値の取得・更新
 	void Update() override;
 
 	//各種ゲッター
-	GamePad* GetGamePad() { return m_pGamePad; }
-	Keyboard* GetKeyboard() { return m_pKeyboard; }
-	Mouse* GetMouse() { return m_pMouse; }
+	static GamePad* GetGamePad() { return m_pGamePad; }
+	static Keyboard* GetKeyboard() { return m_pKeyboard; }
+	static Mouse* GetMouse() { return m_pMouse; }
 
+	void InitializeTag() override
+	{
+		owner->SetTag(GameObjectTagLayer::InputSystemTag);
+		owner->SetDrawable(false);
+	}
 };
 

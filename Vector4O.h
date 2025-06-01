@@ -54,6 +54,15 @@ public:
 	float Length() const { return sqrtf(x * x + y * y + z * z + w * w); }
 	float Normalize() { float len = Length(); if (len > 0.0f) { x /= len; y /= len; z /= len; w /= len; } return len; }
 
+	Vector4O Cross(const Vector4O& vec) const {
+		return Vector4O(
+			y * vec.z - z * vec.y,
+			z * vec.x - x * vec.z,
+			x * vec.y - y * vec.x,
+			0.0f // w component is set to 0 for cross product
+		);
+	}
+
 	auto operator=(const Vector4O&) -> Vector4O & = default;
 	//auto operator=(const Vector4O&&) -> Vector4O & = default;
 

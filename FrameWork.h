@@ -90,6 +90,7 @@ namespace GameObjectTagLayer {
 		SystemTag,
 		CameraTag,
 		ObjectTag,
+		InputSystemTag,
 	};
 
 	enum GameObjectLayer {

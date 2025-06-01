@@ -136,6 +136,7 @@
     <ClInclude Include="Component_Transform.h" />
     <ClInclude Include="Component_CubeMesh.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="EditorCamera.h" />
     <ClInclude Include="EditorView.h" />
     <ClInclude Include="EditorWindow.h" />
     <ClInclude Include="FrameWork.h" />
@@ -149,7 +150,6 @@
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
-    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MainEngine.h" />
     <ClInclude Include="Material.h" />
@@ -172,6 +172,7 @@
     <ClCompile Include="Component_Transform.cpp" />
     <ClCompile Include="Component_CubeMesh.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="EditorCamera.cpp" />
     <ClCompile Include="EditorView.cpp" />
     <ClCompile Include="EditorWindow.cpp" />
     <ClCompile Include="Gamepad.cpp" />
@@ -183,7 +184,6 @@
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
-    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainEngine.cpp" />

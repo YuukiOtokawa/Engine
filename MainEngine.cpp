@@ -13,7 +13,7 @@
 
 #include "FrameWork.h"
 
-#include "InputSystem.h"
+#include "Component_InputSystem.h"
 
 constexpr auto WINDOW_CREATE_FAILED = -1;
 

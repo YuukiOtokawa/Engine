@@ -37,5 +37,7 @@ public:
 	void SetTarget(Vector4O target) { m_Target = target; }
 	void SetAngle(Vector4O angle) { m_Angle = angle; }
 	void SetFov(float fov) { m_Fov = fov; }
+
+	Vector4O GetTarget() const { return m_Target; }
 };
 
