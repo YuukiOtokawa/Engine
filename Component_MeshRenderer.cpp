@@ -45,6 +45,10 @@ void MeshRenderer::Draw() {
 		m_pMaterial->DrawMaterial();
 }
 
+void MeshRenderer::DrawGUI() {
+	ImGui::Text("Mesh Renderer");
+}
+
 void MeshRenderer::InitializeTag() {
 	owner->SetTag(GameObjectTagLayer::ObjectTag);
 }

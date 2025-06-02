@@ -15,6 +15,7 @@ public:
 	~MeshRenderer() = default;
     void Update() override;
 	void Draw() override;
+	void DrawGUI() override;
 
 	void SetMaterial(MATERIAL material) { this->m_pMaterial->SetMaterial(material); }
 	void SetLight(LIGHT light) { 

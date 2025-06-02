@@ -18,6 +18,7 @@ public:
 	MeshFilter(int vertexCount, int indexCount);
 	void Update() override;
 	void Draw() override;
+	void DrawGUI() override;
 
 	void SetOwner(Object* owner) override;
 

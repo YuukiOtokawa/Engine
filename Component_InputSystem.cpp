@@ -21,3 +21,7 @@ void InputSystem::Update()
 	m_pKeyboard->Update();
 	m_pMouse->Update();
 }
+
+void InputSystem::DrawGUI() {
+	ImGui::Text("Input System");
+}

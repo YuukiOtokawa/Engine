@@ -74,3 +74,7 @@ PlaneMesh::PlaneMesh() : MeshFilter(NUM_PLANE_VERTEX, NUM_PLANE_INDEX)
 
 	m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 }
+
+void PlaneMesh::DrawGUI() {
+	ImGui::Text("Plane Mesh Filter");
+}

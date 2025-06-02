@@ -9,5 +9,6 @@ private:
 
 public:
 	PlaneMesh();
+	void DrawGUI() override;
 };
 

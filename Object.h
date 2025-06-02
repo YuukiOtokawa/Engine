@@ -36,6 +36,7 @@ public:
 	virtual void Initialize();
 	void Update();
 	void Draw();
+	void DrawGUI();
 	void Finalize();
 
 	template<typename T, typename... Args>

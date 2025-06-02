@@ -14,6 +14,8 @@
 #include "ModelLoader.h"
 #include "OBJLoader.h"
 
+#include "imgui.h"
+
 Editor* Editor::m_pInstance;
 
 void Editor::Initialize() {
@@ -153,6 +155,8 @@ void Editor::Initialize() {
 	}
 
 	Main();
+	m_pGUI->Initialize();
+
 }
 
 void Editor::Update() {
@@ -189,9 +193,23 @@ void Editor::Draw() {
 		}
 	}
 
-	m_pGUI->Start();
-	m_pGUI->Draw();
-	m_pGUI->End();
+	m_pGUI->StartImGui();
+
+	m_pGUI->StartInspector();
+	if (m_pSelectedObject)
+		m_pSelectedObject->DrawGUI();
+	m_pGUI->EndWindow();
+
+	m_pGUI->StartHierarchy();
+	for (auto& object : m_Objects) {
+		if (ImGui::Button(object->GetName().c_str()))
+		{
+			m_pSelectedObject = object;
+		}
+	}
+	m_pGUI->EndWindow();
+
+	m_pGUI->EndImGui();
 
 	MainEngine::GetInstance()->GetRenderer()->BufferPresent();
 

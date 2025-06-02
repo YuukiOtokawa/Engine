@@ -81,7 +81,7 @@ void EditorCamera::Update()
 
 		 // 視線移動方向を逆にするために符号を反転
 		deltaX = -deltaX;
-		deltaY = -deltaY;
+		deltaY = deltaY;
 
 		// X軸の回転（上下の視線移動）
 		Vector4O rotation = transform->GetRotation();
@@ -107,4 +107,8 @@ void EditorCamera::Update()
 		// 現在位置を保存
 		lastMousePos = currentMousePos;
 	}
+}
+
+void EditorCamera::DrawGUI() {
+	ImGui::Text("Editor Camera");
 }

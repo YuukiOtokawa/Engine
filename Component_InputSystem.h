@@ -18,6 +18,7 @@ public:
 
 	//各デバイスの入力値の取得・更新
 	void Update() override;
+	void DrawGUI() override;
 
 	//各種ゲッター
 	static GamePad* GetGamePad() { return m_pGamePad; }

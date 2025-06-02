@@ -32,6 +32,7 @@ public:
 
     void Update() override;
 	void Draw() override;
+	void DrawGUI() override;
     void InitializeTag() override;
 
 	void SetTarget(Vector4O target) { m_Target = target; }

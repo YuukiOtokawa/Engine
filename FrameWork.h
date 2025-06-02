@@ -20,6 +20,8 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
+#include "imgui.h"
+
 #undef GetObject
 
 //==========================================================================

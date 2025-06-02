@@ -15,6 +15,7 @@ public:
 
 	void Update() override;
 	void Draw() override;
+	void DrawGUI() override;
 
 	void InitializeTag() override;
 

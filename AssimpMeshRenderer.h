@@ -14,5 +14,8 @@ public:
     void SetMesh(std::unordered_map<std::string, ID3D11ShaderResourceView*> assimpTexture) {
 		m_AssimpTexture = assimpTexture;
     }
+
+    void DrawGUI() override;
+
 };
 

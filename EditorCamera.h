@@ -12,5 +12,7 @@ public:
     EditorCamera() = default;
 	~EditorCamera() = default;
     void Update() override;
+    void DrawGUI() override;
+
 };
 
