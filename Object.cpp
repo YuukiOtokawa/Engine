@@ -18,6 +18,14 @@ void Object::Draw() {
 	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->DrawIndexed(m_iIndexCount, 0, 0);
 
 }
+void Object::DrawGUI(){
+	GUI::SetFontObjectName();
+	ImGui::Text(GetName().c_str());
+	GUI::SetFontDefault();
+	for (auto& component : m_Components) {
+		component->DrawGUI();
+	}
+}
 void Object::Finalize() {}
 
 

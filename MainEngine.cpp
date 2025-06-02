@@ -13,7 +13,7 @@
 
 #include "FrameWork.h"
 
-#include "InputSystem.h"
+#include "Component_InputSystem.h"
 
 constexpr auto WINDOW_CREATE_FAILED = -1;
 
@@ -150,7 +150,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 
 	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hEditorMenu, "エディター");
 
-	//SetMenu(m_hWnd, hMenu);
+	SetMenu(m_hWnd, hMenu);
 
 	SetWindowPos(
 		m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
@@ -168,7 +168,6 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	m_pRenderer = new Renderer(m_hWnd);
 
 	m_pEditor = Editor::GetInstance();
-	m_pEditor->Initialize();
 
 	AllocConsole();
 	freopen_s(&m_pFile, "CONOUT$", "w", stdout);
@@ -192,6 +191,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	m_dwExecLastTime = m_dwFPSLastTime = timeGetTime(); // システム時刻をミリ秒単位で取得
 	m_dwCurrentTime = m_dwFrameCount = 0;
 
+	m_pEditor->Initialize();
 
 	return 0;
 

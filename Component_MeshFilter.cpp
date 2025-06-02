@@ -55,6 +55,10 @@ void MeshFilter::Draw() {
 
 }
 
+void MeshFilter::DrawGUI() {
+	ImGui::Text("Mesh Filter");
+}
+
 void MeshFilter::SetOwner(Object* owner) {
 	this->owner = owner;
 	owner->SetDrawable(true);

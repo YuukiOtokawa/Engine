@@ -8,6 +8,6 @@ private:
 	static const auto NUM_CUBE_INDEX = 36;
 public:
     CubeMesh();
-
+	void DrawGUI() override;
 };
 

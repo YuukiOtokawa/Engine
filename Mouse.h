@@ -58,19 +58,27 @@ private:
 	/// @param hWnd ウィンドウハンドル
 	Mouse(HWND hWnd);
 	
+	POINT m_SavedCursorPos; // 相対モードに切り替える前のカーソル位置を保存
 
 	static Mouse* m_Instance;	//インスタンス
 public:
+	~Mouse();
+
+	/// @brief 各種ステートの更新
+	void Update();
+
+	// カーソル位置を保存するメソッド
+	void SaveCursorPosition();
+
+	// 保存したカーソル位置を復元するメソッド
+	void RestoreCursorPosition();
+
 	static Mouse* GetInstance(HWND hWnd = NULL) {
 		if (m_Instance == NULL) {
 			m_Instance = new Mouse(hWnd);
 		}
 		return m_Instance;
 	}
-	~Mouse();
-
-	/// @brief 各種ステートの更新
-	void Update();
 
 	/// @brief ホイールの移動量をリセット フレームごとに回すとフレームごとの移動量を取得できる
 	void ResetScrollWheelValue();

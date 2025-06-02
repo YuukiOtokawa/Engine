@@ -40,8 +40,13 @@ void MeshRenderer::Draw() {
 
 	//ConstantBuffer* constantBuffer;
 	//XMStoreFloat4x4(&constantBuffer->world, XMMatrixTranspose(world));
+	m_pMaterial->SetShader();
+	for (unsigned int i = 0; i < m_MaterialNum; i++)
+		m_pMaterial->DrawMaterial();
+}
 
-	m_pMaterial->DrawMaterial();
+void MeshRenderer::DrawGUI() {
+	ImGui::Text("Mesh Renderer");
 }
 
 void MeshRenderer::InitializeTag() {

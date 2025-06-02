@@ -25,6 +25,8 @@ private:
 
 	static Editor* m_pInstance;
 
+	Object* m_pSelectedObject = nullptr;
+
 public:
 	static Editor* GetInstance()
 	{
