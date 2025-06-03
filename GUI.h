@@ -1,7 +1,23 @@
+// ========================================================
+//
+// imgui�`��N���X[GUI.h]
+// 
+//									Date:20250520
+//									Author:Yuuki Otokawa
+// ========================================================
+
 #pragma once
+
+//==========================================================================
+// �w�b�_�[�C���N���[�h
+//==========================================================================
 
 #include "Vector4O.h"
 #include "d3d11.h"
+
+//==========================================================================
+// �N���X��`
+//==========================================================================
 
 #include <list>
 
@@ -17,11 +33,15 @@ private:
 	static ImFont* m_pFontObjectName;
 	static ImFont* m_pCurrentFont;
 
+	/// @brief �����_�[�^�[�Q�b�g���쐬���܂��B
 	void CreateRenderTarget();
+	/// @brief �����_�[�^�[�Q�b�g���N���[���A�b�v���܂��B
 	void CleanupRenderTarget();
 
+	// imgui�p�����_�[�^�[�Q�b�g�r���[
 	ID3D11RenderTargetView* m_mainRenderTargetView = nullptr;
 public:
+
 	void Initialize();
 	void StartImGui();
 	void StartHierarchy();
