@@ -22,6 +22,9 @@ void Object::DrawGUI(){
 	GUI::SetFontObjectName();
 	ImGui::Text(GetName().c_str());
 	GUI::SetFontDefault();
+	
+	ImGui::Text("Tag: %s", GameObjectTagLayer::GameObjectTagString[GetTag()]);
+
 	for (auto& component : m_Components) {
 		component->DrawGUI();
 	}

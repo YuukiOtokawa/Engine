@@ -304,5 +304,8 @@
     <FxCompile Include="shader\hemisphereLightingVS.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
+    <FxCompile Include="shader\pointLightingBlinnPhongPS.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

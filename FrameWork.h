@@ -31,7 +31,7 @@ using namespace DirectX;
 constexpr auto SCREEN_WIDTH_DEFAULT = 1920;
 constexpr auto SCREEN_HEIGHT_DEFAULT = 1080;
 
-constexpr auto WINDOW_CAPTION = "OtokawaEngine";
+constexpr auto WINDOW_CAPTION = "Engine";
 constexpr auto WINDOW_CLASS_NAME = "OtokawaEngineClass";
 
 constexpr auto FRAME_RATE_MAX = 240;
@@ -43,6 +43,28 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 //==========================================================================
 
 #define SAFE_RELEASE(p) { if (p) { p->Release(); p = NULL; } }
+
+#define OBJECT_TAG \
+	X(SystemTag, "System")\
+	X(CameraTag, "Camera")\
+	X(ObjectTag, "Object")\
+	X(InputSystemTag, "InputSystem")
+
+#define OBJECT_LAYER \
+	X(SystemLayer, "System")
+
+#define COMPONENT_TAG \
+	X(TransformTag, "Transform")\
+	X(MeshTag, "Mesh")\
+	X(TextureTag, "Texture")\
+	X(MaterialTag, "Material")\
+	X(CameraTag, "Camera")\
+	X(LightTag, "Light")\
+	X(ParticleTag, "Particle")\
+	X(SoundTag, "Sound")\
+	X(ScriptTag, "Script")\
+	X(InputSystemTag, "InputSystem")
+
 
 //==========================================================================
 // 構造体定義
@@ -75,42 +97,55 @@ struct MATERIAL
 struct LIGHT {
 	short Enable = true;
 	BOOL Dummy[3]; // Padding to make it 16 bytes
-	XMFLOAT4 Direction;
-	XMFLOAT4 Diffuse;
-	XMFLOAT4 Ambient;
+	XMFLOAT4 Direction;//方向ベクトル
+	XMFLOAT4 Diffuse;//拡散光
+	XMFLOAT4 Ambient;//環境光
 
-	XMFLOAT4 SkyColor;
-	XMFLOAT4 GroundColor;
-	XMFLOAT4 GroundNormal;
+	XMFLOAT4 SkyColor;//空の色
+	XMFLOAT4 GroundColor;//地面の色
+	XMFLOAT4 GroundNormal;//地面の法線ベクトル
 
-	XMFLOAT4 Position;
-	XMFLOAT4 PointLightParam;
+	XMFLOAT4 Position;//点光源の位置
+	XMFLOAT4 PointLightParam;//点光源のパラメータ（半径など）
 };
 
 namespace GameObjectTagLayer {
+#define X(EnumName, StringName) EnumName,
 	enum GameObjectTag {
-		SystemTag,
-		CameraTag,
-		ObjectTag,
-		InputSystemTag,
+		OBJECT_TAG
 	};
+#undef X
 
-	enum GameObjectLayer {
-		SystemLayer,
+#define X(EnumName, StringName) StringName,
+	const char* const GameObjectTagString[] = {
+		OBJECT_TAG
 	};
+#undef X
+
+#define X(EnumName, StringName) EnumName,
+	enum GameObjectLayer {
+		OBJECT_LAYER
+	};
+#undef X
+
+#define X(EnumName, StringName) StringName,
+	const char* const GameObjectLayerString[] = {
+		OBJECT_LAYER
+	};
+#undef X
 }
 
 namespace ComponentTag {
+#define X(EnumName, StringName) EnumName,
 	enum Tag {
-		TransformTag,
-		MeshTag,
-		TextureTag,
-		MaterialTag,
-		CameraTag,
-		LightTag,
-		ParticleTag,
-		SoundTag,
-		ScriptTag,
-		InputSystemTag,
+		COMPONENT_TAG
 	};
+#undef X
+
+#define X(EnumName, StringName) StringName,
+	const char* const GameObjectTagString[] = {
+		COMPONENT_TAG
+	};
+#undef X
 }
+
