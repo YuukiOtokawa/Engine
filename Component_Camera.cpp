@@ -40,6 +40,10 @@ void Camera::Draw() {
 
 }
 
+void Camera::DrawGUI() {
+	ImGui::Text("Camera Component");
+}
+
 void Camera::InitializeTag()
 {
 	owner->SetTag(GameObjectTagLayer::CameraTag);

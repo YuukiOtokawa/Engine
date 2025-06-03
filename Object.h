@@ -1,6 +1,6 @@
 // ========================================================
 //
-// ƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX[Object.h]
+// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Nï¿½ï¿½ï¿½X[Object.h]
 // 
 //									Date:	20250520
 //									Author:	Yuuki Otokawa
@@ -9,14 +9,14 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ï¿½wï¿½bï¿½_ï¿½[ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h
 //==========================================================================
 
 #include <list>
 
 #include "FrameWork.h"
 
-// –¼‘O‹óŠÔ‚Ìw’è
+// ï¿½ï¿½ï¿½Oï¿½ï¿½Ô‚Ìwï¿½ï¿½
 
 using namespace GameObjectTagLayer;
 
@@ -24,22 +24,22 @@ class Component; // Forward declaration of Component class
 class Object
 {
 private:
-	// ƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌƒŠƒXƒg
+	// ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Ìƒï¿½ï¿½Xï¿½g
 	std::list<Component*> m_Components;
-	// ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O‚Æƒ^ƒO
+	// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ì–ï¿½ï¿½Oï¿½Æƒ^ï¿½O
 	std::string m_Name;
 	GameObjectTag m_Tag;
 
-	// ƒIƒuƒWƒFƒNƒg‚Ìó‘Ô
+	// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½
 	bool m_IsActive = true; // Flag to indicate if the object is active
 	bool m_IsDrawable = true; // Flag to indicate if the object is drawable
 
-	// ’¸“_”‚ÆƒCƒ“ƒfƒbƒNƒX”
+	// ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ÆƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½
 	int m_iVertexCount = 0;
 	int m_iIndexCount = 0;
 
 public:
-	// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÆƒfƒXƒgƒ‰ƒNƒ^
+	// ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Æƒfï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
 	Object() = default;
 	Object(const Object&) = delete; // Disable copy constructor
 	Object(Object&&) = delete; // Disable move constructor
@@ -52,17 +52,19 @@ public:
 		}
 	}
 
-	/// @brief ‰Šú‰»ˆ—‚ğs‚¢‚Ü‚·B
+	/// @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	virtual void Initialize();
-	/// @brief ƒIƒuƒWƒFƒNƒg‚Ü‚½‚ÍƒRƒ“ƒ|[ƒlƒ“ƒg‚Ìó‘Ô‚ğXV‚µ‚Ü‚·B
+	/// @brief ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ü‚ï¿½ï¿½ÍƒRï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Ìï¿½Ô‚ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	void Update();
-	/// @brief •`‰æˆ—‚ğÀs‚µ‚Ü‚·B
+	/// @brief ï¿½`ï¿½æˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	void Draw();
-	/// @brief ƒŠƒ\[ƒX‚Ì‰ğ•ú‚âŒãˆ—‚ğs‚¢‚Ü‚·B
+
+	void DrawGUI();
+  	/// @brief ï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½Ì‰ï¿½ï¿½ï¿½ï¿½ãˆï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	void Finalize();
 
-	/// @brief ƒIƒuƒWƒFƒNƒg‚ÉƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ’Ç‰Á‚µ‚Ü‚·B
-	/// @tparam T ’Ç‰Á‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŒ^BT‚ÍComponentƒNƒ‰ƒX‚ğŒp³‚µ‚Ä‚¢‚é•K—v‚ª‚ ‚è‚Ü‚·B
+	/// @brief ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ÉƒRï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @tparam T ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ÌŒ^ï¿½BTï¿½ï¿½Componentï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	/// @tparam ...Args 
 	/// @param ...args 
 	template<typename T, typename... Args>
@@ -72,13 +74,13 @@ public:
 		AddComponentClass(component);
 	}
 
-	/// @brief ƒRƒ“ƒ|[ƒlƒ“ƒgƒNƒ‰ƒX‚ğ’Ç‰Á‚µ‚Ü‚·B
-	/// @param component ’Ç‰Á‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @param component ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½B
 	void AddComponentClass(Component* component);
 
-	/// @brief w’è‚³‚ê‚½Œ^‚ÌÅ‰‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾‚µ‚Ü‚·B
-	/// @tparam T æ“¾‚µ‚½‚¢ƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŒ^B
-	/// @return w’è‚³‚ê‚½Œ^‚Éˆê’v‚·‚éÅ‰‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^Bˆê’v‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚ª‘¶İ‚µ‚È‚¢ê‡‚Ínullptr‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ï¿½wï¿½è‚³ï¿½ê‚½ï¿½^ï¿½ÌÅï¿½ï¿½ÌƒRï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @tparam T ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ÌŒ^ï¿½B
+	/// @return ï¿½wï¿½è‚³ï¿½ê‚½ï¿½^ï¿½Éˆï¿½vï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½ÌƒRï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½Bï¿½ï¿½vï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ï¿½nullptrï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
 	template<typename T>
 	T* GetComponent() {
 		for (Component* component : m_Components) {
@@ -89,50 +91,50 @@ public:
 		return nullptr; // Return nullptr if no matching component is found
 	}
 
-	/// @brief –¼‘O‚ğİ’è‚µ‚Ü‚·B
-	/// @param name İ’è‚·‚é–¼‘OB
+	/// @brief ï¿½ï¿½ï¿½Oï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param name ï¿½İ’è‚·ï¿½é–¼ï¿½Oï¿½B
 	void SetName(const std::string& name) {
 		m_Name = name;
 	}
 
-	/// @brief ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O‚ğ•\‚· std::stringB
+	/// @brief ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ì–ï¿½ï¿½Oï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ì–ï¿½ï¿½Oï¿½ï¿½\ï¿½ï¿½ std::stringï¿½B
 	std::string GetName() const {
 		return m_Name;
 	}
 
-	/// @brief ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ìƒ^ƒO‚ğİ’è‚µ‚Ü‚·B
-	/// @param tag İ’è‚·‚éGameObjectTag’lB
+	/// @brief ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìƒ^ï¿½Oï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param tag ï¿½İ’è‚·ï¿½ï¿½GameObjectTagï¿½lï¿½B
 	void SetTag(GameObjectTag tag) {
 		m_Tag = tag;
 	}
 
-	/// @brief ƒIƒuƒWƒFƒNƒg‚Ìƒ^ƒO‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ÉŠÖ˜A•t‚¯‚ç‚ê‚Ä‚¢‚é GameObjectTag ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìƒ^ï¿½Oï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½ï¿½ï¿½ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ÉŠÖ˜Aï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ GameObjectTag ï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
 	GameObjectTag GetTag() const {
 		return m_Tag;
 	}
 
-	/// @brief ƒIƒuƒWƒFƒNƒg‚ÌƒAƒNƒeƒBƒuó‘Ô‚ğİ’è‚µ‚Ü‚·B
-	/// @param isActive ƒAƒNƒeƒBƒuó‘Ô‚Éİ’è‚·‚éê‡‚Í trueA”ñƒAƒNƒeƒBƒu‚É‚·‚éê‡‚Í false ‚ğw’è‚µ‚Ü‚·B
+	/// @brief ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ÌƒAï¿½Nï¿½eï¿½Bï¿½uï¿½ï¿½Ô‚ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param isActive ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½ï¿½Ô‚Éİ’è‚·ï¿½ï¿½ê‡ï¿½ï¿½ trueï¿½Aï¿½ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½É‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ false ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½ï¿½B
 	void SetActive(bool isActive) {
 		m_IsActive = isActive;
 	}
 
-	/// @brief •`‰æ‰Â”\‚©‚Ç‚¤‚©‚ğİ’è‚µ‚Ü‚·B
-	/// @param isDrawable •`‰æ‰Â”\‚É‚·‚éê‡‚Í trueA‚»‚¤‚Å‚È‚¢ê‡‚Í false ‚ğw’è‚µ‚Ü‚·B
+	/// @brief ï¿½`ï¿½ï¿½Â”\ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param isDrawable ï¿½`ï¿½ï¿½Â”\ï¿½É‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ trueï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ê‡ï¿½ï¿½ false ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½ï¿½B
 	void SetDrawable(bool isDrawable) {
 		m_IsDrawable = isDrawable;
 	}
 
-	/// @brief ’¸“_”‚ğİ’è‚µ‚Ü‚·B
-	/// @param count İ’è‚·‚é’¸“_”B
+	/// @brief ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param count ï¿½İ’è‚·ï¿½é’¸ï¿½_ï¿½ï¿½ï¿½B
 	void SetVertexCount(int count) {
 		m_iVertexCount = count;
 	}
 
-	/// @brief ƒCƒ“ƒfƒbƒNƒX‚Ì”‚ğİ’è‚µ‚Ü‚·B
-	/// @param count İ’è‚·‚éƒCƒ“ƒfƒbƒNƒX‚Ì”B
+	/// @brief ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Ìï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param count ï¿½İ’è‚·ï¿½ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Ìï¿½ï¿½B
 	void SetIndexCount(int count) {
 		m_iIndexCount = count;
 	}

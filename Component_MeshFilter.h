@@ -50,6 +50,7 @@ public:
 	void Update() override;
 	/// @brief 描画処理を実行します。
 	void Draw() override;
+	void DrawGUI() override;
 
 	/// @brief コンポーネントの所有者オブジェクトを設定します。
 	/// @param owner 新しい所有者となるObject型のポインタ。

@@ -2,14 +2,19 @@
 
 #include "MainEngine.h"
 
-#include "Component_Camera.h"
+#include "EditorCamera.h"
 #include "Component_Transform.h"
 #include "Component_MeshRenderer.h"
 #include "Component_CubeMesh.h"
 #include "PlaneMesh.h"
 #include "AssimpMeshRenderer.h"
 
+#include "Component_InputSystem.h"
+
 #include "ModelLoader.h"
+#include "OBJLoader.h"
+
+#include "imgui.h"
 
 Editor* Editor::m_pInstance;
 
@@ -41,11 +46,20 @@ void Editor::Initialize() {
 		auto camera = new Object();
 		camera->SetName("MainCamera");
 		camera->AddComponent<Transform>();
-		camera->AddComponent<Camera>();
+		camera->AddComponent<EditorCamera>();
 
 		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, -2.5f));
+		camera->GetComponent<EditorCamera>()->SetTarget(Vector4O(0.0f, 5.0f, -1.5f));
 
 		AddObject(camera);
+	}
+
+	{
+		auto input = new Object();
+		input->SetName("InputSystem");
+		input->AddComponent<InputSystem>();
+
+		AddObject(input);
 	}
 
 	{
@@ -74,72 +88,7 @@ void Editor::Initialize() {
 		//AddObject(cube);
 	}
 
-	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/sura.jpg");
-	for (int i=0;i<5;i++)
-	{
-		auto torus = new Object();
-		torus->SetName("Torus" + std::to_string(i));
-		torus->AddComponent<Transform>();
-		torus->AddComponent<MeshFilter>();
-		torus->AddComponent<AssimpMeshRenderer>();
-
-		auto loader = new ModelLoader();
-		loader->LoadModel(torus, "asset/model/model.fbx");
-		
-		MATERIAL material;
-		material.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		
-
-
-		LIGHT light;
-
-		light.Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-		light.Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-		light.Direction = XMFLOAT4(0.2f, -1.0f, -1.0f, 0.0f);
-
-		torus->GetComponent<Transform>()->SetPosition(Vector4O(-6.0f + 3.0f * i, 0.0f, 0.0f));
-		torus->GetComponent<MeshRenderer>()->SetMaterial(material);
-		torus->GetComponent<MeshRenderer>()->SetLight(light);
-		torus->GetComponent<MeshRenderer>()->SetTexture(texture);
-
-		switch (i)
-		{
-		case 0:
-			torus->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
-			torus->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
-			break;
-		case 1:
-			torus->GetComponent<MeshRenderer>()->SetVertexShader("vertex");
-			torus->GetComponent<MeshRenderer>()->SetPixelShader("vertex");
-			break;
-		case 2:
-			torus->GetComponent<MeshRenderer>()->SetVertexShader("pixel");
-			torus->GetComponent<MeshRenderer>()->SetPixelShader("pixel");
-			break;
-		case 3:
-			torus->GetComponent<MeshRenderer>()->SetVertexShader("BlinnPhong");
-			torus->GetComponent<MeshRenderer>()->SetPixelShader("BlinnPhong");
-			break;
-		case 4:
-			torus->GetComponent<MeshRenderer>()->SetVertexShader("hemisphere");
-			torus->GetComponent<MeshRenderer>()->SetPixelShader("hemisphere");
-			light.Direction = XMFLOAT4(0.0f, -1.0f, 0.0f, 0.0f); // 半球ライティングは上方向を向く
-			light.SkyColor = XMFLOAT4(0.6f, 0.0f, 0.0f, 1.0f);
-			light.GroundColor = XMFLOAT4(0.0f, 0.6f, 0.0f, 1.0f); // 半球ライティングの空と地面の色を設定
-			light.GroundNormal = XMFLOAT4(0.0f, 1.0f, 0.0f, 0.0f); // 半球ライティングの地面の法線を設定
-			XMVECTOR temp = XMLoadFloat4(&light.GroundNormal);
-			temp = XMVector4Normalize(temp);
-			XMStoreFloat4(&light.GroundNormal, temp);
-			torus->GetComponent<MeshRenderer>()->SetLight(light);
-
-			break;
-		default:
-			break;
-		}
-
-		AddObject(torus);
-	}
+	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
 
 	{
 		Object* plane = new Object();
@@ -171,16 +120,55 @@ void Editor::Initialize() {
 		AddObject(plane);
 	}
 
+	auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
+
+	{
+		Object* model = new Object();
+		model->SetName("Model0");
+		model->AddComponent<Transform>();
+		model->AddComponent<MeshFilter>();
+		model->AddComponent<MeshRenderer>();
+
+		OBJLoader* loader = new OBJLoader();
+		loader->Load("asset\\model\\player.obj", model);
+
+		MATERIAL material;
+		material.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+
+		LIGHT light;
+
+		light.Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+		light.Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+		light.Direction = XMFLOAT4(0.2f, -1.0f, -1.0f, 0.0f);
+
+		model->GetComponent<MeshRenderer>()->SetMaterial(material);
+		model->GetComponent<MeshRenderer>()->SetLight(light);
+
+		model->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		model->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		model->GetComponent<MeshRenderer>()->SetTexture(texture1);
+
+
+		AddObject(model);
+	}
+
 	Main();
+	m_pGUI->Initialize();
+
 }
 
 void Editor::Update() {
 	//Vector4O rot = GetObject("Cube1")->GetComponent<Transform>()->GetRotation();
 	//GetObject("Cube1")->GetComponent<Transform>()->SetRotation(Vector4O(rot.x + 0.01f, rot.y + 0.01f, rot.z + 0.01f));
-	for (int i = 0; i < 5; i++) {
-		Vector4O torusRot = GetObject("Torus" + std::to_string(i))->GetComponent<Transform>()->GetRotation();
-		GetObject("Torus" + std::to_string(i))->GetComponent<Transform>()->SetRotation(Vector4O(torusRot.x + 0.01f, torusRot.y + 0.03f, torusRot.z));
+	//for (int i = 0; i < 5; i++) {
+	//	Vector4O torusRot = GetObject("Torus" + std::to_string(i))->GetComponent<Transform>()->GetRotation();
+	//	GetObject("Torus" + std::to_string(i))->GetComponent<Transform>()->SetRotation(Vector4O(torusRot.x + 0.01f, torusRot.y + 0.03f, torusRot.z));
 
+	//}
+	for (auto& object : m_Objects) {
+		object->Update();
 	}
 }
 
@@ -205,9 +193,23 @@ void Editor::Draw() {
 		}
 	}
 
-	m_pGUI->Start();
-	m_pGUI->Draw();
-	m_pGUI->End();
+	m_pGUI->StartImGui();
+
+	m_pGUI->StartInspector();
+	if (m_pSelectedObject)
+		m_pSelectedObject->DrawGUI();
+	m_pGUI->EndWindow();
+
+	m_pGUI->StartHierarchy();
+	for (auto& object : m_Objects) {
+		if (ImGui::Button(object->GetName().c_str()))
+		{
+			m_pSelectedObject = object;
+		}
+	}
+	m_pGUI->EndWindow();
+
+	m_pGUI->EndImGui();
 
 	MainEngine::GetInstance()->GetRenderer()->BufferPresent();
 

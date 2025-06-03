@@ -1,6 +1,6 @@
 // ========================================================
 //
-// ƒ}ƒeƒŠƒAƒ‹ƒNƒ‰ƒX[Material.h]
+// ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X[Material.h]
 // 
 //									Date:	20250520
 //									Author:	Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ï¿½wï¿½bï¿½_ï¿½[ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h
 //==========================================================================
 
 #include <d3d11.h>
@@ -17,64 +17,77 @@
 #include "FrameWork.h"
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½`
 //==========================================================================
 
 class Material
 {
 private:
-	// ƒVƒF[ƒ_[‚ÌƒL[
+	// ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[
 	std::string m_VertexShader;
 	std::string m_PixelShader;
 
-	// ƒ}ƒeƒŠƒAƒ‹‚ÆŒõŒ¹‚Ìî•ñ
+	// ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÆŒï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½
 	MATERIAL m_Material;
 	LIGHT m_Light;
-	// ƒeƒNƒXƒ`ƒƒ‚ÌƒŠƒ\[ƒXƒrƒ…[
+	// ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½Ìƒï¿½ï¿½\ï¿½[ï¿½Xï¿½rï¿½ï¿½ï¿½[
 	ID3D11ShaderResourceView* m_Texture;
 
+	unsigned int	StartIndex;
+	unsigned int	IndexNum;
+
 public:
-	/// @brief Material ƒNƒ‰ƒX‚ÌƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚·B
+	/// @brief Material ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìƒfï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å‚ï¿½ï¿½B
 	Material() = default;
-	/// @brief Material ƒNƒ‰ƒX‚ÌƒfƒXƒgƒ‰ƒNƒ^‚Å‚·B
+	/// @brief Material ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìƒfï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å‚ï¿½ï¿½B
 	~Material() = default;
 
-	/// @brief ƒ}ƒeƒŠƒAƒ‹î•ñ‚ğƒVƒF[ƒ_[‚É‘—M
+	/// @brief ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½É‘ï¿½ï¿½M
 	void DrawMaterial();
 
-	/// @brief ‚±‚Ìƒ}ƒeƒŠƒAƒ‹‚É’¸“_ƒVƒF[ƒ_[‚ÌƒL[‚ğİ’è‚µ‚Ü‚·B
-	/// @param key İ’è‚·‚é’¸“_ƒVƒF[ƒ_[‚ÌƒL[B
+	/// @brief ï¿½ï¿½ï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½É’ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param key ï¿½İ’è‚·ï¿½é’¸ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½B
 	void SetVertexShaderKey(std::string key);
-	/// @brief ‚±‚Ìƒ}ƒeƒŠƒAƒ‹‚ÉƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ÌƒL[‚ğİ’è‚µ‚Ü‚·B
-	/// @param key İ’è‚·‚éƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ÌƒL[B
+	/// @brief ï¿½ï¿½ï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Éƒsï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param key ï¿½İ’è‚·ï¿½ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½B
 	void SetPixelShaderKey(std::string key);
 
-	/// @brief ƒ}ƒeƒŠƒAƒ‹‚ğİ’è‚µ‚Ü‚·B
-	/// @param material İ’è‚·‚éƒ}ƒeƒŠƒAƒ‹B
+	void SetShader();
+
+  	/// @brief ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param material ï¿½İ’è‚·ï¿½ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½B
 	void SetMaterial(MATERIAL material) { m_Material = material; }
 
-	/// @brief ŒõŒ¹î•ñ‚ğİ’è‚µ‚Ü‚·B
+	/// @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
 	void SetLight(LIGHT light) { m_Light = light; }
 
-	/// @brief ƒeƒNƒXƒ`ƒƒ‚ğİ’è‚µ‚Ü‚·B
-	/// @param texture İ’è‚·‚éID3D11ShaderResourceViewŒ^‚ÌƒeƒNƒXƒ`ƒƒB
+	/// @brief ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param texture ï¿½İ’è‚·ï¿½ï¿½ID3D11ShaderResourceViewï¿½^ï¿½Ìƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½B
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_Texture = texture; }
 
-	/// @brief ‚±‚Ìƒ}ƒeƒŠƒAƒ‹‚Ì’¸“_ƒVƒF[ƒ_[‚ÌƒL[‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ‚±‚Ìƒ}ƒeƒŠƒAƒ‹‚ÉŠi”[‚³‚ê‚Ä‚¢‚é’¸“_ƒVƒF[ƒ_[‚ÌƒL[B
+	/// @brief ï¿½ï¿½ï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½ï¿½ï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é’¸ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½B
 	std::string GetVertexShader() const { return m_VertexShader; }
-	/// @brief ‚±‚Ìƒ}ƒeƒŠƒAƒ‹‚ÌƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ÌƒL[‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ‚±‚Ìƒ}ƒeƒŠƒAƒ‹‚ÉŠi”[‚³‚ê‚Ä‚¢‚éƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ÌƒL[B
+	/// @brief ï¿½ï¿½ï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ìƒsï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½ï¿½ï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½B
 	std::string GetPixelShader() const { return m_PixelShader; }
 
-	/// @brief Œ»İ‚ÌƒIƒuƒWƒFƒNƒg‚Ìƒ}ƒeƒŠƒAƒ‹‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ÉŠÖ˜A•t‚¯‚ç‚ê‚Ä‚¢‚éMATERIALŒ^‚Ìƒ}ƒeƒŠƒAƒ‹B
+	void SetStartIndex(unsigned int startIndex) { StartIndex = startIndex; }
+	void SetIndexNum(unsigned int indexNum) { IndexNum = indexNum; }
+
+	unsigned int GetStartIndex() const { return StartIndex; }
+	unsigned int GetIndexNum() const { return IndexNum; }
+
+	void SetTextureEnable(bool enable) { m_Material.textureEnable = enable; }
+
+  	/// @brief ï¿½ï¿½ï¿½İ‚ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½ï¿½ï¿½ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ÉŠÖ˜Aï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½MATERIALï¿½^ï¿½Ìƒ}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½B
 	MATERIAL GetMaterial() const { return m_Material; }
-	/// @brief ƒ‰ƒCƒgî•ñ‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚Ìƒ‰ƒCƒgî•ñiLIGHTŒ^jB
+	/// @brief ï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½ï¿½ï¿½İ‚Ìƒï¿½ï¿½Cï¿½gï¿½ï¿½ï¿½iLIGHTï¿½^ï¿½jï¿½B
 	LIGHT GetLight() const { return m_Light; }
-	/// @brief ƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒXƒrƒ…[‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ƒeƒNƒXƒ`ƒƒ‚ğ•\‚· ID3D11ShaderResourceView ƒ|ƒCƒ“ƒ^B
+	/// @brief ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ ID3D11ShaderResourceView ï¿½|ï¿½Cï¿½ï¿½ï¿½^ï¿½B
 	ID3D11ShaderResourceView* GetTexture() const { return m_Texture; }
 };
 

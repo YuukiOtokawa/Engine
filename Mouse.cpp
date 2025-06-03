@@ -83,7 +83,7 @@ void Mouse::Update() {
 
 		m_State.ButtonLast[i] = m_State.ButtonRepeat[i];
 	}
-	m_State.Position = { 0,0 };
+	//m_State.Position = { 0,0 };
 	MouseDebug();
 }
 
@@ -160,6 +160,14 @@ void Mouse::SetIsVisible(bool visible) {
 	if (isVisible != visible) {
 		ShowCursor(visible);
 	}
+}
+
+void Mouse::SaveCursorPosition() {
+	GetCursorPos(&m_SavedCursorPos);
+}
+
+void Mouse::RestoreCursorPosition() {
+	SetCursorPos(m_SavedCursorPos.x, m_SavedCursorPos.y);
 }
 
 void Mouse::ProcessMessage(UINT message, WPARAM wParam, LPARAM lParam) {

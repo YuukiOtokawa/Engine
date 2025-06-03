@@ -44,6 +44,8 @@ private:
 	// Editor クラスのシングルトンパターンインスタンス
 	static Editor* m_pInstance;
 
+	Object* m_pSelectedObject = nullptr;
+
 public:
 	/// @brief エディタークラスのシングルトンインスタンスを取得します。
 	/// @return Editor クラスの唯一のインスタンスへのポインタ。

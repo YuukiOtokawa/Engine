@@ -1,6 +1,6 @@
 // ========================================================
 //
-// “ü—ÍƒVƒXƒeƒ€ƒRƒ“ƒ|[ƒlƒ“ƒg[Component_InputSystem.h]
+// å…¥åŠ›ã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ[Component_InputSystem.h]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include "Component.h"
@@ -18,31 +18,31 @@
 #include "Mouse.h"
 #include "Gamepad.h"
 
-//==========================================================================
-// ƒNƒ‰ƒX’è‹`
-//==========================================================================
 
-class Component_InputSystem :
+class InputSystem :
     public Component
 {
 private:
-
-	// ŠeŽí“ü—ÍƒfƒoƒCƒX‚Ìƒ|ƒCƒ“ƒ^
-	GamePad* m_pGamePad;
-	Keyboard* m_pKeyboard;
-	Mouse* m_pMouse;
+	static GamePad* m_pGamePad;
+	static Keyboard* m_pKeyboard;
+	static Mouse* m_pMouse;
 
 public:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	Component_InputSystem();
+	InputSystem();
 
-	//ŠeƒfƒoƒCƒX‚Ì“ü—Í’l‚ÌŽæ“¾EXV
+	//å„ãƒ‡ãƒã‚¤ã‚¹ã®å…¥åŠ›å€¤ã®å–å¾—ãƒ»æ›´æ–°
 	void Update() override;
+	void DrawGUI() override;
 
-	//ŠeŽíƒQƒbƒ^[
-	GamePad* GetGamePad() { return m_pGamePad; }
-	Keyboard* GetKeyboard() { return m_pKeyboard; }
-	Mouse* GetMouse() { return m_pMouse; }
+	//å„ç¨®ã‚²ãƒƒã‚¿ãƒ¼
+	static GamePad* GetGamePad() { return m_pGamePad; }
+	static Keyboard* GetKeyboard() { return m_pKeyboard; }
+	static Mouse* GetMouse() { return m_pMouse; }
 
+	void InitializeTag() override
+	{
+		owner->SetTag(GameObjectTagLayer::InputSystemTag);
+		owner->SetDrawable(false);
+	}
 };
 

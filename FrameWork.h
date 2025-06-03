@@ -20,6 +20,8 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
+#include "imgui.h"
+
 #undef GetObject
 
 //==========================================================================
@@ -71,8 +73,10 @@ struct MATERIAL
 	XMFLOAT4 diffuse;
 	XMFLOAT4 specular;
 	XMFLOAT4 emissive;
+
+	BOOL textureEnable;
 	float shininess;
-	float dummy[3]; // Padding to make it 16 bytes
+	float dummy[2]; // Padding to make it 16 bytes
 };
 
 // ライトの構造体定義
@@ -98,6 +102,7 @@ namespace GameObjectTagLayer {
 		SystemTag,
 		CameraTag,
 		ObjectTag,
+		InputSystemTag,
 	};
 
 	// ゲームオブジェクトのレイヤーを定義する列挙型

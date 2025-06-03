@@ -36,6 +36,7 @@ public:
 	void Update() override;
 	/// @brief 描画処理を実行します。
 	void Draw() override;
+	void DrawGUI() override;
 
 	/// @brief コンポーネントに対応したタグを所有者のオブジェクトに設定します。
 	void InitializeTag() override;

@@ -1,6 +1,6 @@
 // ========================================================
 //
-// ƒJƒƒ‰ƒRƒ“ƒ|[ƒlƒ“ƒg[Component_Camera.h]
+// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½g[Component_Camera.h]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ï¿½wï¿½bï¿½_ï¿½[ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h
 //==========================================================================
 
 #include "Component.h"
@@ -17,67 +17,71 @@
 #include "FrameWork.h"
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½`
 //==========================================================================
 
 class Camera : public Component
 {
 private:
-	// ƒC[ƒWƒ“ƒO—p ‘OƒtƒŒ[ƒ€‚ÌˆÊ’u‚ğ•Û‘¶
+	// ï¿½Cï¿½[ï¿½Wï¿½ï¿½ï¿½Oï¿½p ï¿½Oï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌˆÊ’uï¿½ï¿½Û‘ï¿½
     Vector4O m_LastPosition = Vector4O::Zero();
 
-	// ƒJƒƒ‰‚Ì’‹“_
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ï¿½_
     Vector4O m_Target;
-	// ƒJƒƒ‰‚ÌŠp“xiƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌŠpï¿½xï¿½iï¿½sï¿½bï¿½`ï¿½Aï¿½ï¿½ï¿½[ï¿½Aï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½j
     Vector4O m_Angle;
 
-	// ƒJƒƒ‰‚Ì‹–ìŠpiFOVj
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½pï¿½iFOVï¿½j
     float m_Fov = 90.0f;
 
-	// “Š‰es—ñ
+	// ï¿½ï¿½ï¿½eï¿½sï¿½ï¿½
     XMMATRIX m_Projection;
-	// ƒrƒ…[s—ñ
+	// ï¿½rï¿½ï¿½ï¿½[ï¿½sï¿½ï¿½
 	XMMATRIX m_View;
 
-	// ‹ßÚƒNƒŠƒbƒsƒ“ƒO‹——£
+	// ï¿½ßÚƒNï¿½ï¿½ï¿½bï¿½sï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½
 	float m_Near = 0.1f;
-	// ‰“•ûƒNƒŠƒbƒsƒ“ƒO‹——£
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½sï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½
     float m_Far = 1000.0f;
 
-	// ƒJƒƒ‰‚Ìã•ûŒüƒxƒNƒgƒ‹
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector4O m_Up = Vector4O::Up();
 
 public:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
     Camera();
 
-	/// @brief “Š‰es—ñ‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚Ì“Š‰es—ñiXMMATRIXŒ^jB
+	/// @brief ï¿½ï¿½ï¿½eï¿½sï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½ï¿½ï¿½İ‚Ì“ï¿½ï¿½eï¿½sï¿½ï¿½iXMMATRIXï¿½^ï¿½jï¿½B
 	XMMATRIX GetProjection() const { return m_Projection; }
 
-	/// @brief ƒrƒ…[s—ñ‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚Ìƒrƒ…[s—ñiXMMATRIXŒ^jB
+	/// @brief ï¿½rï¿½ï¿½ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½ï¿½ï¿½İ‚Ìƒrï¿½ï¿½ï¿½[ï¿½sï¿½ï¿½iXMMATRIXï¿½^ï¿½jï¿½B
 	XMMATRIX GetView() const { return m_View; }
 
-	/// @brief Šp“x‚ğ•\‚·ƒxƒNƒgƒ‹‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Šp“x‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ï¿½pï¿½xï¿½ï¿½\ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+	/// @return ï¿½pï¿½xï¿½ï¿½\ï¿½ï¿½ Vector4O ï¿½^ï¿½Ì’lï¿½B
 	Vector4O GetAngle() const { return m_Angle; }
 
-    /// @brief ƒIƒuƒWƒFƒNƒg‚Ìó‘Ô‚ğXV‚µ‚Ü‚·iƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚½ƒƒ\ƒbƒhjB
+    /// @brief ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½Ô‚ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½Ü‚ï¿½ï¿½iï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½hï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½jï¿½B
     void Update() override;
-	/// @brief •`‰æˆ—‚ğÀs‚µ‚Ü‚·B
+	/// @brief ï¿½`ï¿½æˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	void Draw() override;
-	/// @brief ƒRƒ“ƒ|[ƒlƒ“ƒg‚É‘Î‰‚µ‚½ƒ^ƒO‚ğŠ—LÒ‚ÌƒIƒuƒWƒFƒNƒg‚Éİ’è‚µ‚Ü‚·iƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚½ƒƒ\ƒbƒhjB
-    void InitializeTag() override;
+  
+	void DrawGUI() override;
+	/// @brief ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½É‘Î‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½Ò‚ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Éİ’è‚µï¿½Ü‚ï¿½ï¿½iï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½hï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½jï¿½B
+  void InitializeTag() override;
 
-	/// @brief ’‹“_‚ğİ’è‚µ‚Ü‚·B
-	/// @param target İ’è‚·‚éVector4OŒ^‚Ì’‹“_B
+	/// @brief ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param target ï¿½İ’è‚·ï¿½ï¿½Vector4Oï¿½^ï¿½Ì’ï¿½ï¿½ï¿½ï¿½_ï¿½B
 	void SetTarget(Vector4O target) { m_Target = target; }
-	/// @brief Šp“x‚ğİ’è‚µ‚Ü‚·B
-	/// @param angle İ’è‚·‚éŠp“x‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ï¿½pï¿½xï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param angle ï¿½İ’è‚·ï¿½ï¿½pï¿½xï¿½ï¿½\ï¿½ï¿½ Vector4O ï¿½^ï¿½Ì’lï¿½B
 	void SetAngle(Vector4O angle) { m_Angle = angle; }
-	/// @brief ‹–ìŠpiFOVj‚ğİ’è‚µ‚Ü‚·B
-	/// @param fov İ’è‚·‚é‹–ìŠpiFOVj‚Ì’lB
+	/// @brief ï¿½ï¿½ï¿½ï¿½pï¿½iFOVï¿½jï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param fov ï¿½İ’è‚·ï¿½é‹ï¿½ï¿½pï¿½iFOVï¿½jï¿½Ì’lï¿½B
 	void SetFov(float fov) { m_Fov = fov; }
+
+	Vector4O GetTarget() const { return m_Target; }
 };
 

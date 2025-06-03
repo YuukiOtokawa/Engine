@@ -1,6 +1,6 @@
 // ========================================================
 //
-// imgui•`‰æƒNƒ‰ƒX[GUI.h]
+// imguiï¿½`ï¿½ï¿½Nï¿½ï¿½ï¿½X[GUI.h]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
@@ -9,15 +9,17 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ï¿½wï¿½bï¿½_ï¿½[ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h
 //==========================================================================
 
 #include "Vector4O.h"
 #include "d3d11.h"
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½`
 //==========================================================================
+
+#include <list>
 
 class GUI {
 private:
@@ -26,19 +28,29 @@ private:
 	float Float[4] = {};
 	int count = 0;
 
-	/// @brief ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğì¬‚µ‚Ü‚·B
+	//std::list<ImFont*> fonts;
+	static ImFont* m_pFontDefault;
+	static ImFont* m_pFontObjectName;
+	static ImFont* m_pCurrentFont;
+
+	/// @brief ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	void CreateRenderTarget();
-	/// @brief ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğƒNƒŠ[ƒ“ƒAƒbƒv‚µ‚Ü‚·B
+	/// @brief ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	void CleanupRenderTarget();
 
-	// imgui—pƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[
+	// imguiï¿½pï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½rï¿½ï¿½ï¿½[
 	ID3D11RenderTargetView* m_mainRenderTargetView = nullptr;
 public:
-	/// @brief •`‰æŠJn
-	void Start();
-	/// @brief •`‰æI—¹
-	void End();
-	/// @brief •`‰æˆ—‚ğÀs‚µ‚Ü‚·B
+
+	void Initialize();
+	void StartImGui();
+	void StartHierarchy();
+	void StartInspector();
+	void EndWindow();
+	void EndImGui();
 	void Draw();
+
+	static void SetFontDefault();
+	static void SetFontObjectName();
 };
 

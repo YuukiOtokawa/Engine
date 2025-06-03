@@ -1,6 +1,6 @@
 // ========================================================
 //
-// ƒƒbƒVƒ…ƒŒƒ“ƒ_ƒ‰[ƒRƒ“ƒ|[ƒlƒ“ƒgŠî’êƒNƒ‰ƒX[Component_MeshRenderer.h]
+// ï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½[ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X[Component_MeshRenderer.h]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ï¿½wï¿½bï¿½_ï¿½[ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h
 //==========================================================================
 
 #include "Component.h"
@@ -17,52 +17,57 @@
 #include "Material.h"
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½`
 //==========================================================================
 
 class MeshRenderer :
     public Component
 {
 private:
-	// ƒ}ƒeƒŠƒAƒ‹ƒ|ƒCƒ“ƒ^
+	// ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½^
 	Material* m_pMaterial = nullptr;
+	int m_MaterialNum = 1;
 
 public:
-	/// @brief MeshRenderer ƒNƒ‰ƒX‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚µ‚Ü‚·B
+	/// @brief MeshRenderer ï¿½Nï¿½ï¿½ï¿½Xï¿½ÌVï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	MeshRenderer();
-	/// @brief MeshRenderer ‚ÌƒfƒXƒgƒ‰ƒNƒ^‚Å‚·B
+	/// @brief MeshRenderer ï¿½Ìƒfï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å‚ï¿½ï¿½B
 	~MeshRenderer() = default;
 
-    /// @brief ƒIƒuƒWƒFƒNƒg‚Ìó‘Ô‚ğXV‚µ‚Ü‚·B
+    /// @brief ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½Ô‚ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
     void Update() override;
-	/// @brief •`‰æˆ—‚ğÀs‚µ‚Ü‚·B
+	/// @brief ï¿½`ï¿½æˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	void Draw() override;
+	void DrawGUI() override;
 
-	/// @brief ƒ}ƒeƒŠƒAƒ‹‚ğİ’è‚µ‚Ü‚·B
-	/// @param material İ’è‚·‚éƒ}ƒeƒŠƒAƒ‹B
+	/// @brief ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param material ï¿½İ’è‚·ï¿½ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½B
 	void SetMaterial(MATERIAL material) { this->m_pMaterial->SetMaterial(material); }
-	/// @brief LIGHTŒ^‚ÌŒõŒ¹î•ñ‚ğİ’è‚µ‚Ü‚·B
-	/// @param light İ’è‚·‚éLIGHTŒ^‚ÌŒõŒ¹î•ñB
+	/// @brief LIGHTï¿½^ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param light ï¿½İ’è‚·ï¿½ï¿½LIGHTï¿½^ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 	void SetLight(LIGHT light) { 
 		this->m_pMaterial->SetLight(light);
 	}
 
-	/// @brief ’¸“_ƒVƒF[ƒ_[‚ğw’è‚³‚ê‚½ƒL[‚Åİ’è‚µ‚Ü‚·B
-	/// @param key İ’è‚·‚é’¸“_ƒVƒF[ƒ_[‚ÌƒL[B
+	void SetMaterial(Material* material) { this->m_pMaterial = material; }
+	void SetMaterialNum(int num) { this->m_MaterialNum = num; }
+
+	/// @brief ï¿½ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ï¿½ï¿½wï¿½è‚³ï¿½ê‚½ï¿½Lï¿½[ï¿½Åİ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param key ï¿½İ’è‚·ï¿½é’¸ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½B
 	void SetVertexShader(std::string key) {
 		this->m_pMaterial->SetVertexShaderKey(key);
 	}
-	/// @brief ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ğw’è‚³‚ê‚½ƒL[‚Åİ’è‚µ‚Ü‚·B
-	/// @param key İ’è‚·‚éƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ÌƒL[B
+	/// @brief ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ï¿½ï¿½wï¿½è‚³ï¿½ê‚½ï¿½Lï¿½[ï¿½Åİ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param key ï¿½İ’è‚·ï¿½ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒLï¿½[ï¿½B
 	void SetPixelShader(std::string key) {
 		this->m_pMaterial->SetPixelShaderKey(key);
 	}
 
-	/// @brief ƒeƒNƒXƒ`ƒƒ‚ğİ’è‚µ‚Ü‚·B
-	/// @param texture İ’è‚·‚éID3D11ShaderResourceViewŒ^‚ÌƒeƒNƒXƒ`ƒƒB
+	/// @brief ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
+	/// @param texture ï¿½İ’è‚·ï¿½ï¿½ID3D11ShaderResourceViewï¿½^ï¿½Ìƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½B
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_pMaterial->SetTexture(texture); }
 
-	/// @brief ƒRƒ“ƒ|[ƒlƒ“ƒg‚É‘Î‰‚µ‚½ƒ^ƒO‚ğŠ—LÒ‚ÌƒIƒuƒWƒFƒNƒg‚Éİ’è‚µ‚Ü‚·B
+	/// @brief ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½É‘Î‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½Ò‚ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Éİ’è‚µï¿½Ü‚ï¿½ï¿½B
 	void InitializeTag() override;
 };
 
