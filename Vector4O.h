@@ -16,6 +16,8 @@ public:
 	float z = 0.0f;
 	float w = 0.0f;
 
+	static constexpr float PI = 3.14159265358979323846f;
+
 	Vector4O() = default;
 
 	Vector4O(const Vector4O&) = default;

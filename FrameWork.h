@@ -22,6 +22,8 @@ using namespace DirectX;
 
 #include "imgui.h"
 
+#include "Vector4O.h"
+
 #undef GetObject
 
 //==========================================================================
@@ -94,19 +96,22 @@ struct MATERIAL
 	float dummy[2]; // Padding to make it 16 bytes
 };
 
+
 struct LIGHT {
 	short Enable = true;
 	BOOL Dummy[3]; // Padding to make it 16 bytes
-	XMFLOAT4 Direction;//方向ベクトル
-	XMFLOAT4 Diffuse;//拡散光
-	XMFLOAT4 Ambient;//環境光
+	Vector4O Direction;//方向ベクトル
+	Vector4O Diffuse;//拡散光
+	Vector4O Ambient;//環境光
 
-	XMFLOAT4 SkyColor;//空の色
-	XMFLOAT4 GroundColor;//地面の色
-	XMFLOAT4 GroundNormal;//地面の法線ベクトル
+	Vector4O SkyColor;//空の色
+	Vector4O GroundColor;//地面の色
+	Vector4O GroundNormal;//地面の法線ベクトル
 
-	XMFLOAT4 Position;//点光源の位置
-	XMFLOAT4 PointLightParam;//点光源のパラメータ（半径など）
+	Vector4O Position;//点光源の位置
+	Vector4O PointLightRange;//点光源の範囲
+
+	Vector4O SpotLightAngle;//スポットライトの角度
 };
 
 namespace GameObjectTagLayer {

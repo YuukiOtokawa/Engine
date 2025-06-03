@@ -19,11 +19,16 @@ void EditorCamera::Update()
 	forward.z = cosf(rotation.y) * cosf(rotation.x);
 	forward.Normalize();
 
-	// 前方ベクトルからカメラの右方向を計算
-	Vector4O right = Vector4O::Up().Cross(forward).Normalize();
+	// カメラの方向から右方向ベクトルを計算
+	// 右方向はカメラの上方向と前方向の外積で求める
+	Vector4O right;
+	right.x = forward.z * Vector4O::Up().y - forward.y * Vector4O::Up().z;
+	right.y = forward.x * Vector4O::Up().z - forward.z * Vector4O::Up().x;
+	right.z = forward.y * Vector4O::Up().x - forward.x * Vector4O::Up().y;
+	right.Normalize();
 
 	// カメラの上方向を計算
-	Vector4O up = forward.Cross(right).Normalize();
+	Vector4O up = Vector4O::Up();
 
 	if (keyboard->GetKeyRepeat(KK_W)) {
 		Vector4O movement = forward * speed;
@@ -45,12 +50,12 @@ void EditorCamera::Update()
 		transform->SetPosition(transform->GetPosition() + movement);
 		SetTarget(GetTarget() + movement);
 	}
-	if (keyboard->GetKeyRepeat(KK_Q)) {
+	if (keyboard->GetKeyRepeat(KK_E)) {
 		Vector4O movement = up * speed;
 		transform->SetPosition(transform->GetPosition() + movement);
 		SetTarget(GetTarget() + movement);
 	}
-	if (keyboard->GetKeyRepeat(KK_E)) {
+	if (keyboard->GetKeyRepeat(KK_Q)) {
 		Vector4O movement = up * -speed;
 		transform->SetPosition(transform->GetPosition() + movement);
 		SetTarget(GetTarget() + movement);

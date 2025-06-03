@@ -21,27 +21,37 @@ Editor* Editor::m_pInstance;
 void Editor::Initialize() {
 	m_pGUI = new GUI();
 	
-	//光源計算無し
-	MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("unlitTextureVS.cso", "unlit");
-	MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("unlitTexturePS.cso", "unlit");
+	{
+		//光源計算無し
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("unlitTextureVS.cso", "unlit");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("unlitTexturePS.cso", "unlit");
 
-	//頂点ライティング
-	MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("vertexDirectionalLightingVS.cso", "vertex");
-	MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("vertexDirectionalLightingPS.cso", "vertex");
+		//頂点ライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("vertexDirectionalLightingVS.cso", "vertex");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("vertexDirectionalLightingPS.cso", "vertex");
 
-	//ピクセルライティング
-	MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("pixelLightingVS.cso", "pixel");
-	MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("pixelLightingPS.cso", "pixel");
+		//ピクセルライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("pixelLightingVS.cso", "pixel");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("pixelLightingPS.cso", "pixel");
 
-	//BlinnPhongライティング
-	MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("blinnPhongVS.cso", "BlinnPhong");
-	MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("blinnPhongPS.cso", "BlinnPhong");
+		//BlinnPhongライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("blinnPhongVS.cso", "BlinnPhong");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("blinnPhongPS.cso", "BlinnPhong");
 
-	//半球ライティング
-	MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("hemisphereLightingVS.cso", "hemisphere");
-	MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("hemisphereLightingPS.cso", "hemisphere");
+		//半球ライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("hemisphereLightingVS.cso", "hemisphere");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("hemisphereLightingPS.cso", "hemisphere");
 
+		//点光源ライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("blinnPhongVS.cso", "pointLight");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("pointLightingBlinnPhongPS.cso", "pointLight");
 
+		//スポットライトライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("spotLightingVS.cso", "spotLight");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("spotLightingPS.cso", "spotLight");
+	}
+
+	//カメラ作成
 	{
 		auto camera = new Object();
 		camera->SetName("MainCamera");
@@ -54,6 +64,7 @@ void Editor::Initialize() {
 		AddObject(camera);
 	}
 
+	//入力システム作成
 	{
 		auto input = new Object();
 		input->SetName("InputSystem");
@@ -62,6 +73,7 @@ void Editor::Initialize() {
 		AddObject(input);
 	}
 
+	//立方体オブジェクト作成
 	{
 		auto cube = new Object();
 		cube->SetName("Cube1");
@@ -90,6 +102,7 @@ void Editor::Initialize() {
 
 	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
 
+	//平面オブジェクト作成
 	{
 		Object* plane = new Object();
 		plane->SetName("Plane1");
@@ -114,14 +127,15 @@ void Editor::Initialize() {
 		plane->GetComponent<MeshRenderer>()->SetLight(light);
 		plane->GetComponent<MeshRenderer>()->SetTexture(texture);
 
-		plane->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
-		plane->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		plane->GetComponent<MeshRenderer>()->SetVertexShader("spotLight");
+		plane->GetComponent<MeshRenderer>()->SetPixelShader("spotLight");
 
 		AddObject(plane);
 	}
 
 	auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
 
+	//プレイヤーモデルオブジェクト作成
 	{
 		Object* model = new Object();
 		model->SetName("Model0");
@@ -151,7 +165,76 @@ void Editor::Initialize() {
 		model->GetComponent<MeshRenderer>()->SetTexture(texture1);
 
 
-		AddObject(model);
+		//AddObject(model);
+	}
+
+	//トーラスオブジェクト作成
+	{
+		Object* torus;
+
+		for (int i = 0; i < 5; i++) {
+			torus = new Object();
+			torus->SetName("Torus" + std::to_string(i));
+			torus->AddComponent<Transform>();
+			torus->AddComponent<MeshFilter>();
+			torus->AddComponent<AssimpMeshRenderer>();
+
+			ModelLoader* loader = new ModelLoader();
+			loader->LoadModel(torus, "asset\\model\\torus.obj");
+
+			MATERIAL material;
+			material.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+			LIGHT light;
+			light.Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+			light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
+			light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
+
+			torus->GetComponent<Transform>()->SetRotation(Vector4O(2.0f * i, 2.0f * i, 2.0f * i));
+			torus->GetComponent<Transform>()->SetPosition(Vector4O(-5.0f + i * 2.5f, -5.0f + i * 2.f, -5.f + i * 2.f));
+			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
+			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
+			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
+
+			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("pointLight");
+			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("pointLight");
+			//AddObject(torus);
+		}
+
+		//スポットライト用トーラス
+		{
+			Object* torus = new Object();
+			torus->SetName("SpotLightTorus");
+			torus->AddComponent<Transform>();
+			torus->AddComponent<MeshFilter>();
+			torus->AddComponent<AssimpMeshRenderer>();
+
+			ModelLoader* loader = new ModelLoader();
+			loader->LoadModel(torus, "asset\\model\\torus.obj");
+
+			MATERIAL material;
+			material.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+			LIGHT light;
+			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+			light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
+			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // スポットライトの方向
+			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // スポットライトの位置
+			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // スポットライトの範囲
+			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // スポットライトの角度
+
+			torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
+			torus->GetComponent<Transform>()->SetPosition(Vector4O::Zero());
+			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
+			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
+			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
+
+			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("spotLight");
+			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("spotLight");
+			AddObject(torus);
+		}
 	}
 
 	Main();

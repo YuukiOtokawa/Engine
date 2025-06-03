@@ -1,7 +1,6 @@
 #include "GUI.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
-#include "imgui.h"
 
 #include "MainEngine.h"
 
@@ -70,32 +69,6 @@ void GUI::EndImGui()
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GUI::Draw() {
-
-	bool SwapChainOccluded = false;
-
-	//auto windowSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
-
-	//if (windowSize.x != 0 && windowSize.y != 0) {
-	//	CleanupRenderTarget();
-	//	MainEngine::GetInstance()->GetRenderer()->GetSwapChain()->ResizeBuffers(0, windowSize.x, windowSize.y, DXGI_FORMAT_UNKNOWN, 0);
-	//	CreateRenderTarget();
-	//}
-	//SetNextWindowSize(ImVec2(windowSize.x * 0.2f, windowSize.y * 0.2f));
-
-
-	Text("Hello World!");
-	Checkbox("checkbox",&checkbox);
-	SliderFloat("sliderfloat", &sliderfloat, 0.0f, 1.0f);
-	InputFloat("inputfloat", &sliderfloat);
-	SliderFloat4("SliderFloat4", Float, 0.0f, 1.0f);
-	InputFloat4("InputFloat4", Float);
-	Button("count", ImVec2(100,100));
-	
-
-
-
-}
 
 void GUI::SetFontDefault()
 {
