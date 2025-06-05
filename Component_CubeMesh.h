@@ -29,6 +29,5 @@ private:
 public:
     /// @brief 立方体メッシュを生成するコンストラクタです。
     CubeMesh();
-	void DrawGUI() override;
 };
 

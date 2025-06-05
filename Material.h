@@ -45,6 +45,8 @@ public:
 	/// @brief �}�e���A�������V�F�[�_�[�ɑ��M
 	void DrawMaterial();
 
+	void DrawGUI();
+
 	/// @brief ���̃}�e���A���ɒ��_�V�F�[�_�[�̃L�[��ݒ肵�܂��B
 	/// @param key �ݒ肷�钸�_�V�F�[�_�[�̃L�[�B
 	void SetVertexShaderKey(std::string key);

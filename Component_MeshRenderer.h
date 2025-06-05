@@ -35,7 +35,7 @@ public:
 	~MeshRenderer() = default;
 
     /// @brief �I�u�W�F�N�g�̏�Ԃ��X�V���܂��B
-    void Update() override;
+    void UpdateComponent() override;
 	/// @brief �`�揈�������s���܂��B
 	void Draw() override;
 	void DrawGUI() override;

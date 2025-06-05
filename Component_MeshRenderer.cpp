@@ -12,7 +12,7 @@ MeshRenderer::MeshRenderer()
 	m_pMaterial->DrawMaterial();
 }
 
-void MeshRenderer::Update() {
+void MeshRenderer::UpdateComponent() {
 
 }
 
@@ -46,7 +46,11 @@ void MeshRenderer::Draw() {
 }
 
 void MeshRenderer::DrawGUI() {
+	ImGui::Separator();
 	ImGui::Text("Mesh Renderer");
+	ImGui::Indent();
+	m_pMaterial->DrawGUI();
+	ImGui::Unindent();
 }
 
 void MeshRenderer::InitializeTag() {

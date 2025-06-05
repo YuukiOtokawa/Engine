@@ -243,6 +243,3 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 
 }
 
-void CubeMesh::DrawGUI() {
-	ImGui::Text("Cube Mesh");
-}

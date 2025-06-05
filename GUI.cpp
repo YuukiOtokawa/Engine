@@ -13,8 +13,10 @@ ImFont* GUI::m_pCurrentFont = nullptr;
 void GUI::Initialize() {
 	auto io = ImGui::GetIO();
 
-	m_pFontDefault = io.Fonts->AddFontDefault();
-
+	//フォント設定
+	// 通常のフォントを設定
+	m_pFontDefault = io.Fonts->AddFontFromFileTTF("asset\\font\\CascadiaMono.ttf", 16.0f);
+	// オブジェクト名用のフォントを設定
 	m_pFontObjectName = io.Fonts->AddFontFromFileTTF("asset\\font\\CascadiaMono.ttf", 24.0f);
 
 	io.Fonts->Build();
@@ -32,17 +34,15 @@ void GUI::StartImGui()
 }
 void GUI::StartHierarchy() {
 	SetNextWindowPos(ImVec2(0, 0));
-	//SetNextWindowSize(ImVec2(500, 1009));
-	SetNextWindowSizeConstraints(ImVec2(250, 0), ImVec2(500, 750));
+	SetNextWindowSize(ImVec2(400, 1009));
 
 	Begin("Hierarchy");
 }
 
 void GUI::StartInspector()
 {
-	SetNextWindowPos(ImVec2(1400, 0));
-	//SetNextWindowSize(ImVec2(500, 1009));
-	SetNextWindowSizeConstraints(ImVec2(250, 0), ImVec2(500, 750));
+	SetNextWindowPos(ImVec2(1920 - 400, 0));
+	SetNextWindowSize(ImVec2(400, 1009));
 
 	Begin("Inspector");
 }

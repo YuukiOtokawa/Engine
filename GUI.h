@@ -24,12 +24,12 @@ private:
 	static ImFont* m_pFontObjectName;
 	static ImFont* m_pCurrentFont;
 
-	/// @brief �����_�[�^�[�Q�b�g���쐬���܂��B
+	/// @brief レンダーターゲットを作成します。
 	void CreateRenderTarget();
-	/// @brief �����_�[�^�[�Q�b�g���N���[���A�b�v���܂��B
+	/// @brief レンダーターゲットのクリーンアップ処理を行います。
 	void CleanupRenderTarget();
 
-	// imgui�p�����_�[�^�[�Q�b�g�r���[
+	// imgui用レンダーターゲット
 	ID3D11RenderTargetView* m_mainRenderTargetView = nullptr;
 public:
 

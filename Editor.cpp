@@ -61,6 +61,18 @@ void Editor::Initialize() {
 		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, -2.5f));
 		camera->GetComponent<EditorCamera>()->SetTarget(Vector4O(0.0f, 5.0f, -1.5f));
 
+		camera->GetComponent<EditorCamera>()->SetActiveCamera(true);
+		AddObject(camera);
+	}
+
+	//カメラ2作成
+	{
+		auto camera = new Object();
+		camera->SetName("Camera2");
+		camera->AddComponent<Transform>();
+		camera->AddComponent<Camera>();
+		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 2.5f));
+		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 5.0f, 1.5f));
 		AddObject(camera);
 	}
 
@@ -127,8 +139,8 @@ void Editor::Initialize() {
 		plane->GetComponent<MeshRenderer>()->SetLight(light);
 		plane->GetComponent<MeshRenderer>()->SetTexture(texture);
 
-		plane->GetComponent<MeshRenderer>()->SetVertexShader("spotLight");
-		plane->GetComponent<MeshRenderer>()->SetPixelShader("spotLight");
+		plane->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		plane->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
 
 		AddObject(plane);
 	}
@@ -165,7 +177,7 @@ void Editor::Initialize() {
 		model->GetComponent<MeshRenderer>()->SetTexture(texture1);
 
 
-		//AddObject(model);
+		AddObject(model);
 	}
 
 	//トーラスオブジェクト作成
@@ -187,6 +199,8 @@ void Editor::Initialize() {
 			material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 			LIGHT light;
+			light.Direction = XMFLOAT4(0.2f, -1.0f, -1.0f, 0.0f);
+			light.Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 			light.Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 			light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
 			light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
@@ -197,9 +211,9 @@ void Editor::Initialize() {
 			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
 			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
 
-			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("pointLight");
-			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("pointLight");
-			//AddObject(torus);
+			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("BlinnPhong");
+			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("BlinnPhong");
+			AddObject(torus);
 		}
 
 		//スポットライト用トーラス
@@ -233,7 +247,7 @@ void Editor::Initialize() {
 
 			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("spotLight");
 			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("spotLight");
-			AddObject(torus);
+			//AddObject(torus);
 		}
 	}
 
@@ -243,60 +257,80 @@ void Editor::Initialize() {
 }
 
 void Editor::Update() {
-	//Vector4O rot = GetObject("Cube1")->GetComponent<Transform>()->GetRotation();
-	//GetObject("Cube1")->GetComponent<Transform>()->SetRotation(Vector4O(rot.x + 0.01f, rot.y + 0.01f, rot.z + 0.01f));
-	//for (int i = 0; i < 5; i++) {
-	//	Vector4O torusRot = GetObject("Torus" + std::to_string(i))->GetComponent<Transform>()->GetRotation();
-	//	GetObject("Torus" + std::to_string(i))->GetComponent<Transform>()->SetRotation(Vector4O(torusRot.x + 0.01f, torusRot.y + 0.03f, torusRot.z));
-
-	//}
-	for (auto& object : m_Objects) {
+	for (auto& object : m_Objects) 
 		object->Update();
-	}
 }
 
 void Editor::Draw() {
-	
+
+	//レンダリングバッファクリア
 	MainEngine::GetInstance()->GetRenderer()->BufferClear();
 
-	std::list<Object*> cameraList;
+//==========================================================================
+// オブジェクト描画処理
+//==========================================================================
+
+	//使用するカメラを設定
+	Object* activeCamera = nullptr;
 	for (auto& object : m_Objects) {
-		if (object->GetTag() == GameObjectTagLayer::CameraTag) {
-			cameraList.push_back(object);
+		if (object->GetTag() == GameObjectTagLayer::CameraTag &&
+			object->GetComponent<Camera>()->IsActiveCamera()) {
+			activeCamera = object;
 		}
 	}
 
-	for (auto& camera : cameraList) {
-		camera->Draw();
+	//使用するカメラの行列情報を登録
+	activeCamera->Draw();
 
-		for (auto& object : m_Objects) {
-			if (object->GetTag() == GameObjectTagLayer::ObjectTag) {
-				object->Draw();
-			}
+	//オブジェクトの描画
+	for (auto& object : m_Objects) {
+		if (object->GetTag() == GameObjectTagLayer::ObjectTag) {
+			object->Draw();
 		}
 	}
 
+//==========================================================================
+// GUI描画処理
+//==========================================================================
+
+	//ImGuiの初期化
 	m_pGUI->StartImGui();
 
+
+	//インスペクタウィンドウの描画開始
 	m_pGUI->StartInspector();
+
+	//選択されたオブジェクトの情報を表示
 	if (m_pSelectedObject)
 		m_pSelectedObject->DrawGUI();
+
 	m_pGUI->EndWindow();
 
+
+	//ヒエラルキーウィンドウの描画開始
 	m_pGUI->StartHierarchy();
+
+	//全オブジェクトの名前ボタンを描画
 	for (auto& object : m_Objects) {
-		if (ImGui::Button(object->GetName().c_str()))
-		{
-			m_pSelectedObject = object;
+		if (object == m_pSelectedObject)
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f)); // 選択中のオブジェクトの色を変更
+		else
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f)); // 通常のオブジェクトの色
+
+		if (ImGui::Button(object->GetName().c_str())){
+			m_pSelectedObject = object;// 選択されたオブジェクトを更新
 		}
+
+		ImGui::PopStyleColor();
 	}
+		
 	m_pGUI->EndWindow();
 
+	// ImGui描画の終了
 	m_pGUI->EndImGui();
 
+	// レンダリングバッファの内容を画面に表示
 	MainEngine::GetInstance()->GetRenderer()->BufferPresent();
-
-
 }
 
 void Editor::Finalize() {

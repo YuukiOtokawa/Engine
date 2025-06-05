@@ -3,12 +3,29 @@
 #include "Component_InputSystem.h"
 #include "Component_Transform.h"
 
-void EditorCamera::Update()
+void EditorCamera::UpdateComponent()
 {
 	auto keyboard = InputSystem::GetKeyboard();
 	auto mouse = InputSystem::GetMouse();
 	auto transform = owner->GetComponent<Transform>();
 	float speed = 0.5f;
+
+	// 右クリックドラッグでカメラ回転
+	static bool isDragging = false;
+	static XMINT2 lastMousePos = { 0, 0 };
+	float rotationSpeed = 0.001f;
+
+	if (mouse->GetDown(RightButton)) {
+		// ドラッグ開始
+		isDragging = true;
+		lastMousePos = mouse->GetPosition();
+	}
+	else if (mouse->GetUp(RightButton)) {
+		// ドラッグ終了
+		isDragging = false;
+	}
+
+	if (!isDragging)return;
 
 	// 移動
 	// カメラの回転から方向ベクトルを計算
@@ -61,21 +78,6 @@ void EditorCamera::Update()
 		SetTarget(GetTarget() + movement);
 	}
 
-	// 右クリックドラッグでカメラ回転
-	static bool isDragging = false;
-	static XMINT2 lastMousePos = { 0, 0 };
-	float rotationSpeed = 0.001f;
-
-	if (mouse->GetDown(RightButton)) {
-		// ドラッグ開始
-		isDragging = true;
-		lastMousePos = mouse->GetPosition();
-	}
-	else if (mouse->GetUp(RightButton)) {
-		// ドラッグ終了
-		isDragging = false;
-	}
-
 	if (isDragging && mouse->GetRepeat(RightButton)) {
 		// マウスの現在位置を取得
 		XMINT2 currentMousePos = mouse->GetPosition();
@@ -85,8 +87,8 @@ void EditorCamera::Update()
 		int deltaY = currentMousePos.y - lastMousePos.y;
 
 		 // 視線移動方向を逆にするために符号を反転
-		deltaX = -deltaX;
-		deltaY = deltaY;
+		deltaX = deltaX;
+		deltaY = -deltaY;
 
 		// X軸の回転（上下の視線移動）
 		Vector4O rotation = transform->GetRotation();
@@ -114,6 +116,3 @@ void EditorCamera::Update()
 	}
 }
 
-void EditorCamera::DrawGUI() {
-	ImGui::Text("Editor Camera");
-}

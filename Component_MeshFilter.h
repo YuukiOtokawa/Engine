@@ -47,7 +47,7 @@ public:
 	MeshFilter(int vertexCount, int indexCount);
 
 	/// @brief オブジェクトの状態を更新します（オーバーライドされたメソッド）。
-	void Update() override;
+	void UpdateComponent() override;
 	/// @brief 描画処理を実行します。
 	void Draw() override;
 	void DrawGUI() override;

@@ -37,7 +37,6 @@ public:
 		m_AssimpTexture = assimpTexture;
     }
 
-    void DrawGUI() override;
 
 };
 

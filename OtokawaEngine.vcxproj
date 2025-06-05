@@ -143,6 +143,7 @@
     <ClInclude Include="EditorCamera.h" />
     <ClInclude Include="EditorView.h" />
     <ClInclude Include="EditorWindow.h" />
+    <ClInclude Include="EngineComponents.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="Gamepad.h" />
     <ClInclude Include="GUI.h" />
@@ -159,10 +160,12 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="MatrixO.h" />
     <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="MonoBehavior.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="PlaneMesh.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Vector4O.h" />
   </ItemGroup>
@@ -182,7 +185,6 @@
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="imgui.cpp" />
-    <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
@@ -193,6 +195,7 @@
     <ClCompile Include="MainEngine.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="MonoBehavior.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OBJLoader.cpp" />

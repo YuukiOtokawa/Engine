@@ -3,6 +3,7 @@
 #include "MainEngine.h"
 
 #include <sstream>
+#include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 
@@ -182,6 +183,8 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	ImGui_ImplDX11_Init(
 		m_pRenderer->GetDevice(),
 		m_pRenderer->GetDeviceContext());
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.ItemSpacing.y = 8.0f;
 
 	// 指定のウィンドウハンドルのウィンドウを指定の方法で表示
 	ShowWindow(m_hWnd, SW_MAXIMIZE);

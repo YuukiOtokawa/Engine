@@ -9,7 +9,7 @@
 MeshFilter::MeshFilter(int vertexCount, int indexCount) : m_iVertexCount(vertexCount), m_iIndexCount(indexCount) {
 }
 
-void MeshFilter::Update() {
+void MeshFilter::UpdateComponent() {
 
 }
 
@@ -56,7 +56,9 @@ void MeshFilter::Draw() {
 }
 
 void MeshFilter::DrawGUI() {
+	ImGui::Separator();
 	ImGui::Text("Mesh Filter");
+
 }
 
 void MeshFilter::SetOwner(Object* owner) {

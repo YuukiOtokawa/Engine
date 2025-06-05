@@ -7,7 +7,7 @@
 void Object::Initialize() {}
 void Object::Update() {
 	for (auto& component : m_Components) {
-		component->Update();
+		component->UpdateComponent();
 	}
 }
 void Object::Draw() {

@@ -15,7 +15,7 @@ InputSystem::InputSystem()
 }
 
 // Update
-void InputSystem::Update()
+void InputSystem::UpdateComponent()
 {
 	m_pGamePad->Update();
 	m_pKeyboard->Update();

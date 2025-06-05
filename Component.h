@@ -49,7 +49,7 @@ public:
 	virtual void InitializeTag() = 0;
 
 	/// @brief オブジェクトの状態を更新します。
-	virtual void Update() = 0;
+	virtual void UpdateComponent() = 0;
 
 	/// @brief 図形やオブジェクトを描画するための仮想関数です。
 	virtual void Draw() {}

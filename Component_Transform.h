@@ -33,7 +33,7 @@ private:
 
 public:
 	/// @brief オブジェクトの状態を更新します。
-	void Update() override;
+	void UpdateComponent() override;
 	/// @brief 描画処理を実行します。
 	void Draw() override;
 	void DrawGUI() override;

@@ -30,6 +30,5 @@ private:
 public:
 	/// @brief プレーンメッシュを生成するコンストラクタです。
 	PlaneMesh();
-	void DrawGUI() override;
 };
 

@@ -23,65 +23,70 @@
 class Camera : public Component
 {
 private:
-	// �C�[�W���O�p �O�t���[���̈ʒu��ۑ�
+	bool m_IsActiveCamera = false;
+
+	// 前フレームの位置
     Vector4O m_LastPosition = Vector4O::Zero();
 
-	// �J�����̒����_
+	// カメラの視線ターゲット位置
     Vector4O m_Target;
-	// �J�����̊p�x�i�s�b�`�A���[�A���[���j
+	// カメラの角度
     Vector4O m_Angle;
 
-	// �J�����̎���p�iFOV�j
+	// カメラの視野角（FOV）
     float m_Fov = 90.0f;
 
-	// ���e�s��
+	// プロジェクション行列
     XMMATRIX m_Projection;
-	// �r���[�s��
+	// ビュー行列
 	XMMATRIX m_View;
 
-	// �ߐڃN���b�s���O����
+	// 近距離クリッピング距離
 	float m_Near = 0.1f;
-	// �����N���b�s���O����
+	// 遠距離クリッピング距離
     float m_Far = 1000.0f;
 
-	// �J�����̏�����x�N�g��
+	// カメラの上方向ベクトル
 	Vector4O m_Up = Vector4O::Up();
 
 public:
-	// �R���X�g���N�^
+	// コンストラクタ
     Camera();
 
-	/// @brief ���e�s����擾���܂��B
-	/// @return ���݂̓��e�s��iXMMATRIX�^�j�B
+	/// @brief 投影行列を取得します。
+	/// @return 現在の投影行列（XMMATRIX型）。
 	XMMATRIX GetProjection() const { return m_Projection; }
 
-	/// @brief �r���[�s����擾���܂��B
-	/// @return ���݂̃r���[�s��iXMMATRIX�^�j�B
+	/// @brief ビュー行列を取得します。
+	/// @return 現在のビュー行列（XMMATRIX型）。
 	XMMATRIX GetView() const { return m_View; }
 
-	/// @brief �p�x��\���x�N�g�����擾���܂��B
-	/// @return �p�x��\�� Vector4O �^�̒l�B
+	/// @brief カメラの角度を取得します。
+	/// @return 現在のカメラの角度を表す Vector4O 型の値。
 	Vector4O GetAngle() const { return m_Angle; }
 
-    /// @brief �I�u�W�F�N�g�̏�Ԃ��X�V���܂��i�I�[�o�[���C�h���ꂽ���\�b�h�j�B
-    void Update() override;
-	/// @brief �`�揈�������s���܂��B
+    /// @brief コンポーネントの状態を更新します。
+    void UpdateComponent() override;
+	/// @brief 描画処理を実行します。
 	void Draw() override;
   
 	void DrawGUI() override;
-	/// @brief �R���|�[�l���g�ɑΉ������^�O�����L�҂̃I�u�W�F�N�g�ɐݒ肵�܂��i�I�[�o�[���C�h���ꂽ���\�b�h�j�B
-  void InitializeTag() override;
+	/// @brief タグを初期化します。
+	void InitializeTag() override;
 
-	/// @brief �����_��ݒ肵�܂��B
-	/// @param target �ݒ肷��Vector4O�^�̒����_�B
+	/// @brief 視線ターゲットとなるVector4O値を設定します。
+	/// @param target 設定するVector4O型のターゲット値。
 	void SetTarget(Vector4O target) { m_Target = target; }
-	/// @brief �p�x��ݒ肵�܂��B
-	/// @param angle �ݒ肷��p�x��\�� Vector4O �^�̒l�B
+	/// @brief カメラの角度を設定します。
+	/// @param angle 設定する角度を表す Vector4O 型の値。
 	void SetAngle(Vector4O angle) { m_Angle = angle; }
-	/// @brief ����p�iFOV�j��ݒ肵�܂��B
-	/// @param fov �ݒ肷�鎋��p�iFOV�j�̒l�B
+	/// @brief 視野角（FOV）を設定します。
+	/// @param fov 設定する視野角（FOV）の値。
 	void SetFov(float fov) { m_Fov = fov; }
 
 	Vector4O GetTarget() const { return m_Target; }
+
+	void SetActiveCamera(bool active) { m_IsActiveCamera = active; }
+	bool IsActiveCamera() const { return m_IsActiveCamera; }
 };
 
