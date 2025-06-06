@@ -11,5 +11,10 @@ public:
     {
         Update();
 	}
+
+    void InitializeTag() override
+    {
+        
+	}
 };
 

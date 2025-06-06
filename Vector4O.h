@@ -56,9 +56,34 @@ public:
 	static Vector4O UnitY() { return Vector4O(0.0f, 1.0f, 0.0f, 0.0f); }
 	static Vector4O UnitZ() { return Vector4O(0.0f, 0.0f, 1.0f, 0.0f); }
 	static Vector4O UnitW() { return Vector4O(0.0f, 0.0f, 0.0f, 1.0f); }
+	static float Dot(const Vector4O& vec1, const Vector4O& vec2) { 
+		return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z + vec1.w * vec2.w; 
+	}
 
 	float Length() const { return sqrtf(x * x + y * y + z * z + w * w); }
-	float Normalize() { float len = Length(); if (len > 0.0f) { x /= len; y /= len; z /= len; w /= len; } return len; }
+	void Normalize() { 
+		float len = Length();
+		if (len > 0.0f) { 
+			x /= len; y /= len; z /= len; w /= len;
+		} 
+	}
+
+	Vector4O ToRadian() const {
+		return Vector4O(
+			x * (PI / 180.0f),
+			y * (PI / 180.0f),
+			z * (PI / 180.0f),
+			w // w component remains unchanged
+		);
+	}
+	Vector4O ToEuler() const {
+		return Vector4O(
+			x * (180.0f / PI),
+			y * (180.0f / PI),
+			z * (180.0f / PI),
+			w // w component remains unchanged
+		);
+	}
 
 	Vector4O Cross(const Vector4O& vec) const {
 		return Vector4O(

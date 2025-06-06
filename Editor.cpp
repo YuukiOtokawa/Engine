@@ -14,6 +14,9 @@
 #include "ModelLoader.h"
 #include "OBJLoader.h"
 
+#include "Player.h"
+#include "PlayerCamera.h"
+
 #include "imgui.h"
 
 Editor* Editor::m_pInstance;
@@ -61,7 +64,6 @@ void Editor::Initialize() {
 		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, -2.5f));
 		camera->GetComponent<EditorCamera>()->SetTarget(Vector4O(0.0f, 5.0f, -1.5f));
 
-		camera->GetComponent<EditorCamera>()->SetActiveCamera(true);
 		AddObject(camera);
 	}
 
@@ -73,6 +75,10 @@ void Editor::Initialize() {
 		camera->AddComponent<Camera>();
 		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 2.5f));
 		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 5.0f, 1.5f));
+
+		camera->AddComponent<PlayerCamera>();
+		SetActiveCamera(camera);
+
 		AddObject(camera);
 	}
 
@@ -154,6 +160,7 @@ void Editor::Initialize() {
 		model->AddComponent<Transform>();
 		model->AddComponent<MeshFilter>();
 		model->AddComponent<MeshRenderer>();
+		model->AddComponent<Player>();
 
 		OBJLoader* loader = new OBJLoader();
 		loader->Load("asset\\model\\player.obj", model);
@@ -176,7 +183,7 @@ void Editor::Initialize() {
 		model->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
 		model->GetComponent<MeshRenderer>()->SetTexture(texture1);
 
-
+		GetObject("Camera2")->GetComponent<PlayerCamera>()->SetPlayer(model);
 		AddObject(model);
 	}
 

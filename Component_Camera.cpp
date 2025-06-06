@@ -44,7 +44,12 @@ void Camera::DrawGUI() {
 	ImGui::Separator();
 	ImGui::Text("Camera Component");
 	ImGui::Indent();
+	ImGui::BeginDisabled();
 	ImGui::Checkbox("Active", &m_IsActiveCamera);
+	ImGui::EndDisabled();
+	ImGui::SameLine();
+	if (ImGui::Button("SetActive"))
+		Editor::GetInstance()->SetActiveCamera(owner);
 	ImGui::InputFloat3("Target", &m_Target.x, "%.2f");
 	ImGui::InputFloat3("Angle", &m_Angle.x, "%.2f");
 	ImGui::InputFloat("Fov", &m_Fov);

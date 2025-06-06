@@ -21,7 +21,7 @@ void MeshFilter::Draw() {
 
 	{
 		auto objectScale = transform->GetScale();
-		auto objectRotation = transform->GetRotation();
+		auto objectRotation = transform->GetRotation().ToRadian();
 		auto objectPosition = transform->GetPosition();
 
 		scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);

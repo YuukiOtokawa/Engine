@@ -86,7 +86,11 @@ public:
 
 	Vector4O GetTarget() const { return m_Target; }
 
-	void SetActiveCamera(bool active) { m_IsActiveCamera = active; }
-	bool IsActiveCamera() const { return m_IsActiveCamera; }
+	void SetActiveCamera(bool active) { 
+		m_IsActiveCamera = active;
+	}
+	bool IsActiveCamera() const { 
+		return m_IsActiveCamera;
+	}
 };
 

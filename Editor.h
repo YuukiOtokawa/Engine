@@ -20,6 +20,7 @@
 #include "EditorWindow.h"
 
 #include "GUI.h"
+#include "Component_Camera.h"
 
 //==========================================================================
 // クラス定義
@@ -45,6 +46,7 @@ private:
 	static Editor* m_pInstance;
 
 	Object* m_pSelectedObject = nullptr;
+	Object* m_pActiveCamera = nullptr;
 
 public:
 	/// @brief エディタークラスのシングルトンインスタンスを取得します。
@@ -84,6 +86,18 @@ public:
 		}
 		return nullptr;
 	}
+
+	void SetActiveCamera(Object* camera)
+	{
+		if (m_pActiveCamera != nullptr)
+			m_pActiveCamera->GetComponent<Camera>()->SetActiveCamera(false);
+		
+		m_pActiveCamera = camera;
+		m_pActiveCamera->GetComponent<Camera>()->SetActiveCamera(true);
+	}
+
+	Object* GetActiveCamera() const { return m_pActiveCamera; }
+	
 };
 
 void Main();
