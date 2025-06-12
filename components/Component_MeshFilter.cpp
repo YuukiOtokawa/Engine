@@ -69,5 +69,6 @@ void MeshFilter::SetOwner(Object* owner) {
 
 void MeshFilter::InitializeTag() {
 	owner->SetTag(GameObjectTagLayer::ObjectTag);
+	owner->SetVertexCount(m_iVertexCount);
 	owner->SetIndexCount(m_iIndexCount);
 }

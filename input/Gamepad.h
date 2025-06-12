@@ -1,6 +1,6 @@
-// ========================================================
+﻿// ========================================================
 //
-// �R���g���[���[�N���X[Gamepad.h]
+// コントローラークラス[Gamepad.h]
 // 
 //									Date:20250114
 //									Author:Yuuki Otokawa
@@ -8,8 +8,8 @@
 
 //==========================================================================
 // 
-// 20250116����XInput�ɂ̂ݑΉ�
-// DirectInput�ɂ��Ή�������
+// 20250116現在XInputにのみ対応
+// DirectInputにも対応したい
 // 
 //==========================================================================
 
@@ -21,13 +21,13 @@ using namespace DirectX;
 #include "Xinput.h"
 
 //==========================================================================
-// �R���g���[���[
+// コントローラー
 //==========================================================================
 
 constexpr auto XINPUT_GAMEPAD_LEFTTRIGGER = 0x0400;
 constexpr auto XINPUT_GAMEPAD_RIGHTTRIGGER = 0x0800;
 
-/// @brief �Q�[���p�b�h�̊e��{�^���̃L�[�R�[�h�Ƀg���K�[��ǉ���������
+/// @brief ゲームパッドの各種ボタンのキーコードにトリガーを追加したもの
 enum GAMEPADBUTTON {
 	GAMEPAD_A = XINPUT_GAMEPAD_A,
 	GAMEPAD_B = XINPUT_GAMEPAD_B,
@@ -48,14 +48,14 @@ enum GAMEPADBUTTON {
 
 };
 
-/// @brief �Q�[���p�b�h�̃X�e�B�b�N���R�[�h �֐��̈����p
+/// @brief ゲームパッドのスティック軸コード 関数の引数用
 enum GAMEPADAXIS {
 	GAMEPAD_STICK_RIGHT,
 	GAMEPAD_STICK_LEFT,
 	GAMEPAD_STICK_MAX
 };
 
-/// @brief �Q�[���p�b�h�̊e��X�e�[�g�ƃX�e�B�b�N�̒l�̍\����
+/// @brief ゲームパッドの各種ステートとスティックの値の構造体
 struct GAMEPADSTATE {
 	WORD NowState;
 	WORD TriggerState;
@@ -64,47 +64,47 @@ struct GAMEPADSTATE {
 	Vector4O StickValue[GAMEPAD_STICK_MAX];
 };
 
-/// @brief �Q�[���p�b�h�N���X�錾
+/// @brief ゲームパッドクラス宣言
 class GamePad {
 private:
-	/// @brief �R���g���[���[���瑗���Ă�����
+	/// @brief コントローラーから送られてくるやつ
 	XINPUT_STATE m_XInputState;
 
-	/// @brief m_XInputState���R���g���[���[���ƂɊ֐��œǂݏo����悤�ɉ��H�������
+	/// @brief m_XInputStateをコントローラーごとに関数で読み出せるように加工したやつ
 	GAMEPADSTATE m_GamePadState[XUSER_MAX_COUNT];
 
 	DWORD m_dwResult;
 public:
-	/// @brief �R���X�g���N�^ �e��X�e�[�g�̃����o�ϐ���������
+	/// @brief コンストラクタ 各種ステートのメンバ変数を初期化
 	GamePad();
 
-	/// @brief �Q�[���p�b�h�̏�Ԃ��擾�A�e��X�e�[�g�̍X�V
+	/// @brief ゲームパッドの状態を取得、各種ステートの更新
 	void Update();
 
-	/// @brief �Q�[���p�b�h�̃{�^���𗣂����u�Ԃ����m
-	/// @param keycord �{�^���R�[�h GAMEPADBUTTON�񋓑̂��g�p
-	/// @param deviceID �R���g���[���[ID 0~3
+	/// @brief ゲームパッドのボタンを離した瞬間を検知
+	/// @param keycord ボタンコード GAMEPADBUTTON列挙体を使用
+	/// @param deviceID コントローラーID 0~3
 	/// @return 
 	bool GetKeyUp(GAMEPADBUTTON keycord, int deviceID);
 
-	/// @brief �Q�[���p�b�h�̃{�^�����������u�Ԃ����m
-	/// @param keycord �{�^���R�[�h GAMEPADBUTTON�񋓑̂��g�p
-	/// @param deviceID �R���g���[���[ID 0~3
+	/// @brief ゲームパッドのボタンを押した瞬間を検知
+	/// @param keycord ボタンコード GAMEPADBUTTON列挙体を使用
+	/// @param deviceID コントローラーID 0~3
 	/// @return 
 	bool GetKeyDown(GAMEPADBUTTON keycord, int deviceID);
 
-	/// @brief �Q�[���p�b�h�̃{�^���������Ă���Ԍ��m
-	/// @param keycord �{�^���R�[�h GAMEPADBUTTON�񋓑̂��g�p
-	/// @param deviceID �R���g���[���[ID 0~3
+	/// @brief ゲームパッドのボタンを押している間検知
+	/// @param keycord ボタンコード GAMEPADBUTTON列挙体を使用
+	/// @param deviceID コントローラーID 0~3
 	/// @return 
 	bool GetKeyRepeat(GAMEPADBUTTON keycord, int deviceID);
 
-	/// @brief �Q�[���p�b�h�̃X�e�B�b�N���͒l���擾
-	/// @param axis ���E�X�e�B�b�N��I�� GAMEPADAXIS�񋓑̂��g�p
-	/// @param deviceID �R���g���[���[ID 0~3
+	/// @brief ゲームパッドのスティック入力値を取得
+	/// @param axis 左右スティックを選択 GAMEPADAXIS列挙体を使用
+	/// @param deviceID コントローラーID 0~3
 	/// @return 
 	Vector4O GetAxis(GAMEPADAXIS axis, int deviceID);
 
-	/// @brief �f�o�b�O�p �R���\�[���ɃR���g���[���[���͏󋵂��o��
+	/// @brief デバッグ用 コンソールにコントローラー入力状況を出力
 	void ControllerDebug();
 };

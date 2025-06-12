@@ -1,6 +1,6 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// ƒ}ƒEƒXƒNƒ‰ƒX[Mouse.h]
+// ãƒã‚¦ã‚¹ã‚¯ãƒ©ã‚¹[Mouse.h]
 // 
 //									Date:20250115
 //									Author:Yuuki Otokawa
@@ -9,26 +9,26 @@
 #include "FrameWork.h"
 
 //==========================================================================
-// ƒ}ƒEƒX
+// ãƒã‚¦ã‚¹
 //==========================================================================
 
-// ƒ}ƒEƒXƒ‚[ƒh
+// ãƒã‚¦ã‚¹ãƒ¢ãƒ¼ãƒ‰
 typedef enum Mouse_PositionMode_tag {
-	MOUSE_POSITION_MODE_ABSOLUTE, // â‘ÎÀ•Wƒ‚[ƒh ƒEƒBƒ“ƒhƒEã‚ÌÀÛ‚ÌÀ•W‚ğæ“¾
-	MOUSE_POSITION_MODE_RELATIVE, // ‘Š‘ÎÀ•Wƒ‚[ƒh ‘O‰ñ‚ÌÀ•W‚©‚ç‚ÌˆÚ“®—Ê‚ğæ“¾ ƒJ[ƒ\ƒ‹‚ª‰f‚ç‚È‚­‚È‚é‚Ì‚Å’ˆÓ
+	MOUSE_POSITION_MODE_ABSOLUTE, // çµ¶å¯¾åº§æ¨™ãƒ¢ãƒ¼ãƒ‰ ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸Šã®å®Ÿéš›ã®åº§æ¨™ã‚’å–å¾—
+	MOUSE_POSITION_MODE_RELATIVE, // ç›¸å¯¾åº§æ¨™ãƒ¢ãƒ¼ãƒ‰ å‰å›ã®åº§æ¨™ã‹ã‚‰ã®ç§»å‹•é‡ã‚’å–å¾— ã‚«ãƒ¼ã‚½ãƒ«ãŒæ˜ ã‚‰ãªããªã‚‹ã®ã§æ³¨æ„
 } Mouse_PositionMode;
 
-//ƒ}ƒEƒXƒ{ƒ^ƒ“—ñ‹“‘Ì ŠÖ”—p
+//ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³åˆ—æŒ™ä½“ é–¢æ•°ç”¨
 enum MOUSE_BUTTON {
 	LeftButton,
 	MiddleButton,
 	RightButton,
-	XButton1,//ƒTƒCƒhƒ{ƒ^ƒ“è‘O
-	XButton2,//ƒTƒCƒhƒ{ƒ^ƒ“‰œ
+	XButton1,//ã‚µã‚¤ãƒ‰ãƒœã‚¿ãƒ³æ‰‹å‰
+	XButton2,//ã‚µã‚¤ãƒ‰ãƒœã‚¿ãƒ³å¥¥
 	Button_Max
 };
 
-// ƒ}ƒEƒXó‘Ô\‘¢‘Ì
+// ãƒã‚¦ã‚¹çŠ¶æ…‹æ§‹é€ ä½“
 typedef struct MouseState_tag {
 	bool ButtonUp[Button_Max];
 	bool ButtonDown[Button_Max];
@@ -39,38 +39,38 @@ typedef struct MouseState_tag {
 	Mouse_PositionMode positionMode;
 } Mouse_State;
 
-/// @brief ƒ}ƒEƒXƒNƒ‰ƒX’è‹`
+/// @brief ãƒã‚¦ã‚¹ã‚¯ãƒ©ã‚¹å®šç¾©
 class Mouse {
 private:
-	Mouse_State			m_State;					//ƒ}ƒEƒX‚Ìó‘Ô
-	HWND				m_Window;					//ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	Mouse_PositionMode	m_Mode;						//ƒ}ƒEƒX‚ÌÀ•Wæ“¾ƒ‚[ƒh Mouse_PositionMode—ñ‹“‘Ì‚àŠm”F‚·‚é‚±‚Æ
-	HANDLE				m_ScrollWheelValue = NULL;	//ƒ}ƒEƒXƒzƒC[ƒ‹‚Ì—İŒv‰ñ“]—Ê
+	Mouse_State			m_State;					//ãƒã‚¦ã‚¹ã®çŠ¶æ…‹
+	HWND				m_Window;					//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+	Mouse_PositionMode	m_Mode;						//ãƒã‚¦ã‚¹ã®åº§æ¨™å–å¾—ãƒ¢ãƒ¼ãƒ‰ Mouse_PositionModeåˆ—æŒ™ä½“ã‚‚ç¢ºèªã™ã‚‹ã“ã¨
+	HANDLE				m_ScrollWheelValue = NULL;	//ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ã®ç´¯è¨ˆå›è»¢é‡
 	HANDLE				m_RelativeRead = NULL;		//
 	HANDLE				m_AbsoluteMode = NULL;
 	HANDLE				m_RelativeMode = NULL;
-	XMINT2				m_LastPosition;				//‘OƒtƒŒ[ƒ€‚ÌÀ•W
-	XMINT2				m_RelativePosition;			//‘OƒtƒŒ[ƒ€‚©‚ç‚ÌÀ•WˆÚ“®—Ê
+	XMINT2				m_LastPosition;				//å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®åº§æ¨™
+	XMINT2				m_RelativePosition;			//å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã®åº§æ¨™ç§»å‹•é‡
 	bool				m_InFocus;
 
 	void ClipToWindow();
-	/// @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^ ƒƒ“ƒo•Ï”‚Ì‰Šú‰» ƒ}ƒEƒX‚É•K—v‚Èİ’è
-	/// @param hWnd ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
+	/// @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ ãƒ¡ãƒ³ãƒå¤‰æ•°ã®åˆæœŸåŒ– ãƒã‚¦ã‚¹ã«å¿…è¦ãªè¨­å®š
+	/// @param hWnd ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
 	Mouse(HWND hWnd);
 	
-	POINT m_SavedCursorPos; // ‘Š‘Îƒ‚[ƒh‚ÉØ‚è‘Ö‚¦‚é‘O‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚ğ•Û‘¶
+	POINT m_SavedCursorPos; // ç›¸å¯¾ãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆã‚‹å‰ã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’ä¿å­˜
 
-	static Mouse* m_Instance;	//ƒCƒ“ƒXƒ^ƒ“ƒX
+	static Mouse* m_Instance;	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 public:
 	~Mouse();
 
-	/// @brief ŠeíƒXƒe[ƒg‚ÌXV
+	/// @brief å„ç¨®ã‚¹ãƒ†ãƒ¼ãƒˆã®æ›´æ–°
 	void Update();
 
-	// ƒJ[ƒ\ƒ‹ˆÊ’u‚ğ•Û‘¶‚·‚éƒƒ\ƒbƒh
+	// ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’ä¿å­˜ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	void SaveCursorPosition();
 
-	// •Û‘¶‚µ‚½ƒJ[ƒ\ƒ‹ˆÊ’u‚ğ•œŒ³‚·‚éƒƒ\ƒbƒh
+	// ä¿å­˜ã—ãŸã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’å¾©å…ƒã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	void RestoreCursorPosition();
 
 	static Mouse* GetInstance(HWND hWnd = NULL) {
@@ -80,48 +80,48 @@ public:
 		return m_Instance;
 	}
 
-	/// @brief ƒzƒC[ƒ‹‚ÌˆÚ“®—Ê‚ğƒŠƒZƒbƒg ƒtƒŒ[ƒ€‚²‚Æ‚É‰ñ‚·‚ÆƒtƒŒ[ƒ€‚²‚Æ‚ÌˆÚ“®—Ê‚ğæ“¾‚Å‚«‚é
+	/// @brief ãƒ›ã‚¤ãƒ¼ãƒ«ã®ç§»å‹•é‡ã‚’ãƒªã‚»ãƒƒãƒˆ ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«å›ã™ã¨ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã®ç§»å‹•é‡ã‚’å–å¾—ã§ãã‚‹
 	void ResetScrollWheelValue();
 
-	/// @brief ƒ}ƒEƒX‚ÌÀ•Wæ“¾ƒ‚[ƒh‚ğİ’è
-	/// @param mode Ø‚è‘Ö‚¦æƒ‚[ƒh Mouse_PositionMode—ñ‹“‘Ì‚àŠm”F‚·‚é‚±‚Æ
+	/// @brief ãƒã‚¦ã‚¹ã®åº§æ¨™å–å¾—ãƒ¢ãƒ¼ãƒ‰ã‚’è¨­å®š
+	/// @param mode åˆ‡ã‚Šæ›¿ãˆå…ˆãƒ¢ãƒ¼ãƒ‰ Mouse_PositionModeåˆ—æŒ™ä½“ã‚‚ç¢ºèªã™ã‚‹ã“ã¨
 	void SetMode(Mouse_PositionMode mode);
 
-	/// @brief Ú‘±ó‘Ô‚ğŠm”F
+	/// @brief æ¥ç¶šçŠ¶æ…‹ã‚’ç¢ºèª
 	/// @return 
 	bool GetIsConnected();
 
-	/// @brief ƒJ[ƒ\ƒ‹‚ªŒ©‚¦‚éó‘Ô‚©Šm”F
+	/// @brief ã‚«ãƒ¼ã‚½ãƒ«ãŒè¦‹ãˆã‚‹çŠ¶æ…‹ã‹ç¢ºèª
 	/// @return 
 	bool GetIsVisible();
 
-	/// @brief ƒ}ƒEƒXƒ{ƒ^ƒ“‚ğ—£‚µ‚½uŠÔ‚ğŒŸ’m
-	/// @param button ƒ{ƒ^ƒ“ƒR[ƒh MOUSE_BUTTON—ñ‹“‘Ì‚ğg—p
+	/// @brief ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã‚’é›¢ã—ãŸç¬é–“ã‚’æ¤œçŸ¥
+	/// @param button ãƒœã‚¿ãƒ³ã‚³ãƒ¼ãƒ‰ MOUSE_BUTTONåˆ—æŒ™ä½“ã‚’ä½¿ç”¨
 	/// @return 
 	bool GetUp(MOUSE_BUTTON button);
 
-	/// @brief ƒ}ƒEƒXƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½uŠÔ‚ğŒŸ’m
-	/// @param button ƒ{ƒ^ƒ“ƒR[ƒh MOUSE_BUTTON—ñ‹“‘Ì‚ğg—p
+	/// @brief ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸç¬é–“ã‚’æ¤œçŸ¥
+	/// @param button ãƒœã‚¿ãƒ³ã‚³ãƒ¼ãƒ‰ MOUSE_BUTTONåˆ—æŒ™ä½“ã‚’ä½¿ç”¨
 	/// @return 
 	bool GetDown(MOUSE_BUTTON button);
 
-	/// @brief ƒ}ƒEƒXƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚¢‚éŠÔŒŸ’m
-	/// @param button ƒ{ƒ^ƒ“ƒR[ƒh MOUSE_BUTTON—ñ‹“‘Ì‚ğg—p
+	/// @brief ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ã„ã‚‹é–“æ¤œçŸ¥
+	/// @param button ãƒœã‚¿ãƒ³ã‚³ãƒ¼ãƒ‰ MOUSE_BUTTONåˆ—æŒ™ä½“ã‚’ä½¿ç”¨
 	/// @return 
 	bool GetRepeat(MOUSE_BUTTON button);
 
-	/// @brief ƒJ[ƒ\ƒ‹‚ÌƒEƒBƒ“ƒhƒEãÀ•W‚ğæ“¾ m_Mode‚É‚æ‚Á‚Ä•Ô‚è’l‚Ì«¿‚ªˆÙ‚È‚é Mouse_PositionModeQÆ
+	/// @brief ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸Šåº§æ¨™ã‚’å–å¾— m_Modeã«ã‚ˆã£ã¦è¿”ã‚Šå€¤ã®æ€§è³ªãŒç•°ãªã‚‹ Mouse_PositionModeå‚ç…§
 	/// @return 
 	XMINT2 GetPosition();
 
-	/// @brief ƒzƒC[ƒ‹‚Ì—İŒv‰ñ“]—Ê‚ğæ“¾
+	/// @brief ãƒ›ã‚¤ãƒ¼ãƒ«ã®ç´¯è¨ˆå›è»¢é‡ã‚’å–å¾—
 	/// @return 
 	int GetWheelValue();
 
 	Mouse_PositionMode GetMode();
 
-	/// @brief ƒJ[ƒ\ƒ‹‚ğŒ©‚¦‚é‚æ‚¤‚É/Œ©‚¦‚È‚­‚È‚é‚æ‚¤‚É‚·‚é
-	/// @param visible true:Œ©‚¦‚é false:Œ©‚¦‚È‚­‚È‚é
+	/// @brief ã‚«ãƒ¼ã‚½ãƒ«ã‚’è¦‹ãˆã‚‹ã‚ˆã†ã«/è¦‹ãˆãªããªã‚‹ã‚ˆã†ã«ã™ã‚‹
+	/// @param visible true:è¦‹ãˆã‚‹ false:è¦‹ãˆãªããªã‚‹
 	void SetIsVisible(bool visible);
 
 	void ProcessMessage(UINT message, WPARAM wParam, LPARAM lParam);

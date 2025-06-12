@@ -1,6 +1,6 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// ƒŒƒ“ƒ_ƒ‰[ƒNƒ‰ƒX[Renderer.h]
+// ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚¯ãƒ©ã‚¹[Renderer.h]
 // 
 //									Date:20250514
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include "FrameWork.h"
@@ -24,13 +24,13 @@
 #include <vector>
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ã‚¯ãƒ©ã‚¹å®šç¾©
 //==========================================================================
 
 class Renderer
 {
 private:
-	// ƒeƒNƒXƒ`ƒƒ‚Ì\‘¢‘Ì’è‹`
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ§‹é€ ä½“å®šç¾©
 	struct Texture {
 		std::wstring filename;
 		ID3D11ShaderResourceView* shader_resource_view;
@@ -38,7 +38,7 @@ private:
 		int height;
 	};
 
-	// DirectX 11ŠÖŒW‚Ìƒ|ƒCƒ“ƒ^
+	// DirectX 11é–¢ä¿‚ã®ãƒã‚¤ãƒ³ã‚¿
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
 	IDXGISwapChain* m_pSwapChain;
@@ -46,23 +46,23 @@ private:
 	ID3D11RenderTargetView* m_pRenderTargetView;
 	ID3D11DepthStencilView* m_pDepthStencilView;
 
-	// ƒ‰ƒXƒ^ƒ‰ƒCƒUƒXƒe[ƒg‚Ìƒ|ƒCƒ“ƒ^
+	// ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚¶ã‚¹ãƒ†ãƒ¼ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
 	ID3D11RasterizerState* m_pRasterizerState = NULL;
-	// ƒuƒŒƒ“ƒhƒXƒe[ƒg‚Ìƒ|ƒCƒ“ƒ^
+	// ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
 	ID3D11BlendState* m_pBlendState = NULL;
 	ID3D11BlendState* m_pBlendStateAdd = NULL;
 
-	// [“xƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒg‚Ìƒ|ƒCƒ“ƒ^
+	// æ·±åº¦ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚¹ãƒ†ãƒ¼ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
 	ID3D11DepthStencilState* m_pDepthStencilStateDepthEnable = NULL;
 	ID3D11DepthStencilState* m_pDepthStencilStateDepthDisable = NULL;
 	ID3D11DepthStencilState* m_pDepthStencilStateShadow = NULL;
 	ID3D11DepthStencilState* m_pDepthStencilStateBackGround = NULL;
 	ID3D11DepthStencilState* m_pDepthStencilState3D = NULL;
 
-	// ƒTƒ“ƒvƒ‰[ƒXƒe[ƒg‚Ìƒ|ƒCƒ“ƒ^
+	// ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
 	ID3D11SamplerState* m_pSamplerState = NULL;
 
-	// Šeí’è”ƒoƒbƒtƒ@‚Ìƒ|ƒCƒ“ƒ^
+	// å„ç¨®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒã‚¤ãƒ³ã‚¿
 	ID3D11Buffer* m_pConstantBuffer = NULL;
 	ID3D11Buffer* m_pWorldBuffer = NULL;
 	ID3D11Buffer* m_pViewBuffer = NULL;
@@ -72,167 +72,168 @@ private:
 	ID3D11Buffer* m_pCameraBuffer = NULL;
 	ID3D11Buffer* m_pParameterBuffer = NULL;
 
-	// ƒNƒ‰ƒCƒAƒ“ƒgƒTƒCƒY
+	// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚µã‚¤ã‚º
 	Vector4O m_ClientSize{ SCREEN_WIDTH_DEFAULT,SCREEN_HEIGHT_DEFAULT };
 
-	// ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
 	HWND m_Handle;
 
-	// ’¸“_ƒVƒF[ƒ_[‚ÆƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ìƒ}ƒbƒv
+	// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¨ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ãƒãƒƒãƒ—
 	std::map<std::string, ID3D11VertexShader*> m_VertexShaders;
 	std::map<std::string, ID3D11PixelShader*> m_PixelShaders;
-	// “ü—ÍƒŒƒCƒAƒEƒg‚Ìƒ|ƒCƒ“ƒ^
+	// å…¥åŠ›ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
 	ID3D11InputLayout* m_pInputLayout = nullptr;
 
-	// Œ»İg—p’†‚ÌƒVƒF[ƒ_[ƒL[
+	// ç¾åœ¨ä½¿ç”¨ä¸­ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚­ãƒ¼
 	std::string m_CurrentVertexShaderKey;
 	std::string m_CurrentPixelShaderKey;
 
-	// ƒeƒNƒXƒ`ƒƒ‚ÌƒxƒNƒ^[
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ™ã‚¯ã‚¿ãƒ¼
 	std::vector<Texture> m_Textures;
 
 
-	/// @brief ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[‚Ì¶¬
+	/// @brief ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ã®ç”Ÿæˆ
 	void CreateRenderTargetView();
 
-	/// @brief ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[EƒfƒvƒXƒXƒeƒ“ƒVƒ‹—pƒeƒNƒXƒ`ƒƒEƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒ^[ƒQƒbƒg‚Ì¶¬
+	/// @brief ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼ãƒ»ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ç”¨ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ»ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ç”Ÿæˆ
 	void CreateDepthStencil();
 
-	/// @brief ƒrƒ…[ƒ|[ƒgİ’è
+	/// @brief ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¨­å®š
 	void CreateViewPort();
 
-	/// @brief ƒ‰ƒXƒ^ƒ‰ƒCƒUƒXƒe[ƒgì¬
+	/// @brief ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚¶ã‚¹ãƒ†ãƒ¼ãƒˆä½œæˆ
 	void CreateRasterizer();
 
-	/// @brief ƒuƒŒƒ“ƒhƒXƒe[ƒgİ’è
+	/// @brief ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 	void CreateBlendState();
 
-	/// @brief [“xƒXƒe[ƒgì¬
+	/// @brief æ·±åº¦ã‚¹ãƒ†ãƒ¼ãƒˆä½œæˆ
 	void CreateDepthStencilState();
 
-	/// @brief ƒTƒ“ƒvƒ‰[ƒXƒe[ƒg‚ğì¬‚µ‚Ü‚·B
+	/// @brief ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã‚’ä½œæˆã—ã¾ã™ã€‚
 	void CreateSamplerState();
 
 
 public:
-	/// @brief w’è‚³‚ê‚½ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚ÉŠÖ˜A•t‚¯‚ç‚ê‚½RendererƒIƒuƒWƒFƒNƒg‚ğì¬‚µ‚Ü‚·B
-	/// @param hWnd •`‰æ‘ÎÛ‚Æ‚È‚éƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹B
+	/// @brief æŒ‡å®šã•ã‚ŒãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸRendererã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¾ã™ã€‚
+	/// @param hWnd æç”»å¯¾è±¡ã¨ãªã‚‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«ã€‚
 	Renderer(HWND hWnd);
-	/// @brief Renderer ƒNƒ‰ƒX‚ÌƒfƒXƒgƒ‰ƒNƒ^‚Å‚·B
+	/// @brief Renderer ã‚¯ãƒ©ã‚¹ã®ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ã™ã€‚
 	~Renderer();
 
-	/// @brief ƒoƒbƒtƒ@‚Ì“à—e‚ğƒNƒŠƒA‚µ‚Ü‚·B
+	/// @brief ãƒãƒƒãƒ•ã‚¡ã®å†…å®¹ã‚’ã‚¯ãƒªã‚¢ã—ã¾ã™ã€‚
 	void BufferClear();
-	/// @brief ƒoƒbƒtƒ@‚Ì“à—e‚ğ•\¦‚Ü‚½‚Ío—Í‚µ‚Ü‚·B
+	/// @brief ãƒãƒƒãƒ•ã‚¡ã®å†…å®¹ã‚’è¡¨ç¤ºã¾ãŸã¯å‡ºåŠ›ã—ã¾ã™ã€‚
 	void BufferPresent();
-	/// @brief ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒTƒCƒY‚ğw’è‚µ‚½•‚Æ‚‚³‚É•ÏX‚µ‚Ü‚·B
-	/// @param width V‚µ‚¢ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì•iƒsƒNƒZƒ‹’PˆÊjB
-	/// @param height V‚µ‚¢ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì‚‚³iƒsƒNƒZƒ‹’PˆÊjB
+	/// @brief ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ã‚µã‚¤ã‚ºã‚’æŒ‡å®šã—ãŸå¹…ã¨é«˜ã•ã«å¤‰æ›´ã—ã¾ã™ã€‚
+	/// @param width æ–°ã—ã„ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®å¹…ï¼ˆãƒ”ã‚¯ã‚»ãƒ«å˜ä½ï¼‰ã€‚
+	/// @param height æ–°ã—ã„ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®é«˜ã•ï¼ˆãƒ”ã‚¯ã‚»ãƒ«å˜ä½ï¼‰ã€‚
 	void ResizeClient(int width, int height);
 
-	/// @brief ƒfƒoƒCƒXƒIƒuƒWƒFƒNƒg‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ID3D11Device ƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief ãƒ‡ãƒã‚¤ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ID3D11Device ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	ID3D11Device* GetDevice() { return m_pDevice; }
-	/// @brief ƒfƒoƒCƒXƒRƒ“ƒeƒLƒXƒg‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ID3D11DeviceContext ƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief ãƒ‡ãƒã‚¤ã‚¹ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ID3D11DeviceContext ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; }
-	/// @brief ƒXƒƒbƒvƒ`ƒF[ƒ“ƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾‚µ‚Ü‚·B
-	/// @return IDXGISwapChain ƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return IDXGISwapChain ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	IDXGISwapChain* GetSwapChain() { return m_pSwapChain; }
-	/// @brief ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[‚ÆƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[‚ğƒfƒoƒCƒXƒRƒ“ƒeƒLƒXƒg‚Éİ’è‚µ‚Ü‚·B
+	/// @brief ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ã¨ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼ã‚’ãƒ‡ãƒã‚¤ã‚¹ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã«è¨­å®šã—ã¾ã™ã€‚
 	void SetRenderTargetView() { m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView); }
-	/// @brief ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒTƒCƒY‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒTƒCƒY‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ã‚µã‚¤ã‚ºã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ã‚µã‚¤ã‚ºã‚’è¡¨ã™ Vector4O å‹ã®å€¤ã€‚
 	Vector4O GetClientSize() { return m_ClientSize; }
 
-	/// @brief w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹–¼‚ÆƒL[‚©‚ç’¸“_ƒVƒF[ƒ_[‚ğì¬‚µ‚Ü‚·B
-	/// @param filename ’¸“_ƒVƒF[ƒ_[‚Ìƒ\[ƒXƒR[ƒh‚ªŠÜ‚Ü‚ê‚éƒtƒ@ƒCƒ‹‚Ì–¼‘OB
-	/// @param key ƒVƒF[ƒ_[‚ğ¯•Ê‚Ü‚½‚Íæ“¾‚·‚é‚½‚ß‚ÌƒL[B
-	/// @return ì¬‚³‚ê‚½’¸“_ƒVƒF[ƒ_[‚Ì“à—e‚ğ•\‚·•¶š—ñB
+	/// @brief æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«åã¨ã‚­ãƒ¼ã‹ã‚‰é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ä½œæˆã—ã¾ã™ã€‚
+	/// @param filename é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ãŒå«ã¾ã‚Œã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰ã€‚
+	/// @param key ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’è­˜åˆ¥ã¾ãŸã¯å–å¾—ã™ã‚‹ãŸã‚ã®ã‚­ãƒ¼ã€‚
+	/// @return ä½œæˆã•ã‚ŒãŸé ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®å†…å®¹ã‚’è¡¨ã™æ–‡å­—åˆ—ã€‚
 	std::string CreateVertexShader(std::string filename, std::string key);
-	/// @brief w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹–¼‚ÆƒL[‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ğì¬‚µ‚Ü‚·B
-	/// @param filename ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ìƒ\[ƒXƒR[ƒh‚ªŠÜ‚Ü‚ê‚éƒtƒ@ƒCƒ‹‚Ì–¼‘OB
-	/// @param key ƒVƒF[ƒ_[‚ğ¯•Ê‚·‚é‚½‚ß‚ÌƒL[B
-	/// @return ì¬‚³‚ê‚½ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ì“à—e‚ğ•\‚·•¶š—ñB
+	/// @brief æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«åã¨ã‚­ãƒ¼ã‹ã‚‰ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ä½œæˆã—ã¾ã™ã€‚
+	/// @param filename ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ãŒå«ã¾ã‚Œã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰ã€‚
+	/// @param key ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’è­˜åˆ¥ã™ã‚‹ãŸã‚ã®ã‚­ãƒ¼ã€‚
+	/// @return ä½œæˆã•ã‚ŒãŸãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®å†…å®¹ã‚’è¡¨ã™æ–‡å­—åˆ—ã€‚
 	std::string CreatePixelShader(std::string filename, std::string key);
-	/// @brief ƒVƒF[ƒ_[ƒoƒCƒgƒR[ƒh‚©‚çID3D11InputLayoutƒIƒuƒWƒFƒNƒg‚ğì¬‚µ‚Ü‚·B
-	/// @param pByteCode “ü—ÍƒŒƒCƒAƒEƒg‚ğ‹Lq‚·‚éƒVƒF[ƒ_[ƒoƒCƒgƒR[ƒh‚Ö‚Ìƒ|ƒCƒ“ƒ^B
-	/// @param byteCodeLength ƒoƒCƒgƒR[ƒh‚Ì’·‚³iƒoƒCƒg’PˆÊjB
-	/// @return ì¬‚³‚ê‚½ID3D11InputLayoutƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^B¸”s‚µ‚½ê‡‚Ínullptr‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‹ã‚‰ID3D11InputLayoutã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¾ã™ã€‚
+	/// @param pByteCode å…¥åŠ›ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’è¨˜è¿°ã™ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
+	/// @param byteCodeLength ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®é•·ã•ï¼ˆãƒã‚¤ãƒˆå˜ä½ï¼‰ã€‚
+	/// @return ä½œæˆã•ã‚ŒãŸID3D11InputLayoutã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚å¤±æ•—ã—ãŸå ´åˆã¯nullptrã‚’è¿”ã—ã¾ã™ã€‚
 	ID3D11InputLayout* CreateInputLayout(unsigned char* pByteCode, long byteCodeLength);
-	/// @brief “ü—ÍƒŒƒCƒAƒEƒg‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚ÌID3D11InputLayoutƒ|ƒCƒ“ƒ^B
+	/// @brief å…¥åŠ›ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ç¾åœ¨ã®ID3D11InputLayoutãƒã‚¤ãƒ³ã‚¿ã€‚
 	ID3D11InputLayout* GetInputLayout() { return m_pInputLayout; }
-	/// @brief ’è”ƒoƒbƒtƒ@‚ğì¬‚µ‚Ü‚·B
+	/// @brief å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’ä½œæˆã—ã¾ã™ã€‚
 	void CreateConstantBuffer();
 
-	/// @brief w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹–¼‚©‚çƒeƒNƒXƒ`ƒƒ‚ğ“Ç‚İ‚İAID3D11ShaderResourceView ƒ|ƒCƒ“ƒ^‚ğ•Ô‚µ‚Ü‚·B
-	/// @param filename “Ç‚İ‚ŞƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğ•\‚·ƒƒCƒh•¶š—ñB
-	/// @return “Ç‚İ‚Ü‚ê‚½ƒeƒNƒXƒ`ƒƒ‚Ì ID3D11ShaderResourceView ƒ|ƒCƒ“ƒ^B¸”s‚µ‚½ê‡‚Í nullptr ‚ğ•Ô‚·‚±‚Æ‚ª‚ ‚è‚Ü‚·B
+	/// @brief æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿è¾¼ã¿ã€ID3D11ShaderResourceView ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã—ã¾ã™ã€‚
+	/// @param filename èª­ã¿è¾¼ã‚€ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’è¡¨ã™ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ã€‚
+	/// @return èª­ã¿è¾¼ã¾ã‚ŒãŸãƒ†ã‚¯ã‚¹ãƒãƒ£ã® ID3D11ShaderResourceView ãƒã‚¤ãƒ³ã‚¿ã€‚å¤±æ•—ã—ãŸå ´åˆã¯ nullptr ã‚’è¿”ã™ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚
 	ID3D11ShaderResourceView* TextureLoad(const std::wstring& filename);
-	/// @brief w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚ÌƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒXƒrƒ…[‚ğæ“¾‚µ‚Ü‚·B
-	/// @param index æ“¾‚·‚éƒeƒNƒXƒ`ƒƒ‚ÌƒCƒ“ƒfƒbƒNƒXB
-	/// @return w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚É‘Î‰‚·‚éID3D11ShaderResourceViewƒ|ƒCƒ“ƒ^BŠY“–‚·‚éƒeƒNƒXƒ`ƒƒ‚ª‘¶İ‚µ‚È‚¢ê‡‚Ínullptr‚ğ•Ô‚·‚±‚Æ‚ª‚ ‚è‚Ü‚·B
+	/// @brief æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @param index å–å¾—ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€‚
+	/// @return æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«å¯¾å¿œã™ã‚‹ID3D11ShaderResourceViewãƒã‚¤ãƒ³ã‚¿ã€‚è©²å½“ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯nullptrã‚’è¿”ã™ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚
 	ID3D11ShaderResourceView* GetTexture(int index);
-	/// @brief w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚ÌƒeƒNƒXƒ`ƒƒ‚Ì•‚ğæ“¾‚µ‚Ü‚·B
-	/// @param index •‚ğæ“¾‚·‚éƒeƒNƒXƒ`ƒƒ‚ÌƒCƒ“ƒfƒbƒNƒXB
-	/// @return ƒeƒNƒXƒ`ƒƒ‚Ì•iƒsƒNƒZƒ‹’PˆÊjB
+	/// @brief æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å¹…ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @param index å¹…ã‚’å–å¾—ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€‚
+	/// @return ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å¹…ï¼ˆãƒ”ã‚¯ã‚»ãƒ«å˜ä½ï¼‰ã€‚
 	int GetTextureWidth(int index);
-	/// @brief w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚ÌƒeƒNƒXƒ`ƒƒ‚Ì‚‚³‚ğæ“¾‚µ‚Ü‚·B
-	/// @param index ‚‚³‚ğæ“¾‚·‚éƒeƒNƒXƒ`ƒƒ‚ÌƒCƒ“ƒfƒbƒNƒXB
-	/// @return ƒeƒNƒXƒ`ƒƒ‚Ì‚‚³iƒsƒNƒZƒ‹’PˆÊjB
+	/// @brief æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®é«˜ã•ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @param index é«˜ã•ã‚’å–å¾—ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€‚
+	/// @return ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®é«˜ã•ï¼ˆãƒ”ã‚¯ã‚»ãƒ«å˜ä½ï¼‰ã€‚
 	int GetTextureHeight(int index);
 
-	/// @brief w’è‚³‚ê‚½ƒL[‚É‘Î‰‚·‚é’¸“_ƒVƒF[ƒ_[‚ğİ’è‚µ‚Ü‚·B
-	/// @param key İ’è‚·‚é’¸“_ƒVƒF[ƒ_[‚ğ¯•Ê‚·‚é‚½‚ß‚ÌƒL[B
+	/// @brief æŒ‡å®šã•ã‚ŒãŸã‚­ãƒ¼ã«å¯¾å¿œã™ã‚‹é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param key è¨­å®šã™ã‚‹é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’è­˜åˆ¥ã™ã‚‹ãŸã‚ã®ã‚­ãƒ¼ã€‚
 	void SetVertexShader(std::string key);
-	/// @brief w’è‚³‚ê‚½ƒL[‚É‘Î‰‚·‚éƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ğİ’è‚µ‚Ü‚·B
-	/// @param key İ’è‚·‚éƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ğ¯•Ê‚·‚é•¶š—ñƒL[B
+	/// @brief æŒ‡å®šã•ã‚ŒãŸã‚­ãƒ¼ã«å¯¾å¿œã™ã‚‹ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param key è¨­å®šã™ã‚‹ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’è­˜åˆ¥ã™ã‚‹æ–‡å­—åˆ—ã‚­ãƒ¼ã€‚
 	void SetPixelShader(std::string key);
 
-	/// @brief ’è”ƒoƒbƒtƒ@‚ğİ’è‚µ‚Ü‚·B
-	/// @param matrix İ’è‚·‚éCONSTANTBUFFERŒ^‚Ì’è”ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param matrix è¨­å®šã™ã‚‹CONSTANTBUFFERå‹ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	void SetConstantBuffer(const CONSTANTBUFFER* matrix);
 
-	/// @brief ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[‚ğİ’è‚µ‚Ü‚·B
-	/// @param renderTargetView İ’è‚·‚éID3D11RenderTargetView‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param renderTargetView è¨­å®šã™ã‚‹ID3D11RenderTargetViewã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	void SetRenderTargetView(ID3D11RenderTargetView* renderTargetView)
 	{
+		// renderTargetViewã¯ã™ã§ã«ãƒã‚¤ãƒ³ã‚¿ãªã®ã§ã€ãã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æ¸¡ã™
 		m_pDeviceContext->OMSetRenderTargets(1, &renderTargetView, m_pDepthStencilView);
 	}
 
-	/// @brief w’è‚µ‚½ƒXƒƒbƒg‚ÉƒVƒF[ƒ_[ƒŠƒ\[ƒXƒrƒ…[‚ğİ’è‚µ‚Ü‚·B
-	/// @param shaderResourceView İ’è‚·‚éID3D11ShaderResourceView‚Ö‚Ìƒ|ƒCƒ“ƒ^B
-	/// @param slot ƒŠƒ\[ƒXƒrƒ…[‚ğƒoƒCƒ“ƒh‚·‚éƒXƒƒbƒg”Ô†BƒfƒtƒHƒ‹ƒg‚Í0‚Å‚·B
+	/// @brief æŒ‡å®šã—ãŸã‚¹ãƒ­ãƒƒãƒˆã«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param shaderResourceView è¨­å®šã™ã‚‹ID3D11ShaderResourceViewã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
+	/// @param slot ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã‚’ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚¹ãƒ­ãƒƒãƒˆç•ªå·ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯0ã§ã™ã€‚
 	void SetShaderResourceView(ID3D11ShaderResourceView* shaderResourceView, UINT slot = 0)
 	{
 		m_pDeviceContext->PSSetShaderResources(slot, 1, &shaderResourceView);
 	}
 
-	/// @brief 2D—p‚Ìƒ[ƒ‹ƒhEƒrƒ…[EƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ğİ’è‚µ‚Ü‚·B
+	/// @brief 2Dç”¨ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒ»ãƒ“ãƒ¥ãƒ¼ãƒ»ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’è¨­å®šã—ã¾ã™ã€‚
 	void SetWorldViewProjection2D();
-	/// @brief 3Dƒ[ƒ‹ƒhƒrƒ…[Ë‰es—ñ‚ğƒŠƒZƒbƒg‚µ‚Ü‚·B
+	/// @brief 3Dãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒ“ãƒ¥ãƒ¼å°„å½±è¡Œåˆ—ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¾ã™ã€‚
 	void ResetWorldViewProjection3D();
-	/// @brief ƒ[ƒ‹ƒhs—ñ‚ğİ’è‚µ‚Ü‚·B
-	/// @param world İ’è‚·‚éƒ[ƒ‹ƒhs—ñB
+	/// @brief ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param world è¨­å®šã™ã‚‹ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã€‚
 	void SetWorldMatrix(XMMATRIX world);
-	/// @brief ƒrƒ…[s—ñ‚ğİ’è‚µ‚Ü‚·B
-	/// @param view İ’è‚·‚éƒrƒ…[s—ñB
+	/// @brief ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param view è¨­å®šã™ã‚‹ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã€‚
 	void SetViewMatrix(XMMATRIX view);
-	/// @brief Ë‰es—ñ‚ğİ’è‚µ‚Ü‚·B
-	/// @param projection İ’è‚·‚éË‰es—ñB
+	/// @brief å°„å½±è¡Œåˆ—ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param projection è¨­å®šã™ã‚‹å°„å½±è¡Œåˆ—ã€‚
 	void SetProjectionMatrix(XMMATRIX projection);
-	/// @brief ƒ}ƒeƒŠƒAƒ‹‚ğİ’è‚µ‚Ü‚·B
-	/// @param material İ’è‚·‚éMATERIALŒ^‚Ìƒ}ƒeƒŠƒAƒ‹B
+	/// @brief ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param material è¨­å®šã™ã‚‹MATERIALå‹ã®ãƒãƒ†ãƒªã‚¢ãƒ«ã€‚
 	void SetMaterial(MATERIAL material);
-	/// @brief ƒ‰ƒCƒg‚ğİ’è‚µ‚Ü‚·B
-	/// @param light İ’è‚·‚éƒ‰ƒCƒgB
+	/// @brief ãƒ©ã‚¤ãƒˆã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param light è¨­å®šã™ã‚‹ãƒ©ã‚¤ãƒˆã€‚
 	void SetLight(LIGHT light);
-	/// @brief ƒJƒƒ‰‚ÌˆÊ’u‚ğİ’è‚µ‚Ü‚·B
-	/// @param position ƒJƒƒ‰‚ÌV‚µ‚¢ˆÊ’u‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param position ã‚«ãƒ¡ãƒ©ã®æ–°ã—ã„ä½ç½®ã‚’è¡¨ã™ Vector4O å‹ã®å€¤ã€‚
 	void SetCamera(Vector4O position);
-	/// @brief ˆÊ’uƒpƒ‰ƒ[ƒ^‚ğİ’è‚µ‚Ü‚·B
-	/// @param position İ’è‚·‚é4ŸŒ³ƒxƒNƒgƒ‹‚ÌˆÊ’uB
+	/// @brief ä½ç½®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param position è¨­å®šã™ã‚‹4æ¬¡å…ƒãƒ™ã‚¯ãƒˆãƒ«ã®ä½ç½®ã€‚
 	void SetParameter(Vector4O position);
 
 };

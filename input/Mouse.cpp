@@ -1,5 +1,5 @@
-//==========================================================================
-// ƒ}ƒEƒX
+ï»¿//==========================================================================
+// ãƒã‚¦ã‚¹
 //==========================================================================
 #include "Mouse.h"
 #include "framework.h"
@@ -55,8 +55,8 @@ Mouse::Mouse(HWND window) : m_Window(window) {
 	Rid.hwndTarget = window;
 	RegisterRawInputDevices(&Rid, 1, sizeof(RAWINPUTDEVICE));
 
-	m_Mode = MOUSE_POSITION_MODE_ABSOLUTE;	//â‘ÎÀ•Wƒ‚[ƒh ÀÛ‚ÌÀ•W‚ğæ“¾ UI‚ÌƒNƒŠƒbƒNˆ—‚È‚Ç
-	//m_Mode = MOUSE_POSITION_MODE_RELATIVE;	//‘Š‘ÎÀ•Wƒ‚[ƒh ‘O‰ñ‚ÌÀ•W‚©‚ç‚Ì·•ª‚ğæ“¾ FPSƒQ[ƒ€‚È‚Ç
+	m_Mode = MOUSE_POSITION_MODE_ABSOLUTE;	//çµ¶å¯¾åº§æ¨™ãƒ¢ãƒ¼ãƒ‰ å®Ÿéš›ã®åº§æ¨™ã‚’å–å¾— UIã®ã‚¯ãƒªãƒƒã‚¯å‡¦ç†ãªã©
+	//m_Mode = MOUSE_POSITION_MODE_RELATIVE;	//ç›¸å¯¾åº§æ¨™ãƒ¢ãƒ¼ãƒ‰ å‰å›ã®åº§æ¨™ã‹ã‚‰ã®å·®åˆ†ã‚’å–å¾— FPSã‚²ãƒ¼ãƒ ãªã©
 
 	if (!m_ScrollWheelValue) { m_ScrollWheelValue = CreateEventEx(nullptr, nullptr, CREATE_EVENT_MANUAL_RESET, EVENT_MODIFY_STATE | SYNCHRONIZE); }
 	if (!m_RelativeRead) { m_RelativeRead = CreateEventEx(nullptr, nullptr, CREATE_EVENT_MANUAL_RESET, EVENT_MODIFY_STATE | SYNCHRONIZE); }
@@ -191,7 +191,7 @@ void Mouse::ProcessMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 		POINT point;
 		//m_LastPosition = XMINT2(point.x, point.y);
 
-		// ƒŠƒ‚[ƒgƒfƒBƒXƒNƒgƒbƒv‚É‘Î‰‚·‚é‚½‚ß‚ÉˆÚ“®‘O‚ÉƒJ[ƒ\ƒ‹‚ğ•\¦‚·‚é
+		// ãƒªãƒ¢ãƒ¼ãƒˆãƒ‡ã‚£ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã«å¯¾å¿œã™ã‚‹ãŸã‚ã«ç§»å‹•å‰ã«ã‚«ãƒ¼ã‚½ãƒ«ã‚’è¡¨ç¤ºã™ã‚‹
 		ShowCursor(TRUE);
 
 		if (MapWindowPoints(m_Window, nullptr, &point, 1)) {
@@ -261,7 +261,7 @@ void Mouse::ProcessMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 				}
 				else if (raw.data.mouse.usFlags & MOUSE_VIRTUAL_DESKTOP) {
 
-					// ƒŠƒ‚[ƒgƒfƒBƒXƒNƒgƒbƒv‚È‚Ç‚É‘Î‰
+					// ãƒªãƒ¢ãƒ¼ãƒˆãƒ‡ã‚£ã‚¹ã‚¯ãƒˆãƒƒãƒ—ãªã©ã«å¯¾å¿œ
 					const int width = GetSystemMetrics(SM_CXVIRTUALSCREEN);
 					const int height = GetSystemMetrics(SM_CYVIRTUALSCREEN);
 
@@ -345,13 +345,13 @@ void Mouse::ProcessMessage(UINT message, WPARAM wParam, LPARAM lParam) {
 		break;
 
 	default:
-		// ƒ}ƒEƒX‚É‘Î‚·‚éƒƒbƒZ[ƒW‚Í–³‚©‚Á‚½c
+		// ãƒã‚¦ã‚¹ã«å¯¾ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯ç„¡ã‹ã£ãŸâ€¦
 		return;
 	}
 
 	if (m_Mode == MOUSE_POSITION_MODE_ABSOLUTE) {
 
-		// ‚·‚×‚Ä‚Ìƒ}ƒEƒXƒƒbƒZ[ƒW‚É‘Î‚µ‚ÄV‚µ‚¢À•W‚ğæ“¾‚·‚é
+		// ã™ã¹ã¦ã®ãƒã‚¦ã‚¹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«å¯¾ã—ã¦æ–°ã—ã„åº§æ¨™ã‚’å–å¾—ã™ã‚‹
 		int xPos = GET_X_LPARAM(lParam);
 		int yPos = GET_Y_LPARAM(lParam);
 

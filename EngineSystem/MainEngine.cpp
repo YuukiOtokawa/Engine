@@ -1,4 +1,4 @@
-
+ï»¿
 
 #include "MainEngine.h"
 
@@ -44,34 +44,34 @@ int MainEngine::SystemLoop()
 	while (WM_QUIT != m_Message.message) {
 
 		if (PeekMessage(&m_Message, NULL, 0, 0, PM_REMOVE)) {
-			// ƒƒbƒZ[ƒW‚ª‚ ‚éê‡‚ÍƒƒbƒZ[ƒWˆ—‚ğ—Dæ
+			// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒã‚ã‚‹å ´åˆã¯ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†ã‚’å„ªå…ˆ
 			TranslateMessage(&m_Message);
 			DispatchMessage(&m_Message);
 		}
 		else {
 
-			m_dwCurrentTime = timeGetTime(); // ƒVƒXƒeƒ€‚ğæ“¾
-			if ((m_dwCurrentTime - m_dwFPSLastTime) >= 1000) // 1•b‚²‚Æ‚ÉÀs
+			m_dwCurrentTime = timeGetTime(); // ã‚·ã‚¹ãƒ†ãƒ æ™‚åˆ»ã‚’å–å¾—
+			if ((m_dwCurrentTime - m_dwFPSLastTime) >= 1000) // 1ç§’ã”ã¨ã«å®Ÿè¡Œ
 			{
 #ifdef _DEBUG
 				m_FramePerSecond = m_dwFrameCount;
 #endif
-				m_dwFPSLastTime = m_dwCurrentTime; // FPS‚ğ‘ª’è‚µ‚½‚ğ•Û‘¶
-				m_dwFrameCount = 0; // ƒJƒEƒ“ƒg‚ğƒNƒŠƒA
+				m_dwFPSLastTime = m_dwCurrentTime; // FPSã‚’æ¸¬å®šã—ãŸæ™‚åˆ»ã‚’ä¿å­˜
+				m_dwFrameCount = 0; // ã‚«ã‚¦ãƒ³ãƒˆã‚’ã‚¯ãƒªã‚¢
 			}
-			if ((m_dwCurrentTime - m_dwExecLastTime) >= (1000 / 60)) // 1/60•b‚²‚Æ‚ÉÀs
+			if ((m_dwCurrentTime - m_dwExecLastTime) >= (1000 / 60)) // 1/60ç§’ã”ã¨ã«å®Ÿè¡Œ
 			{
-				m_dwExecLastTime = m_dwCurrentTime; // ˆ—‚µ‚½‚ğ•Û‘¶
-#ifdef _DEBUG // ƒfƒoƒbƒO”Å‚Ì‚¾‚¯FPS‚ğ•\¦‚·‚é
+				m_dwExecLastTime = m_dwCurrentTime; // å‡¦ç†ã—ãŸæ™‚åˆ»ã‚’ä¿å­˜
+#ifdef _DEBUG // ãƒ‡ãƒãƒƒã‚°ç‰ˆã®æ™‚ã ã‘FPSã‚’è¡¨ç¤ºã™ã‚‹
 				std::stringstream caption;
-				caption << WINDOW_CAPTION << " FPS:" << m_FramePerSecond;
+				caption << WINDOW_CAPTION << " FPS: " << m_FramePerSecond;
 				SetWindowText(m_hWnd, caption.str().c_str());
 #endif
-				// ‚±‚±‚ªƒGƒ“ƒWƒ“ˆ—
+				// ã“ã“ãŒã‚¨ãƒ³ã‚¸ãƒ³å‡¦ç†
 				m_pEditor->Update();
 				m_pEditor->Draw();
 
-				m_dwFrameCount++; // ˆ—‰ñ”‚ÌƒJƒEƒ“ƒg‚ğ‰ÁZ
+				m_dwFrameCount++; // å‡¦ç†å›æ•°ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’åŠ ç®—
 			}
 			else {
 				Sleep(0);
@@ -83,73 +83,73 @@ int MainEngine::SystemLoop()
 
 int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX\‘¢‘Ì‚Ìİ’è
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹æ§‹é€ ä½“ã®è¨­å®š
 	WNDCLASS wc = {};
-	wc.lpfnWndProc = WindowProc;                          // ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚Ìw’è
-	wc.lpszClassName = WINDOW_CLASS_NAME;                     // ƒNƒ‰ƒX–¼‚Ìİ’è
-	wc.hInstance = m_hInstance = hInstance;                          // ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹‚Ìw’è
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);          // ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğw’è
-	wc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1); // ƒEƒCƒ“ƒhƒE‚ÌƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì”wŒiF‚ğİ’è
+	wc.lpfnWndProc = WindowProc;                          // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã®æŒ‡å®š
+	wc.lpszClassName = WINDOW_CLASS_NAME;                     // ã‚¯ãƒ©ã‚¹åã®è¨­å®š
+	wc.hInstance = m_hInstance = hInstance;                          // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«ã®æŒ‡å®š
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);          // ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’æŒ‡å®š
+	wc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1); // ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®èƒŒæ™¯è‰²ã‚’è¨­å®š
 
-	// ƒNƒ‰ƒX“o˜^
+	// ã‚¯ãƒ©ã‚¹ç™»éŒ²
 	RegisterClass(&wc);
 
 	// DWORD window_style = (WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) ^ WS_MAXIMIZEBOX;
 	DWORD windowStyle = WS_OVERLAPPEDWINDOW | WS_MAXIMIZEBOX | WS_THICKFRAME;
 	//DWORD windowStyle = WS_OVERLAPPEDWINDOW;
 
-	// Šî–{‹éŒ`À•W
+	// åŸºæœ¬çŸ©å½¢åº§æ¨™
 	RECT windowRect = { 0, 0, SCREEN_WIDTH_DEFAULT, SCREEN_HEIGHT_DEFAULT };
 
-	// w’è‚µ‚½ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ğŠm•Û‚·‚é‚½‚ß‚ÉV‚½‚È‹éŒ`À•W‚ğŒvZ
+	// æŒ‡å®šã—ãŸã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã‚’ç¢ºä¿ã™ã‚‹ãŸã‚ã«æ–°ãŸãªçŸ©å½¢åº§æ¨™ã‚’è¨ˆç®—
 	AdjustWindowRect(&windowRect, windowStyle, FALSE);
 
-	// V‚½‚ÈWindow‚Ì‹éŒ`À•W‚©‚ç•‚Æ‚‚³‚ğZo
+	// æ–°ãŸãªWindowã®çŸ©å½¢åº§æ¨™ã‹ã‚‰å¹…ã¨é«˜ã•ã‚’ç®—å‡º
 	XMINT2 windowSize = { windowRect.right - windowRect.left, windowRect.bottom - windowRect.top };
 
-	// ƒvƒ‰ƒCƒ}ƒŠƒ‚ƒjƒ^[‚Ì‰æ–Ê‰ğ‘œ“xæ“¾
+	// ãƒ—ãƒ©ã‚¤ãƒãƒªãƒ¢ãƒ‹ã‚¿ãƒ¼ã®ç”»é¢è§£åƒåº¦å–å¾—
 	XMINT2 desktopSize = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 
-	// ƒfƒXƒNƒgƒbƒv‚Ì^‚ñ’†‚ÉƒEƒBƒ“ƒhƒE‚ª¶¬‚³‚ê‚é‚æ‚¤‚ÉÀ•W‚ğŒvZ
-	// ¦‚½‚¾‚µ–œ‚ªˆêAƒfƒXƒNƒgƒbƒv‚æ‚èƒEƒBƒ“ƒhƒE‚ª‘å‚«‚¢ê‡‚Í¶ã‚É•\¦
+	// ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã®çœŸã‚“ä¸­ã«ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒç”Ÿæˆã•ã‚Œã‚‹ã‚ˆã†ã«åº§æ¨™ã‚’è¨ˆç®—
+	// â€»ãŸã ã—ä¸‡ãŒä¸€ã€ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã‚ˆã‚Šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒå¤§ãã„å ´åˆã¯å·¦ä¸Šã«è¡¨ç¤º
 	XMINT2 windowPos = {
 		desktopSize.x - windowSize.x >= 0 ? desktopSize.x - windowSize.x : 0,
 		desktopSize.x - windowSize.x >= 0 ? desktopSize.y - windowSize.y : 0
 	};
 
-	// ƒEƒBƒ“ƒhƒE‚Ì¶¬
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç”Ÿæˆ
 	m_hWnd = CreateWindow(
-		WINDOW_CLASS_NAME,          // ƒEƒBƒ“ƒhƒE ƒNƒ‰ƒX
-		WINDOW_CAPTION,      // ƒEƒBƒ“ƒhƒE ƒeƒLƒXƒg
-		windowStyle,        // ƒEƒBƒ“ƒhƒE ƒXƒ^ƒCƒ‹
+		WINDOW_CLASS_NAME,          // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ ã‚¯ãƒ©ã‚¹
+		WINDOW_CAPTION,      // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ ãƒ†ã‚­ã‚¹ãƒˆ
+		windowStyle,        // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ ã‚¹ã‚¿ã‚¤ãƒ«
 
-		// ƒTƒCƒY‚ÆˆÊ’u
+		// ã‚µã‚¤ã‚ºã¨ä½ç½®
 		0,
 		0,
 		windowSize.x,
 		windowSize.y,
 
-		NULL,       // eƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-		NULL,       // ƒƒjƒ…[ƒnƒ“ƒhƒ‹
-		hInstance,  // ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹
-		NULL        // ’Ç‰Á‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒf[ƒ^
+		NULL,       // è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+		NULL,       // ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ«
+		hInstance,  // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«
+		NULL        // è¿½åŠ ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿
 	);
 
 	if (m_hWnd == NULL) {
-		// ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚ª‰½‚ç‚©‚Ì——R‚Å¶¬o—ˆ‚È‚©‚Á‚½
+		// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ãŒä½•ã‚‰ã‹ã®ç†ç”±ã§ç”Ÿæˆå‡ºæ¥ãªã‹ã£ãŸ
 		return WINDOW_CREATE_FAILED;
 	}
 
 
-	//ƒƒjƒ…[ƒo[‚Ìİ’è
+	//ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ¼ã®è¨­å®š
 	HMENU hMenu = CreateMenu();
 
 	HMENU hEditorMenu = CreatePopupMenu();
-	AppendMenu(hEditorMenu, MF_STRING, EngineMenu::Editor_NewWindow, "V‹KƒEƒBƒ“ƒhƒE");
+	AppendMenu(hEditorMenu, MF_STRING, EngineMenu::Editor_NewWindow, "æ–°è¦ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦");
 	AppendMenu(hEditorMenu, MF_SEPARATOR, 0, NULL);
-	AppendMenu(hEditorMenu, MF_STRING, EngineMenu::Editor_End, "I—¹");
+	AppendMenu(hEditorMenu, MF_STRING, EngineMenu::Editor_End, "çµ‚äº†");
 
-	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hEditorMenu, "ƒGƒfƒBƒ^[");
+	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hEditorMenu, "ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼");
 
 	SetMenu(m_hWnd, hMenu);
 
@@ -160,7 +160,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	SetWindowLongPtr(m_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 //==========================================================================
-// ƒVƒXƒeƒ€‰Šú‰»
+// ã‚·ã‚¹ãƒ†ãƒ åˆæœŸåŒ–
 //==========================================================================
 
 
@@ -173,7 +173,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	AllocConsole();
 	freopen_s(&m_pFile, "CONOUT$", "w", stdout);
 
-	//imGUI‰Šú‰»
+	//imGUIåˆæœŸåŒ–
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -186,12 +186,12 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ItemSpacing.y = 8.0f;
 
-	// w’è‚ÌƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚ÌƒEƒBƒ“ƒhƒE‚ğw’è‚Ì•û–@‚Å•\¦
+	// æŒ‡å®šã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æŒ‡å®šã®æ–¹æ³•ã§è¡¨ç¤º
 	ShowWindow(m_hWnd, SW_MAXIMIZE);
 
-	timeBeginPeriod(1); // •ª‰ğ”\‚ğİ’è
+	timeBeginPeriod(1); // åˆ†è§£èƒ½ã‚’è¨­å®š
 
-	m_dwExecLastTime = m_dwFPSLastTime = timeGetTime(); // ƒVƒXƒeƒ€‚ğƒ~ƒŠ•b’PˆÊ‚Åæ“¾
+	m_dwExecLastTime = m_dwFPSLastTime = timeGetTime(); // ã‚·ã‚¹ãƒ†ãƒ æ™‚åˆ»ã‚’ãƒŸãƒªç§’å˜ä½ã§å–å¾—
 	m_dwCurrentTime = m_dwFrameCount = 0;
 
 	m_pEditor->Initialize();
@@ -220,7 +220,7 @@ LRESULT MainEngine::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 {
 	MainEngine* pThis = reinterpret_cast<MainEngine*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	if (pThis) {
-		//ƒCƒ“ƒXƒ^ƒ“ƒX‚ª•K—v‚Èê‡AŠÖ”‚ğŒÄ‚Ô
+		//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒå¿…è¦ãªå ´åˆã€é–¢æ•°ã‚’å‘¼ã¶
 		return pThis->Proc(hWnd, message, wParam, lParam);
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -236,35 +236,35 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-		case EngineMenu::Editor_NewWindow: // V‹KƒEƒBƒ“ƒhƒE
-			MessageBox(hWnd, "ƒEƒBƒ“ƒhƒE‚ğì‚è‚½‚©‚Á‚½", "CreateWindow", MB_OKCANCEL | MB_DEFBUTTON2);
+		case EngineMenu::Editor_NewWindow: // æ–°è¦ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
+			MessageBox(hWnd, "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œã‚ŠãŸã‹ã£ãŸ", "CreateWindow", MB_OKCANCEL | MB_DEFBUTTON2);
 			break;
-		case EngineMenu::Editor_End: // I—¹
-			if (MessageBox(hWnd, "–{“–‚ÉI—¹‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©H", "Šm”F", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
-				DestroyWindow(hWnd); // w’è‚ÌƒEƒBƒ“ƒhƒE‚ÉWM_DESTROYƒƒbƒZ[ƒW‚ğ‘—‚é
+		case EngineMenu::Editor_End: // çµ‚äº†
+			if (MessageBox(hWnd, "æœ¬å½“ã«çµ‚äº†ã—ã¦ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
+				DestroyWindow(hWnd); // æŒ‡å®šã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«WM_DESTROYãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‹
 			}
-			return 0; // DefWindowProcŠÖ”‚ÉƒƒbƒZ[ƒW‚ğ—¬‚³‚¸I—¹‚·‚é‚±‚Æ‚É‚æ‚Á‚Ä‰½‚à‚È‚©‚Á‚½‚±‚Æ‚É‚·‚é
+			return 0; // DefWindowProcé–¢æ•°ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æµã•ãšçµ‚äº†ã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦ä½•ã‚‚ãªã‹ã£ãŸã“ã¨ã«ã™ã‚‹
 		default:
 			break;
 		}
 		break;
 
 	case WM_CLOSE:
-		if (MessageBox(hWnd, "–{“–‚ÉI—¹‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©H", "Šm”F", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
-			DestroyWindow(hWnd); // w’è‚ÌƒEƒBƒ“ƒhƒE‚ÉWM_DESTROYƒƒbƒZ[ƒW‚ğ‘—‚é
+		if (MessageBox(hWnd, "æœ¬å½“ã«çµ‚äº†ã—ã¦ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
+			DestroyWindow(hWnd); // æŒ‡å®šã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«WM_DESTROYãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‹
 		}
-		return 0; // DefWindowProcŠÖ”‚ÉƒƒbƒZ[ƒW‚ğ—¬‚³‚¸I—¹‚·‚é‚±‚Æ‚É‚æ‚Á‚Ä‰½‚à‚È‚©‚Á‚½‚±‚Æ‚É‚·‚é
+		return 0; // DefWindowProcé–¢æ•°ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æµã•ãšçµ‚äº†ã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦ä½•ã‚‚ãªã‹ã£ãŸã“ã¨ã«ã™ã‚‹
 
-	case WM_DESTROY: // ƒEƒBƒ“ƒhƒE‚Ì”jŠüƒƒbƒZ[ƒW
-		PostQuitMessage(0); // WM_QUITƒƒbƒZ[ƒW‚Ì‘—M
+	case WM_DESTROY: // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç ´æ£„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+		PostQuitMessage(0); // WM_QUITãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡
 		return 0;
 	case WM_SIZE:
 		if (wParam == SIZE_MINIMIZED) {
-			// ƒEƒBƒ“ƒhƒE‚ªÅ¬‰»‚³‚ê‚½ê‡
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒæœ€å°åŒ–ã•ã‚ŒãŸå ´åˆ
 			m_pRenderer->ResizeClient(0, 0);
 		}
 		else {
-			// ƒEƒBƒ“ƒhƒE‚ÌƒTƒCƒY•ÏX
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚ºå¤‰æ›´
 			m_pRenderer->ResizeClient(LOWORD(lParam), HIWORD(lParam));
 		}
 		break;
@@ -275,7 +275,7 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_KEYDOWN:
 		if (wParam == VK_ESCAPE) {
-			SendMessage(hWnd, WM_CLOSE, 0, 0); // WM_CLOSEƒƒbƒZ[ƒW‚Ì‘—M
+			SendMessage(hWnd, WM_CLOSE, 0, 0); // WM_CLOSEãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡
 		}
 
 
@@ -300,7 +300,14 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	};
 
-	// ’ÊíƒƒbƒZ[ƒWˆ—‚Í‚±‚ÌŠÖ”‚É”C‚¹‚é
+	// é€šå¸¸ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†ã¯ã“ã®é–¢æ•°ã«ä»»ã›ã‚‹
 	return DefWindowProc(hWnd, message, wParam, lParam);
 
+}
+
+void MainEngine::ErrorMessage(std::string message, std::string title)
+{
+	HWND hWnd = GetInstance()->GetWindow();
+	MessageBox(hWnd, message.c_str(), title.c_str(), MB_OK | MB_DEFBUTTON2);
+	DestroyWindow(hWnd); // æŒ‡å®šã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«WM_DESTROYãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‹
 }

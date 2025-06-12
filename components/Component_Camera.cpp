@@ -1,4 +1,4 @@
-#include "Component_Camera.h"
+ï»¿#include "Component_Camera.h"
 
 
 #include "FrameWork.h"
@@ -17,25 +17,25 @@ void Camera::UpdateComponent() {
 
 void Camera::Draw() {
 	Vector4O clientSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
-	//ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ðì¬
-	XMMATRIX	ProjectionMatrix =
+	//ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’ä½œæˆ
+	m_Projection =
 		XMMatrixPerspectiveFovLH(
 			XMConvertToRadians(m_Fov),
 			clientSize.x / clientSize.y,
 			m_Near,
 			m_Far
 		);
-	//ƒJƒƒ‰s—ñ‚ðì¬
+	//ã‚«ãƒ¡ãƒ©è¡Œåˆ—ã‚’ä½œæˆ
 	XMVECTOR	eyev = XMLoadFloat3(m_Target.ToFloat3());
 	XMVECTOR	pos = XMLoadFloat3(owner->GetComponent<Transform>()->GetPosition().ToFloat3());
 	XMVECTOR	up = XMLoadFloat3(m_Up.ToFloat3());
-	XMMATRIX	ViewMatrix =
+	m_View =
 		XMMatrixLookAtLH(pos, eyev, up);
 
-	//ƒJƒƒ‰s—ñ‚ðƒZƒbƒg
-	MainEngine::GetInstance()->GetRenderer()->SetViewMatrix(ViewMatrix);
-	MainEngine::GetInstance()->GetRenderer()->SetProjectionMatrix(ProjectionMatrix);
-	//ƒJƒƒ‰À•WƒZƒbƒg
+	//ã‚«ãƒ¡ãƒ©è¡Œåˆ—ã‚’ã‚»ãƒƒãƒˆ
+	MainEngine::GetInstance()->GetRenderer()->SetViewMatrix(m_View);
+	MainEngine::GetInstance()->GetRenderer()->SetProjectionMatrix(m_Projection);
+	//ã‚«ãƒ¡ãƒ©åº§æ¨™ã‚»ãƒƒãƒˆ
 	MainEngine::GetInstance()->GetRenderer()->SetCamera(owner->GetComponent<Transform>()->GetPosition());
 
 }

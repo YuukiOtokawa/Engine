@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "MonoBehavior.h"
 
 #include "imgui.h"
@@ -6,24 +6,39 @@
 
 #include "Component_Transform.h"
 
+#include "../components/Bullet.h"
+
 class Player :
     public MonoBehavior
 {
 private:
 	bool isControllable = true;
-	float speed = 0.5f; // ˆÚ“®‘¬“x
+	float speed = 0.5f; // ç§»å‹•é€Ÿåº¦
+
+	Vector4O m_Direction = Vector4O::Backward(); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•æ–¹å‘
+
+	float bulletSpeed = 0.01f;
+	float bulletInterval = 0.5f; // å¼¾ã®ç™ºå°„é–“éš”
+	float bulletLifeTime = 5.0f; // å¼¾ã®ãƒ©ã‚¤ãƒ•ã‚¿ã‚¤ãƒ 
+	float bulletTimer = 0.0f; // å¼¾ã®ç™ºå°„ã‚¿ã‚¤ãƒžãƒ¼
 public:
     void Start() override {
 
     }
 
     void Update() override {
+		if (bulletTimer > 0.0f) {
+			bulletTimer -= 1.0f / 60.0f;
+			if (bulletTimer < 0.0f) {
+				bulletTimer = 0.0f;
+			}
+		}
         if (isControllable) {
             // Handle player input and movement here
-            auto keyboard = InputSystem::GetKeyboard();
+			auto keyboard = InputSystem::GetKeyboard();
 			auto transform = owner->GetComponent<Transform>();
 
-			// ƒJƒƒ‰‚Ì•ûŒüƒxƒNƒgƒ‹‚ðŒvŽZ
+			// ã‚«ãƒ¡ãƒ©ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
 			Object* camera = Editor::GetInstance()->GetActiveCamera();
 
 			Vector4O direction = Vector4O::Zero();
@@ -36,8 +51,8 @@ public:
 
 			Vector4O move;
 
-			// ƒJƒƒ‰‚Ì•ûŒü‚©‚ç‰E•ûŒüƒxƒNƒgƒ‹‚ðŒvŽZ
-			// ‰E•ûŒü‚ÍƒJƒƒ‰‚Ìã•ûŒü‚Æ‘O•ûŒü‚ÌŠOÏ‚Å‹‚ß‚é
+			// ã‚«ãƒ¡ãƒ©ã®æ–¹å‘ã‹ã‚‰å³æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
+			// å³æ–¹å‘ã¯ã‚«ãƒ¡ãƒ©ã®ä¸Šæ–¹å‘ã¨å‰æ–¹å‘ã®å¤–ç©ã§æ±‚ã‚ã‚‹
 
 			if (keyboard->GetKeyRepeat(KK_W)) {
 				direction.z += 1.0f;
@@ -72,16 +87,68 @@ public:
 				angleDiff = atan2(direction.x, direction.z);
 				newAngle.y = angleDiff - cameraAngle.y + 1.57f;
 				newAngle = newAngle.ToEuler();
+				m_Direction = move;
 			}
 
 			transform->SetPosition(transform->GetPosition() + move * speed);
 			transform->SetRotation(newAngle);
+
+			if (keyboard->GetKeyDown(KK_E)&&
+				bulletTimer <= 0.0f) {
+				// å¼¾ã‚’ç™ºå°„
+				Object* bullet = new Object();
+
+				bullet->SetName("Bullet");
+				bullet->AddComponent<Transform>();
+				bullet->AddComponent<MeshFilter>();
+				bullet->AddComponent<MeshRenderer>();
+				bullet->AddComponent<Bullet>();
+
+				OBJLoader* loader = new OBJLoader();
+				loader->Load("asset\\model\\bullet.obj", bullet);
+
+				MATERIAL material;
+				material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+				material.ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
+
+				LIGHT light;
+
+				light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+				light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
+
+				bullet->GetComponent<MeshRenderer>()->SetMaterial(material);
+				bullet->GetComponent<MeshRenderer>()->SetLight(light);
+
+				bullet->GetComponent<MeshRenderer>()->SetVertexShader("BlinnPhong");
+				bullet->GetComponent<MeshRenderer>()->SetPixelShader("BlinnPhong");
+
+				bullet->GetComponent<Bullet>()->SetSpeed(bulletSpeed);
+				bullet->GetComponent<Bullet>()->SetLifeTime(bulletLifeTime);
+
+				bullet->GetComponent<Transform>()->SetPosition(transform->GetPosition());
+				bullet->GetComponent<Bullet>()->SetDirection(m_Direction);
+
+				auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
+				bullet->GetComponent<MeshRenderer>()->SetTexture(texture1);
+
+				Editor::GetInstance()->AddObject(bullet);
+				bulletTimer = bulletInterval;
+			}
 		}
+
 	}
 
     void DrawGUI() override {
+		ImGui::Separator();
+		ImGui::Text("Player Settings");
+		ImGui::Indent();
 		ImGui::Checkbox("Controllable", &isControllable);
 		ImGui::InputFloat("Speed", &speed, 0.01f, 0.1f);
+		ImGui::InputFloat("Bullet Speed", &bulletSpeed, 0.1f, 1.0f);
+		ImGui::InputFloat("Bullet Interval", &bulletInterval, 0.01f, 0.1f);
+		ImGui::InputFloat("Bullet Life Time", &bulletLifeTime, 0.1f, 1.0f);
+		ImGui::Text("Bullet Timer: %.2f", bulletTimer);
+		ImGui::Unindent();
     }
 };
 

@@ -1,5 +1,5 @@
-//==========================================================================
-// ƒL[ƒ{[ƒh
+ï»¿//==========================================================================
+// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰
 //==========================================================================
 #include "Keyboard.h"
 #include <Windows.h>
@@ -13,7 +13,7 @@ using namespace DirectX;
 
 Keyboard* Keyboard::m_pInstance = nullptr;
 
-static_assert(sizeof(Keyboard_State) == 256 / 8, "ƒL[ƒ{[ƒhó‘Ô\‘¢‘Ì‚ÌƒTƒCƒY•sˆê’v");
+static_assert(sizeof(Keyboard_State) == 256 / 8, "ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰çŠ¶æ…‹æ§‹é€ ä½“ã®ã‚µã‚¤ã‚ºä¸ä¸€è‡´");
 
 void Keyboard::KeyUp(int key) {
 	if (key < 0 || key > 0xfe) { return; }
@@ -46,7 +46,7 @@ void Keyboard::Update() {
 	LPBYTE po = (LPBYTE)&m_LastState;
 
 	for (int i = 0; i < sizeof(Keyboard_State); i++) {
-		pt[i] = pn[i] ^ po[i] & pn[i];//‰Ÿ‚µ‚½uŠÔ‚Ì‚İpt[i]=1 ‚»‚êˆÈŠO‚Í0
+		pt[i] = pn[i] ^ po[i] & pn[i];//æŠ¼ã—ãŸç¬é–“ã®ã¿pt[i]=1 ãã‚Œä»¥å¤–ã¯0
 	}
 
 	LPBYTE pu = (LPBYTE)&m_UpState;
@@ -117,7 +117,7 @@ void Keyboard::KeyboardProcessMessage(UINT message, WPARAM wParam, LPARAM lParam
 	case VK_SHIFT:
 		vk = (int)MapVirtualKey(((unsigned int)lParam & 0x00ff0000) >> 16u, MAPVK_VSC_TO_VK_EX);
 		if (!down) {
-			// ¶ƒVƒtƒg‚Æ‰EƒVƒtƒg‚Ì—¼•û‚ª“¯‚É‰Ÿ‚³‚ê‚½ê‡‚ÉƒNƒŠƒA‚³‚ê‚é‚æ‚¤‚É‚·‚é‚½‚ß‚Ì‰ñ”ğô
+			// å·¦ã‚·ãƒ•ãƒˆã¨å³ã‚·ãƒ•ãƒˆã®ä¸¡æ–¹ãŒåŒæ™‚ã«æŠ¼ã•ã‚ŒãŸå ´åˆã«ã‚¯ãƒªã‚¢ã•ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹ãŸã‚ã®å›é¿ç­–
 			KeyUp(VK_LSHIFT);
 			KeyUp(VK_RSHIFT);
 		}

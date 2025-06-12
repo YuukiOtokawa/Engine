@@ -1,6 +1,6 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// ƒGƒ“ƒWƒ“ƒVƒXƒeƒ€[MainEngine.h]
+// ã‚¨ãƒ³ã‚¸ãƒ³ã‚·ã‚¹ãƒ†ãƒ [MainEngine.h]
 // 
 //									Date:20250514
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include <Windows.h>
@@ -20,64 +20,64 @@
 #include "Editor.h"
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ã‚¯ãƒ©ã‚¹å®šç¾©
 //==========================================================================
 
 class MainEngine
 {
 private:
-	// ƒGƒ“ƒWƒ“ƒƒjƒ…[‚Ì’è‹`
+	// ã‚¨ãƒ³ã‚¸ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®å®šç¾©
 	enum EngineMenu {
 		Editor_NewWindow = 1,
 		Editor_End,
 	};
 
-	// ƒŒƒ“ƒ_ƒ‰[‚ÆƒGƒfƒBƒ^[‚Ìƒ|ƒCƒ“ƒ^
-	Renderer* m_pRenderer;
-	Editor* m_pEditor;
+	// ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã¨ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼ã®ãƒã‚¤ãƒ³ã‚¿
+	Renderer* m_pRenderer = nullptr;
+	Editor* m_pEditor = nullptr;
 
-	// ƒƒOƒtƒ@ƒCƒ‹‚Ìƒ|ƒCƒ“ƒ^
-	FILE* m_pFile;
+	// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒã‚¤ãƒ³ã‚¿
+	FILE* m_pFile = nullptr;
 
-	// FPSƒJƒEƒ“ƒ^•Ï”
+	// FPSã‚«ã‚¦ãƒ³ã‚¿å¤‰æ•°
 	static DWORD g_CountFPS;
 
 
-	// FPS§ŒÀ—pŠÔŒv‘ª•Ï”
+	// FPSåˆ¶é™ç”¨æ™‚é–“è¨ˆæ¸¬å¤‰æ•°
 	DWORD m_dwExecLastTime = 0;
 	DWORD m_dwFPSLastTime = 0;
 	DWORD m_dwCurrentTime = 0;
 	DWORD m_dwFrameCount = 0;
 
-	// ƒtƒŒ[ƒ€ƒŒ[ƒg§ŒÀ—p•Ï”
-	int m_FramePerSecond;
+	// ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆåˆ¶é™ç”¨å¤‰æ•°
+	int m_FramePerSecond = 0;
 
-	// ƒƒbƒZ[ƒW\‘¢‘Ì
+	// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ§‹é€ ä½“
 	MSG m_Message = {};
 
-	//ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
+	//ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
 	HWND m_hWnd = NULL;
 
-	// ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹
+	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«
 	HINSTANCE m_hInstance = NULL;
 
 
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	MainEngine() = default;
 	MainEngine(const MainEngine&) = delete;
 	MainEngine& operator=(const MainEngine&) = delete;
 
-	//ƒfƒXƒgƒ‰ƒNƒ^
+	//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	~MainEngine() {
 		
 	}
 
-	//ƒNƒ‰ƒXƒCƒ“ƒXƒ^ƒ“ƒXƒ|ƒCƒ“ƒ^
+	//ã‚¯ãƒ©ã‚¹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒã‚¤ãƒ³ã‚¿
 	static MainEngine* m_pInstance;
 
 public:
-	/// @brief MainEngine ƒNƒ‰ƒX‚ÌƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚µ‚Ü‚·B
-	/// @return MainEngine ƒNƒ‰ƒX‚Ì—Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief MainEngine ã‚¯ãƒ©ã‚¹ã®ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return MainEngine ã‚¯ãƒ©ã‚¹ã®å”¯ä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	static MainEngine* GetInstance() {
 		if (m_pInstance == nullptr) {
 			m_pInstance = new MainEngine();
@@ -85,45 +85,46 @@ public:
 		return m_pInstance;
 	}
 
-	/// @brief ƒVƒXƒeƒ€‚ÌƒƒCƒ“ƒ‹[ƒv‚ğÀs‚µ‚Ü‚·B
-	/// @return ƒ‹[ƒv‚ÌI—¹‚É•Ô‚³‚ê‚éƒXƒe[ƒ^ƒXƒR[ƒhi®”’ljB
+	/// @brief ã‚·ã‚¹ãƒ†ãƒ ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
+	/// @return ãƒ«ãƒ¼ãƒ—ã®çµ‚äº†æ™‚ã«è¿”ã•ã‚Œã‚‹ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚³ãƒ¼ãƒ‰ï¼ˆæ•´æ•°å€¤ï¼‰ã€‚
 	int SystemLoop();
 
-	/// @brief ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ì‰Šú‰»‚ğs‚¢‚Ü‚·B
-	/// @param hInstance Œ»İ‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒnƒ“ƒhƒ‹B
-	/// @param hPrevInstance ‘O‰ñ‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒnƒ“ƒhƒ‹ií‚ÉNULLjB
-	/// @param lpCmdLine ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì•¶š—ñB
-	/// @param nCmdShow ƒEƒBƒ“ƒhƒE‚Ì•\¦ó‘Ô‚ğw’è‚·‚éƒtƒ‰ƒOB
-	/// @return ‰Šú‰»‚ª¬Œ÷‚µ‚½ê‡‚Í0A¸”s‚µ‚½ê‡‚Í0ˆÈŠO‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–ã‚’è¡Œã„ã¾ã™ã€‚
+	/// @param hInstance ç¾åœ¨ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒãƒ³ãƒ‰ãƒ«ã€‚
+	/// @param hPrevInstance å‰å›ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒãƒ³ãƒ‰ãƒ«ï¼ˆå¸¸ã«NULLï¼‰ã€‚
+	/// @param lpCmdLine ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ–‡å­—åˆ—ã€‚
+	/// @param nCmdShow ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºçŠ¶æ…‹ã‚’æŒ‡å®šã™ã‚‹ãƒ•ãƒ©ã‚°ã€‚
+	/// @return åˆæœŸåŒ–ãŒæˆåŠŸã—ãŸå ´åˆã¯0ã€å¤±æ•—ã—ãŸå ´åˆã¯0ä»¥å¤–ã®å€¤ã‚’è¿”ã—ã¾ã™ã€‚
 	int Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-	/// @brief ƒIƒuƒWƒFƒNƒg‚âƒŠƒ\[ƒX‚ÌŒãˆ—‚ğs‚¢‚Ü‚·B
+	/// @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚„ãƒªã‚½ãƒ¼ã‚¹ã®å¾Œå‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	void Finalize();
 
-	/// @brief ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚Æ‚µ‚ÄAƒEƒBƒ“ƒhƒEƒƒbƒZ[ƒW‚ğˆ—‚µ‚Ü‚·B
-	/// @param hWnd ƒƒbƒZ[ƒW‚ğóM‚·‚éƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹B
-	/// @param message ˆ—‚·‚éƒƒbƒZ[ƒW‚Ì¯•ÊqB
-	/// @param wParam ƒƒbƒZ[ƒW‚ÉŠÖ˜A‚·‚é’Ç‰Áî•ñiƒ[ƒhƒpƒ‰ƒ[ƒ^jB
-	/// @param lParam ƒƒbƒZ[ƒW‚ÉŠÖ˜A‚·‚é’Ç‰Áî•ñiƒƒ“ƒOƒpƒ‰ƒ[ƒ^jB
-	/// @return ƒƒbƒZ[ƒW‚Ìˆ—Œ‹‰Ê‚ğ¦‚·’lB
+	/// @brief ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã¨ã—ã¦ã€ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡¦ç†ã—ã¾ã™ã€‚
+	/// @param hWnd ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å—ä¿¡ã™ã‚‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«ã€‚
+	/// @param message å‡¦ç†ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è­˜åˆ¥å­ã€‚
+	/// @param wParam ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«é–¢é€£ã™ã‚‹è¿½åŠ æƒ…å ±ï¼ˆãƒ¯ãƒ¼ãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼‰ã€‚
+	/// @param lParam ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«é–¢é€£ã™ã‚‹è¿½åŠ æƒ…å ±ï¼ˆãƒ­ãƒ³ã‚°ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼‰ã€‚
+	/// @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‡¦ç†çµæœã‚’ç¤ºã™å€¤ã€‚
 	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	/// @brief ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚Æ‚µ‚ÄAƒEƒBƒ“ƒhƒEƒƒbƒZ[ƒW‚ğˆ—‚µ‚Ü‚·B
-	/// @param hWnd ƒƒbƒZ[ƒW‚ğó‚¯æ‚éƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹B
-	/// @param message ˆ—‚·‚éƒƒbƒZ[ƒW‚Ì¯•ÊqB
-	/// @param wParam ƒƒbƒZ[ƒW‚ÉŠÖ˜A‚·‚é’Ç‰Áî•ñiƒ[ƒh’PˆÊjB
-	/// @param lParam ƒƒbƒZ[ƒW‚ÉŠÖ˜A‚·‚é’Ç‰Áî•ñiƒƒ“ƒO’PˆÊjB
-	/// @return ƒƒbƒZ[ƒW‚Ìˆ—Œ‹‰ÊB“Á’è‚ÌƒƒbƒZ[ƒW‚É‰‚¶‚½’l‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã¨ã—ã¦ã€ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡¦ç†ã—ã¾ã™ã€‚
+	/// @param hWnd ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å—ã‘å–ã‚‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«ã€‚
+	/// @param message å‡¦ç†ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è­˜åˆ¥å­ã€‚
+	/// @param wParam ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«é–¢é€£ã™ã‚‹è¿½åŠ æƒ…å ±ï¼ˆãƒ¯ãƒ¼ãƒ‰å˜ä½ï¼‰ã€‚
+	/// @param lParam ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«é–¢é€£ã™ã‚‹è¿½åŠ æƒ…å ±ï¼ˆãƒ­ãƒ³ã‚°å˜ä½ï¼‰ã€‚
+	/// @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‡¦ç†çµæœã€‚ç‰¹å®šã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«å¿œã˜ãŸå€¤ã‚’è¿”ã—ã¾ã™ã€‚
 	LRESULT Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	/// @brief ƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹iHWNDŒ^j‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«ï¼ˆHWNDå‹ï¼‰ã‚’è¿”ã—ã¾ã™ã€‚
 	HWND GetWindow() { return m_hWnd; }
-	/// @brief ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒnƒ“ƒhƒ‹iHINSTANCEŒ^j‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ç¾åœ¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒãƒ³ãƒ‰ãƒ«ï¼ˆHINSTANCEå‹ï¼‰ã‚’è¿”ã—ã¾ã™ã€‚
 	HINSTANCE GetInstanceHandle() { return m_hInstance; }
-	/// @brief ƒŒƒ“ƒ_ƒ‰[ƒIƒuƒWƒFƒNƒg‚ğæ“¾‚µ‚Ü‚·B
-	/// @return m_pRenderer ‚Ö‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return m_pRenderer ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	Renderer* GetRenderer() { return m_pRenderer; }
 
+	static void ErrorMessage(std::string message, std::string title);
 };
 

@@ -1,4 +1,4 @@
-#include "Component_CubeMesh.h"
+ï»¿#include "Component_CubeMesh.h"
 
 
 
@@ -7,10 +7,10 @@
 CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 {
 
-	// ’¸“_î•ñ‚Ìì¬
+	// é ‚ç‚¹æƒ…å ±ã®ä½œæˆ
 	VERTEX vertex[NUM_CUBE_VERTEX];
 
-	//ã
+	//ä¸Š
 
 	vertex[0] = {
 		Vector4O(-1.0f, 1.0f, 1.0f),
@@ -40,7 +40,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		Vector4O(1.0f, 1.0f),
 	};
 
-	//è‘O
+	//æ‰‹å‰
 
 	vertex[4] = {
 		Vector4O(-1.0f, 1.0f, -1.0f),
@@ -72,7 +72,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		Vector4O(1.0f, 1.0f),
 	};
 
-	//‰E
+	//å³
 
 	vertex[8] = {
 		Vector4O(1.0f, 1.0f, -1.0f),
@@ -102,7 +102,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		Vector4O(1.0f, 1.0f),
 	};
 
-	//‰œ
+	//å¥¥
 
 	vertex[12] = {
 		Vector4O(1.0f, 1.0f, 1.0f),
@@ -132,7 +132,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		Vector4O(1.0f, 1.0f),
 	};
 
-	//¶
+	//å·¦
 
 	vertex[16] = {
 		Vector4O(-1.0f, 1.0f, 1.0f),
@@ -162,7 +162,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		Vector4O(1.0f, 1.0f),
 	};
 
-	//‰º
+	//ä¸‹
 
 	vertex[20] = {
 		Vector4O(-1.0f, -1.0f, -1.0f),
@@ -194,11 +194,11 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 
 	HRESULT hr;
 	{
-		// ’¸“_ƒoƒbƒtƒ@¶¬
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(VERTEX) * NUM_CUBE_VERTEX; // ’¸“_ƒoƒbƒtƒ@‚Ì—Ê
+		bd.ByteWidth = sizeof(VERTEX) * NUM_CUBE_VERTEX; // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®é‡
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
@@ -209,7 +209,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
 	}
 
-	// ƒCƒ“ƒfƒbƒNƒXİ’è
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹è¨­å®š
 	UINT index[NUM_CUBE_INDEX] = {
 		0, 1, 2,
 		1, 3, 2,
@@ -225,7 +225,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		21, 23, 22 };
 
 	{
-		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
+		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DEFAULT;

@@ -1,4 +1,4 @@
-#include "GUI.h"
+ï»¿#include "GUI.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 
@@ -13,10 +13,10 @@ ImFont* GUI::m_pCurrentFont = nullptr;
 void GUI::Initialize() {
 	auto io = ImGui::GetIO();
 
-	//ƒtƒHƒ“ƒgİ’è
-	// ’Êí‚ÌƒtƒHƒ“ƒg‚ğİ’è
+	//ãƒ•ã‚©ãƒ³ãƒˆè¨­å®š
+	// é€šå¸¸ã®ãƒ•ã‚©ãƒ³ãƒˆã‚’è¨­å®š
 	m_pFontDefault = io.Fonts->AddFontFromFileTTF("asset\\font\\CascadiaMono.ttf", 16.0f);
-	// ƒIƒuƒWƒFƒNƒg–¼—p‚ÌƒtƒHƒ“ƒg‚ğİ’è
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆã‚’è¨­å®š
 	m_pFontObjectName = io.Fonts->AddFontFromFileTTF("asset\\font\\CascadiaMono.ttf", 24.0f);
 
 	io.Fonts->Build();

@@ -1,6 +1,6 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// ƒL[ƒ{[ƒhƒNƒ‰ƒX[Keyboard.h]
+// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚¯ãƒ©ã‚¹[Keyboard.h]
 // 
 //									Date:20250115
 //									Author:Yuuki Otokawa
@@ -9,10 +9,10 @@
 #include "FrameWork.h"
 
 //==========================================================================
-// ƒL[ƒ{[ƒh
+// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰
 //==========================================================================
 
-//ƒL[‚Ì—ñ‹“ ’·‚¢‚Ì‚Å‚½‚½‚ñ‚Å‚¨‚­‚±‚Æ‚ğ„§
+//ã‚­ãƒ¼ã®åˆ—æŒ™ é•·ã„ã®ã§ãŸãŸã‚“ã§ãŠãã“ã¨ã‚’æ¨å¥¨
 typedef enum Keyboard_Keys_tag {
 	KK_NONE = 0x0,
 
@@ -192,7 +192,7 @@ typedef enum Keyboard_Keys_tag {
 	KK_OEMCLEAR = 0xfe,
 } Keyboard_Keys;
 
-// ƒL[ƒ{[ƒhó‘Ô\‘¢‘Ì ’·‚¢‚Ì‚Å‚½‚½‚ñ‚Å‚¨‚­‚±‚Æ‚ğ„§
+// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰çŠ¶æ…‹æ§‹é€ ä½“ é•·ã„ã®ã§ãŸãŸã‚“ã§ãŠãã“ã¨ã‚’æ¨å¥¨
 typedef struct Keyboard_State_tag {
 	bool Reserved0 : 8;
 	bool Back : 1;              // VK_BACK, 0x8
@@ -383,26 +383,26 @@ typedef struct Keyboard_State_tag {
 
 class Keyboard {
 private:
-	/// @brief ŠeíƒXƒe[ƒg
+	/// @brief å„ç¨®ã‚¹ãƒ†ãƒ¼ãƒˆ
 	Keyboard_State m_UpState;
 	Keyboard_State m_DownState;
 	Keyboard_State m_RepeatState;
 	Keyboard_State m_LastState;
 
-	// ProcessMessageŠÖ”—pŠÖ” ‹C‚É‚µ‚È‚­‚Ä‚æ‚µ
+	// ProcessMessageé–¢æ•°ç”¨é–¢æ•° æ°—ã«ã—ãªãã¦ã‚ˆã—
 	void KeyUp(int key);
 	void KeyDown(int key);
 
-	/// @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^ ŠeíƒXƒe[ƒg‚Ì‰Šú‰»
+	/// @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ å„ç¨®ã‚¹ãƒ†ãƒ¼ãƒˆã®åˆæœŸåŒ–
 	Keyboard() { Reset(); }
 
-	Keyboard(const Keyboard&) = delete; // ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^‹Ö~
-	Keyboard& operator=(const Keyboard&) = delete; // ‘ã“ü‰‰Zq‹Ö~
+	Keyboard(const Keyboard&) = delete; // ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ç¦æ­¢
+	Keyboard& operator=(const Keyboard&) = delete; // ä»£å…¥æ¼”ç®—å­ç¦æ­¢
 
-	Keyboard(Keyboard&&) = delete; // ƒ€[ƒuƒRƒ“ƒXƒgƒ‰ƒNƒ^‹Ö~
-	Keyboard& operator=(Keyboard&&) = delete; // ƒ€[ƒu‘ã“ü‰‰Zq‹Ö~
+	Keyboard(Keyboard&&) = delete; // ãƒ ãƒ¼ãƒ–ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ç¦æ­¢
+	Keyboard& operator=(Keyboard&&) = delete; // ãƒ ãƒ¼ãƒ–ä»£å…¥æ¼”ç®—å­ç¦æ­¢
 
-	static Keyboard* m_pInstance; // ƒCƒ“ƒXƒ^ƒ“ƒX
+	static Keyboard* m_pInstance; // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 public:
 
 	static Keyboard* GetInstance() {
@@ -412,24 +412,24 @@ public:
 		return m_pInstance;
 	}
 
-	/// @brief ŠeíƒXƒe[ƒg‚Ì‰Šú‰» ƒRƒ“ƒXƒgƒ‰ƒNƒ^ˆÈŠO‚Åg‚¤‚±‚Æ‚È‚¢‚æ‚ËH
+	/// @brief å„ç¨®ã‚¹ãƒ†ãƒ¼ãƒˆã®åˆæœŸåŒ– ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ä»¥å¤–ã§ä½¿ã†ã“ã¨ãªã„ã‚ˆã­ï¼Ÿ
 	void Reset();
 
-	/// @brief ŠeíƒXƒe[ƒg‚ÌXV
+	/// @brief å„ç¨®ã‚¹ãƒ†ãƒ¼ãƒˆã®æ›´æ–°
 	void Update();
 
-	/// @brief ƒL[‚ğ—£‚µ‚½uŠÔ‚ğŒŸ’m
-	/// @param key ƒL[ƒR[ƒh Keyboard_Keys—ñ‹“‘Ì‚ğg—p
+	/// @brief ã‚­ãƒ¼ã‚’é›¢ã—ãŸç¬é–“ã‚’æ¤œçŸ¥
+	/// @param key ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰ Keyboard_Keysåˆ—æŒ™ä½“ã‚’ä½¿ç”¨
 	/// @return 
 	bool GetKeyUp(Keyboard_Keys key);
 
-	/// @brief ƒL[‚ğ‰Ÿ‚µ‚½uŠÔ‚ğŒŸ’m
-	/// @param key ƒL[ƒR[ƒh Keyboard_Keys—ñ‹“‘Ì‚ğg—p
+	/// @brief ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸç¬é–“ã‚’æ¤œçŸ¥
+	/// @param key ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰ Keyboard_Keysåˆ—æŒ™ä½“ã‚’ä½¿ç”¨
 	/// @return 
 	bool GetKeyDown(Keyboard_Keys key);
 
-	/// @brief ƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚éŠÔŒŸ’m
-	/// @param key ƒL[ƒR[ƒh Keyboard_Keys—ñ‹“‘Ì‚ğg—p
+	/// @brief ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ã„ã‚‹é–“æ¤œçŸ¥
+	/// @param key ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰ Keyboard_Keysåˆ—æŒ™ä½“ã‚’ä½¿ç”¨
 	/// @return 
 	bool GetKeyRepeat(Keyboard_Keys key);
 

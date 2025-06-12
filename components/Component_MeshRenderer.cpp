@@ -1,4 +1,4 @@
-#include "Component_MeshRenderer.h"
+ï»¿#include "Component_MeshRenderer.h"
 
 #include "Component_Camera.h"
 #include "Component_Transform.h"
@@ -17,7 +17,7 @@ void MeshRenderer::UpdateComponent() {
 }
 
 void MeshRenderer::Draw() {
-	//ƒJƒƒ‰‚ÌŽdŽ–
+	//ã‚«ãƒ¡ãƒ©ã®ä»•äº‹
 	//auto camera = owner->GetComponent<Camera>();
 
 	//auto transform = owner->GetComponent<Transform>();

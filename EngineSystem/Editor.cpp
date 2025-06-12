@@ -1,4 +1,4 @@
-#include "Editor.h"
+ï»¿#include "Editor.h"
 
 #include "MainEngine.h"
 
@@ -17,6 +17,10 @@
 #include "Player.h"
 #include "PlayerCamera.h"
 
+#include "../components/Bullet.h"
+#include "../Billboard.h"
+#include "../Animation.h"
+
 #include "imgui.h"
 
 Editor* Editor::m_pInstance;
@@ -24,32 +28,33 @@ Editor* Editor::m_pInstance;
 void Editor::Initialize() {
 	m_pGUI = new GUI();
 	
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®èª­ã¿è¾¼ã¿
 	{
-		//ŒõŒ¹ŒvŽZ–³‚µ
+		//å…‰æºè¨ˆç®—ç„¡ã—
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/unlitTextureVS.cso", "unlit");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/unlitTexturePS.cso", "unlit");
 
-		//’¸“_ƒ‰ƒCƒeƒBƒ“ƒO
+		//é ‚ç‚¹ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/vertexDirectionalLightingVS.cso", "vertex");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/vertexDirectionalLightingPS.cso", "vertex");
 
-		//ƒsƒNƒZƒ‹ƒ‰ƒCƒeƒBƒ“ƒO
+		//ãƒ”ã‚¯ã‚»ãƒ«ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/pixelLightingVS.cso", "pixel");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/pixelLightingPS.cso", "pixel");
 
-		//BlinnPhongƒ‰ƒCƒeƒBƒ“ƒO
+		//BlinnPhongãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/blinnPhongVS.cso", "BlinnPhong");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/blinnPhongPS.cso", "BlinnPhong");
 
-		//”¼‹…ƒ‰ƒCƒeƒBƒ“ƒO
+		//åŠçƒãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/hemisphereLightingVS.cso", "hemisphere");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/hemisphereLightingPS.cso", "hemisphere");
 
-		//“_ŒõŒ¹ƒ‰ƒCƒeƒBƒ“ƒO
+		//ç‚¹å…‰æºãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/blinnPhongVS.cso", "pointLight");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/pointLightingBlinnPhongPS.cso", "pointLight");
 
-		//ƒXƒ|ƒbƒgƒ‰ƒCƒgƒ‰ƒCƒeƒBƒ“ƒO
+		//ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/spotLightingVS.cso", "spotLight");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/spotLightingPS.cso", "spotLight");
 
@@ -58,7 +63,7 @@ void Editor::Initialize() {
 
 	}
 
-	//ƒJƒƒ‰ì¬
+	//ã‚«ãƒ¡ãƒ©ä½œæˆ
 	{
 		auto camera = new Object();
 		camera->SetName("MainCamera");
@@ -67,11 +72,12 @@ void Editor::Initialize() {
 
 		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, -2.5f));
 		camera->GetComponent<EditorCamera>()->SetTarget(Vector4O(0.0f, 5.0f, -1.5f));
+		SetActiveCamera(camera);
 
 		AddObject(camera);
 	}
 
-	//ƒJƒƒ‰2ì¬
+	//ã‚«ãƒ¡ãƒ©2ä½œæˆ
 	{
 		auto camera = new Object();
 		camera->SetName("Camera2");
@@ -81,12 +87,11 @@ void Editor::Initialize() {
 		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 5.0f, 1.5f));
 
 		camera->AddComponent<PlayerCamera>();
-		SetActiveCamera(camera);
 
 		AddObject(camera);
 	}
 
-	//“ü—ÍƒVƒXƒeƒ€ì¬
+	//å…¥åŠ›ã‚·ã‚¹ãƒ†ãƒ ä½œæˆ
 	{
 		auto input = new Object();
 		input->SetName("InputSystem");
@@ -95,7 +100,7 @@ void Editor::Initialize() {
 		AddObject(input);
 	}
 
-	//—§•û‘ÌƒIƒuƒWƒFƒNƒgì¬
+	//ç«‹æ–¹ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆ
 	{
 		auto cube = new Object();
 		cube->SetName("Cube1");
@@ -124,7 +129,7 @@ void Editor::Initialize() {
 
 	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
 
-	//•½–ÊƒIƒuƒWƒFƒNƒgì¬
+	//å¹³é¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆ
 	{
 		Object* plane = new Object();
 		plane->SetName("Plane1");
@@ -149,15 +154,15 @@ void Editor::Initialize() {
 		plane->GetComponent<MeshRenderer>()->SetLight(light);
 		plane->GetComponent<MeshRenderer>()->SetTexture(texture);
 
-		plane->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
-		plane->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		plane->GetComponent<MeshRenderer>()->SetVertexShader("spotLight");
+		plane->GetComponent<MeshRenderer>()->SetPixelShader("spotLight");
 
 		AddObject(plane);
 	}
 
 	auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
 
-	//ƒvƒŒƒCƒ„[ƒ‚ƒfƒ‹ƒIƒuƒWƒFƒNƒgì¬
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¢ãƒ‡ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆ
 	{
 		Object* model = new Object();
 		model->SetName("Model0");
@@ -185,13 +190,13 @@ void Editor::Initialize() {
 
 		model->GetComponent<MeshRenderer>()->SetVertexShader("limLight");
 		model->GetComponent<MeshRenderer>()->SetPixelShader("limLight");
-		model->GetComponent<MeshRenderer>()->SetTexture(texture1);
+		//model->GetComponent<MeshRenderer>()->SetTexture(texture1);
 
 		GetObject("Camera2")->GetComponent<PlayerCamera>()->SetPlayer(model);
-		AddObject(model);
+		//AddObject(model);
 	}
 
-	//ƒg[ƒ‰ƒXƒIƒuƒWƒFƒNƒgì¬
+	//ãƒˆãƒ¼ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆ
 	{
 		Object* torus;
 
@@ -248,7 +253,7 @@ void Editor::Initialize() {
 			light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
 			light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
 
-			torus->GetComponent<Transform>()->SetPosition(Vector4O::Backward());
+			torus->GetComponent<Transform>()->SetPosition(Vector4O(5.0f,0.0f,5.0f));
 			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
 			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
 			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
@@ -259,7 +264,7 @@ void Editor::Initialize() {
 
 		}
 
-		//ƒXƒ|ƒbƒgƒ‰ƒCƒg—pƒg[ƒ‰ƒX
+		//ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆç”¨ãƒˆãƒ¼ãƒ©ã‚¹
 		{
 			Object* torus = new Object();
 			torus->SetName("SpotLightTorus");
@@ -277,10 +282,10 @@ void Editor::Initialize() {
 			LIGHT light;
 			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 			light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
-			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì•ûŒü
-			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ÌˆÊ’u
-			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì”ÍˆÍ
-			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ÌŠp“x
+			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®æ–¹å‘
+			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ä½ç½®
+			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ç¯„å›²
+			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®è§’åº¦
 
 			torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
 			torus->GetComponent<Transform>()->SetPosition(Vector4O::Zero());
@@ -290,30 +295,108 @@ void Editor::Initialize() {
 
 			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("spotLight");
 			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("spotLight");
-			//AddObject(torus);
+			AddObject(torus);
 		}
+		//ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆç”¨ãƒˆãƒ¼ãƒ©ã‚¹
+		{
+			Object* torus = new Object();
+			torus->SetName("PointTorus");
+			torus->AddComponent<Transform>();
+			torus->AddComponent<MeshFilter>();
+			torus->AddComponent<AssimpMeshRenderer>();
+
+			ModelLoader* loader = new ModelLoader();
+			loader->LoadModel(torus, "asset\\model\\torus.obj");
+
+			MATERIAL material;
+			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+
+			LIGHT light;
+			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+			light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
+			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®æ–¹å‘
+			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ä½ç½®
+			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ç¯„å›²
+			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®è§’åº¦
+
+			torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
+			torus->GetComponent<Transform>()->SetPosition(Vector4O(-5.0f, 0.0f, 5.0f));
+			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
+			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
+			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
+
+			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("pointLight");
+			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("pointLight");
+			AddObject(torus);
+		}
+	}
+
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆä½œæˆ
+	{
+		Object* sprite = new Object();
+		sprite->SetName("sprite");
+		sprite->AddComponent<Transform>();
+		sprite->AddComponent<Billboard>();
+		sprite->AddComponent<MeshRenderer>();
+		sprite->AddComponent<Animation>();
+
+		MATERIAL material;
+		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+
+		LIGHT light;
+
+		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+		light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
+		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
+
+		sprite->GetComponent<Transform>()->SetScale(Vector4O(1.0f, 1.0f, 1.0f));
+		sprite->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 1.0f, 5.0f));
+		sprite->GetComponent<MeshRenderer>()->SetMaterial(material);
+		sprite->GetComponent<MeshRenderer>()->SetLight(light);
+		auto texture2 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\explosion.png");
+		sprite->GetComponent<MeshRenderer>()->SetTexture(texture2);
+
+		sprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		sprite->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+
+		sprite->GetComponent<Animation>()->SetFramePerSecond(30);
+		sprite->GetComponent<Billboard>()->SetUVRect(Vector4O(4, 4));
+
+		//AddObject(sprite);
+
 	}
 
 	Main();
 	m_pGUI->Initialize();
-
 }
 
 void Editor::Update() {
 	for (auto& object : m_Objects) 
 		object->Update();
+	for (auto& object : m_DeleteObjects) {
+		auto it = std::find(m_Objects.begin(), m_Objects.end(), object);
+		if (it != m_Objects.end()) {
+			if (*it == m_pSelectedObject)
+				m_pSelectedObject = nullptr; // é¸æŠžä¸­ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¯ãƒªã‚¢
+			delete *it; // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤
+			m_Objects.erase(it); // ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤
+		}
+	}
+	m_DeleteObjects.clear();
 }
 
 void Editor::Draw() {
 
-	//ƒŒƒ“ƒ_ƒŠƒ“ƒOƒoƒbƒtƒ@ƒNƒŠƒA
+	//ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡ã‚¯ãƒªã‚¢
 	MainEngine::GetInstance()->GetRenderer()->BufferClear();
 
 //==========================================================================
-// ƒIƒuƒWƒFƒNƒg•`‰æˆ—
+// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‡¦ç†
 //==========================================================================
 
-	//Žg—p‚·‚éƒJƒƒ‰‚ðÝ’è
+	//ä½¿ç”¨ã™ã‚‹ã‚«ãƒ¡ãƒ©ã‚’è¨­å®š
 	Object* activeCamera = nullptr;
 	for (auto& object : m_Objects) {
 		if (object->GetTag() == GameObjectTagLayer::CameraTag &&
@@ -322,10 +405,10 @@ void Editor::Draw() {
 		}
 	}
 
-	//Žg—p‚·‚éƒJƒƒ‰‚Ìs—ñî•ñ‚ð“o˜^
+	//ä½¿ç”¨ã™ã‚‹ã‚«ãƒ¡ãƒ©ã®è¡Œåˆ—æƒ…å ±ã‚’ç™»éŒ²
 	activeCamera->Draw();
 
-	//ƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 	for (auto& object : m_Objects) {
 		if (object->GetTag() == GameObjectTagLayer::ObjectTag) {
 			object->Draw();
@@ -333,35 +416,35 @@ void Editor::Draw() {
 	}
 
 //==========================================================================
-// GUI•`‰æˆ—
+// GUIæç”»å‡¦ç†
 //==========================================================================
 
-	//ImGui‚Ì‰Šú‰»
+	//ImGuiã®åˆæœŸåŒ–
 	m_pGUI->StartImGui();
 
 
-	//ƒCƒ“ƒXƒyƒNƒ^ƒEƒBƒ“ƒhƒE‚Ì•`‰æŠJŽn
+	//ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æç”»é–‹å§‹
 	m_pGUI->StartInspector();
 
-	//‘I‘ð‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚Ìî•ñ‚ð•\Ž¦
+	//é¸æŠžã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æƒ…å ±ã‚’è¡¨ç¤º
 	if (m_pSelectedObject)
 		m_pSelectedObject->DrawGUI();
 
 	m_pGUI->EndWindow();
 
 
-	//ƒqƒGƒ‰ƒ‹ƒL[ƒEƒBƒ“ƒhƒE‚Ì•`‰æŠJŽn
+	//ãƒ’ã‚¨ãƒ©ãƒ«ã‚­ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æç”»é–‹å§‹
 	m_pGUI->StartHierarchy();
 
-	//‘SƒIƒuƒWƒFƒNƒg‚Ì–¼‘Oƒ{ƒ^ƒ“‚ð•`‰æ
+	//å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰ãƒœã‚¿ãƒ³ã‚’æç”»
 	for (auto& object : m_Objects) {
 		if (object == m_pSelectedObject)
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f)); // ‘I‘ð’†‚ÌƒIƒuƒWƒFƒNƒg‚ÌF‚ð•ÏX
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f)); // é¸æŠžä¸­ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è‰²ã‚’å¤‰æ›´
 		else
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f)); // ’Êí‚ÌƒIƒuƒWƒFƒNƒg‚ÌF
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f)); // é€šå¸¸ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è‰²
 
 		if (ImGui::Button(object->GetName().c_str())){
-			m_pSelectedObject = object;// ‘I‘ð‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ðXV
+			m_pSelectedObject = object;// é¸æŠžã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ›´æ–°
 		}
 
 		ImGui::PopStyleColor();
@@ -369,10 +452,10 @@ void Editor::Draw() {
 		
 	m_pGUI->EndWindow();
 
-	// ImGui•`‰æ‚ÌI—¹
+	// ImGuiæç”»ã®çµ‚äº†
 	m_pGUI->EndImGui();
 
-	// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒoƒbƒtƒ@‚Ì“à—e‚ð‰æ–Ê‚É•\Ž¦
+	// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡ã®å†…å®¹ã‚’ç”»é¢ã«è¡¨ç¤º
 	MainEngine::GetInstance()->GetRenderer()->BufferPresent();
 }
 
@@ -382,6 +465,21 @@ void Editor::Finalize() {
 
 void Editor::AddObject(Object* object)
 {
+	int copyCount = 0;
+	for (auto& obj : m_Objects) {
+		if (obj->GetName() == object->GetName() + std::to_string(copyCount)||
+			obj->GetName() == object->GetName()) {
+			// åŒã˜åå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ã€åå‰ã‚’å¤‰æ›´
+			copyCount++;
+		}
+	}
+	if (copyCount > 0)
+		object->SetName(object->GetName() + std::to_string(copyCount));
 	m_Objects.push_back(object);
+}
+
+void Editor::DeleteObject(Object* object)
+{
+	m_DeleteObjects.push_back(object);
 }
 

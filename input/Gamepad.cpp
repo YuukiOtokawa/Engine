@@ -1,11 +1,11 @@
-#include "framework.h"
+п»ї#include "framework.h"
 #include "Gamepad.h"
 
 #include <memory>
 
 GamePad::GamePad() {
 
-	//ѓЃѓ“ѓo•Пђ”‚МЏ‰Љъ‰»
+	//гѓЎгѓігѓђе¤‰ж•°гЃ®е€ќжњџеЊ–
 	for (int i = 0; i < XUSER_MAX_COUNT; i++) {
 		ZeroMemory(&m_XInputState, sizeof(XINPUT_STATE));
 		ZeroMemory(&m_GamePadState[i].NowState, sizeof(GAMEPADSTATE));
@@ -18,44 +18,44 @@ GamePad::GamePad() {
 void GamePad::Update() {
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++) {
 
-		//ѓRѓ“ѓgѓЌЃ[ѓ‰Ѓ[Џо•с‚МЋж“ѕ
+		//г‚ігѓігѓ€гѓ­гѓјгѓ©гѓјжѓ…е ±гЃ®еЏ–еѕ—
 		m_dwResult = XInputGetState(i, &m_XInputState);
 
-		if (m_dwResult == ERROR_SUCCESS) {//ѓRѓ“ѓgѓЌЃ[ѓ‰Ѓ[‚ЄђЪ‘±‚і‚к‚Д‚ў‚й
+		if (m_dwResult == ERROR_SUCCESS) {//г‚ігѓігѓ€гѓ­гѓјгѓ©гѓјгЃЊжЋҐз¶љгЃ•г‚ЊгЃ¦гЃ„г‚‹
 
-			//NowState‚ЙѓgѓЉѓKЃ[Џо•с‚р’З‰Б
+			//NowStateгЃ«гѓ€гѓЄг‚¬гѓјжѓ…е ±г‚’иїЅеЉ 
 			m_GamePadState[i].NowState = m_XInputState.Gamepad.wButtons;
-			if ((int)m_XInputState.Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {//Ќ¶ѓgѓЉѓKЃ[‚Є“ь—Н‚і‚к‚Д‚ў‚й(ЊлЌм“®–hЋ~‚Ми‡’l‚р’ґ‚¦‚Ѕ)
+			if ((int)m_XInputState.Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {//е·¦гѓ€гѓЄг‚¬гѓјгЃЊе…ҐеЉ›гЃ•г‚ЊгЃ¦гЃ„г‚‹(иЄ¤дЅње‹•йІж­ўгЃ®й–ѕеЂ¤г‚’и¶…гЃ€гЃџ)
 				m_GamePadState[i].NowState |= XINPUT_GAMEPAD_LEFTTRIGGER;
 			}
-			if ((int)m_XInputState.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {//‰EѓgѓЉѓKЃ[‚Є“ь—Н‚і‚к‚Д‚ў‚й(ЊлЌм“®–hЋ~‚Ми‡’l‚р’ґ‚¦‚Ѕ)
+			if ((int)m_XInputState.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {//еЏігѓ€гѓЄг‚¬гѓјгЃЊе…ҐеЉ›гЃ•г‚ЊгЃ¦гЃ„г‚‹(иЄ¤дЅње‹•йІж­ўгЃ®й–ѕеЂ¤г‚’и¶…гЃ€гЃџ)
 				m_GamePadState[i].NowState |= XINPUT_GAMEPAD_RIGHTTRIGGER;
 			}
 
-			//NowState‚рЊі‚ЙTriggerState,UpState‚рЌXђV
+			//NowStateг‚’е…ѓгЃ«TriggerState,UpStateг‚’ж›ґж–°
 			const WORD* nowState = &m_GamePadState[i].NowState;
 
 			LPBYTE pt = (LPBYTE)&m_GamePadState[i].TriggerState;
 			LPBYTE pl = (LPBYTE)&m_GamePadState[i].LastState;
 			LPBYTE pn = (LPBYTE)nowState;
-			//ѓrѓbѓg‚І‚Ж‚Йѓ`ѓFѓbѓN
+			//гѓ“гѓѓгѓ€гЃ”гЃЁгЃ«гѓЃг‚§гѓѓг‚Ї
 			for (int n = 0; n < sizeof(WORD); n++) {
-				//pn = 1, pl = 0 ‚М‚Ж‚«‚ѕ‚Їpt = 1 ->‰џ‚і‚к‚Д‚ў‚й
+				//pn = 1, pl = 0 гЃ®гЃЁгЃЌгЃ гЃ‘pt = 1 ->жЉјгЃ•г‚ЊгЃ¦гЃ„г‚‹
 				pt[n] = pn[n] ^ pl[n] & pn[n];
 			}
 
 			LPBYTE pu = (LPBYTE)&m_GamePadState[i].UpState;
-			//ѓrѓbѓg‚І‚Ж‚Йѓ`ѓFѓbѓN
+			//гѓ“гѓѓгѓ€гЃ”гЃЁгЃ«гѓЃг‚§гѓѓг‚Ї
 			for (int n = 0; n < sizeof(WORD); n++) {
-				//pn = 0, pl = 1 ‚М‚Ж‚«‚ѕ‚Їpt = 1 ->‰џ‚і‚к‚Д‚ў‚И‚ў
+				//pn = 0, pl = 1 гЃ®гЃЁгЃЌгЃ гЃ‘pt = 1 ->жЉјгЃ•г‚ЊгЃ¦гЃ„гЃЄгЃ„
 				pu[n] = (pn[n] ^ pl[n]) & pl[n];
 			}
 
-			//ЌЕЊг‚ЙLastState‚рЌXђV
+			//жњЂеѕЊгЃ«LastStateг‚’ж›ґж–°
 			m_GamePadState[i].LastState = *nowState;
 
 
-			//ѓXѓeѓBѓbѓN‚М“ь—Н’l‚Єѓfѓbѓhѓ]Ѓ[ѓ“€И‰є‚ѕ‚Б‚ЅЏкЌ‡ЉЫ‚Я‚й => ђG‚Б‚Ѕ‚ѕ‚Ї‚Е”Ѕ‰ћ‚µ‚ЅЃI ‚р–h‚®
+			//г‚№гѓ†г‚Јгѓѓг‚ЇгЃ®е…ҐеЉ›еЂ¤гЃЊгѓ‡гѓѓгѓ‰г‚ѕгѓјгѓід»Ґдё‹гЃ гЃЈгЃџе ґеђ€дёёг‚Ѓг‚‹ => и§¦гЃЈгЃџгЃ гЃ‘гЃ§еЏЌеїњгЃ—гЃџпјЃ г‚’йІгЃђ
 			if ((m_XInputState.Gamepad.sThumbLX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
 				 m_XInputState.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
 				(m_XInputState.Gamepad.sThumbLY <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
@@ -71,14 +71,14 @@ void GamePad::Update() {
 				m_XInputState.Gamepad.sThumbRY = 0;
 			}
 
-			//ЉЦђ”‚Е“З‚ЭЏo‚·—p‚МѓЃѓ“ѓo•Пђ”‚Й‹L^
+			//й–ўж•°гЃ§иЄ­гЃїе‡єгЃ™з”ЁгЃ®гѓЎгѓігѓђе¤‰ж•°гЃ«иЁйЊІ
 			m_GamePadState[i].StickValue[GAMEPAD_STICK_RIGHT] = Vector4O(m_XInputState.Gamepad.sThumbRX, m_XInputState.Gamepad.sThumbRY);
 			m_GamePadState[i].StickValue[GAMEPAD_STICK_LEFT] = Vector4O(m_XInputState.Gamepad.sThumbLX, m_XInputState.Gamepad.sThumbLY);
 
 		}
 		else {
-			//ѓRѓ“ѓgѓЌЃ[ѓ‰Ѓ[‚НђЪ‘±‚і‚к‚Д‚ў‚И‚ў
-			//‚М‚Е‰Ѕ‚а‚Е‚«‚И‚ў
+			//г‚ігѓігѓ€гѓ­гѓјгѓ©гѓјгЃЇжЋҐз¶љгЃ•г‚ЊгЃ¦гЃ„гЃЄгЃ„
+			//гЃ®гЃ§дЅ•г‚‚гЃ§гЃЌгЃЄгЃ„
 		}
 	}
 }
@@ -86,32 +86,32 @@ void GamePad::Update() {
 bool GamePad::GetKeyUp(GAMEPADBUTTON keycord, int deviceID) {
 	if (keycord > 0x8000) return false;
 
-	//ѓLЃ[ѓRЃ[ѓh‚Й‘О‰ћ‚·‚йѓrѓbѓg‚Є1‚ѕ‚Б‚Ѕ‚зtrue‚Є•Ф‚й
+	//г‚­гѓјг‚ігѓјгѓ‰гЃ«еЇѕеїњгЃ™г‚‹гѓ“гѓѓгѓ€гЃЊ1гЃ гЃЈгЃџг‚‰trueгЃЊиї”г‚‹
 	return m_GamePadState[deviceID].UpState & keycord;
 }
 
 bool GamePad::GetKeyDown(GAMEPADBUTTON keycord, int deviceID) {
 	if (keycord > 0x8000) return false;
 
-	//ѓLЃ[ѓRЃ[ѓh‚Й‘О‰ћ‚·‚йѓrѓbѓg‚Є1‚ѕ‚Б‚Ѕ‚зtrue‚Є•Ф‚й
+	//г‚­гѓјг‚ігѓјгѓ‰гЃ«еЇѕеїњгЃ™г‚‹гѓ“гѓѓгѓ€гЃЊ1гЃ гЃЈгЃџг‚‰trueгЃЊиї”г‚‹
 	return m_GamePadState[deviceID].TriggerState & keycord;
 }
 
 bool GamePad::GetKeyRepeat(GAMEPADBUTTON keycord, int deviceID) {
 	if (keycord > 0x8000) return false;
 
-	//ѓLЃ[ѓRЃ[ѓh‚Й‘О‰ћ‚·‚йѓrѓbѓg‚Є1‚ѕ‚Б‚Ѕ‚зtrue‚Є•Ф‚й
+	//г‚­гѓјг‚ігѓјгѓ‰гЃ«еЇѕеїњгЃ™г‚‹гѓ“гѓѓгѓ€гЃЊ1гЃ гЃЈгЃџг‚‰trueгЃЊиї”г‚‹
 	return m_GamePadState[deviceID].NowState & keycord;
 }
 
 Vector4O GamePad::GetAxis(GAMEPADAXIS axis, int deviceID) {
-	//ѓXѓeѓBѓbѓN‚Й‘О‰ћ‚·‚й“ь—Н’l‚р•Ф‚·(ѓXѓeѓBѓbѓN‚І‚Ж‚Й2ЋІ‚Ь‚Ж‚Я‚Д)
+	//г‚№гѓ†г‚Јгѓѓг‚ЇгЃ«еЇѕеїњгЃ™г‚‹е…ҐеЉ›еЂ¤г‚’иї”гЃ™(г‚№гѓ†г‚Јгѓѓг‚ЇгЃ”гЃЁгЃ«2и»ёгЃѕгЃЁг‚ЃгЃ¦)
 	return m_GamePadState[deviceID].StickValue[axis];
 }
 
 
 void GamePad::ControllerDebug() {
-	//ѓfѓoѓbѓO—pѓvѓЌѓOѓ‰ѓЂЃBѓ{ѓ^ѓ“€кЊВ‚ё‚В“ь—Н’l‚рЊД‚с‚Е‚й‚ѕ‚Ї
+	//гѓ‡гѓђгѓѓг‚°з”Ёгѓ—гѓ­г‚°гѓ©гѓ гЂ‚гѓњг‚їгѓідёЂеЂ‹гЃљгЃ¤е…ҐеЉ›еЂ¤г‚’е‘јг‚“гЃ§г‚‹гЃ гЃ‘
 	COORD coord;
 	coord.X = 0;
 	coord.Y = 0;

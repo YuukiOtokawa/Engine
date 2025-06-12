@@ -1,4 +1,4 @@
-#include "ModelLoader.h"
+ï»¿#include "ModelLoader.h"
 
 #include "MainEngine.h"
 
@@ -16,17 +16,17 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 	model->AiScene = aiImportFile(filename, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
 	assert(model->AiScene);
 
-	model->VertexBuffer = new ID3D11Buffer * [model->AiScene->mNumMeshes];//’¸“_ƒf[ƒ^ƒ|ƒCƒ“ƒ^[
-	model->IndexBuffer = new ID3D11Buffer * [model->AiScene->mNumMeshes];//ƒCƒ“ƒfƒbƒNƒXƒf[ƒ^ƒ|ƒCƒ“ƒ^[
+	model->VertexBuffer = new ID3D11Buffer * [model->AiScene->mNumMeshes];//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	model->IndexBuffer = new ID3D11Buffer * [model->AiScene->mNumMeshes];//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ã‚¿ãƒ¼
 
 
 	for (unsigned int m = 0; m < model->AiScene->mNumMeshes; m++)
 	{
 		aiMesh* mesh = model->AiScene->mMeshes[m];
 
-		// ’¸“_ƒoƒbƒtƒ@¶¬
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 		{
-			VERTEX* vertex = new VERTEX[mesh->mNumVertices];//’¸“_”•ª‚Ì”z—ñ—Ìˆæì¬
+			VERTEX* vertex = new VERTEX[mesh->mNumVertices];//é ‚ç‚¹æ•°åˆ†ã®é…åˆ—é ˜åŸŸä½œæˆ
 
 			for (unsigned int v = 0; v < mesh->mNumVertices; v++)
 			{
@@ -53,9 +53,9 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 		}
 
 
-		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@¶¬
+		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 		{
-			unsigned int* index = new unsigned int[mesh->mNumFaces * 3];//ƒ|ƒŠƒSƒ“””*3
+			unsigned int* index = new unsigned int[mesh->mNumFaces * 3];//ãƒãƒªã‚´ãƒ³æ•°æ•°*3
 
 			for (unsigned int f = 0; f < mesh->mNumFaces; f++)
 			{
@@ -86,7 +86,7 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 
 	}
 
-	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	for (UINT i = 0; i < model->AiScene->mNumTextures; i++)
 	{
 		aiTexture* aitexture = model->AiScene->mTextures[i];

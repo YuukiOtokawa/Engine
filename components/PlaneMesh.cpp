@@ -1,4 +1,4 @@
-#include "PlaneMesh.h"
+ï»¿#include "PlaneMesh.h"
 
 #include "MainEngine.h"
 
@@ -35,11 +35,11 @@ PlaneMesh::PlaneMesh() : MeshFilter(NUM_PLANE_VERTEX, NUM_PLANE_INDEX)
 	};
 
 	{
-		// ’¸“_ƒoƒbƒtƒ@¶¬
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(VERTEX) * NUM_PLANE_VERTEX; // ’¸“_ƒoƒbƒtƒ@‚Ì—Ê
+		bd.ByteWidth = sizeof(VERTEX) * NUM_PLANE_VERTEX; // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®é‡
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
@@ -50,13 +50,13 @@ PlaneMesh::PlaneMesh() : MeshFilter(NUM_PLANE_VERTEX, NUM_PLANE_INDEX)
 		MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
 	}
 
-	// ƒCƒ“ƒfƒbƒNƒXİ’è
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹è¨­å®š
 	UINT index[NUM_PLANE_INDEX] = {
 		0, 1, 2, 3
 	};
 
 	{
-		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
+		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DEFAULT;

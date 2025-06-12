@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+ï»¿#define _CRT_SECURE_NO_WARNINGS
 #include "Renderer.h"
 
 #include <d3dcompiler.h>
@@ -19,7 +19,7 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-	// ƒ^ƒXƒNƒo[‚ª‰º‚É‚ ‚éê‡
+	// ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãŒä¸‹ã«ã‚ã‚‹å ´åˆ
 	int taskbarHeight = screenHeight - workArea.bottom;
 
 	DXGI_SWAP_CHAIN_DESC sd = {};
@@ -94,7 +94,7 @@ Renderer::~Renderer()
 
 void Renderer::BufferClear()
 {
-	float clear_color[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
+	float clear_color[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
 	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, clear_color);
 	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
 }
@@ -185,7 +185,7 @@ void Renderer::CreateDepthStencilState()
 {
 	D3D11_DEPTH_STENCIL_DESC dsd = {};
 
-	//[“x—LŒøƒXƒe[ƒg
+	//æ·±åº¦æœ‰åŠ¹ã‚¹ãƒ†ãƒ¼ãƒˆ
 	dsd.DepthEnable = TRUE;
 	dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
@@ -193,7 +193,7 @@ void Renderer::CreateDepthStencilState()
 
 	m_pDevice->CreateDepthStencilState(&dsd, &m_pDepthStencilStateDepthEnable);
 
-	//[“x–³ŒøƒXƒe[ƒg
+	//æ·±åº¦ç„¡åŠ¹ã‚¹ãƒ†ãƒ¼ãƒˆ
 	dsd.DepthEnable = FALSE;
 	dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 
@@ -227,11 +227,11 @@ void Renderer::CreateSamplerState()
 std::string Renderer::CreateVertexShader(std::string filename, std::string key)
 {
 	if (m_VertexShaders.find(key) != m_VertexShaders.end()) {
-		// ‚·‚Å‚É“¯‚¶ƒL[‚ÌƒVƒF[ƒ_[‚ª‘¶İ‚·‚éê‡‚ÍA‰½‚à‚¹‚¸ƒL[‚ğ•Ô‚·
+		// ã™ã§ã«åŒã˜ã‚­ãƒ¼ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ã€ä½•ã‚‚ã›ãšã‚­ãƒ¼ã‚’è¿”ã™
 		return key;
 	}
 
-	// ƒRƒ“ƒpƒCƒ‹‚³‚ê‚½ƒVƒF[ƒ_[ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+	// ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã•ã‚ŒãŸã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 	FILE* file;
 
 	file = fopen(filename.c_str(), "rb");
@@ -243,13 +243,13 @@ std::string Renderer::CreateVertexShader(std::string filename, std::string key)
 	fclose(file);
 
 
-	// ƒVƒF[ƒ_[‚ğì¬
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ä½œæˆ
 	ID3D11VertexShader* pVertexShader = NULL;
 
 	HRESULT hr = m_pDevice->CreateVertexShader(buffer, fsize, NULL, &pVertexShader);
 
 	for (auto shader : m_VertexShaders) {
-		// ‚·‚Å‚É“¯‚¶ƒL[‚ÌƒVƒF[ƒ_[‚ª‘¶İ‚·‚éê‡‚ÍA‰½‚à‚¹‚¸ƒL[‚ğ•Ô‚·
+		// ã™ã§ã«åŒã˜ã‚­ãƒ¼ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ã€ä½•ã‚‚ã›ãšã‚­ãƒ¼ã‚’è¿”ã™
 		if (shader.second == pVertexShader) {
 			return shader.first;
 		}
@@ -257,7 +257,7 @@ std::string Renderer::CreateVertexShader(std::string filename, std::string key)
 
 	m_VertexShaders.emplace(key, pVertexShader);
 
-	// “ü—ÍƒŒƒCƒAƒEƒg‚ğì¬
+	// å…¥åŠ›ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’ä½œæˆ
 	if (m_pInputLayout == nullptr) {
 		m_pInputLayout = CreateInputLayout(buffer, fsize);
 		m_pDeviceContext->IASetInputLayout(m_pInputLayout);
@@ -271,7 +271,7 @@ std::string Renderer::CreateVertexShader(std::string filename, std::string key)
 std::string Renderer::CreatePixelShader(std::string filename, std::string key)
 {
 	if (m_PixelShaders.find(key) != m_PixelShaders.end()) {
-		// ‚·‚Å‚É“¯‚¶ƒL[‚ÌƒVƒF[ƒ_[‚ª‘¶İ‚·‚éê‡‚ÍA‰½‚à‚¹‚¸ƒL[‚ğ•Ô‚·
+		// ã™ã§ã«åŒã˜ã‚­ãƒ¼ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ã€ä½•ã‚‚ã›ãšã‚­ãƒ¼ã‚’è¿”ã™
 		return key;
 	}
 
@@ -291,7 +291,7 @@ std::string Renderer::CreatePixelShader(std::string filename, std::string key)
 	HRESULT hr = m_pDevice->CreatePixelShader(buffer, fsize, NULL, &pPixelShader);
 
 	for (auto shader : m_PixelShaders) {
-		// ‚·‚Å‚É“¯‚¶ƒL[‚ÌƒVƒF[ƒ_[‚ª‘¶İ‚·‚éê‡‚ÍA‰½‚à‚¹‚¸ƒL[‚ğ•Ô‚·
+		// ã™ã§ã«åŒã˜ã‚­ãƒ¼ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ã€ä½•ã‚‚ã›ãšã‚­ãƒ¼ã‚’è¿”ã™
 		if (shader.second == pPixelShader) {
 			return shader.first;
 		}
@@ -306,7 +306,7 @@ std::string Renderer::CreatePixelShader(std::string filename, std::string key)
 
 ID3D11InputLayout* Renderer::CreateInputLayout(unsigned char* pByteCode, long byteCodeLength)
 {
-	// “ü—ÍƒŒƒCƒAƒEƒg¶¬
+	// å…¥åŠ›ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆç”Ÿæˆ
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -338,13 +338,13 @@ void Renderer::CreateConstantBuffer()
 	hBufferDesc.MiscFlags = 0;
 	hBufferDesc.StructureByteStride = sizeof(float);
 
-	//’è?ƒoƒbƒtƒ@
+	//å®š?ãƒãƒƒãƒ•ã‚¡
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pConstantBuffer);
 	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 
 	//================================================
-// WorldViewProjections—ñ—p’è”ƒoƒbƒtƒ@¶¬
-	//s—ñƒIƒuƒWƒFƒNƒg‚ğƒVƒF[ƒ_[‚ÖÚ‘±@b0‚ğ‚Â‚©‚¤
+// WorldViewProjectionè¡Œåˆ—ç”¨å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
+	//è¡Œåˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¸æ¥ç¶šã€€b0ã‚’ã¤ã‹ã†
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pWorldBuffer);
 	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pWorldBuffer);
 
@@ -354,14 +354,14 @@ void Renderer::CreateConstantBuffer()
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pProjectionBuffer);
 	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pProjectionBuffer);
 
-	//ƒ}ƒeƒŠƒAƒ‹—p’è”ƒoƒbƒtƒ@¶¬
+	//ãƒãƒ†ãƒªã‚¢ãƒ«ç”¨å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	hBufferDesc.ByteWidth = sizeof(MATERIAL);
 	hBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	hBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	hBufferDesc.CPUAccessFlags = 0;
 	hBufferDesc.MiscFlags = 0;
 	hBufferDesc.StructureByteStride = sizeof(float);
-	//ƒ}ƒeƒŠƒAƒ‹ƒIƒuƒWƒFƒNƒg‚ğƒVƒF[ƒ_[‚ÖÚ‘±@b1‚ğg‚¤
+	//ãƒãƒ†ãƒªã‚¢ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¸æ¥ç¶šã€€b1ã‚’ä½¿ã†
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pMaterialBuffer);
 	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pMaterialBuffer);
 
@@ -388,18 +388,18 @@ void Renderer::CreateConstantBuffer()
 
 ID3D11ShaderResourceView* Renderer::TextureLoad(const std::wstring& filename)
 {
-	// ‚·‚Å‚É“¯–¼‚ÌƒeƒNƒXƒ`ƒƒ‚ª“Ç‚İ‚Ü‚ê‚Ä‚¢‚È‚¢‚©Šm”F‚·‚é
+	// ã™ã§ã«åŒåã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒèª­ã¿è¾¼ã¾ã‚Œã¦ã„ãªã„ã‹ç¢ºèªã™ã‚‹
 	{
 		int count = 0;
 		for (auto it : m_Textures) {
 			if (it.filename == filename) {
-				return it.shader_resource_view; // ‚·‚Å‚É“Ç‚İ‚Ü‚ê‚Ä‚¢‚½‚Ì‚Åid‚ğ‚í‚½‚·
+				return it.shader_resource_view; // ã™ã§ã«èª­ã¿è¾¼ã¾ã‚Œã¦ã„ãŸã®ã§idã‚’ã‚ãŸã™
 			}
 			count++;
 		}
 
 	}
-	// ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	TexMetadata metadata;
 	ScratchImage image;
 	LoadFromWICFile(filename.c_str(), WIC_FLAGS_NONE, &metadata, image);
@@ -410,13 +410,13 @@ ID3D11ShaderResourceView* Renderer::TextureLoad(const std::wstring& filename)
 	texture.height = (int)metadata.height;
 
 	if (!texture.shader_resource_view) {
-		MessageBoxW(NULL, L"ƒtƒ@ƒCƒ‹‚ª“Ç‚İ‚ß‚È‚©‚Á‚½", filename.c_str(), MB_ICONEXCLAMATION | MB_OK);
+		MessageBoxW(NULL, L"ãƒ•ã‚¡ã‚¤ãƒ«ãŒèª­ã¿è¾¼ã‚ãªã‹ã£ãŸ", filename.c_str(), MB_ICONEXCLAMATION | MB_OK);
 		return nullptr;
 	}
 
 	m_Textures.push_back(texture);
 
-	return texture.shader_resource_view; // V‚µ‚­“Ç‚İ‚ñ‚¾ƒeƒNƒXƒ`ƒƒ‚ÌID‚ğ•Ô‚·
+	return texture.shader_resource_view; // æ–°ã—ãèª­ã¿è¾¼ã‚“ã ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®IDã‚’è¿”ã™
 }
 
 ID3D11ShaderResourceView* Renderer::GetTexture(int index)
@@ -462,10 +462,10 @@ void Renderer::SetConstantBuffer(const CONSTANTBUFFER* matrix)
 }
 
 void Renderer::SetWorldViewProjection2D() {
-	//2D—p³Ë‰es—ñ‚ğƒZƒbƒg
+	//2Dç”¨æ­£å°„å½±è¡Œåˆ—ã‚’ã‚»ãƒƒãƒˆ
 	XMMATRIX projectionMatrix = XMMatrixOrthographicOffCenterLH(0.0f, m_ClientSize.x, m_ClientSize.y, 0.0f, 0.0f, 1.0f);
 	SetProjectionMatrix(projectionMatrix);
-	//s—ñ‚ğ’PˆÊs—ñ‚É‚µ‚Ä‰Šú‰»
+	//è¡Œåˆ—ã‚’å˜ä½è¡Œåˆ—ã«ã—ã¦åˆæœŸåŒ–
 	SetViewMatrix(XMMatrixIdentity());
 	SetWorldMatrix(XMMatrixIdentity());
 

@@ -1,6 +1,6 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€ƒRƒ“ƒ|[ƒlƒ“ƒg[Component_Transform.h]
+// ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ[Component_Transform.h]
 // 
 //									Date:202505220
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include "Component.h"
@@ -17,48 +17,48 @@
 #include "Vector4O.h"
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ã‚¯ãƒ©ã‚¹å®šç¾©
 //==========================================================================
 
 class Transform :
     public Component
 {
 private:
-	// À•W
+	// åº§æ¨™
 	Vector4O m_Position = Vector4O(0.0f,0.0f,0.0f);
-	// ‰ñ“]iƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
+	// å›è»¢ï¼ˆãƒ”ãƒƒãƒã€ãƒ¨ãƒ¼ã€ãƒ­ãƒ¼ãƒ«ï¼‰
 	Vector4O m_Rotation = Vector4O(0.0f, 0.0f, 0.0f);
-	// ƒXƒP[ƒ‹iX, Y, Zj
+	// ã‚¹ã‚±ãƒ¼ãƒ«ï¼ˆX, Y, Zï¼‰
 	Vector4O m_Scale = Vector4O(1.0f, 1.0f, 1.0f);
 
 public:
-	/// @brief ƒIƒuƒWƒFƒNƒg‚Ìó‘Ô‚ğXV‚µ‚Ü‚·B
+	/// @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çŠ¶æ…‹ã‚’æ›´æ–°ã—ã¾ã™ã€‚
 	void UpdateComponent() override;
-	/// @brief •`‰æˆ—‚ğÀs‚µ‚Ü‚·B
+	/// @brief æç”»å‡¦ç†ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
 	void Draw() override;
 	void DrawGUI() override;
 
-	/// @brief ƒRƒ“ƒ|[ƒlƒ“ƒg‚É‘Î‰‚µ‚½ƒ^ƒO‚ğŠ—LÒ‚ÌƒIƒuƒWƒFƒNƒg‚Éİ’è‚µ‚Ü‚·B
+	/// @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾å¿œã—ãŸã‚¿ã‚°ã‚’æ‰€æœ‰è€…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¨­å®šã—ã¾ã™ã€‚
 	void InitializeTag() override;
 
-	/// @brief ˆÊ’u‚ğİ’è‚µ‚Ü‚·B
-	/// @param position İ’è‚·‚éˆÊ’u‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ä½ç½®ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param position è¨­å®šã™ã‚‹ä½ç½®ã‚’è¡¨ã™ Vector4O å‹ã®å€¤ã€‚
 	void SetPosition(Vector4O position) { m_Position = position; }
-	/// @brief ‰ñ“]‚ğİ’è‚µ‚Ü‚·B
-	/// @param rotation İ’è‚·‚é‰ñ“]’lB
+	/// @brief å›è»¢ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param rotation è¨­å®šã™ã‚‹å›è»¢å€¤ã€‚
 	void SetRotation(Vector4O rotation) { m_Rotation = rotation; }
-	/// @brief ƒXƒP[ƒ‹’l‚ğİ’è‚µ‚Ü‚·B
-	/// @param scale İ’è‚·‚éƒXƒP[ƒ‹’lB
+	/// @brief ã‚¹ã‚±ãƒ¼ãƒ«å€¤ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param scale è¨­å®šã™ã‚‹ã‚¹ã‚±ãƒ¼ãƒ«å€¤ã€‚
 	void SetScale(Vector4O scale) { m_Scale = scale; }
 
-	/// @brief Œ»İ‚ÌˆÊ’uƒxƒNƒgƒ‹‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚ÌˆÊ’u‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ç¾åœ¨ã®ä½ç½®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ç¾åœ¨ã®ä½ç½®ã‚’è¡¨ã™ Vector4O å‹ã®å€¤ã€‚
 	Vector4O GetPosition() { return m_Position; }
-	/// @brief Œ»İ‚Ì‰ñ“]‚ğ•\‚· Vector4O ƒIƒuƒWƒFƒNƒg‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚Ì‰ñ“]‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ç¾åœ¨ã®å›è»¢ã‚’è¡¨ã™ Vector4O ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ç¾åœ¨ã®å›è»¢ã‚’è¡¨ã™ Vector4O å‹ã®å€¤ã€‚
 	Vector4O GetRotation() { return m_Rotation; }
-	/// @brief ƒXƒP[ƒ‹’l‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ƒIƒuƒWƒFƒNƒg‚ÌƒXƒP[ƒ‹‚ğ•\‚· Vector4O Œ^‚Ì’lB
+	/// @brief ã‚¹ã‚±ãƒ¼ãƒ«å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¡¨ã™ Vector4O å‹ã®å€¤ã€‚
 	Vector4O GetScale() { return m_Scale; }
 };
 

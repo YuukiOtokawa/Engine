@@ -49,6 +49,7 @@ public:
 	~Object() {
 		for (Component* component : m_Components) {
 			delete component; // Clean up dynamically allocated components
+			component = nullptr;
 		}
 	}
 
@@ -62,6 +63,8 @@ public:
 	void DrawGUI();
 	/// @brief ファイナライズ処理を実行します。
 	void Finalize();
+
+	void Destroy();
 
 	/// @brief コンポーネントの追加
 	/// @tparam T 追加したいコンポーネントの型。

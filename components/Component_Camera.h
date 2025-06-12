@@ -59,7 +59,9 @@ public:
 
 	/// @brief ビュー行列を取得します。
 	/// @return 現在のビュー行列（XMMATRIX型）。
-	XMMATRIX GetView() const { return m_View; }
+	XMMATRIX GetView() const { 
+		return m_View;
+	}
 
 	/// @brief カメラの角度を取得します。
 	/// @return 現在のカメラの角度を表す Vector4O 型の値。

@@ -1,6 +1,6 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// Assimp“Ç‚İ‚İƒ‚ƒfƒ‹—pƒƒbƒVƒ…ƒŒƒ“ƒ_ƒ‰[ƒNƒ‰ƒX[AssimpMeshRenderer.h]
+// Assimpèª­ã¿è¾¼ã¿ãƒ¢ãƒ‡ãƒ«ç”¨ãƒ¡ãƒƒã‚·ãƒ¥ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚¯ãƒ©ã‚¹[AssimpMeshRenderer.h]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include "Component_MeshRenderer.h"
@@ -17,22 +17,22 @@
 #include <unordered_map>
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ã‚¯ãƒ©ã‚¹å®šç¾©
 //==========================================================================
 
 class AssimpMeshRenderer :
     public MeshRenderer
 {
 private:
-	// Assimp‚Å“Ç‚İ‚ñ‚¾ƒeƒNƒXƒ`ƒƒ‚ğŠi”[‚·‚éƒ}ƒbƒv
+	// Assimpã§èª­ã¿è¾¼ã‚“ã ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ—
     std::unordered_map<std::string, ID3D11ShaderResourceView*> m_AssimpTexture;
 
 public:
-	/// @brief AssimpMeshRenderer ‚ÌƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚·B
+	/// @brief AssimpMeshRenderer ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ã™ã€‚
 	AssimpMeshRenderer() = default;
 
-    /// @brief ƒƒbƒVƒ…‚ÌƒeƒNƒXƒ`ƒƒî•ñ‚ğİ’è‚µ‚Ü‚·B
-    /// @param assimpTexture ƒeƒNƒXƒ`ƒƒ–¼‚ÆID3D11ShaderResourceView* ‚ÌƒyƒA‚ğŠi”[‚µ‚½˜A‘z”z—ñB
+    /// @brief ãƒ¡ãƒƒã‚·ãƒ¥ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£æƒ…å ±ã‚’è¨­å®šã—ã¾ã™ã€‚
+    /// @param assimpTexture ãƒ†ã‚¯ã‚¹ãƒãƒ£åã¨ID3D11ShaderResourceView* ã®ãƒšã‚¢ã‚’æ ¼ç´ã—ãŸé€£æƒ³é…åˆ—ã€‚
     void SetMesh(std::unordered_map<std::string, ID3D11ShaderResourceView*> assimpTexture) {
 		m_AssimpTexture = assimpTexture;
     }

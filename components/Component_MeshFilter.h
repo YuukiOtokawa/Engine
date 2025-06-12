@@ -1,6 +1,6 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// ƒƒbƒVƒ…ƒtƒBƒ‹ƒ^[ƒRƒ“ƒ|[ƒlƒ“ƒgŠî’êƒNƒ‰ƒX[Component_MeshFilter.h]
+// ãƒ¡ãƒƒã‚·ãƒ¥ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆåŸºåº•ã‚¯ãƒ©ã‚¹[Component_MeshFilter.h]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
@@ -9,7 +9,7 @@
 #pragma once
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include "Component.h"
@@ -17,7 +17,7 @@
 #include <d3d11.h>
 
 //==========================================================================
-// ƒNƒ‰ƒX’è‹`
+// ã‚¯ãƒ©ã‚¹å®šç¾©
 //==========================================================================
 
 class MeshFilter :
@@ -25,58 +25,60 @@ class MeshFilter :
 {
 protected:
 
-	// ’¸“_”
+	// é ‚ç‚¹æ•°
 	int m_iVertexCount = 0;
-	// ƒCƒ“ƒfƒbƒNƒX”
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æ•°
 	int m_iIndexCount = 0;
 
-	// ’¸“_ƒoƒbƒtƒ@
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
 	ID3D11Buffer* m_pVertexBuffer = nullptr;
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
 	ID3D11Buffer* m_pIndexBuffer = nullptr;
 
-	// ‚±‚ÌƒƒbƒVƒ…‚Åg—p‚·‚éƒvƒŠƒ~ƒeƒBƒuƒgƒ|ƒƒW[
+	// ã“ã®ãƒ¡ãƒƒã‚·ãƒ¥ã§ä½¿ç”¨ã™ã‚‹ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ãƒˆãƒãƒ­ã‚¸ãƒ¼
 	D3D11_PRIMITIVE_TOPOLOGY m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 public:
-	/// @brief MeshFilter ‚ÌƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚·B
+	/// @brief MeshFilter ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ã™ã€‚
 	MeshFilter() = default;
-	/// @brief ’¸“_”‚ÆƒCƒ“ƒfƒbƒNƒX”‚ğw’è‚µ‚ÄAMeshFilter ƒIƒuƒWƒFƒNƒg‚ğì¬‚µ‚Ü‚·B
-	/// @param vertexCount ƒƒbƒVƒ…“à‚Ì’¸“_‚Ì”B
-	/// @param indexCount ƒƒbƒVƒ…“à‚ÌƒCƒ“ƒfƒbƒNƒX‚Ì”B
+	/// @brief é ‚ç‚¹æ•°ã¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æ•°ã‚’æŒ‡å®šã—ã¦ã€MeshFilter ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¾ã™ã€‚
+	/// @param vertexCount ãƒ¡ãƒƒã‚·ãƒ¥å†…ã®é ‚ç‚¹ã®æ•°ã€‚
+	/// @param indexCount ãƒ¡ãƒƒã‚·ãƒ¥å†…ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®æ•°ã€‚
 	MeshFilter(int vertexCount, int indexCount);
 
-	/// @brief ƒIƒuƒWƒFƒNƒg‚Ìó‘Ô‚ğXV‚µ‚Ü‚·iƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚½ƒƒ\ƒbƒhjB
+	/// @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çŠ¶æ…‹ã‚’æ›´æ–°ã—ã¾ã™ï¼ˆã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ï¼‰ã€‚
 	void UpdateComponent() override;
-	/// @brief •`‰æˆ—‚ğÀs‚µ‚Ü‚·B
+	/// @brief æç”»å‡¦ç†ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
 	void Draw() override;
 	void DrawGUI() override;
 
-	/// @brief ƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŠ—LÒƒIƒuƒWƒFƒNƒg‚ğİ’è‚µ‚Ü‚·B
-	/// @param owner V‚µ‚¢Š—LÒ‚Æ‚È‚éObjectŒ^‚Ìƒ|ƒCƒ“ƒ^B
+	/// @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®æ‰€æœ‰è€…ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param owner æ–°ã—ã„æ‰€æœ‰è€…ã¨ãªã‚‹Objectå‹ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
 	void SetOwner(Object* owner) override;
 
-	/// @brief ƒRƒ“ƒ|[ƒlƒ“ƒg‚É‘Î‰‚µ‚½ƒ^ƒO‚ğŠ—LÒ‚ÌƒIƒuƒWƒFƒNƒg‚Éİ’è‚µ‚Ü‚·B
+	/// @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾å¿œã—ãŸã‚¿ã‚°ã‚’æ‰€æœ‰è€…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¨­å®šã—ã¾ã™ã€‚
 	void InitializeTag() override;
 
-	/// @brief Š—LÒƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒfƒbƒNƒX”‚ğİ’è‚µ‚Ü‚·B
+	/// @brief æ‰€æœ‰è€…ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æ•°ã‚’è¨­å®šã—ã¾ã™ã€‚
 	void SetOwnerIndexCount() { owner->SetIndexCount(m_iIndexCount); }
 
-	/// @brief ’¸“_ƒoƒbƒtƒ@‚Æ’¸“_”‚ğİ’è‚µ‚Ü‚·B
-	/// @param vertexBuffer İ’è‚·‚éID3D11BufferŒ^‚Ì’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^B
-	/// @param vertexCount ’¸“_ƒoƒbƒtƒ@“à‚Ì’¸“_”B
+	/// @brief é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¨é ‚ç‚¹æ•°ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param vertexBuffer è¨­å®šã™ã‚‹ID3D11Bufferå‹ã®é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
+	/// @param vertexCount é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡å†…ã®é ‚ç‚¹æ•°ã€‚
 	void SetVertexBuffer(ID3D11Buffer* vertexBuffer, int vertexCount) {
 		m_pVertexBuffer = vertexBuffer;
 		m_iVertexCount = vertexCount;
 	}
 
-	/// @brief ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ÆƒCƒ“ƒfƒbƒNƒX”‚ğİ’è‚µ‚Ü‚·B
-	/// @param indexBuffer İ’è‚·‚éID3D11BufferŒ^‚ÌƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^B
-	/// @param indexCount ƒCƒ“ƒfƒbƒNƒX‚Ì”B
+	/// @brief ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æ•°ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param indexBuffer è¨­å®šã™ã‚‹ID3D11Bufferå‹ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã€‚
+	/// @param indexCount ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®æ•°ã€‚
 	void SetIndexBuffer(ID3D11Buffer* indexBuffer, int indexCount) {
 		m_pIndexBuffer = indexBuffer;
 		m_iIndexCount = indexCount;
 		owner->SetIndexCount(indexCount);
 	}
+
+
 };
 

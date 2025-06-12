@@ -1,15 +1,15 @@
-#pragma once
+ï»¿#pragma once
 
 // ========================================================
 //
-// ‚æ‚­g‚¤‚â‚Â’u‚«ê[FrameWork.h]
+// ã‚ˆãä½¿ã†ã‚„ã¤ç½®ãå ´[FrameWork.h]
 // 
 //									Date:20250514
 //									Author:Yuuki Otokawa
 // ========================================================
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include <Windows.h>
@@ -28,24 +28,24 @@ using namespace DirectX;
 #undef GetObject
 
 //==========================================================================
-// ’è”
+// å®šæ•°
 //==========================================================================
 
-// ‰Šúó‘Ô‚ÌƒXƒNƒŠ[ƒ“ƒTƒCƒY
+// åˆæœŸçŠ¶æ…‹ã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚º
 constexpr auto SCREEN_WIDTH_DEFAULT = 1920;
 constexpr auto SCREEN_HEIGHT_DEFAULT = 1080;
 
 constexpr auto WINDOW_CAPTION = "Engine";
-// ƒEƒBƒ“ƒhƒE‚ÌƒNƒ‰ƒX–¼
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ©ã‚¹å
 constexpr auto WINDOW_CLASS_NAME = "OtokawaEngineClass";
 
-// ƒtƒŒ[ƒ€ƒŒ[ƒg‚Ìİ’è
+// ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆã®è¨­å®š
 constexpr auto FRAME_RATE_MAX = 240;
 constexpr auto FRAME_RATE_MIN = 30;
 constexpr auto FRAME_RATE_DEFAULT = 60;
 
 //==========================================================================
-// ƒ}ƒNƒ’è‹`
+// ãƒã‚¯ãƒ­å®šç¾©
 //==========================================================================
 
 #define SAFE_RELEASE(p) { if (p) { p->Release(); p = NULL; } }
@@ -73,16 +73,16 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 
 
 //==========================================================================
-// \‘¢‘Ì’è‹`
+// æ§‹é€ ä½“å®šç¾©
 //==========================================================================
 
-// ’è”ƒoƒbƒtƒ@‚Ì\‘¢‘Ì’è‹`
+// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®æ§‹é€ ä½“å®šç¾©
 struct CONSTANTBUFFER {
 	MatrixO wvp;
 	MatrixO world;
 };
 
-// ’¸“_ƒf[ƒ^‚Ì\‘¢‘Ì’è‹`
+// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®æ§‹é€ ä½“å®šç¾©
 struct VERTEX {
 	Vector4O position;
 	Vector4O normal;
@@ -90,7 +90,7 @@ struct VERTEX {
 	Vector4O texcoord;
 };
 
-// ƒ}ƒeƒŠƒAƒ‹‚Ì\‘¢‘Ì’è‹`
+// ãƒãƒ†ãƒªã‚¢ãƒ«ã®æ§‹é€ ä½“å®šç¾©
 struct MATERIAL
 {
 	Vector4O ambient;
@@ -103,27 +103,27 @@ struct MATERIAL
 	float dummy[2]; // Padding to make it 16 bytes
 };
 
-// ƒ‰ƒCƒg‚Ì\‘¢‘Ì’è‹`
+// ãƒ©ã‚¤ãƒˆã®æ§‹é€ ä½“å®šç¾©
 struct LIGHT {
 	short Enable = true;
 	BOOL Dummy[3]; // Padding to make it 16 bytes
-	Vector4O Direction;//•ûŒüƒxƒNƒgƒ‹
-	Vector4O Diffuse;//ŠgUŒõ
-	Vector4O Ambient;//ŠÂ‹«Œõ
+	Vector4O Direction;//æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	Vector4O Diffuse;//æ‹¡æ•£å…‰
+	Vector4O Ambient;//ç’°å¢ƒå…‰
 
-	Vector4O SkyColor;//‹ó‚ÌF
-	Vector4O GroundColor;//’n–Ê‚ÌF
-	Vector4O GroundNormal;//’n–Ê‚Ì–@üƒxƒNƒgƒ‹
+	Vector4O SkyColor;//ç©ºã®è‰²
+	Vector4O GroundColor;//åœ°é¢ã®è‰²
+	Vector4O GroundNormal;//åœ°é¢ã®æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
 
-	Vector4O Position;//“_ŒõŒ¹‚ÌˆÊ’u
-	Vector4O PointLightRange;//“_ŒõŒ¹‚Ì”ÍˆÍ
+	Vector4O Position;//ç‚¹å…‰æºã®ä½ç½®
+	Vector4O PointLightRange;//ç‚¹å…‰æºã®ç¯„å›²
 
-	Vector4O SpotLightAngle;//ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ÌŠp“x
+	Vector4O SpotLightAngle;//ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®è§’åº¦
 };
 
-// ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ìƒ^ƒO‚ÆƒŒƒCƒ„[‚ğ’è‹`‚·‚é–¼‘O‹óŠÔ
+// ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¿ã‚°ã¨ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å®šç¾©ã™ã‚‹åå‰ç©ºé–“
 namespace GameObjectTagLayer {
-	// ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ìƒ^ƒO‚ğ’è‹`‚·‚é—ñ‹“Œ^
+	// ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¿ã‚°ã‚’å®šç¾©ã™ã‚‹åˆ—æŒ™å‹
 #define X(EnumName, StringName) EnumName,
 	enum GameObjectTag {
 		OBJECT_TAG
@@ -136,7 +136,7 @@ namespace GameObjectTagLayer {
 	};
 #undef X
 
-	// ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ÌƒŒƒCƒ„[‚ğ’è‹`‚·‚é—ñ‹“Œ^
+	// ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å®šç¾©ã™ã‚‹åˆ—æŒ™å‹
 #define X(EnumName, StringName) EnumName,
 	enum GameObjectLayer {
 		OBJECT_LAYER
@@ -150,9 +150,9 @@ namespace GameObjectTagLayer {
 #undef X
 }
 
-// ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ìƒ^ƒO‚ğ’è‹`‚·‚é–¼‘O‹óŠÔ
+// ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¿ã‚°ã‚’å®šç¾©ã™ã‚‹åå‰ç©ºé–“
 namespace ComponentTag {
-	// ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ìƒ^ƒO‚ğ’è‹`‚·‚é—ñ‹“Œ^
+	// ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¿ã‚°ã‚’å®šç¾©ã™ã‚‹åˆ—æŒ™å‹
 #define X(EnumName, StringName) EnumName,
 	enum Tag {
 		COMPONENT_TAG

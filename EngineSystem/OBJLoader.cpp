@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+ï»¿#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
@@ -52,7 +52,7 @@ void OBJLoader::UnloadAll()
 
 void OBJLoader::Load(const char* FileName, Object* object)
 {
-	//ƒRƒ“ƒ|[ƒlƒ“ƒg‚ª•s‘«‚µ‚Ä‚¢‚éƒGƒ‰[•\¦
+	//ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒä¸è¶³ã—ã¦ã„ã‚‹ã‚¨ãƒ©ãƒ¼è¡¨ç¤º
 
 
 
@@ -84,7 +84,7 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 
 
 
-	// ’¸“_ƒoƒbƒtƒ@¶¬
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	{
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
@@ -101,7 +101,7 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 	}
 
 
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@¶¬
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	{
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
@@ -117,7 +117,7 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 		renderer->GetDevice()->CreateBuffer(&bd, &sd, &Model->IndexBuffer);
 	}
 
-	// ƒTƒuƒZƒbƒgİ’è
+	// ã‚µãƒ–ã‚»ãƒƒãƒˆè¨­å®š
 	{
 		Model->MaterialArray = new Material[modelObj.SubsetNum];
 		Model->SubsetNum = modelObj.SubsetNum;
@@ -134,7 +134,7 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 			Model->VertexNum = modelObj.VertexNum;
 			Model->IndexNum = modelObj.IndexNum;
 
-			// ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 			TexMetadata metadata;
 			ScratchImage image;
 			wchar_t wc[256];
@@ -164,7 +164,7 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 
 
 
-//ƒ‚ƒfƒ‹“Ç////////////////////////////////////////////
+//ãƒ¢ãƒ‡ãƒ«èª­è¾¼////////////////////////////////////////////
 void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 {
 
@@ -202,7 +202,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 
-	//—v‘f”ƒJƒEƒ“ƒg
+	//è¦ç´ æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 	while (true)
 	{
 		fscanf(file, "%s", str);
@@ -238,7 +238,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 				c = fgetc(file);
 			} while (c != '\n' && c != '\r');
 
-			//lŠp‚ÍOŠp‚É•ªŠ„
+			//å››è§’ã¯ä¸‰è§’ã«åˆ†å‰²
 			if (in == 4)
 				in = 6;
 
@@ -247,7 +247,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 	}
 
 
-	//ƒƒ‚ƒŠŠm•Û
+	//ãƒ¡ãƒ¢ãƒªç¢ºä¿
 	positionArray = new Vector4O[positionNum];
 	normalArray = new Vector4O[normalNum];
 	texcoordArray = new Vector4O[texcoordNum];
@@ -265,7 +265,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 
-	//—v‘f“Ç
+	//è¦ç´ èª­è¾¼
 	Vector4O* position = positionArray;
 	Vector4O* normal = normalArray;
 	Vector4O* texcoord = texcoordArray;
@@ -286,7 +286,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 		if (strcmp(str, "mtllib") == 0)
 		{
-			//ƒ}ƒeƒŠƒAƒ‹ƒtƒ@ƒCƒ‹
+			//ãƒãƒ†ãƒªã‚¢ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«
 			fscanf(file, "%s", str);
 
 			char path[256];
@@ -298,12 +298,12 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		}
 		else if (strcmp(str, "o") == 0)
 		{
-			//ƒIƒuƒWƒFƒNƒg–¼
+			//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå
 			fscanf(file, "%s", str);
 		}
 		else if (strcmp(str, "v") == 0)
 		{
-			//’¸“_À•W
+			//é ‚ç‚¹åº§æ¨™
 			fscanf(file, "%f", &position->x);
 			fscanf(file, "%f", &position->y);
 			fscanf(file, "%f", &position->z);
@@ -311,7 +311,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		}
 		else if (strcmp(str, "vn") == 0)
 		{
-			//–@ü
+			//æ³•ç·š
 			fscanf(file, "%f", &normal->x);
 			fscanf(file, "%f", &normal->y);
 			fscanf(file, "%f", &normal->z);
@@ -319,7 +319,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		}
 		else if (strcmp(str, "vt") == 0)
 		{
-			//ƒeƒNƒXƒ`ƒƒÀ•W
+			//ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 			fscanf(file, "%f", &texcoord->x);
 			fscanf(file, "%f", &texcoord->y);
 			texcoord->x = 1.0f - texcoord->x;
@@ -328,7 +328,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		}
 		else if (strcmp(str, "usemtl") == 0)
 		{
-			//ƒ}ƒeƒŠƒAƒ‹
+			//ãƒãƒ†ãƒªã‚¢ãƒ«
 			fscanf(file, "%s", str);
 
 			if (sc != 0)
@@ -354,7 +354,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		}
 		else if (strcmp(str, "f") == 0)
 		{
-			//–Ê
+			//é¢
 			in = 0;
 
 			do
@@ -365,7 +365,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 				ModelObj->VertexArray[vc].position = positionArray[atoi(s) - 1];
 				if (s[strlen(s) + 1] != '/')
 				{
-					//ƒeƒNƒXƒ`ƒƒÀ•W‚ª‘¶İ‚µ‚È‚¢ê‡‚à‚ ‚é
+					//ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™ãŒå­˜åœ¨ã—ãªã„å ´åˆã‚‚ã‚ã‚‹
 					s = strtok(nullptr, "/");
 					ModelObj->VertexArray[vc].texcoord = texcoordArray[atoi(s) - 1];
 				}
@@ -382,7 +382,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 				c = fgetc(file);
 			} while (c != '\n' && c != '\r');
 
-			//lŠp‚ÍOŠp‚É•ªŠ„
+			//å››è§’ã¯ä¸‰è§’ã«åˆ†å‰²
 			if (in == 4)
 			{
 				ModelObj->IndexArray[ic] = vc - 4;
@@ -410,7 +410,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 
-//ƒ}ƒeƒŠƒAƒ‹“Ç‚İ‚İ///////////////////////////////////////////////////////////////////
+//ãƒãƒ†ãƒªã‚¢ãƒ«èª­ã¿è¾¼ã¿///////////////////////////////////////////////////////////////////
 void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArray, unsigned int* MaterialNum)
 {
 
@@ -431,7 +431,7 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 	MODEL_MATERIAL* materialArray;
 	unsigned int materialNum = 0;
 
-	//—v‘f”ƒJƒEƒ“ƒg
+	//è¦ç´ æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 	while (true)
 	{
 		fscanf(file, "%s", str);
@@ -447,11 +447,11 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 	}
 
 
-	//ƒƒ‚ƒŠŠm•Û
+	//ãƒ¡ãƒ¢ãƒªç¢ºä¿
 	materialArray = new MODEL_MATERIAL[materialNum];
 
 
-	//—v‘f“Ç
+	//è¦ç´ èª­è¾¼
 	int mc = -1;
 
 	fseek(file, 0, SEEK_SET);
@@ -466,7 +466,7 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 
 		if (strcmp(str, "newmtl") == 0)
 		{
-			//ƒ}ƒeƒŠƒAƒ‹–¼
+			//ãƒãƒ†ãƒªã‚¢ãƒ«å
 			mc++;
 			fscanf(file, "%s", materialArray[mc].Name);
 			strcpy(materialArray[mc].TextureName, "");
@@ -478,7 +478,7 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 		}
 		else if (strcmp(str, "Ka") == 0)
 		{
-			//ƒAƒ“ƒrƒGƒ“ƒg
+			//ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆ
 			fscanf(file, "%f", &materialArray[mc].Material.ambient.x);
 			fscanf(file, "%f", &materialArray[mc].Material.ambient.y);
 			fscanf(file, "%f", &materialArray[mc].Material.ambient.z);
@@ -486,7 +486,7 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 		}
 		else if (strcmp(str, "Kd") == 0)
 		{
-			//ƒfƒBƒtƒ…[ƒY
+			//ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚º
 			fscanf(file, "%f", &materialArray[mc].Material.diffuse.x);
 			fscanf(file, "%f", &materialArray[mc].Material.diffuse.y);
 			fscanf(file, "%f", &materialArray[mc].Material.diffuse.z);
@@ -494,7 +494,7 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 		}
 		else if (strcmp(str, "Ks") == 0)
 		{
-			//ƒXƒyƒLƒ…ƒ‰
+			//ã‚¹ãƒšã‚­ãƒ¥ãƒ©
 			fscanf(file, "%f", &materialArray[mc].Material.specular.x);
 			fscanf(file, "%f", &materialArray[mc].Material.specular.y);
 			fscanf(file, "%f", &materialArray[mc].Material.specular.z);
@@ -502,17 +502,17 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 		}
 		else if (strcmp(str, "Ns") == 0)
 		{
-			//ƒXƒyƒLƒ…ƒ‰‹­“x
+			//ã‚¹ãƒšã‚­ãƒ¥ãƒ©å¼·åº¦
 			fscanf(file, "%f", &materialArray[mc].Material.shininess);
 		}
 		else if (strcmp(str, "d") == 0)
 		{
-			//ƒAƒ‹ƒtƒ@
+			//ã‚¢ãƒ«ãƒ•ã‚¡
 			fscanf(file, "%f", &materialArray[mc].Material.diffuse.w);
 		}
 		else if (strcmp(str, "map_Kd") == 0)
 		{
-			//ƒeƒNƒXƒ`ƒƒ
+			//ãƒ†ã‚¯ã‚¹ãƒãƒ£
 			fscanf(file, "%s", str);
 
 			char path[256];

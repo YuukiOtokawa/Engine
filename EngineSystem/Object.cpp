@@ -15,8 +15,10 @@ void Object::Draw() {
 		component->Draw();
 	}
 	if (m_IsDrawable == false) return;
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->DrawIndexed(m_iIndexCount, 0, 0);
-
+	if (m_iIndexCount == 0)
+		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Draw(m_iVertexCount, 0);
+	else
+		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->DrawIndexed(m_iIndexCount, 0, 0);
 }
 void Object::DrawGUI(){
 	GUI::SetFontObjectName();
@@ -30,6 +32,11 @@ void Object::DrawGUI(){
 	}
 }
 void Object::Finalize() {}
+
+void Object::Destroy()
+{
+	Editor::GetInstance()->DeleteObject(this);
+}
 
 
 void Object::AddComponentClass(Component* component) {
