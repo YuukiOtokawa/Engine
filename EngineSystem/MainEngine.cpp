@@ -1,4 +1,14 @@
-﻿
+﻿// ========================================================
+//
+// エンジンシステム[MainEngine.cpp]
+// 
+//									Date:20250514
+//									Author:Yuuki Otokawa
+// ========================================================
+
+//==========================================================================
+// ヘッダーインクルード
+//==========================================================================
 
 #include "MainEngine.h"
 
@@ -12,6 +22,8 @@
 #include <crtdbg.h>
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 
+#include <Psapi.h>
+
 #include "FrameWork.h"
 
 #include "Component_InputSystem.h"
@@ -20,6 +32,9 @@ constexpr auto WINDOW_CREATE_FAILED = -1;
 
 MainEngine* MainEngine::m_pInstance = nullptr;
 
+//==========================================================================
+// メンバ関数
+//==========================================================================
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -65,7 +80,7 @@ int MainEngine::SystemLoop()
 #ifdef _DEBUG // デバッグ版の時だけFPSを表示する
 				std::stringstream caption;
 				caption << WINDOW_CAPTION << " FPS: " << m_FramePerSecond;
-				SetWindowText(m_hWnd, caption.str().c_str());
+				SetWindowTextA(m_hWnd, caption.str().c_str());
 #endif
 				// ここがエンジン処理
 				m_pEditor->Update();
@@ -118,7 +133,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	};
 
 	// ウィンドウの生成
-	m_hWnd = CreateWindow(
+	m_hWnd = CreateWindowA(
 		WINDOW_CLASS_NAME,          // ウィンドウ クラス
 		WINDOW_CAPTION,      // ウィンドウ テキスト
 		windowStyle,        // ウィンドウ スタイル
@@ -145,11 +160,11 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	HMENU hMenu = CreateMenu();
 
 	HMENU hEditorMenu = CreatePopupMenu();
-	AppendMenu(hEditorMenu, MF_STRING, EngineMenu::Editor_NewWindow, "新規ウィンドウ");
-	AppendMenu(hEditorMenu, MF_SEPARATOR, 0, NULL);
-	AppendMenu(hEditorMenu, MF_STRING, EngineMenu::Editor_End, "終了");
+	AppendMenuA(hEditorMenu, MF_STRING, EngineMenu::Editor_NewWindow, "新規ウィンドウ");
+	AppendMenuA(hEditorMenu, MF_SEPARATOR, 0, NULL);
+	AppendMenuA(hEditorMenu, MF_STRING, EngineMenu::Editor_End, "終了");
 
-	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hEditorMenu, "エディター");
+	AppendMenuA(hMenu, MF_POPUP, (UINT_PTR)hEditorMenu, "エディター");
 
 	SetMenu(m_hWnd, hMenu);
 
@@ -237,10 +252,10 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (LOWORD(wParam))
 		{
 		case EngineMenu::Editor_NewWindow: // 新規ウィンドウ
-			MessageBox(hWnd, "ウィンドウを作りたかった", "CreateWindow", MB_OKCANCEL | MB_DEFBUTTON2);
+			MessageBoxA(hWnd, "ウィンドウを作りたかった", "CreateWindow", MB_OKCANCEL | MB_DEFBUTTON2);
 			break;
 		case EngineMenu::Editor_End: // 終了
-			if (MessageBox(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
+			if (MessageBoxA(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
 				DestroyWindow(hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
 			}
 			return 0; // DefWindowProc関数にメッセージを流さず終了することによって何もなかったことにする
@@ -250,7 +265,7 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_CLOSE:
-		if (MessageBox(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
+		if (MessageBoxA(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
 			DestroyWindow(hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
 		}
 		return 0; // DefWindowProc関数にメッセージを流さず終了することによって何もなかったことにする
@@ -308,6 +323,31 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void MainEngine::ErrorMessage(std::string message, std::string title)
 {
 	HWND hWnd = GetInstance()->GetWindow();
-	MessageBox(hWnd, message.c_str(), title.c_str(), MB_OK | MB_DEFBUTTON2);
+	MessageBoxA(hWnd, message.c_str(), title.c_str(), MB_OK | MB_DEFBUTTON2);
 	DestroyWindow(hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
+}
+
+void MainEngine::GetWindowsInfo()
+{
+	// システムメモリ情報を取得
+	MEMORYSTATUSEX statex = { sizeof(statex) };
+	statex.dwLength = sizeof(statex);
+	GlobalMemoryStatusEx(&statex);
+
+
+	SIZE_T memory;
+
+	// プロセスメモリ情報を取得(現在実行中のプロセス)
+	PROCESS_MEMORY_COUNTERS_EX pmc = { sizeof(pmc) };
+	if (GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))) {
+		memory = pmc.WorkingSetSize / 1024 / 1024 / 1024; // GB単位に変換
+	}
+	else {
+		memory = 0;
+	}
+
+	// システム情報を取得 プロセッサとかハードウェア構成
+	LPSYSTEM_INFO sysInfo;
+
+	GetSystemInfo(sysInfo);
 }

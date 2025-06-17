@@ -1,4 +1,12 @@
-﻿#include "PlaneMesh.h"
+﻿// ========================================================
+//
+// プレーン平面用メッシュフィルタークラス[PlaneMesh.cpp]
+// 
+//									Date:20250528
+//									Author:Yuuki Otokawa
+// ========================================================
+
+#include "PlaneMesh.h"
 
 #include "MainEngine.h"
 

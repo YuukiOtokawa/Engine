@@ -1,9 +1,3 @@
-//==========================================================================
-// GM31課題用コメント
-// ここでアニメーションをコントロールしてます
-//==========================================================================
-
-
 #include "Animation.h"
 #include "SpriteMesh.h"
 
@@ -17,7 +11,7 @@ void Animation::UpdateComponent() {
 		return;
 	}
 	if (owner->GetComponent<SpriteMesh>() == nullptr) {
-		MainEngine::ErrorMessage("SpriteMeshが見つかりません。Animationコンポーネントを使用するには、SpriteMeshコンポーネントが必要です。", owner->GetName());
+		MainEngine::ErrorMessage("SpriteMesh Not Found", owner->GetName());
 	}
 	bool stable = owner->GetComponent<SpriteMesh>()->SetSpriteByIndex(m_SpriteCount);
 	m_SpriteCount++;
@@ -35,7 +29,9 @@ void Animation::DrawGUI() {
 	ImGui::Indent();
 	ImGui::Checkbox("Loop", &m_Loop);
 	ImGui::InputInt("Frame Per Second", &m_FramePerSecond);
+	ImGui::BeginDisabled();
 	ImGui::InputInt("Sprite Count", &m_SpriteCount,ImGuiInputTextFlags_ReadOnly);
+	ImGui::EndDisabled();
 	ImGui::Unindent();
 
 }

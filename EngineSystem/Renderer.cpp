@@ -1,27 +1,53 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+﻿// ========================================================
+//
+// レンダラークラス[Renderer.cpp]
+// 
+//									Date:20250514
+//									Author:Yuuki Otokawa
+// ========================================================
+
+//==========================================================================
+// マクロ定義
+//==========================================================================
+
+#define _CRT_SECURE_NO_WARNINGS
+
+//==========================================================================
+// ヘッダーインクルード
+//==========================================================================
+
 #include "Renderer.h"
 
 #include <d3dcompiler.h>
 #include <io.h>
 
+//==========================================================================
+// メンバ関数
+//==========================================================================
+
 Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
+	// Direct 3Dバージョンの定義
 	D3D_FEATURE_LEVEL feature_level = D3D_FEATURE_LEVEL_11_0;
 
+	// 描画領域のサイズを定義
+	// ウィンドウのクライアント領域のサイズを取得
 	RECT clientRect;
 	GetClientRect(hWnd, &clientRect);
 
+	// クライアント領域の幅と高さを計算
 	int renderWidth = clientRect.right - clientRect.left;
 	int renderHeight = clientRect.bottom - clientRect.top;
 
+	// タスクバーの高さを考慮して、描画領域の高さを調整
 	RECT workArea;
 	SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
 
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-	// タスクバーが下にある場合
 	int taskbarHeight = screenHeight - workArea.bottom;
 
+	// スワップチェーンの設定を定義
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferCount = 1;
 	sd.BufferDesc.Width = renderWidth;
@@ -35,6 +61,7 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
 
+	// デバイスとスワップチェーンの作成
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(
 		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -80,7 +107,14 @@ Renderer::~Renderer()
 	SAFE_RELEASE(m_pDepthStencilStateDepthEnable);
 	SAFE_RELEASE(m_pDepthStencilStateDepthDisable);
 
-	SAFE_RELEASE(m_pConstantBuffer);
+	SAFE_RELEASE(m_pTranslationBuffer);
+	SAFE_RELEASE(m_pAngleBuffer);
+	SAFE_RELEASE(m_pScaleBuffer);
+	SAFE_RELEASE(m_pViewBuffer);
+	SAFE_RELEASE(m_pProjectionBuffer);
+	SAFE_RELEASE(m_pLightBuffer);
+	SAFE_RELEASE(m_pCameraBuffer);
+	SAFE_RELEASE(m_pParameterBuffer);
 	SAFE_RELEASE(m_pSamplerState);
 
 	for (auto& shader : m_VertexShaders) {
@@ -331,58 +365,48 @@ ID3D11InputLayout* Renderer::CreateInputLayout(unsigned char* pByteCode, long by
 void Renderer::CreateConstantBuffer()
 {
 	D3D11_BUFFER_DESC hBufferDesc = {};
-	hBufferDesc.ByteWidth = sizeof(CONSTANTBUFFER);
+	hBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
 	hBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	hBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	hBufferDesc.CPUAccessFlags = 0;
 	hBufferDesc.MiscFlags = 0;
 	hBufferDesc.StructureByteStride = sizeof(float);
-
-	//定?バッファ
-	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pConstantBuffer);
-	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 
 	//================================================
 // WorldViewProjection行列用定数バッファ生成
 	//行列オブジェクトをシェーダーへ接続　b0をつかう
-	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pWorldBuffer);
-	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pWorldBuffer);
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pTranslationBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pTranslationBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pTranslationBuffer);
+
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pAngleBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pAngleBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pAngleBuffer);
+
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pScaleBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pScaleBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(2, 1, &m_pScaleBuffer);
 
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pViewBuffer);
-	m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pViewBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pViewBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(3, 1, &m_pViewBuffer);
 
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pProjectionBuffer);
-	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pProjectionBuffer);
-
-	//マテリアル用定数バッファ生成
-	hBufferDesc.ByteWidth = sizeof(MATERIAL);
-	hBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	hBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	hBufferDesc.CPUAccessFlags = 0;
-	hBufferDesc.MiscFlags = 0;
-	hBufferDesc.StructureByteStride = sizeof(float);
-	//マテリアルオブジェクトをシェーダーへ接続　b1を使う
-	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pMaterialBuffer);
-	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pMaterialBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
 
 	hBufferDesc.ByteWidth = sizeof(LIGHT);
 
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pLightBuffer);
-	m_pDeviceContext->VSSetConstantBuffers(4, 1, &m_pLightBuffer);
-	m_pDeviceContext->PSSetConstantBuffers(4, 1, &m_pLightBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(5, 1, &m_pLightBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(5, 1, &m_pLightBuffer);
 
 	hBufferDesc.ByteWidth = sizeof(Vector4O);
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pCameraBuffer);
-	m_pDeviceContext->PSSetConstantBuffers(5, 1, &m_pCameraBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(6, 1, &m_pCameraBuffer);
 
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pParameterBuffer);
-	m_pDeviceContext->PSSetConstantBuffers(6, 1, &m_pParameterBuffer);
-
-	MATERIAL material;
-	ZeroMemory(&material, sizeof(material));
-	material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-	material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-	SetMaterial(material);
+	m_pDeviceContext->PSSetConstantBuffers(7, 1, &m_pParameterBuffer);
 
 }
 
@@ -448,26 +472,15 @@ void Renderer::SetPixelShader(std::string key)
 	m_CurrentPixelShaderKey = key;
 }
 
-void Renderer::SetConstantBuffer(const CONSTANTBUFFER* matrix)
-{
-	m_pDeviceContext->UpdateSubresource(
-		m_pConstantBuffer,
-		0,
-		NULL,
-		matrix,
-		0,
-		0);
-
-
-}
-
 void Renderer::SetWorldViewProjection2D() {
 	//2D用正射影行列をセット
 	XMMATRIX projectionMatrix = XMMatrixOrthographicOffCenterLH(0.0f, m_ClientSize.x, m_ClientSize.y, 0.0f, 0.0f, 1.0f);
 	SetProjectionMatrix(projectionMatrix);
 	//行列を単位行列にして初期化
 	SetViewMatrix(XMMatrixIdentity());
-	SetWorldMatrix(XMMatrixIdentity());
+	SetTranslationMatrix(XMMatrixIdentity());
+	SetAngleMatrix(XMMatrixIdentity());
+	SetScaleMatrix(XMMatrixIdentity());
 
 }
 
@@ -476,21 +489,52 @@ void Renderer::ResetWorldViewProjection3D()
 
 }
 
-void Renderer::SetWorldMatrix(XMMATRIX world)
+void Renderer::SetTranslationMatrix(XMMATRIX translation)
 {
-	XMMATRIX worldMatrix;
-	worldMatrix = XMMatrixTranspose(world);
+	XMMATRIX transMatrix = XMMatrixTranspose(translation);
 	XMFLOAT4X4 matrix;
-	XMStoreFloat4x4(&matrix, worldMatrix);
+	XMStoreFloat4x4(&matrix, transMatrix);
 	m_pDeviceContext->UpdateSubresource(
-		m_pWorldBuffer,
+		m_pTranslationBuffer,
 		0,
 		NULL,
 		&matrix,
 		0,
 		0);
-	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pWorldBuffer);
-	m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pWorldBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pTranslationBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pTranslationBuffer);
+}
+
+void Renderer::SetAngleMatrix(XMMATRIX angle)
+{
+	XMMATRIX angleMatrix = XMMatrixTranspose(angle);
+	XMFLOAT4X4 matrix;
+	XMStoreFloat4x4(&matrix, angleMatrix);
+	m_pDeviceContext->UpdateSubresource(
+		m_pAngleBuffer,
+		0,
+		NULL,
+		&matrix,
+		0,
+		0);
+	m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pAngleBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pAngleBuffer);
+}
+
+void Renderer::SetScaleMatrix(XMMATRIX scale)
+{
+	XMMATRIX scaleMatrix = XMMatrixTranspose(scale);
+	XMFLOAT4X4 matrix;
+	XMStoreFloat4x4(&matrix, scaleMatrix);
+	m_pDeviceContext->UpdateSubresource(
+		m_pScaleBuffer,
+		0,
+		NULL,
+		&matrix,
+		0,
+		0);
+	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pScaleBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(2, 1, &m_pScaleBuffer);
 }
 
 void Renderer::SetViewMatrix(XMMATRIX view)
@@ -506,8 +550,8 @@ void Renderer::SetViewMatrix(XMMATRIX view)
 		&matrix,
 		0,
 		0);
-	m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pViewBuffer);
-	m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pViewBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pViewBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(3, 1, &m_pViewBuffer);
 }
 
 void Renderer::SetProjectionMatrix(XMMATRIX projection)
@@ -523,14 +567,8 @@ void Renderer::SetProjectionMatrix(XMMATRIX projection)
 		&matrix,
 		0,
 		0);
-	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pProjectionBuffer);
-	m_pDeviceContext->PSSetConstantBuffers(2, 1, &m_pProjectionBuffer);
-}
-
-void Renderer::SetMaterial(MATERIAL material)
-{
-	GetDeviceContext()->UpdateSubresource(m_pMaterialBuffer, 0, NULL, &material, 0, 0);
-	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pMaterialBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
 }
 
 void Renderer::SetLight(LIGHT light)

@@ -2,6 +2,8 @@
 
 void main(in VS_IN In, out PS_IN Out)
 {
+    matrix World; //ワールド行列を作成
+    World = mul(Scale, mul(Angle, Translation));
 	//頂点変換行列を作る World * View * Projection
     matrix wvp;
     wvp = mul(World, View);

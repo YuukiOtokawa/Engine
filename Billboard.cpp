@@ -1,9 +1,3 @@
-//==========================================================================
-// GM31課題用コメント
-// SpriteMeshから派生したクラスで頂点情報のみビルボード用に変更しています
-//==========================================================================
-
-
 #include "Billboard.h"
 
 #include "components/Component_Transform.h"
@@ -15,10 +9,10 @@ void Billboard::Draw() {
 	XMMATRIX scale, angle, translation;
 	XMMATRIX world;
 
-	//ビューの逆行列
+	
 	XMMATRIX invView;
 	auto view = Editor::GetInstance()->GetActiveCamera()->GetComponent<Camera>()->GetView();
-	invView = XMMatrixInverse(nullptr, view); //逆行列の生成
+	invView = XMMatrixInverse(nullptr, view);
 	invView.r[3].m128_f32[0] = 0.0f;
 	invView.r[3].m128_f32[1] = 0.0f;
 	invView.r[3].m128_f32[2] = 0.0f;
@@ -33,9 +27,9 @@ void Billboard::Draw() {
 		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
 	}
 
-	world = scale * invView * translation;
-
-	MainEngine::GetInstance()->GetRenderer()->SetWorldMatrix(world);
+	MainEngine::GetInstance()->GetRenderer()->SetTranslationMatrix(translation);
+	MainEngine::GetInstance()->GetRenderer()->SetScaleMatrix(scale);
+	MainEngine::GetInstance()->GetRenderer()->SetAngleMatrix(angle);
 
 	//XMMATRIX worldViewProjection;
 

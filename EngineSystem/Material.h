@@ -31,7 +31,8 @@ private:
 	MATERIAL m_Material;
 	LIGHT m_Light;
 	// テクスチャ
-	ID3D11ShaderResourceView* m_Texture;
+	ID3D11ShaderResourceView* m_Texture = nullptr;
+	ID3D11ShaderResourceView* m_BumpTexture = nullptr;
 
 	unsigned int	StartIndex;
 	unsigned int	IndexNum;
@@ -67,6 +68,9 @@ public:
 	/// @brief テクスチャを設定します。
 	/// @param texture 設定するID3D11ShaderResourceView型のテクスチャ。
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_Texture = texture; }
+	/// @brief バンプマップテクスチャを設定します。
+	/// @param bumpTexture 設定するID3D11ShaderResourceView型のバンプマップテクスチャ。
+	void SetBumpTexture(ID3D11ShaderResourceView* bumpTexture) { m_BumpTexture = bumpTexture; }
 
 	/// @brief 頂点シェーダーの文字列を取得します。
 	/// @return 格納されている頂点シェーダーの文字列。

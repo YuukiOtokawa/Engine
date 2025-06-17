@@ -1,13 +1,21 @@
 
-cbuffer WorldBuffer : register(b0) //行列を受け取る b0 : レジスタの0番バッファ
+cbuffer TranslationBuffer : register(b0)
 {
-    matrix World;
+    matrix Translation;
 }
-cbuffer ViewBuffer : register(b1) 
+cbuffer AngleBuffer : register(b1)
+{
+    matrix Angle;
+}
+cbuffer ScaleBuffer : register(b2)
+{
+    matrix Scale;
+}
+cbuffer ViewBuffer : register(b3) 
 {
     matrix View;
 }
-cbuffer ProjectionBuffer : register(b2)
+cbuffer ProjectionBuffer : register(b4)
 {
     matrix Projection;
 }
@@ -49,17 +57,17 @@ struct LIGHT
     float4 SpotLightAngle;
 };
 
-cbuffer LightBuffer : register(b4)
+cbuffer LightBuffer : register(b5)
 {
     LIGHT Light;
 }
 
-cbuffer CameraBuffer : register(b5)
+cbuffer CameraBuffer : register(b6)
 {
     float4 CameraPosition;
 }
 
-cbuffer ParameterBuffer : register(b6)
+cbuffer ParameterBuffer : register(b7)
 {
     float4 Parameter;
 }

@@ -1,6 +1,22 @@
+// ========================================================
+//
+// マテリアルクラス[Material.h]
+// 
+//									Date:	20250520
+//									Author:	Yuuki Otokawa
+// ========================================================
+
+//==========================================================================
+// ヘッダーインクルード
+//==========================================================================
+
 #include "Material.h"
 
 #include "MainEngine.h"
+
+//==========================================================================
+// メンバ関数
+//==========================================================================
 
 void Material::DrawMaterial()
 {
@@ -8,8 +24,9 @@ void Material::DrawMaterial()
 
 
 	renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
+	if (m_BumpTexture)
+		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, &m_BumpTexture);
 
-	renderer->SetMaterial(m_Material);
 	renderer->SetLight(m_Light);
 
 }
@@ -33,6 +50,10 @@ void Material::DrawGUI() {
 	ImGui::InputFloat3("Point Light Position", &m_Light.Position.x);
 	ImGui::InputFloat3("Point Light Range", &m_Light.PointLightRange.x);
 	ImGui::Unindent();
+	ImGui::Text("Texture");
+	ImGui::Image((ImTextureID)m_Texture, ImVec2(300, 300));
+	ImGui::Text("Bump Map");
+	ImGui::Image((ImTextureID)m_BumpTexture, ImVec2(300, 300));
 
 }
 

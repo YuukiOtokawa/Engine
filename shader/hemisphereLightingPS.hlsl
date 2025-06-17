@@ -30,7 +30,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target) {
     //半球ライティング
     float norm = dot(normal, normalize(Light.GroundNormal));
     norm = (norm + 1.0f) * 0.5f; // -1.0 ~ 1.0 -> 0.0 ~ 1.0)
-    float3 hemiColor = lerp(Light.GroundColor, Light.SkyColor, norm);
+    float3 hemiColor = lerp(Light.GroundColor, Light.SkyColor, norm).xyz;
     
     
     outDiffuse.rgb += hemiColor + specular;

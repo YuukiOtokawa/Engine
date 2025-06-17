@@ -108,14 +108,11 @@
     <FxCompile Include="shader\bumpPS.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
+    <FxCompile Include="shader\bumpVS.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="components\AssimpMeshRenderer.cpp">
-      <Filter>ソース ファイル\component</Filter>
-    </ClCompile>
-    <ClCompile Include="components\Component.cpp">
-      <Filter>ソース ファイル\component</Filter>
-    </ClCompile>
     <ClCompile Include="components\Component_Camera.cpp">
       <Filter>ソース ファイル\component</Filter>
     </ClCompile>
@@ -138,9 +135,6 @@
       <Filter>ソース ファイル\component</Filter>
     </ClCompile>
     <ClCompile Include="components\PlaneMesh.cpp">
-      <Filter>ソース ファイル\component</Filter>
-    </ClCompile>
-    <ClCompile Include="components\MonoBehavior.cpp">
       <Filter>ソース ファイル\component</Filter>
     </ClCompile>
     <ClCompile Include="EngineSystem\Editor.cpp">
@@ -341,6 +335,15 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Billboard.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3O.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2O.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MathO.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

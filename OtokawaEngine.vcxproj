@@ -105,7 +105,6 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>assimp;shader;DirectXTex;scripts;input;imgui;EngineSystem;cso;components;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,6 +149,12 @@
     </FxCompile>
     <FxCompile Include="shader\bumpPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shader\bumpVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -266,8 +271,6 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Billboard.cpp" />
-    <ClCompile Include="components\AssimpMeshRenderer.cpp" />
-    <ClCompile Include="components\Component.cpp" />
     <ClCompile Include="components\Component_Camera.cpp" />
     <ClCompile Include="components\Component_CubeMesh.cpp" />
     <ClCompile Include="components\Component_InputSystem.cpp" />
@@ -275,7 +278,6 @@
     <ClCompile Include="components\Component_MeshRenderer.cpp" />
     <ClCompile Include="components\Component_Transform.cpp" />
     <ClCompile Include="components\EditorCamera.cpp" />
-    <ClCompile Include="components\MonoBehavior.cpp" />
     <ClCompile Include="components\PlaneMesh.cpp" />
     <ClCompile Include="EngineSystem\Editor.cpp" />
     <ClCompile Include="EngineSystem\EditorView.cpp" />
@@ -340,9 +342,12 @@
     <ClInclude Include="input\Gamepad.h" />
     <ClInclude Include="input\Keyboard.h" />
     <ClInclude Include="input\Mouse.h" />
+    <ClInclude Include="MathO.h" />
     <ClInclude Include="OtokawaEngine.h" />
     <ClInclude Include="scripts\Player.h" />
     <ClInclude Include="SpriteMesh.h" />
+    <ClInclude Include="Vector2O.h" />
+    <ClInclude Include="Vector3O.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

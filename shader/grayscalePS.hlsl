@@ -17,7 +17,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     outDiffuse.rgb = grayDiffuse.rrr;
     
     //ƒZƒsƒA•ÏŠ·
-    float sepia = float4(0.96f, 0.784f, 0.58f, 1.0f);
+    float4 sepia = float4(0.96f, 0.784f, 0.58f, 1.0f);
     
     outDiffuse *= sepia;
     

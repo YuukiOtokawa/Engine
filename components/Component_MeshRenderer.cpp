@@ -1,9 +1,25 @@
-﻿#include "Component_MeshRenderer.h"
+﻿// ========================================================
+//
+// メッシュレンダラーコンポーネントクラス[Component_MeshRenderer.cpp]
+// 
+//									Date:20250520
+//									Author:Yuuki Otokawa
+// ========================================================
+
+//==========================================================================
+// ヘッダーインクルード
+//==========================================================================
+
+#include "Component_MeshRenderer.h"
 
 #include "Component_Camera.h"
 #include "Component_Transform.h"
 
 #include "MainEngine.h"
+
+//==========================================================================
+// メンバ関数定義
+//==========================================================================
 
 MeshRenderer::MeshRenderer()
 {
@@ -17,30 +33,9 @@ void MeshRenderer::UpdateComponent() {
 }
 
 void MeshRenderer::Draw() {
-	//カメラの仕事
-	//auto camera = owner->GetComponent<Camera>();
-
-	//auto transform = owner->GetComponent<Transform>();
-
-	//XMMATRIX translation, rotation, scale;
-
-	//{
-	//	auto position = transform->GetPosition();
-	//	auto rotate = transform->GetRotation();
-	//	auto size = transform->GetScale();
-
-	//	translation = XMMatrixTranslation(position.x, position.y, position.z);
-	//	rotation = XMMatrixRotationRollPitchYaw(rotate.x, rotate.y, rotate.z);
-	//	scale = XMMatrixScaling(size.x, size.y, size.z);
-	//}
-
-	//XMMATRIX world = scale * rotation * translation;
-
-	//xmmatrix
-
-	//ConstantBuffer* constantBuffer;
-	//XMStoreFloat4x4(&constantBuffer->world, XMMatrixTranspose(world));
+	// シェーダーを設定
 	m_pMaterial->SetShader();
+	// マテリアルを設定
 	for (unsigned int i = 0; i < m_MaterialNum; i++)
 		m_pMaterial->DrawMaterial();
 }

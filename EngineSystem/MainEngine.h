@@ -58,6 +58,9 @@ private:
 	//メインウィンドウハンドル
 	HWND m_hWnd = NULL;
 
+	
+
+
 	// インスタンスハンドル
 	HINSTANCE m_hInstance = NULL;
 
@@ -126,5 +129,7 @@ public:
 	Renderer* GetRenderer() { return m_pRenderer; }
 
 	static void ErrorMessage(std::string message, std::string title);
+
+	void GetWindowsInfo();
 };
 

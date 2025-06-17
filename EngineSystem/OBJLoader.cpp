@@ -170,7 +170,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 	char dir[MAX_PATH];
 	strcpy(dir, FileName);
-	PathRemoveFileSpec(dir);
+	PathRemoveFileSpecA(dir);
 
 
 
@@ -416,7 +416,7 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 
 	char dir[MAX_PATH];
 	strcpy(dir, FileName);
-	PathRemoveFileSpec(dir);
+	PathRemoveFileSpecA(dir);
 
 
 

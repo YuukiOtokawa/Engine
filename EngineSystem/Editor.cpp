@@ -1,7 +1,21 @@
-﻿#include "Editor.h"
+﻿// ========================================================
+//
+// エディター管理クラス[Editor.cpp]
+// 
+//									Date:20250520
+//									Author:Yuuki Otokawa
+// ========================================================
+
+//==========================================================================
+// ヘッダーインクルード
+//==========================================================================
+
+#include "Editor.h"
 
 #include "MainEngine.h"
 
+//以下コンポーネントのヘッダー
+//省略できるようにしたい
 #include "EditorCamera.h"
 #include "Component_Transform.h"
 #include "Component_MeshRenderer.h"
@@ -24,6 +38,10 @@
 #include "imgui.h"
 
 Editor* Editor::m_pInstance;
+
+//==========================================================================
+// メンバ関数
+//==========================================================================
 
 void Editor::Initialize() {
 	m_pGUI = new GUI();
@@ -58,9 +76,13 @@ void Editor::Initialize() {
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/spotLightingVS.cso", "spotLight");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/spotLightingPS.cso", "spotLight");
 
+		//リムライトライティング
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/blinnPhongVS.cso", "limLight");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/limLightingPS.cso", "limLight");
 
+		//法線マップ
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/bumpVS.cso", "normal");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/bumpPS.cso", "normal");
 	}
 
 	//カメラ作成
@@ -128,7 +150,7 @@ void Editor::Initialize() {
 	}
 
 	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
-
+	auto bumpTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/test.png");
 	//平面オブジェクト作成
 	{
 		Object* plane = new Object();
@@ -141,21 +163,22 @@ void Editor::Initialize() {
 		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
 		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
 
-
 		LIGHT light;
-
 		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-		light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
+		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 0.2f);
 		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
+		light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
+		light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
 
 		plane->GetComponent<Transform>()->SetScale(Vector4O(20.0f, 1.0f, 20.0f));
 		plane->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, -5.0f, 0.0f));
 		plane->GetComponent<MeshRenderer>()->SetMaterial(material);
 		plane->GetComponent<MeshRenderer>()->SetLight(light);
 		plane->GetComponent<MeshRenderer>()->SetTexture(texture);
+		plane->GetComponent<MeshRenderer>()->SetBumpTexture(bumpTexture);
 
-		plane->GetComponent<MeshRenderer>()->SetVertexShader("spotLight");
-		plane->GetComponent<MeshRenderer>()->SetPixelShader("spotLight");
+		plane->GetComponent<MeshRenderer>()->SetVertexShader("normal");
+		plane->GetComponent<MeshRenderer>()->SetPixelShader("normal");
 
 		AddObject(plane);
 	}
@@ -193,7 +216,7 @@ void Editor::Initialize() {
 		//model->GetComponent<MeshRenderer>()->SetTexture(texture1);
 
 		GetObject("Camera2")->GetComponent<PlayerCamera>()->SetPlayer(model);
-		//AddObject(model);
+		AddObject(model);
 	}
 
 	//トーラスオブジェクト作成
@@ -333,6 +356,7 @@ void Editor::Initialize() {
 	}
 
 	//アニメーションスプライト作成
+	
 	{
 		Object* sprite = new Object();
 		sprite->SetName("sprite");
@@ -364,9 +388,10 @@ void Editor::Initialize() {
 		sprite->GetComponent<Animation>()->SetFramePerSecond(30);
 		sprite->GetComponent<Billboard>()->SetUVRect(Vector4O(4, 4));
 
-		//AddObject(sprite);
-
+		AddObject(sprite);
 	}
+
+	
 
 	Main();
 	m_pGUI->Initialize();

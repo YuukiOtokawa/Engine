@@ -63,8 +63,9 @@ private:
 	ID3D11SamplerState* m_pSamplerState = NULL;
 
 	// 各種定数バッファのポインタ
-	ID3D11Buffer* m_pConstantBuffer = NULL;
-	ID3D11Buffer* m_pWorldBuffer = NULL;
+	ID3D11Buffer* m_pTranslationBuffer = NULL;
+	ID3D11Buffer* m_pAngleBuffer = NULL;
+	ID3D11Buffer* m_pScaleBuffer = NULL;
 	ID3D11Buffer* m_pViewBuffer = NULL;
 	ID3D11Buffer* m_pProjectionBuffer = NULL;
 	ID3D11Buffer* m_pMaterialBuffer = NULL;
@@ -190,10 +191,6 @@ public:
 	/// @param key 設定するピクセルシェーダーを識別する文字列キー。
 	void SetPixelShader(std::string key);
 
-	/// @brief 定数バッファを設定します。
-	/// @param matrix 設定するCONSTANTBUFFER型の定数バッファへのポインタ。
-	void SetConstantBuffer(const CONSTANTBUFFER* matrix);
-
 	/// @brief レンダーターゲットビューを設定します。
 	/// @param renderTargetView 設定するID3D11RenderTargetViewへのポインタ。
 	void SetRenderTargetView(ID3D11RenderTargetView* renderTargetView)
@@ -214,9 +211,9 @@ public:
 	void SetWorldViewProjection2D();
 	/// @brief 3Dワールドビュー射影行列をリセットします。
 	void ResetWorldViewProjection3D();
-	/// @brief ワールド行列を設定します。
-	/// @param world 設定するワールド行列。
-	void SetWorldMatrix(XMMATRIX world);
+	void SetTranslationMatrix(XMMATRIX translation);
+	void SetAngleMatrix(XMMATRIX angle);
+	void SetScaleMatrix(XMMATRIX scale);
 	/// @brief ビュー行列を設定します。
 	/// @param view 設定するビュー行列。
 	void SetViewMatrix(XMMATRIX view);

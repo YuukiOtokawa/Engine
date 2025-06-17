@@ -1,10 +1,26 @@
-﻿#include "Component_Camera.h"
+﻿// ========================================================
+//
+// 基本カメラコンポーネント[Component_Camera.cpp]
+// 
+//									Date:20250520
+//									Author:Yuuki Otokawa
+// ========================================================
+
+//==========================================================================
+// ヘッダーインクルード
+//==========================================================================
+
+#include "Component_Camera.h"
 
 
 #include "FrameWork.h"
 #include "MainEngine.h"
 
 #include "Component_Transform.h"
+
+//==========================================================================
+// メンバ関数定義
+//==========================================================================
 
 Camera::Camera()
 {
@@ -16,7 +32,9 @@ void Camera::UpdateComponent() {
 }
 
 void Camera::Draw() {
+	// 描画領域のサイズを取得
 	Vector4O clientSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
+
 	//プロジェクション行列を作成
 	m_Projection =
 		XMMatrixPerspectiveFovLH(
@@ -25,12 +43,12 @@ void Camera::Draw() {
 			m_Near,
 			m_Far
 		);
+
 	//カメラ行列を作成
-	XMVECTOR	eyev = XMLoadFloat3(m_Target.ToFloat3());
-	XMVECTOR	pos = XMLoadFloat3(owner->GetComponent<Transform>()->GetPosition().ToFloat3());
-	XMVECTOR	up = XMLoadFloat3(m_Up.ToFloat3());
-	m_View =
-		XMMatrixLookAtLH(pos, eyev, up);
+	XMVECTOR eyev = XMLoadFloat3(m_Target.ToFloat3());										// カメラの視線ベクトル
+	XMVECTOR pos = XMLoadFloat3(owner->GetComponent<Transform>()->GetPosition().ToFloat3());	// カメラの位置ベクトル
+	XMVECTOR up = XMLoadFloat3(m_Up.ToFloat3());												// カメラの上方向ベクトル
+	m_View = XMMatrixLookAtLH(pos, eyev, up);
 
 	//カメラ行列をセット
 	MainEngine::GetInstance()->GetRenderer()->SetViewMatrix(m_View);

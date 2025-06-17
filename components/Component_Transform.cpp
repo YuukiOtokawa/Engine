@@ -1,3 +1,10 @@
+// ========================================================
+//
+// ƒ^ƒCƒgƒ‹[XXX]
+// 
+//									Date:YYYYMMDD
+//									Author:Yuuki Otokawa
+// ========================================================
 #include "Component_Transform.h"
 
 void Transform::UpdateComponent() {

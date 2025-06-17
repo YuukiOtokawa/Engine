@@ -238,10 +238,6 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 		sd.pSysMem = index;
 
 		MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
-
 	}
-
-
-
 }
 

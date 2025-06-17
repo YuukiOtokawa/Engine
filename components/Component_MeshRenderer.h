@@ -66,6 +66,7 @@ public:
 	/// @brief テクスチャを設定します。
 	/// @param texture 設定するID3D11ShaderResourceView型のテクスチャ。
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_pMaterial->SetTexture(texture); }
+	void SetBumpTexture(ID3D11ShaderResourceView* texture) { m_pMaterial->SetBumpTexture(texture); }
 
 	/// @brief タグを初期化します。
 	void InitializeTag() override;

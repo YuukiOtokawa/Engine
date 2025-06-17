@@ -84,7 +84,7 @@ void Mouse::Update() {
 		m_State.ButtonLast[i] = m_State.ButtonRepeat[i];
 	}
 	//m_State.Position = { 0,0 };
-	MouseDebug();
+	//MouseDebug();
 }
 
 void Mouse::ResetScrollWheelValue() {
