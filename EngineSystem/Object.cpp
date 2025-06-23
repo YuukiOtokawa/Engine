@@ -4,6 +4,13 @@
 
 #include "MainEngine.h"
 
+Object::~Object()
+{
+	for (Component* component : m_Components) {
+		delete component; // Clean up dynamically allocated components
+		component = nullptr;
+	}
+}
 void Object::Initialize() {}
 void Object::Update() {
 	for (auto& component : m_Components) {
@@ -43,4 +50,10 @@ void Object::AddComponentClass(Component* component) {
 	component->SetOwner(this);
 	component->InitializeTag();
 	m_Components.push_back(component);
+}
+
+void Object::ExportFile() {
+	for (Component* component : m_Components) {
+		component->ExportFile();
+	}
 }

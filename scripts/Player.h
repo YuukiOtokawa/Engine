@@ -13,14 +13,14 @@ class Player :
 {
 private:
 	bool isControllable = true;
-	float speed = 0.5f; // 移動速度
+	float speed = 0.5f; // 遘ｻ蜍暮溷ｺｦ
 
-	Vector4O m_Direction = Vector4O::Backward(); // プレイヤーの移動方向
+	Vector4O m_Direction = Vector4O::Backward(); // 繝励Ξ繧､繝､繝ｼ縺ｮ遘ｻ蜍墓婿蜷�
 
 	float bulletSpeed = 0.01f;
-	float bulletInterval = 0.5f; // 弾の発射間隔
-	float bulletLifeTime = 5.0f; // 弾のライフタイム
-	float bulletTimer = 0.0f; // 弾の発射タイマー
+	float bulletInterval = 0.5f; // 蠑ｾ縺ｮ逋ｺ蟆�髢馴囈
+	float bulletLifeTime = 5.0f; // 蠑ｾ縺ｮ繝ｩ繧､繝輔ち繧､繝�
+	float bulletTimer = 0.0f; // 蠑ｾ縺ｮ逋ｺ蟆�繧ｿ繧､繝槭�ｼ
 public:
     void Start() override {
 
@@ -38,11 +38,10 @@ public:
 			auto keyboard = InputSystem::GetKeyboard();
 			auto transform = owner->GetComponent<Transform>();
 
-			// カメラの方向ベクトルを計算
+			// 繧ｫ繝｡繝ｩ縺ｮ譁ｹ蜷代�吶け繝医Ν繧定ｨ育ｮ�
 			Object* camera = Editor::GetInstance()->GetActiveCamera();
 
 			Vector4O direction = Vector4O::Zero();
-			float rotation;
 			Vector4O cameraAngle = camera->GetComponent<Transform>()->GetRotation();
 			Vector4O cameraForward = transform->GetPosition() - camera->GetComponent<Transform>()->GetPosition();
 			cameraForward.Normalize();
@@ -51,8 +50,8 @@ public:
 
 			Vector4O move;
 
-			// カメラの方向から右方向ベクトルを計算
-			// 右方向はカメラの上方向と前方向の外積で求める
+			// 繧ｫ繝｡繝ｩ縺ｮ譁ｹ蜷代°繧牙承譁ｹ蜷代�吶け繝医Ν繧定ｨ育ｮ�
+			// 蜿ｳ譁ｹ蜷代�ｯ繧ｫ繝｡繝ｩ縺ｮ荳頑婿蜷代→蜑肴婿蜷代�ｮ螟也ｩ阪〒豎ゅａ繧�
 
 			if (keyboard->GetKeyRepeat(KK_W)) {
 				direction.z += 1.0f;
@@ -95,7 +94,7 @@ public:
 
 			if (keyboard->GetKeyDown(KK_E)&&
 				bulletTimer <= 0.0f) {
-				// 弾を発射
+				// 蠑ｾ繧堤匱蟆�
 				Object* bullet = new Object();
 
 				bullet->SetName("Bullet");

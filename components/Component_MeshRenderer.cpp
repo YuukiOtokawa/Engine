@@ -36,7 +36,7 @@ void MeshRenderer::Draw() {
 	// シェーダーを設定
 	m_pMaterial->SetShader();
 	// マテリアルを設定
-	for (unsigned int i = 0; i < m_MaterialNum; i++)
+	for (int i = 0; i < m_MaterialNum; i++)
 		m_pMaterial->DrawMaterial();
 }
 

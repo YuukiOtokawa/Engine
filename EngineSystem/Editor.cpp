@@ -10,6 +10,9 @@
 // ヘッダーインクルード
 //==========================================================================
 
+
+
+
 #include "Editor.h"
 
 #include "MainEngine.h"
@@ -31,9 +34,9 @@
 #include "Player.h"
 #include "PlayerCamera.h"
 
-#include "../components/Bullet.h"
-#include "../Billboard.h"
-#include "../Animation.h"
+#include "Bullet.h"
+#include "Billboard.h"
+#include "Animation.h"
 
 #include "imgui.h"
 
@@ -46,6 +49,7 @@ Editor* Editor::m_pInstance;
 void Editor::Initialize() {
 	m_pGUI = new GUI();
 	
+
 	// シェーダーの読み込み
 	{
 		//光源計算無し
@@ -84,6 +88,7 @@ void Editor::Initialize() {
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/bumpVS.cso", "normal");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/bumpPS.cso", "normal");
 	}
+
 
 	//カメラ作成
 	{
@@ -463,6 +468,7 @@ void Editor::Draw() {
 
 	//全オブジェクトの名前ボタンを描画
 	for (auto& object : m_Objects) {
+		if (!object) continue; // nullptrチェック
 		if (object == m_pSelectedObject)
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f)); // 選択中のオブジェクトの色を変更
 		else
@@ -505,6 +511,8 @@ void Editor::AddObject(Object* object)
 
 void Editor::DeleteObject(Object* object)
 {
+	
 	m_DeleteObjects.push_back(object);
+	delete object;
 }
 

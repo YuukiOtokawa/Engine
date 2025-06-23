@@ -24,7 +24,8 @@
 
 Camera::Camera()
 {
-	
+	m_Projection = XMMatrixIdentity();
+	m_View = XMMatrixIdentity();
 }
 
 void Camera::UpdateComponent() {
@@ -69,7 +70,6 @@ void Camera::DrawGUI() {
 	if (ImGui::Button("SetActive"))
 		Editor::GetInstance()->SetActiveCamera(owner);
 	ImGui::InputFloat3("Target", &m_Target.x, "%.2f");
-	ImGui::InputFloat3("Angle", &m_Angle.x, "%.2f");
 	ImGui::InputFloat("Fov", &m_Fov);
 	ImGui::Unindent();
 }
@@ -79,3 +79,4 @@ void Camera::InitializeTag()
 	owner->SetTag(GameObjectTagLayer::CameraTag);
 	owner->SetDrawable(false);
 }
+

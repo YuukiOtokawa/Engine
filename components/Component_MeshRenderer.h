@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 //
 // メッシュレンダラーコンポーネントクラス[Component_MeshRenderer.h]
 // 
@@ -24,15 +24,13 @@ class MeshRenderer :
     public Component
 {
 private:
-	// マテリアルデータ
+	// マテリアル
 	Material* m_pMaterial = nullptr;
 	int m_MaterialNum = 1;
 
 public:
 	/// @brief MeshRenderer クラスの新しいインスタンスを作成します。
 	MeshRenderer();
-	/// @brief MeshRenderer オブジェクトのデストラクタです。
-	~MeshRenderer() = default;
 
     /// @brief コンポーネントの状態を更新します。
     void UpdateComponent() override;
@@ -40,11 +38,14 @@ public:
 	void Draw() override;
 	void DrawGUI() override;
 
+    void ExportComponent() override {
+    }
+
 	/// @brief マテリアルを設定します。
 	/// @param material 設定するマテリアル。
 	void SetMaterial(MATERIAL material) { this->m_pMaterial->SetMaterial(material); }
-	/// @brief LIGHT オブジェクトを設定します。
-	/// @param light 設定する LIGHT オブジェクト。
+	/// @brief LIGHT型の光源情報を設定します。
+	/// @param light 設定する光源情報。
 	void SetLight(LIGHT light) { 
 		this->m_pMaterial->SetLight(light);
 	}
@@ -63,7 +64,7 @@ public:
 		this->m_pMaterial->SetPixelShaderKey(key);
 	}
 
-	/// @brief テクスチャを設定します。
+	/// @brief テクスチャをマテリアルに設定します。
 	/// @param texture 設定するID3D11ShaderResourceView型のテクスチャ。
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_pMaterial->SetTexture(texture); }
 	void SetBumpTexture(ID3D11ShaderResourceView* texture) { m_pMaterial->SetBumpTexture(texture); }

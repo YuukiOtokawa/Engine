@@ -1,5 +1,4 @@
-﻿// UTF-8 BOM付きで保存することでエンコーディング問題を解決します。
-// ========================================================
+﻿// ========================================================
 //
 // オブジェクトクラス[Object.h]
 // 
@@ -17,25 +16,27 @@
 
 #include "FrameWork.h"
 
-// 名前空間
+#include "../EngineMetaFile.h"
+
+// 名前空間定義
 
 using namespace GameObjectTagLayer;
 
 class Component; // Forward declaration of Component class
-class Object
+class Object : public EngineMetaFile
 {
 private:
-	// コンポーネントリスト
+	// コンポーネントのリスト
 	std::list<Component*> m_Components;
-	// オブジェクトの名前
+	// オブジェクトの名前とタグ
 	std::string m_Name;
-	GameObjectTag m_Tag;
+	GameObjectTag m_Tag = NoObject;
 
 	
 	bool m_IsActive = true; // Flag to indicate if the object is active
 	bool m_IsDrawable = true; // Flag to indicate if the object is drawable
 
-	// 頂点数とインデックス数
+	// 使用する頂点とインデックスの数
 	int m_iVertexCount = 0;
 	int m_iIndexCount = 0;
 
@@ -47,30 +48,25 @@ public:
 	Object& operator=(const Object&) = delete; // Disable copy assignment
 	Object& operator=(Object&&) = delete; // Disable move assignment
 
-	~Object() {
-		for (Component* component : m_Components) {
-			delete component; // Clean up dynamically allocated components
-			component = nullptr;
-		}
-	}
+	~Object();
 
-	/// @brief 初期化処理を行います。
+	/// @brief 初期化
 	virtual void Initialize();
-	/// @brief 状態を更新します。
+	/// @brief コンポーネントの更新
 	void Update();
 	/// @brief 描画処理を実行します。
 	void Draw();
 
 	void DrawGUI();
-	/// @brief ファイナライズ処理を実行します。
+	/// @brief 終了処理
 	void Finalize();
 
 	void Destroy();
 
 	/// @brief コンポーネントの追加
-	/// @tparam T 追加したいコンポーネントの型。
-	/// @tparam ...Args 
-	/// @param ...args 
+	/// @tparam T コンポーネントのクラステンプレート
+	/// @tparam ...Args コンポーネントのコンストラクタ引数テンプレート
+	/// @param ...args コンポーネントのコンストラクタ引数
 	template<typename T, typename... Args>
 	void AddComponent(Args&&... args) {
 		static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
@@ -79,12 +75,12 @@ public:
 	}
 
 	/// @brief コンポーネントクラスを追加します。
-	/// @param component 追加するコンポーネントへのポインタ。
+	/// @param component 追加する Component 型のポインタ。
 	void AddComponentClass(Component* component);
 
-	/// @brief 指定した型のコンポーネントを取得します。
+	/// @brief 指定された型の最初のコンポーネントを取得します。
 	/// @tparam T 取得したいコンポーネントの型。
-	/// @return 指定した型に一致する最初のコンポーネントへのポインタ。一致するコンポーネントが存在しない場合はnullptrを返します。
+	/// @return 指定された型にキャスト可能な最初のコンポーネントへのポインタ。該当するコンポーネントが存在しない場合はnullptrを返します。
 	template<typename T>
 	T* GetComponent() {
 		for (Component* component : m_Components) {
@@ -95,6 +91,9 @@ public:
 		return nullptr; // Return nullptr if no matching component is found
 	}
 
+	/// @brief コンポーネントのデータをCSV形式でエクスポートします。
+    void ExportFile() override;
+
 	/// @brief 名前を設定します。
 	/// @param name 設定する名前。
 	void SetName(const std::string& name) {
@@ -102,7 +101,7 @@ public:
 	}
 
 	/// @brief オブジェクトの名前を取得します。
-	/// @return オブジェクトの名前を表す std::string。
+	/// @return オブジェクトの名前を表す std::string 型の値。
 	std::string GetName() const {
 		return m_Name;
 	}
@@ -113,8 +112,8 @@ public:
 		m_Tag = tag;
 	}
 
-	/// @brief ゲームオブジェクトのタグを取得します。
-	/// @return このゲームオブジェクトに関連付けられているタグ。
+	/// @brief 
+	/// @return 
 	GameObjectTag GetTag() const {
 		return m_Tag;
 	}

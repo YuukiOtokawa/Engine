@@ -1,9 +1,9 @@
-#include "Animation.h"
+﻿#include "Animation.h"
 #include "SpriteMesh.h"
 
-#include "EngineSystem/MainEngine.h"
+#include "MainEngine.h"
 
-#include "imgui/imgui.h"
+#include "imgui.h"
 
 void Animation::UpdateComponent() {
 	if (m_FrameCount < 60.0f / m_FramePerSecond) {

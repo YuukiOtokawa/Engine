@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "MonoBehavior.h"
 class Explosion :
     public MonoBehavior

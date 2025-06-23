@@ -89,6 +89,9 @@ public:
 		return nullptr;
 	}
 
+    std::list<Object*>& GetObjects() { return m_Objects; }
+    void SetObjects(const std::list<Object*>& objects) { m_Objects = objects; }
+
 	void SetActiveCamera(Object* camera)
 	{
 		if (m_pActiveCamera != nullptr)

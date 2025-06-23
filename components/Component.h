@@ -1,6 +1,6 @@
 ﻿// ========================================================
 //
-// コンポーネント基底クラス[Component.h]
+// コンポーネントクラス[Component.h]
 // 
 //									Date:	20250520
 //									Author:	Yuuki Otokawa
@@ -15,28 +15,32 @@
 #include "FrameWork.h"
 #include "Object.h"
 
+#include "../EngineMetaFile.h"
+
 using namespace ComponentTag;
 
 //==========================================================================
 // クラス定義
 //==========================================================================
 
-class Component
+class Component : public EngineMetaFile
 {
 protected:
-	// このコンポーネントが所属するオブジェクト
+    // コンポーネントの所有者オブジェクト
 	Object* owner = nullptr;
 
-	// trueならUpdateやDrawが呼ばれる
+    // trueならコンポーネントはアクティブであることを示すフラグ
 	bool isActive = true;
 
 	// コンポーネントのタグ
-	Tag tag;
+	Tag tag = NoComponent;
+
+    int m_ComponentID = 0; // コンポーネントのID
 
 public:
-	// デフォルトコンストラクタとデストラクタ
+	// コンストラクタ
 	Component() = default;
-	~Component() = default;
+    virtual ~Component() = default; // 仮想デストラクタを定義
 	
 	/// @brief オブジェクトの所有者を設定し、タグを初期化します。
 	/// @param obj 新しい所有者となるObject型のポインタ。
@@ -45,10 +49,10 @@ public:
 		InitializeTag();
 	}
 
-	/// @brief コンポーネントに対応したタグを所有者のオブジェクトに設定します。
+	/// @brief タグを初期化する純粋仮想関数です。
 	virtual void InitializeTag() = 0;
 
-	/// @brief オブジェクトの状態を更新します。
+	/// @brief コンポーネントを更新する純粋仮想関数です。
 	virtual void UpdateComponent() = 0;
 
 	/// @brief 図形やオブジェクトを描画するための仮想関数です。
@@ -56,5 +60,17 @@ public:
 
 	/// @brief GUI を描画するための仮想関数です。
 	virtual void DrawGUI() {}
+
+    void ExportFile() override {
+        if (m_ComponentID == 0) {
+            throw std::runtime_error("Component ID is not initialized.");
+        }
+        CSVExporter::ExportInt(m_ComponentID);
+        ExportComponent();
+    }
+
+    virtual void ExportComponent() {
+        // デフォルトの実装は何もしない
+    }
 };
 

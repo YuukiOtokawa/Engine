@@ -1,18 +1,18 @@
-//==========================================================================
-// GM31‰Û‘è—pƒRƒƒ“ƒg
-// ƒXƒvƒ‰ƒCƒg‚Ì’¸“_î•ñ‚ÌUV‚ğAnimationƒNƒ‰ƒX‚©‚çw—ß‚ğó‚¯‚ÄXV‚µ‚Ü‚·
+ï»¿//==========================================================================
+// GM31èª²é¡Œç”¨ã‚³ãƒ¡ãƒ³ãƒˆ
+// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®é ‚ç‚¹æƒ…å ±ã®UVã‚’Animationã‚¯ãƒ©ã‚¹ã‹ã‚‰æŒ‡ä»¤ã‚’å—ã‘ã¦æ›´æ–°ã—ã¾ã™
 //==========================================================================
 
 
 #include "SpriteMesh.h"
 
-#include "EngineSystem/MainEngine.h"
+#include "MainEngine.h"
 
 SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 {
 	VERTEX vertex[SPRITE_VERTICES];
 
-	//ã
+	//ä¸Š
 
 	vertex[0] = {
 		Vector4O(-1.0f, 1.0f, 0.0f),
@@ -44,11 +44,11 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 
 	HRESULT hr;
 	{
-		// ’¸“_ƒoƒbƒtƒ@¶¬
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DYNAMIC;
-		bd.ByteWidth = sizeof(VERTEX) * SPRITE_VERTICES; // ’¸“_ƒoƒbƒtƒ@‚Ì—Ê
+		bd.ByteWidth = sizeof(VERTEX) * SPRITE_VERTICES; // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®é‡
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
@@ -108,9 +108,9 @@ bool SpriteMesh::SetSpriteByIndex(int index)
 	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);
 
 	if (index >= m_uvRect.x * m_uvRect.y) {
-		return false; // ”ÍˆÍŠO‚ÌƒCƒ“ƒfƒbƒNƒX
+		return false; // ç¯„å›²å¤–ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 	}
 	else {
-		return true; // ³í‚Éİ’è
+		return true; // æ­£å¸¸ã«è¨­å®š
 	}
 }

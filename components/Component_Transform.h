@@ -41,6 +41,12 @@ public:
 	/// @brief コンポーネントに対応したタグを所有者のオブジェクトに設定します。
 	void InitializeTag() override;
 
+    void ExportComponent() override {
+        CSVExporter::ExportVector4O(m_Position);
+        CSVExporter::ExportVector4O(m_Rotation);
+        CSVExporter::ExportVector4O(m_Scale);
+    }
+
 	/// @brief 位置を設定します。
 	/// @param position 設定する位置を表す Vector4O 型の値。
 	void SetPosition(Vector4O position) { m_Position = position; }

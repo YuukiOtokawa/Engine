@@ -28,6 +28,13 @@
 
 #include "Component_InputSystem.h"
 
+#include <Windows.h>
+
+#include "CSVExporter.h"
+#include "CSVImporter.h"
+#include "resource.h"
+#include <Richedit.h>
+
 constexpr auto WINDOW_CREATE_FAILED = -1;
 
 MainEngine* MainEngine::m_pInstance = nullptr;
@@ -36,12 +43,16 @@ MainEngine* MainEngine::m_pInstance = nullptr;
 // メンバ関数
 //==========================================================================
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int APIENTRY WinMain(
+	_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPSTR lpCmdLine,
+	_In_ int nCmdShow)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
 	auto mainEngine = MainEngine::GetInstance();
 
@@ -109,8 +120,8 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	// クラス登録
 	RegisterClass(&wc);
 
-	// DWORD window_style = (WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) ^ WS_MAXIMIZEBOX;
-	DWORD windowStyle = WS_OVERLAPPEDWINDOW | WS_MAXIMIZEBOX | WS_THICKFRAME;
+	 DWORD windowStyle = (WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) ^ WS_MAXIMIZEBOX;
+	//DWORD windowStyle = WS_OVERLAPPEDWINDOW | WS_MAXIMIZEBOX | WS_THICKFRAME;
 	//DWORD windowStyle = WS_OVERLAPPEDWINDOW;
 
 	// 基本矩形座標
@@ -124,6 +135,16 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 
 	// プライマリモニターの画面解像度取得
 	XMINT2 desktopSize = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
+
+	// タスクバーの高さを考慮して、描画領域の高さを調整
+	RECT workArea;
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
+
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+	int taskbarHeight = screenHeight - workArea.bottom;
+
 
 	// デスクトップの真ん中にウィンドウが生成されるように座標を計算
 	// ※ただし万が一、デスクトップよりウィンドウが大きい場合は左上に表示
@@ -157,20 +178,12 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 
 
 	//メニューバーの設定
-	HMENU hMenu = CreateMenu();
-
-	HMENU hEditorMenu = CreatePopupMenu();
-	AppendMenuA(hEditorMenu, MF_STRING, EngineMenu::Editor_NewWindow, "新規ウィンドウ");
-	AppendMenuA(hEditorMenu, MF_SEPARATOR, 0, NULL);
-	AppendMenuA(hEditorMenu, MF_STRING, EngineMenu::Editor_End, "終了");
-
-	AppendMenuA(hMenu, MF_POPUP, (UINT_PTR)hEditorMenu, "エディター");
-
+	HMENU hMenu = LoadMenu(m_hInstance, MAKEINTRESOURCE(IDR_MENU1));
 	SetMenu(m_hWnd, hMenu);
 
 	SetWindowPos(
 		m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-
+	LoadLibrary("Riched20.dll"); // リッチエディットコントロールの読み込み
 
 	SetWindowLongPtr(m_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
@@ -251,10 +264,16 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-		case EngineMenu::Editor_NewWindow: // 新規ウィンドウ
+		case ID_WINDOW_NEWWINDOW: // 新規ウィンドウ
 			MessageBoxA(hWnd, "ウィンドウを作りたかった", "CreateWindow", MB_OKCANCEL | MB_DEFBUTTON2);
 			break;
-		case EngineMenu::Editor_End: // 終了
+		case ID_FILE_SAVE: // 保存
+			CSVExporter::Export(m_pEditor->GetObjects());
+			break;
+		case ID_FILE_LOAD: // 読み込み
+			FilePathDialog();
+			break;
+		case ID_FILE_EXIT: // 終了
 			if (MessageBoxA(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
 				DestroyWindow(hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
 			}
@@ -308,9 +327,9 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEHOVER:
 		Mouse::GetInstance(hWnd)->ProcessMessage(message, wParam, lParam);
 
-	case WM_SYSKEYDOWN:
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
+	case WM_SYSKEYDOWN:
 		Keyboard::GetInstance()->KeyboardProcessMessage(message, wParam, lParam);
 		break;
 	};
@@ -347,7 +366,58 @@ void MainEngine::GetWindowsInfo()
 	}
 
 	// システム情報を取得 プロセッサとかハードウェア構成
-	LPSYSTEM_INFO sysInfo;
+	SYSTEM_INFO sysInfo = {};
 
-	GetSystemInfo(sysInfo);
+	GetSystemInfo(&sysInfo);
+}
+
+void MainEngine::FilePathDialog()
+{
+    auto rs = DialogBox(m_hInstance, MAKEINTRESOURCE(IDD_DIALOG1), m_hWnd, FilePathDialogProc);
+    if (rs == -1) {
+        DWORD error = GetLastError();
+        std::stringstream ss;
+        ss << "DialogBox failed. Error code: " << error;
+        MessageBoxA(m_hWnd, ss.str().c_str(), "Dialog Error", MB_OK | MB_ICONERROR);
+    }
+}
+
+INT_PTR MainEngine::FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	{
+		static std::string* pInputValue = nullptr;
+		switch (message)
+		{
+		case WM_INITDIALOG:
+			pInputValue = reinterpret_cast<std::string*>(lParam);
+			if (pInputValue && !pInputValue->empty())
+			{
+				SetDlgItemTextA(hDlg, IDC_RICHEDIT21, pInputValue->c_str()); // テキストボックスに値を設定
+			}
+			return (INT_PTR)TRUE;
+		case WM_COMMAND:
+			if (LOWORD(wParam) == IDOK)
+			{
+				char buffer[1024] = { 0 };
+				EndDialog(hDlg, LOWORD(wParam));
+				std::list<Object*> objects;
+				GetDlgItemTextA(hDlg, IDC_RICHEDIT21, buffer, sizeof(buffer));
+				objects = CSVImporter::Import(buffer);
+				if (objects.empty()) {
+					MessageBoxA(hDlg, "読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
+				}
+				else {
+					Editor::GetInstance()->SetObjects(objects); // 読み込んだオブジェクトをエディターに設定
+				}
+				return (INT_PTR)TRUE;
+			}
+			else if (LOWORD(wParam) == IDCANCEL)
+			{
+				EndDialog(hDlg, LOWORD(wParam));
+				return (INT_PTR)TRUE;
+			}
+			break;
+		}
+		return (INT_PTR)FALSE;
+	}
 }

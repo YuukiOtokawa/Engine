@@ -45,7 +45,8 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-	int taskbarHeight = screenHeight - workArea.bottom;
+	int taskbarHeight = 0;
+	//taskbarHeight = screenHeight - workArea.bottom;
 
 	// スワップチェーンの設定を定義
 	DXGI_SWAP_CHAIN_DESC sd = {};
@@ -145,8 +146,12 @@ void Renderer::ResizeClient(int width, int height)
 
 void Renderer::CreateRenderTargetView()
 {
-	ID3D11Texture2D* pBackBuffer = NULL;
+	ID3D11Texture2D* pBackBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	if (pBackBuffer == nullptr) {
+		MessageBoxA(NULL, "Failed to get back buffer", "Error", MB_ICONERROR);
+		return;
+	}
 	HRESULT hr = m_pDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRenderTargetView);
 	pBackBuffer->Release();
 	SetRenderTargetView(m_pRenderTargetView);
@@ -167,6 +172,10 @@ void Renderer::CreateDepthStencil()
 	td.CPUAccessFlags = 0;
 	td.MiscFlags = 0;
 	HRESULT hr = m_pDevice->CreateTexture2D(&td, NULL, &m_pDepthStencilTexture);
+	if (!m_pDepthStencilTexture) {
+		MessageBoxA(NULL, "Failed to create depth stencil texture", "Error", MB_ICONERROR);
+		return;
+	}
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd = {};
 	dsvd.Format = td.Format;
 	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -237,7 +246,6 @@ void Renderer::CreateDepthStencilState()
 
 void Renderer::CreateSamplerState()
 {
-	HRESULT hr;
 
 	D3D11_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;

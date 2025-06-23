@@ -110,7 +110,7 @@ void EditorCamera::UpdateComponent()
 		Vector4O rotation = transform->GetRotation();
 		rotation.x += deltaY * rotationSpeed;
 
-		// 上下の視線移動を制限（-89°〜89°）
+		// 上下の視線移動を制限（-89°～89°）
 		if (rotation.x > 1.55f) rotation.x = 1.55f; // 約89度
 		if (rotation.x < -1.55f) rotation.x = -1.55f; // 約-89度
 

@@ -29,6 +29,8 @@ private:
 	// エンジンメニューの定義
 	enum EngineMenu {
 		Editor_NewWindow = 1,
+        Editor_Save,
+        Editor_Load,
 		Editor_End,
 	};
 
@@ -131,5 +133,9 @@ public:
 	static void ErrorMessage(std::string message, std::string title);
 
 	void GetWindowsInfo();
+
+    void FilePathDialog();
+
+    static INT_PTR CALLBACK FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 };
 

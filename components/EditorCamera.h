@@ -1,6 +1,6 @@
 ﻿// ========================================================
 //
-// エディターカメラコンポーネントクラス[EditorCamera.h]
+// 繧ｨ繝�繧｣繧ｿ繝ｼ繧ｫ繝｡繝ｩ繧ｳ繝ｳ繝昴�ｼ繝阪Φ繝医け繝ｩ繧ｹ[EditorCamera.h]
 // 
 //									Date:20250602
 //									Author:Yuuki Otokawa
@@ -18,7 +18,6 @@ private:
     POINT m_OriginalScreenPosition = { 0, 0 };
 public:
     EditorCamera() = default;
-	~EditorCamera() = default;
     void UpdateComponent() override;
 
 };

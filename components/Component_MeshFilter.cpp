@@ -1,13 +1,13 @@
-// ========================================================
+ï»¿// ========================================================
 //
-// ƒƒbƒVƒ…ƒtƒBƒ‹ƒ^[ƒRƒ“ƒ|[ƒlƒ“ƒgƒNƒ‰ƒX[Componenet_MeshFilter.cpp]
+// ãƒ¡ãƒƒã‚·ãƒ¥ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚¯ãƒ©ã‚¹[Componenet_MeshFilter.cpp]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
 // ========================================================
 
 //==========================================================================
-// ƒwƒbƒ_[ƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 //==========================================================================
 
 #include "Component_MeshFilter.h"
@@ -19,7 +19,7 @@
 #include "MainEngine.h"
 
 //==========================================================================
-// ƒƒ“ƒoŠÖ”’è‹`
+// ãƒ¡ãƒ³ãƒé–¢æ•°å®šç¾©
 //==========================================================================
 
 MeshFilter::MeshFilter(int vertexCount, int indexCount) : m_iVertexCount(vertexCount), m_iIndexCount(indexCount) {
@@ -32,11 +32,10 @@ void MeshFilter::UpdateComponent() {
 void MeshFilter::Draw() {
 	auto transform = owner->GetComponent<Transform>();
 
-	// s—ñ‚ÌéŒ¾
+	// è¡Œåˆ—ã®å®£è¨€
 	XMMATRIX scale, angle, translation;
-	XMMATRIX world;
 
-	// ƒIƒuƒWƒFƒNƒg‚ÌƒXƒP[ƒ‹A‰ñ“]AˆÊ’u‚ðŽæ“¾‚µ‚Äs—ñ‚ðŒvŽZ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¹ã‚±ãƒ¼ãƒ«ã€å›žè»¢ã€ä½ç½®ã‚’å–å¾—ã—ã¦è¡Œåˆ—ã‚’è¨ˆç®—
 	{
 		auto objectScale = transform->GetScale();
 		auto objectRotation = transform->GetRotation().ToRadian();
@@ -47,20 +46,20 @@ void MeshFilter::Draw() {
 		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
 	}
 
-	// ƒ[ƒ‹ƒhs—ñ‚ð“]’u‚µ‚ÄƒVƒF[ƒ_[‚É‘—‚é‚½‚ß‚Ì€”õ
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’è»¢ç½®ã—ã¦ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«é€ã‚‹ãŸã‚ã®æº–å‚™
 	MainEngine::GetInstance()->GetRenderer()->SetTranslationMatrix(translation);
 	MainEngine::GetInstance()->GetRenderer()->SetScaleMatrix(scale);
 	MainEngine::GetInstance()->GetRenderer()->SetAngleMatrix(angle);
 
-	// ƒVƒF[ƒ_[‚É’¸“_ƒoƒbƒtƒ@‚ðÝ’è
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®š
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
 	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
-	// ƒVƒF[ƒ_[‚ÉƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ðÝ’è
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®š
 	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	// ƒvƒŠƒ~ƒeƒBƒuƒgƒ|ƒƒW‚ðÝ’è
+	// ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ãƒˆãƒãƒ­ã‚¸ã‚’è¨­å®š
 	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
 
 }

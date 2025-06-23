@@ -1,13 +1,12 @@
-#include "Billboard.h"
+﻿#include "Billboard.h"
 
-#include "components/Component_Transform.h"
-#include "EngineSystem/MainEngine.h"
+#include "Component_Transform.h"
+#include "MainEngine.h"
 
 void Billboard::Draw() {
 	auto transform = owner->GetComponent<Transform>();
 
 	XMMATRIX scale, angle, translation;
-	XMMATRIX world;
 
 	
 	XMMATRIX invView;

@@ -11,7 +11,7 @@ void main(in VS_IN In, out PS_IN Out)
 
 	//ポリゴンの頂点を変換行列で変換して出力
 	Out.Position = mul(In.Position, wvp); //Position * wvp
-	
+    Out.WorldPosition = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	Out.Normal = In.Normal;     //法線データ
 	Out.TexCoord = In.TexCoord; //テクスチャ座標
 	Out.Diffuse = In.Diffuse;	//頂点色

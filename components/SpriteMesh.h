@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Component_MeshFilter.h"
 class SpriteMesh :
     public MeshFilter

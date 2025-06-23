@@ -23,7 +23,7 @@ using namespace DirectX;
 #include "imgui.h"
 
 #include "Vector4O.h"
-#include "MatrixO.h"
+//#include "MatrixO.h"
 
 #undef GetObject
 
@@ -31,15 +31,12 @@ using namespace DirectX;
 // 定数
 //==========================================================================
 
-// 初期状態のスクリーンサイズ
 constexpr auto SCREEN_WIDTH_DEFAULT = 1920;
 constexpr auto SCREEN_HEIGHT_DEFAULT = 1080;
 
 constexpr auto WINDOW_CAPTION = "Engine";
-// ウィンドウのクラス名
 constexpr auto WINDOW_CLASS_NAME = "OtokawaEngineClass";
 
-// フレームレートの設定
 constexpr auto FRAME_RATE_MAX = 240;
 constexpr auto FRAME_RATE_MIN = 30;
 constexpr auto FRAME_RATE_DEFAULT = 60;
@@ -51,6 +48,7 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 #define SAFE_RELEASE(p) { if (p) { p->Release(); p = NULL; } }
 
 #define OBJECT_TAG \
+    X(NoObject, "NoObject")\
 	X(SystemTag, "System")\
 	X(CameraTag, "Camera")\
 	X(ObjectTag, "Object")\
@@ -60,15 +58,16 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 	X(SystemLayer, "System")
 
 #define COMPONENT_TAG \
-	X(TransformTag, "Transform")\
-	X(MeshTag, "Mesh")\
-	X(TextureTag, "Texture")\
-	X(MaterialTag, "Material")\
-	X(CameraTag, "Camera")\
-	X(LightTag, "Light")\
-	X(ParticleTag, "Particle")\
-	X(SoundTag, "Sound")\
-	X(ScriptTag, "Script")\
+	X(NoComponent, "NoComponent") \
+	X(TransformTag, "Transform") \
+	X(MeshTag, "Mesh") \
+	X(TextureTag, "Texture") \
+	X(MaterialTag, "Material") \
+	X(CameraTag, "Camera") \
+	X(LightTag, "Light") \
+	X(ParticleTag, "Particle") \
+	X(SoundTag, "Sound") \
+	X(ScriptTag, "Script") \
 	X(InputSystemTag, "InputSystem")
 
 
@@ -76,13 +75,6 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 // 構造体定義
 //==========================================================================
 
-// 定数バッファの構造体定義
-struct CONSTANTBUFFER {
-	MatrixO wvp;
-	MatrixO world;
-};
-
-// 頂点データの構造体定義
 struct VERTEX {
 	Vector4O position;
 	Vector4O normal;
@@ -90,7 +82,6 @@ struct VERTEX {
 	Vector4O texcoord;
 };
 
-// マテリアルの構造体定義
 struct MATERIAL
 {
 	Vector4O ambient;
@@ -98,32 +89,29 @@ struct MATERIAL
 	Vector4O specular;
 	Vector4O emissive;
 
-	BOOL textureEnable;
-	float shininess;
-	float dummy[2]; // Padding to make it 16 bytes
+	BOOL textureEnable = TRUE;
+	float shininess = 0;
+	float dummy[2] = {}; // Padding to make it 16 bytes
 };
 
-// ライトの構造体定義
 struct LIGHT {
 	short Enable = true;
-	BOOL Dummy[3]; // Padding to make it 16 bytes
-	Vector4O Direction;//方向ベクトル
-	Vector4O Diffuse;//拡散光
-	Vector4O Ambient;//環境光
+	BOOL Dummy[3] = {}; // Padding to make it 16 bytes
+	Vector4O Direction;
+	Vector4O Diffuse;
+	Vector4O Ambient;
 
-	Vector4O SkyColor;//空の色
-	Vector4O GroundColor;//地面の色
-	Vector4O GroundNormal;//地面の法線ベクトル
+	Vector4O SkyColor;
+	Vector4O GroundColor;
+	Vector4O GroundNormal;
 
-	Vector4O Position;//点光源の位置
-	Vector4O PointLightRange;//点光源の範囲
+	Vector4O Position;
+	Vector4O PointLightRange;
 
-	Vector4O SpotLightAngle;//スポットライトの角度
+	Vector4O SpotLightAngle;
 };
 
-// ゲームオブジェクトのタグとレイヤーを定義する名前空間
 namespace GameObjectTagLayer {
-	// ゲームオブジェクトのタグを定義する列挙型
 #define X(EnumName, StringName) EnumName,
 	enum GameObjectTag {
 		OBJECT_TAG
@@ -136,7 +124,6 @@ namespace GameObjectTagLayer {
 	};
 #undef X
 
-	// ゲームオブジェクトのレイヤーを定義する列挙型
 #define X(EnumName, StringName) EnumName,
 	enum GameObjectLayer {
 		OBJECT_LAYER
@@ -150,9 +137,9 @@ namespace GameObjectTagLayer {
 #undef X
 }
 
-// コンポーネントのタグを定義する名前空間
+
 namespace ComponentTag {
-	// コンポーネントのタグを定義する列挙型
+	
 #define X(EnumName, StringName) EnumName,
 	enum Tag {
 		COMPONENT_TAG
@@ -160,7 +147,7 @@ namespace ComponentTag {
 #undef X
 
 #define X(EnumName, StringName) StringName,
-	const char* const GameObjectTagString[] = {
+	const char* const ComponentTagString[] = {
 		COMPONENT_TAG
 	};
 #undef X
