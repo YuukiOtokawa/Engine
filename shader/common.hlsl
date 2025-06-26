@@ -42,7 +42,8 @@ struct PS_IN
 struct LIGHT
 {
     bool Enable;
-    bool3 Dummy;
+    bool2 Dummy;
+    float SpecularPower;
     float4 Direction;
     float4 Diffuse;
     float4 Ambient;

@@ -18,7 +18,7 @@ void Animation::UpdateComponent() {
 	if (!stable) {
 		m_SpriteCount = 0;
 		if (m_Loop == false)
-			Editor::GetInstance()->DeleteObject(owner);
+			owner->Destroy();
 	}
 	m_FrameCount = 0;
 }

@@ -22,25 +22,14 @@ void Billboard::Draw() {
 		auto objectPosition = transform->GetPosition();
 
 		scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
-		angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+		//angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+		angle = invView;
 		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
 	}
 
 	MainEngine::GetInstance()->GetRenderer()->SetTranslationMatrix(translation);
 	MainEngine::GetInstance()->GetRenderer()->SetScaleMatrix(scale);
 	MainEngine::GetInstance()->GetRenderer()->SetAngleMatrix(angle);
-
-	//XMMATRIX worldViewProjection;
-
-	//world = XMMatrixTranspose(world);
-
-
-
-	//CONSTANTBUFFER cb;
-	////XMStoreFloat4x4(&cb.wvp, worldViewProjection);
-	//XMStoreFloat4x4(&cb.world, world);
-
-	//MainEngine::GetInstance()->GetRenderer()->SetConstantBuffer(&cb);
 
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;

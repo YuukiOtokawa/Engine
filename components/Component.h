@@ -35,11 +35,9 @@ protected:
 	// コンポーネントのタグ
 	Tag tag = NoComponent;
 
-    int m_ComponentID = 0; // コンポーネントのID
-
 public:
 	// コンストラクタ
-	Component() = default;
+	Component() : EngineMetaFile(CID_None) {}
     virtual ~Component() = default; // 仮想デストラクタを定義
 	
 	/// @brief オブジェクトの所有者を設定し、タグを初期化します。
@@ -62,10 +60,7 @@ public:
 	virtual void DrawGUI() {}
 
     void ExportFile() override {
-        if (m_ComponentID == 0) {
-            throw std::runtime_error("Component ID is not initialized.");
-        }
-        CSVExporter::ExportInt(m_ComponentID);
+        CSVExporter::ExportString("&");// コンポーネントの識別子をエクスポート
         ExportComponent();
     }
 

@@ -7,7 +7,8 @@
 //									Author:Yuuki Otokawa
 // ========================================================
 
-#include "FrameWork.h"
+#include <DirectXMath.h>
+using namespace DirectX;
 
 //==========================================================================
 // 繧ｯ繝ｩ繧ｹ螳夂ｾｩ

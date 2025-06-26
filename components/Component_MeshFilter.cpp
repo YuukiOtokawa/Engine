@@ -23,6 +23,7 @@
 //==========================================================================
 
 MeshFilter::MeshFilter(int vertexCount, int indexCount) : m_iVertexCount(vertexCount), m_iIndexCount(indexCount) {
+
 }
 
 void MeshFilter::UpdateComponent() {
@@ -73,6 +74,8 @@ void MeshFilter::DrawGUI() {
 void MeshFilter::SetOwner(Object* owner) {
 	this->owner = owner;
 	owner->SetDrawable(true);
+	owner->SetVertexCount(m_iVertexCount);
+	owner->SetIndexCount(m_iIndexCount);
 	//owner->AddComponent<MeshRenderer>();
 }
 

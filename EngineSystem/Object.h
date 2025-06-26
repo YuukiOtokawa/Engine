@@ -42,7 +42,7 @@ private:
 
 public:
 	// @brief コンストラクタ
-	Object() = default;
+    Object() : EngineMetaFile(CID_Object) {}
 	Object(const Object&) = delete; // Disable copy constructor
 	Object(Object&&) = delete; // Disable move constructor
 	Object& operator=(const Object&) = delete; // Disable copy assignment

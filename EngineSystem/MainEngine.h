@@ -12,10 +12,6 @@
 // ヘッダーインクルード
 //==========================================================================
 
-#include <Windows.h>
-
-#include <fstream>
-
 #include "Renderer.h"
 #include "Editor.h"
 

@@ -13,15 +13,6 @@
 //==========================================================================
 
 #include <Windows.h>
-
-#include <string>
-
-
-#include <DirectXMath.h>
-using namespace DirectX;
-
-#include "imgui.h"
-
 #include "Vector4O.h"
 //#include "MatrixO.h"
 
@@ -52,7 +43,8 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 	X(SystemTag, "System")\
 	X(CameraTag, "Camera")\
 	X(ObjectTag, "Object")\
-	X(InputSystemTag, "InputSystem")
+	X(InputSystemTag, "InputSystem")\
+    X(BillBoardTag, "BillBoard") \
 
 #define OBJECT_LAYER \
 	X(SystemLayer, "System")
@@ -68,7 +60,7 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 	X(ParticleTag, "Particle") \
 	X(SoundTag, "Sound") \
 	X(ScriptTag, "Script") \
-	X(InputSystemTag, "InputSystem")
+	X(InputSystemTag, "InputSystem") \
 
 
 //==========================================================================
@@ -95,8 +87,9 @@ struct MATERIAL
 };
 
 struct LIGHT {
-	short Enable = true;
-	BOOL Dummy[3] = {}; // Padding to make it 16 bytes
+	BOOL Enable = true;
+	BOOL Dummy[2] = {}; // Padding to make it 16 bytes
+    FLOAT SpecularPower = 100.0f;
 	Vector4O Direction;
 	Vector4O Diffuse;
 	Vector4O Ambient;

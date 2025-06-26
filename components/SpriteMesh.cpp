@@ -10,6 +10,7 @@
 
 SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 {
+	m_ClassID = CID_SpriteMesh;
 	VERTEX vertex[SPRITE_VERTICES];
 
 	//上

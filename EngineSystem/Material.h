@@ -16,11 +16,15 @@
 
 #include "FrameWork.h"
 
+#include <string>
+
+#include "../EngineMetaFile.h"
+
 //==========================================================================
 // 繧ｯ繝ｩ繧ｹ
 //==========================================================================
 
-class Material
+class Material : public EngineMetaFile
 {
 private:
 	// 繧ｷ繧ｧ繝ｼ繝繝ｼ繧ｭ繝ｼ
@@ -39,7 +43,9 @@ private:
 
 public:
 	/// @brief Material 繧ｯ繝ｩ繧ｹ縺ｮ繝�繝輔か繝ｫ繝医さ繝ｳ繧ｹ繝医Λ繧ｯ繧ｿ縺ｧ縺吶�
-	Material() = default;
+	Material() {
+        m_ClassID = CID_Material;
+    }
 	/// @brief Material 繧ｯ繝ｩ繧ｹ縺ｮ繝�繧ｹ繝医Λ繧ｯ繧ｿ縺ｧ縺吶�
 	~Material() = default;
 

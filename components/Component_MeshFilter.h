@@ -40,7 +40,9 @@ protected:
 
 public:
 	/// @brief MeshFilter のデフォルトコンストラクタです。
-	MeshFilter() = default;
+	MeshFilter() {
+        m_ClassID = CID_MeshFilter;
+    }
 	/// @brief 頂点数とインデックス数を指定して、MeshFilter オブジェクトを作成します。
 	/// @param vertexCount メッシュ内の頂点の数。
 	/// @param indexCount メッシュ内のインデックスの数。

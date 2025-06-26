@@ -17,7 +17,7 @@ private:
 
 	Vector4O m_Direction = Vector4O::Backward(); // 繝励Ξ繧､繝､繝ｼ縺ｮ遘ｻ蜍墓婿蜷�
 
-	float bulletSpeed = 0.01f;
+	float bulletSpeed = 1.0f;
 	float bulletInterval = 0.5f; // 蠑ｾ縺ｮ逋ｺ蟆�髢馴囈
 	float bulletLifeTime = 5.0f; // 蠑ｾ縺ｮ繝ｩ繧､繝輔ち繧､繝�
 	float bulletTimer = 0.0f; // 蠑ｾ縺ｮ逋ｺ蟆�繧ｿ繧､繝槭�ｼ
@@ -92,7 +92,7 @@ public:
 			transform->SetPosition(transform->GetPosition() + move * speed);
 			transform->SetRotation(newAngle);
 
-			if (keyboard->GetKeyDown(KK_E)&&
+			if (keyboard->GetKeyDown(KK_F)&&
 				bulletTimer <= 0.0f) {
 				// 蠑ｾ繧堤匱蟆�
 				Object* bullet = new Object();

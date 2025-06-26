@@ -29,7 +29,9 @@ private:
 
 public:
 	/// @brief AssimpMeshRenderer のデフォルトコンストラクタです。
-	AssimpMeshRenderer() = default;
+	AssimpMeshRenderer() {
+        m_ClassID = CID_AssimpMeshRenderer;
+    }
 
     /// @brief メッシュのテクスチャ情報を設定します。
     /// @param assimpTexture テクスチャ名とID3D11ShaderResourceView* のペアを格納した連想配列。

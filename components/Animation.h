@@ -10,7 +10,9 @@ private:
 	int m_FramePerSecond = 30;
 	bool m_Loop = true;
 public:
-	Animation() = default;
+    Animation() {
+        m_ClassID = CID_Animation;
+    }
 
 	void UpdateComponent() override;
 

@@ -26,6 +26,8 @@ MeshRenderer::MeshRenderer()
 	m_pMaterial = new Material();
 
 	m_pMaterial->DrawMaterial();
+
+	m_ClassID = CID_MeshRenderer;
 }
 
 void MeshRenderer::UpdateComponent() {

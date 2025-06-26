@@ -146,6 +146,9 @@
     <FxCompile Include="shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="shader\cookPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="shader\grayscalePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>
@@ -249,7 +252,7 @@
     <ClInclude Include="input\Keyboard.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="MathO.h" />
-    <ClInclude Include="OtokawaEngine.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="scripts\Player.h" />
   </ItemGroup>
   <ItemGroup>

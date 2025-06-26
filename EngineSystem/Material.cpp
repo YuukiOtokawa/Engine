@@ -42,13 +42,14 @@ void Material::DrawGUI() {
 	//ImGui::Unindent();
 	ImGui::Text("Light Properties");
 	ImGui::Indent();
-	ImGui::InputFloat3( "Direction", &m_Light.Direction.x);
+	ImGui::DragFloat3( "Direction", &m_Light.Direction.x);
 	ImGui::ColorEdit4("Ambient", &m_Light.Ambient.x);
 	ImGui::ColorEdit4("Color", &m_Light.Diffuse.x);
+	ImGui::DragFloat("Specular Power", &m_Light.SpecularPower, 1.0f, 1.0f, 100.0f);
 	ImGui::ColorEdit4("Sky Color", &m_Light.SkyColor.x);
 	ImGui::ColorEdit4("Ground Color", &m_Light.GroundColor.x);
-	ImGui::InputFloat3("Point Light Position", &m_Light.Position.x);
-	ImGui::InputFloat3("Point Light Range", &m_Light.PointLightRange.x);
+	ImGui::DragFloat3("Point Light Position", &m_Light.Position.x);
+	ImGui::DragFloat3("Point Light Range", &m_Light.PointLightRange.x);
 	ImGui::Unindent();
 	ImGui::Text("Texture");
 	ImGui::Image((ImTextureID)m_Texture, ImVec2(300, 300));

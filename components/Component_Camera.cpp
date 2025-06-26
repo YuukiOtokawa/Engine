@@ -26,6 +26,7 @@ Camera::Camera()
 {
 	m_Projection = XMMatrixIdentity();
 	m_View = XMMatrixIdentity();
+	m_ClassID = CID_Camera;
 }
 
 void Camera::UpdateComponent() {

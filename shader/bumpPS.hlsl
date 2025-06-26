@@ -19,7 +19,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     normalMap = (normalMap * 2.0f) - 1.0f; //法線マップの値を[-1, 1]の範囲に変換
     
     float4 normal;
-    normal.x = normalMap.r; //法線マップのX成分
+    normal.x = normalMap.r * -1.0f; //法線マップのX成分
     normal.y = normalMap.b; //法線マップのY成分
     normal.z = normalMap.g; //法線マップのZ成分
     normal.w = 0.0f; //W成分は０に設定
@@ -47,7 +47,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     //ブリン・フォンシェーディングの計算
     float specular = -dot(halfv, normal.xyz);
     specular = saturate(specular);
-    specular = pow(specular, 30);
+    specular = pow(specular, Light.SpecularPower); //スペキュラのパワーを掛ける
 
     outDiffuse.rgb += (specular * ofs);
 }

@@ -6,7 +6,7 @@
 
 CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 {
-
+	m_ClassID = CID_CubeMesh;
 	// 頂点情報の作成
 	VERTEX vertex[NUM_CUBE_VERTEX];
 

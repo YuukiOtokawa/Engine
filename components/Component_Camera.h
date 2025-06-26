@@ -70,11 +70,13 @@ public:
 	void InitializeTag() override;
 
     void ExportComponent() override {
-        CSVExporter::ExportFloat(m_Fov);
+        CSVExporter::ExportFloat(m_IsActiveCamera);
+        CSVExporter::ExportVector4O(m_LastPosition);
         CSVExporter::ExportVector4O(m_Target);
-        CSVExporter::ExportVector4O(m_Up);
+        CSVExporter::ExportFloat(m_Fov);
         CSVExporter::ExportFloat(m_Near);
         CSVExporter::ExportFloat(m_Far);
+        CSVExporter::ExportVector4O(m_Up);
     }
 
 	/// @brief ターゲットとなるVector4Oオブジェクトを設定します。
@@ -92,5 +94,6 @@ public:
 	bool IsActiveCamera() const { 
 		return m_IsActiveCamera;
 	}
+
 };
 

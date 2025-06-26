@@ -32,6 +32,9 @@ private:
 	Vector4O m_Scale = Vector4O(1.0f, 1.0f, 1.0f);
 
 public:
+    Transform() {
+        m_ClassID = CID_Transform;
+    }
 	/// @brief オブジェクトの状態を更新します。
 	void UpdateComponent() override;
 	/// @brief 描画処理を実行します。

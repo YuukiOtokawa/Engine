@@ -6,7 +6,6 @@
 //									Author:Yuuki Otokawa
 // ========================================================
 #include "Component_Transform.h"
-
 void Transform::UpdateComponent() {
 
 }

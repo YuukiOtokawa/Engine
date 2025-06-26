@@ -22,6 +22,8 @@
 #include "GUI.h"
 #include "Component_Camera.h"
 
+#include "Material.h"
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -32,6 +34,8 @@ private:
 	// オブジェクトのリスト
 	std::list<Object*> m_Objects;
 	std::list<Object*> m_DeleteObjects;
+
+    std::list<Material*> m_Materials; // マテリアルのリスト
 	// エディターウィンドウのリスト
 	std::list<EditorWindow*> m_EditorWindows;
 
@@ -60,6 +64,8 @@ public:
 		}
 		return m_pInstance;
 	}
+
+    ~Editor();
 	
 	/// @brief エディターの初期化処理を実行します。
 	void Initialize();
@@ -102,6 +108,9 @@ public:
 	}
 
 	Object* GetActiveCamera() const { return m_pActiveCamera; }
+
+
+    int AddMaterial(Material* material);
 	
 };
 

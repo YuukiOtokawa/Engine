@@ -46,6 +46,27 @@ Editor* Editor::m_pInstance;
 // メンバ関数
 //==========================================================================
 
+Editor::~Editor()
+{
+	if (m_pGUI) {
+		delete m_pGUI;
+		m_pGUI = nullptr;
+	}
+	// すべてのオブジェクトを削除
+	for (auto& object : m_Objects) {
+		delete object;
+	}
+	m_Objects.clear();
+	for (auto& material : m_Materials) {
+		delete material;
+	}
+	m_Materials.clear();
+	if (m_pInstance) {
+		delete m_pInstance;
+		m_pInstance = nullptr;
+	}
+}
+
 void Editor::Initialize() {
 	m_pGUI = new GUI();
 	
@@ -53,44 +74,48 @@ void Editor::Initialize() {
 	// シェーダーの読み込み
 	{
 		//光源計算無し
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/unlitTextureVS.cso", "unlit");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/unlitTexturePS.cso", "unlit");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/unlitTextureVS.cso", "unlit");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/unlitTexturePS.cso", "unlit");
 
 		//頂点ライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/vertexDirectionalLightingVS.cso", "vertex");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/vertexDirectionalLightingPS.cso", "vertex");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/vertexDirectionalLightingVS.cso", "vertex");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/vertexDirectionalLightingPS.cso", "vertex");
 
 		//ピクセルライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/pixelLightingVS.cso", "pixel");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/pixelLightingPS.cso", "pixel");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/pixelLightingVS.cso", "pixel");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/pixelLightingPS.cso", "pixel");
 
 		//BlinnPhongライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/blinnPhongVS.cso", "BlinnPhong");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/blinnPhongPS.cso", "BlinnPhong");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "BlinnPhong");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/blinnPhongPS.cso", "BlinnPhong");
 
 		//半球ライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/hemisphereLightingVS.cso", "hemisphere");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/hemisphereLightingPS.cso", "hemisphere");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/hemisphereLightingVS.cso", "hemisphere");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/hemisphereLightingPS.cso", "hemisphere");
 
 		//点光源ライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/blinnPhongVS.cso", "pointLight");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/pointLightingBlinnPhongPS.cso", "pointLight");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "pointLight");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/pointLightingBlinnPhongPS.cso", "pointLight");
 
 		//スポットライトライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/spotLightingVS.cso", "spotLight");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/spotLightingPS.cso", "spotLight");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/spotLightingVS.cso", "spotLight");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/spotLightingPS.cso", "spotLight");
 
 		//リムライトライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/blinnPhongVS.cso", "limLight");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/limLightingPS.cso", "limLight");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "limLight");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/limLightingPS.cso", "limLight");
 
 		//法線マップ
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("shader/bumpVS.cso", "normal");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("shader/bumpPS.cso", "normal");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/bumpVS.cso", "normal");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/bumpPS.cso", "normal");
+
+		//Cook-Torranceライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "CookTorrance");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/cookPS.cso", "CookTorrance");
 	}
 
 
-	//カメラ作成
+	//エディターカメラ作成
 	{
 		auto camera = new Object();
 		camera->SetName("MainCamera");
@@ -104,7 +129,7 @@ void Editor::Initialize() {
 		AddObject(camera);
 	}
 
-	//カメラ2作成
+	//プレイヤー追尾カメラ作成
 	{
 		auto camera = new Object();
 		camera->SetName("Camera2");
@@ -155,7 +180,7 @@ void Editor::Initialize() {
 	}
 
 	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
-	auto bumpTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/test.png");
+	auto bumpTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/Normal.bmp");
 	//平面オブジェクト作成
 	{
 		Object* plane = new Object();
@@ -173,7 +198,7 @@ void Editor::Initialize() {
 		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 0.2f);
 		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
 		light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
-		light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
+		light.PointLightRange = Vector4O(100.0f, 0.0f, 0.0f, 0.0f);
 
 		plane->GetComponent<Transform>()->SetScale(Vector4O(20.0f, 1.0f, 20.0f));
 		plane->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, -5.0f, 0.0f));
@@ -356,12 +381,46 @@ void Editor::Initialize() {
 
 			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("pointLight");
 			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("pointLight");
+			//AddObject(torus);
+		}
+		//クックトランス用トーラス
+		{
+			Object* torus = new Object();
+			torus->SetName("CookTorus");
+			torus->AddComponent<Transform>();
+			torus->AddComponent<MeshFilter>();
+			torus->AddComponent<AssimpMeshRenderer>();
+
+			ModelLoader* loader = new ModelLoader();
+			loader->LoadModel(torus, "asset\\model\\torus.obj");
+
+			MATERIAL material;
+			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+
+			LIGHT light;
+			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+			light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
+			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // スポットライトの方向
+			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // スポットライトの位置
+			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // スポットライトの範囲
+			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // スポットライトの角度
+
+			torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
+			torus->GetComponent<Transform>()->SetPosition(Vector4O(-5.0f, 0.0f, 5.0f));
+			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
+			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
+			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
+
+			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("CookTorrance");
+			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("CookTorrance");
 			AddObject(torus);
 		}
 	}
 
+	ID3D11ShaderResourceView* texture2 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\explosion.png");
+
 	//アニメーションスプライト作成
-	
 	{
 		Object* sprite = new Object();
 		sprite->SetName("sprite");
@@ -384,7 +443,6 @@ void Editor::Initialize() {
 		sprite->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 1.0f, 5.0f));
 		sprite->GetComponent<MeshRenderer>()->SetMaterial(material);
 		sprite->GetComponent<MeshRenderer>()->SetLight(light);
-		auto texture2 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\explosion.png");
 		sprite->GetComponent<MeshRenderer>()->SetTexture(texture2);
 
 		sprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
@@ -393,9 +451,10 @@ void Editor::Initialize() {
 		sprite->GetComponent<Animation>()->SetFramePerSecond(30);
 		sprite->GetComponent<Billboard>()->SetUVRect(Vector4O(4, 4));
 
+		sprite->SetTag(GameObjectTagLayer::BillBoardTag);
+
 		AddObject(sprite);
 	}
-
 	
 
 	Main();
@@ -441,6 +500,11 @@ void Editor::Draw() {
 	//オブジェクトの描画
 	for (auto& object : m_Objects) {
 		if (object->GetTag() == GameObjectTagLayer::ObjectTag) {
+			object->Draw();
+		}
+	}
+	for (auto& object : m_Objects) {
+		if (object->GetTag() == GameObjectTagLayer::BillBoardTag) {
 			object->Draw();
 		}
 	}
@@ -513,6 +577,11 @@ void Editor::DeleteObject(Object* object)
 {
 	
 	m_DeleteObjects.push_back(object);
-	delete object;
+}
+
+int Editor::AddMaterial(Material* material)
+{
+	m_Materials.push_back(material);
+	return static_cast<int>(m_Materials.size() - 1); // 追加したマテリアルのインデックスを返す
 }
 

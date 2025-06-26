@@ -12,7 +12,9 @@ private:
 	float lengthFrag = 10.0f;
 	float speed = 0.05f;
 public:
-	PlayerCamera() = default;
+	PlayerCamera() {
+        m_ClassID = CID_PlayerCamera;
+    }
 
 	void Start() override {
 

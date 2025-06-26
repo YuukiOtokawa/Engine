@@ -12,6 +12,7 @@
 
 PlaneMesh::PlaneMesh() : MeshFilter(NUM_PLANE_VERTEX, NUM_PLANE_INDEX)
 {
+	m_ClassID = CID_PlaneMesh;
 	VERTEX vertex[NUM_PLANE_VERTEX];
 
 	vertex[0] = {

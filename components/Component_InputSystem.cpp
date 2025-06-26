@@ -33,6 +33,8 @@ InputSystem::InputSystem()
 	m_pGamePad = new GamePad();
 	m_pKeyboard = Keyboard::GetInstance();
 	m_pMouse = Mouse::GetInstance(MainEngine::GetInstance()->GetWindow());
+
+	m_ClassID = CID_InputSystem;
 }
 
 // Update
