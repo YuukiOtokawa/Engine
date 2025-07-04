@@ -12,7 +12,7 @@ public:
     void Start() override {}
 
     void Update() override {
-        if (InputSystem::GetKeyboard()->GetInstance()->GetKeyDown(KK_ENTER)) {
+        if (InputSystem::GetKeyboard()->GetInstance()->GetKeyDown(KK_ESCAPE)) {
             Editor::GetInstance()->ChangeScene("Result");
         }
     }

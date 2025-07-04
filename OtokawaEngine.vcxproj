@@ -293,6 +293,7 @@
     <ClCompile Include="input\Gamepad.cpp" />
     <ClCompile Include="input\Keyboard.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="scripts\main.cpp" />
   </ItemGroup>

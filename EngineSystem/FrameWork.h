@@ -46,6 +46,7 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 	X(InputSystemTag, "InputSystem")\
     X(BillBoardTag, "BillBoard") \
     X(SpriteTag, "Sprite") \
+    X(ParticleTag, "Particle") \
 
 #define OBJECT_LAYER \
 	X(SystemLayer, "System")

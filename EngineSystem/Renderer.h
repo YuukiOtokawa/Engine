@@ -49,6 +49,7 @@ private:
 
 	// 繝ｩ繧ｹ繧ｿ繝ｩ繧､繧ｶ繧ｹ繝�繝ｼ繝医�ｮ繝昴う繝ｳ繧ｿ
 	ID3D11RasterizerState* m_pRasterizerState = NULL;
+    ID3D11RasterizerState* m_pRasterizerState2D = NULL;
 	// 繝悶Ξ繝ｳ繝峨せ繝�繝ｼ繝医�ｮ繝昴う繝ｳ繧ｿ
 	ID3D11BlendState* m_pBlendState = NULL;
 	ID3D11BlendState* m_pBlendStateAdd = NULL;
@@ -212,6 +213,10 @@ public:
 	void SetWorldViewProjection2D();
 	/// @brief 3D繝ｯ繝ｼ繝ｫ繝峨ン繝･繝ｼ蟆�蠖ｱ陦悟�励ｒ繝ｪ繧ｻ繝�繝医＠縺ｾ縺吶�
 	void ResetWorldViewProjection3D();
+
+    void SetRasterizerState3D();
+    void SetRasterizerState2D();
+
 	void SetTranslationMatrix(XMMATRIX translation);
 	void SetAngleMatrix(XMMATRIX angle);
 	void SetScaleMatrix(XMMATRIX scale);

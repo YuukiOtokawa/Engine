@@ -22,6 +22,8 @@
 #include "GUI.h"
 #include "Component_Camera.h"
 
+#include "../ParticleManager.h"
+
 #include "Material.h"
 
 //==========================================================================
@@ -41,6 +43,7 @@ private:
 
 	// GUIのポインタ
 	GUI* m_pGUI = nullptr;
+    ParticleManager* m_pParticleManager = nullptr;
 
 	/// @brief Editor クラスのシングルトンパターンデフォルトコンストラクタです。
 	Editor() = default;

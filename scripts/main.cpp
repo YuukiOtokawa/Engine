@@ -15,13 +15,15 @@
 #include "Player.h"	
 #include "AssimpMeshRenderer.h"
 
+#include "../Particle.h"
+
 #include "../Title.h"
 #include "../Game.h"
 #include "../Result.h"
 
 
 void Main() {
-	SetSceneTitle();
+	SetSceneGame();
 }
 
 void SetSceneTitle()
@@ -218,37 +220,6 @@ void SetSceneGame()
 	{
 		Object* torus;
 
-		for (int i = 0; i < 5; i++) {
-			torus = new Object();
-			torus->SetName("Torus" + std::to_string(i));
-			torus->AddComponent<Transform>();
-			torus->AddComponent<MeshFilter>();
-			torus->AddComponent<AssimpMeshRenderer>();
-
-			ModelLoader* loader = new ModelLoader();
-			loader->LoadModel(torus, "asset\\model\\torus.obj");
-
-			MATERIAL material;
-			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-
-			LIGHT light;
-			light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
-			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-			light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-			light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
-			light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
-
-			torus->GetComponent<Transform>()->SetRotation(Vector4O(2.0f * i, 2.0f * i, 2.0f * i));
-			torus->GetComponent<Transform>()->SetPosition(Vector4O(-5.0f + i * 2.5f, -5.0f + i * 2.f, -5.f + i * 2.f));
-			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
-			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
-			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
-
-			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("BlinnPhong");
-			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("BlinnPhong");
-			//AddObject(torus);
-		}
 
 		{
 			torus = new Object();
@@ -314,39 +285,6 @@ void SetSceneGame()
 			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("spotLight");
 			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("spotLight");
 			Editor::GetInstance()->AddObject(torus);
-		}
-		//ポイントライト用トーラス
-		{
-			Object* torus = new Object();
-			torus->SetName("PointTorus");
-			torus->AddComponent<Transform>();
-			torus->AddComponent<MeshFilter>();
-			torus->AddComponent<AssimpMeshRenderer>();
-
-			OBJLoader* loader = new OBJLoader();
-			loader->Load("asset\\model\\torus.obj", torus);
-
-			MATERIAL material;
-			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-
-			LIGHT light;
-			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-			light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
-			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // スポットライトの方向
-			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // スポットライトの位置
-			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // スポットライトの範囲
-			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // スポットライトの角度
-
-			torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
-			torus->GetComponent<Transform>()->SetPosition(Vector4O(-5.0f, 0.0f, 5.0f));
-			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
-			torus->GetComponent<AssimpMeshRenderer>()->SetLight(light);
-			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
-
-			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("pointLight");
-			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("pointLight");
-			//AddObject(torus);
 		}
 		//クックトランス用トーラス
 		{
@@ -418,7 +356,22 @@ void SetSceneGame()
 
 		sprite->SetTag(GameObjectTagLayer::BillBoardTag);
 
-		Editor::GetInstance()->AddObject(sprite);
+		//Editor::GetInstance()->AddObject(sprite);
+	}
+	ID3D11ShaderResourceView* particleTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/particle.png");
+	// パーティクル作成
+	{
+		Object* particle = new Object();
+		particle->SetName("Particle");
+		particle->AddComponent<Transform>();
+		particle->AddComponent<Particle>();
+		particle->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 0.0f));
+		particle->GetComponent<Particle>()->SetTexture(particleTexture);
+		particle->GetComponent<Particle>()->SetLifeTime(60);
+		particle->GetComponent<Particle>()->SetAcceleration(Vector4O::Down() * 0.1f);
+		particle->GetComponent<Particle>()->SetVelocity(Vector4O(1.0f,1.0f,0.0f).Normalize() * 5.0f);
+		particle->GetComponent<Particle>()->SetSpawnSpan(10);
+		Editor::GetInstance()->AddObject(particle);
 	}
 }
 

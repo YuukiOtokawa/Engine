@@ -204,6 +204,10 @@ void Renderer::CreateRasterizer()
 	rd.DepthClipEnable = TRUE;
 	rd.MultisampleEnable = FALSE;
 	m_pDevice->CreateRasterizerState(&rd, &m_pRasterizerState);
+
+	rd.CullMode = D3D11_CULL_NONE;
+	m_pDevice->CreateRasterizerState(&rd, &m_pRasterizerState2D);
+
 }
 
 void Renderer::CreateBlendState()
@@ -510,6 +514,16 @@ void Renderer::SetWorldViewProjection2D() {
 void Renderer::ResetWorldViewProjection3D()
 {
 
+}
+
+void Renderer::SetRasterizerState3D()
+{
+	m_pDeviceContext->RSSetState(m_pRasterizerState);
+}
+
+void Renderer::SetRasterizerState2D()
+{
+	m_pDeviceContext->RSSetState(m_pRasterizerState2D);
 }
 
 void Renderer::SetTranslationMatrix(XMMATRIX translation)

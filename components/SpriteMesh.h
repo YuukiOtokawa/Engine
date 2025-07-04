@@ -12,7 +12,10 @@ public:
 
 	void UpdateComponent() override;
 
-	void SetUVRect(Vector4O uvRect) { m_uvRect = uvRect; }
+	void SetUVRect(Vector4O uvRect) {
+        m_uvRect = uvRect;
+        SetSpriteByIndex(0); // Reset to first sprite
+    }
 
 	bool SetSpriteByIndex(int index);
 

@@ -62,11 +62,12 @@ public:
 	}
 
 	float Length() const { return sqrtf(x * x + y * y + z * z + w * w); }
-	void Normalize() { 
+	Vector4O Normalize() { 
 		float len = Length();
 		if (len > 0.0f) { 
 			x /= len; y /= len; z /= len; w /= len;
-		} 
+		}
+        return *this;
 	}
 
 	Vector4O ToRadian() const {

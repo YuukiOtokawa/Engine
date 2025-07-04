@@ -68,7 +68,7 @@ Editor::~Editor()
 
 void Editor::Initialize() {
 	m_pGUI = new GUI();
-	
+	m_pParticleManager = ParticleManager::GetInstance();
 
 	// シェーダーの読み込み
 	{
@@ -133,6 +133,7 @@ void Editor::Update() {
 		}
 	}
 	m_DeleteObjects.clear();
+	m_pParticleManager->UpdateParticles();
 }
 
 void Editor::Draw() {
@@ -157,23 +158,42 @@ void Editor::Draw() {
 	if (activeCamera)
 		activeCamera->Draw();
 
+	// オブジェクトをカメラに遠い順にソート
+	auto objects = m_Objects;
+	objects.sort([activeCamera](Object* a, Object* b) {
+		if (!activeCamera) return false; // activeCameraがnullptrの場合、ソートしない
+		if (a->GetTag() == GameObjectTagLayer::CameraTag || b->GetTag() == GameObjectTagLayer::CameraTag)
+			return false; // カメラオブジェクトはソートしない
+		if (!a->GetComponent<Transform>() || !b->GetComponent<Transform>())
+			return false; // Transformコンポーネントがない場合はソートしない
+		auto aPos = a->GetComponent<Transform>()->GetPosition();
+		auto bPos = b->GetComponent<Transform>()->GetPosition();
+		auto aLength = (aPos - activeCamera->GetComponent<Transform>()->GetPosition()).Length();
+		auto bLength = (bPos - activeCamera->GetComponent<Transform>()->GetPosition()).Length();
+		return aLength > bLength; // 遠い順にソート
+	});
+
 	//オブジェクトの描画
-	for (auto& object : m_Objects) {
+	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectTagLayer::ObjectTag) {
 			object->Draw();
 		}
 	}
-	for (auto& object : m_Objects) {
+	MainEngine::GetInstance()->GetRenderer()->SetRasterizerState2D();
+	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectTagLayer::BillBoardTag) {
 			object->Draw();
 		}
 	}
+	//パーティクルの描画
+	m_pParticleManager->DrawParticles();
 	MainEngine::GetInstance()->GetRenderer()->SetWorldViewProjection2D();
-	for (auto& object : m_Objects) {
+	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectTagLayer::SpriteTag) {
 			object->Draw();
 		}
 	}
+	MainEngine::GetInstance()->GetRenderer()->SetRasterizerState3D();
 
 //==========================================================================
 // GUI描画処理

@@ -16,6 +16,15 @@ void Billboard::Draw() {
 	invView.r[3].m128_f32[1] = 0.0f;
 	invView.r[3].m128_f32[2] = 0.0f;
 
+	// 行列式を確認して、必要に応じて補正
+	XMVECTOR det = XMMatrixDeterminant(invView);
+	float determinant = XMVectorGetX(det);
+	if (determinant < 0.0f) {
+		// 行列式が負の場合、スケールのX軸を反転させて巻き方向を補正
+		XMMATRIX flipMatrix = XMMatrixScaling(-1.0f, 1.0f, 1.0f);
+		invView = XMMatrixMultiply(flipMatrix, invView);
+	}
+
 	{
 		auto objectScale = transform->GetScale();
 		auto objectRotation = transform->GetRotation().ToRadian();
