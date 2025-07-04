@@ -15,5 +15,12 @@ public:
 	void SetUVRect(Vector4O uvRect) { m_uvRect = uvRect; }
 
 	bool SetSpriteByIndex(int index);
+
+    void InitializeTag() override
+    {
+        owner->SetTag(GameObjectTagLayer::SpriteTag);
+    }
+
+    void Draw() override;
 };
 

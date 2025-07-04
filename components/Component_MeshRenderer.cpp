@@ -51,5 +51,5 @@ void MeshRenderer::DrawGUI() {
 }
 
 void MeshRenderer::InitializeTag() {
-	owner->SetTag(GameObjectTagLayer::ObjectTag);
+	//owner->SetTag(GameObjectTagLayer::ObjectTag);
 }

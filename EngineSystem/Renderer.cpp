@@ -42,17 +42,18 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	RECT workArea;
 	SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
 
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	m_ClientSize.x = GetSystemMetrics(SM_CXSCREEN);
+	m_ClientSize.y = GetSystemMetrics(SM_CYSCREEN);
 
 	int taskbarHeight = 0;
 	//taskbarHeight = screenHeight - workArea.bottom;
+	m_ClientSize.y -= taskbarHeight;
 
 	// スワップチェーンの設定を定義
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferCount = 1;
-	sd.BufferDesc.Width = renderWidth;
-	sd.BufferDesc.Height = renderHeight - taskbarHeight;
+	sd.BufferDesc.Width = m_ClientSize.x;
+	sd.BufferDesc.Height = m_ClientSize.y;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -160,8 +161,8 @@ void Renderer::CreateRenderTargetView()
 void Renderer::CreateDepthStencil()
 {
 	D3D11_TEXTURE2D_DESC td = {};
-	td.Width = SCREEN_WIDTH_DEFAULT;
-	td.Height = SCREEN_HEIGHT_DEFAULT;
+	td.Width = m_ClientSize.x;
+	td.Height = m_ClientSize.y;
 	td.MipLevels = 1;
 	td.ArraySize = 1;
 	td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -482,7 +483,21 @@ void Renderer::SetPixelShader(std::string key)
 
 void Renderer::SetWorldViewProjection2D() {
 	//2D用正射影行列をセット
-	XMMATRIX projectionMatrix = XMMatrixOrthographicOffCenterLH(0.0f, m_ClientSize.x, m_ClientSize.y, 0.0f, 0.0f, 1.0f);
+// C++側
+	float screenWidth = m_ClientSize.x;
+	float screenHeight = m_ClientSize.y;
+
+	// (0,0)が画面中央になるようにプロジェクション行列を設定
+	XMMATRIX projectionMatrix = XMMatrixOrthographicOffCenterLH(
+		-screenWidth / 2.0f,    // left:   左端を-width/2に
+		screenWidth / 2.0f,    // right:  右端を+width/2に
+		screenHeight / 2.0f,   // bottom: 下端を+height/2に
+		-screenHeight / 2.0f,   // top:    上端を-height/2に
+		0.0f,                   // zNear
+		1.0f                    // zFar
+	);
+
+	// この 'Projection' 行列をシェーダーに渡します。
 	SetProjectionMatrix(projectionMatrix);
 	//行列を単位行列にして初期化
 	SetViewMatrix(XMMatrixIdentity());

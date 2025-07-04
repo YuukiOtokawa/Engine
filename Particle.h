@@ -1,15 +1,17 @@
 ﻿#pragma once
 #include "Component.h"
+
+struct ParticleData {
+    Vector4O position;
+    Vector4O velocity;
+    float lifetime;
+    float age;
+};
+
 class Particle :
     public Component
 {
 private:
-    struct ParticleData {
-        Vector4O position;
-        Vector4O velocity;
-        float lifetime;
-        float age;
-    };
     enum ParticleStatus {
         PARTICLE_WAIT,
         PARTICLE_MOVE,

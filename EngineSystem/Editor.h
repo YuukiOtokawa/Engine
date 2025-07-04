@@ -53,6 +53,8 @@ private:
 	Object* m_pSelectedObject = nullptr;
 	Object* m_pActiveCamera = nullptr;
 
+    std::string m_NextSceneName = "";
+
 public:
 	/// @brief エディタークラスのシングルトンインスタンスを取得します。
 	/// @return Editor クラスの唯一のインスタンスへのポインタ。
@@ -111,7 +113,14 @@ public:
 
 
     int AddMaterial(Material* material);
-	
+
+    void ChangeScene(std::string sceneName)
+    {
+        m_NextSceneName = sceneName;
+    }
 };
 
 void Main();
+void SetSceneTitle();
+void SetSceneGame();
+void SetSceneResult();

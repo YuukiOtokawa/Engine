@@ -8,6 +8,8 @@
 
 #include "MainEngine.h"
 
+#include "Component_Transform.h"
+
 SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 {
 	m_ClassID = CID_SpriteMesh;
@@ -16,28 +18,28 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 	//上
 
 	vertex[0] = {
-		Vector4O(-1.0f, 1.0f, 0.0f),
+		Vector4O(-1.0f, -1.0f, 0.0f),
 		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector4O(0.0f, 0.0f),
 	};
 
 	vertex[1] = {
-		Vector4O(1.0f, 1.0f, 0.0f),
+		Vector4O(1.0f, -1.0f, 0.0f),
 		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector4O(1.0f, 0.0f),
 	};
 
 	vertex[2] = {
-		Vector4O(-1.0f, -1.0f, 0.0f),
+		Vector4O(-1.0f, 1.0f, 0.0f),
 		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector4O(0.0f, 1.0f),
 	};
 
 	vertex[3] = {
-		Vector4O(1.0f, -1.0f, 0.0f),
+		Vector4O(1.0f, 1.0f, 0.0f),
 		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector4O(1.0f, 1.0f),
@@ -114,4 +116,44 @@ bool SpriteMesh::SetSpriteByIndex(int index)
 	else {
 		return true; // 正常に設定
 	}
+}
+
+void SpriteMesh::Draw()
+{
+	auto transform = owner->GetComponent<Transform>();
+
+	// 行列の宣言
+	XMMATRIX scale, angle, translation;
+
+	// オブジェクトのスケール、回転、位置を取得して行列を計算
+	{
+		auto objectScale = transform->GetScale();
+		auto objectRotation = transform->GetRotation().ToRadian();
+		auto objectPosition = transform->GetPosition();
+
+		// 1920.1080で画面いっぱいに表示
+		objectScale.x = objectScale.x * 0.5f;
+		objectScale.y = objectScale.y * 0.5f;
+
+		scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
+		angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
+	}
+
+	// ワールド行列を転置してシェーダーに送るための準備
+	MainEngine::GetInstance()->GetRenderer()->SetTranslationMatrix(translation);
+	MainEngine::GetInstance()->GetRenderer()->SetScaleMatrix(scale);
+	MainEngine::GetInstance()->GetRenderer()->SetAngleMatrix(angle);
+
+	// シェーダーに頂点バッファを設定
+	UINT stride = sizeof(VERTEX);
+	UINT offset = 0;
+	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+
+	// シェーダーにインデックスバッファを設定
+	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	// プリミティブトポロジを設定
+	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
+
 }
