@@ -27,30 +27,23 @@ void Material::DrawMaterial()
 	if (m_BumpTexture)
 		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, &m_BumpTexture);
 
-	renderer->SetLight(m_Light);
+	renderer->SetMaterialBuffer(m_Material);
 
 }
 
 void Material::DrawGUI() {
 	ImGui::Text("Material Properties");
-	//ImGui::Indent();
-	//ImGui::ColorEdit4("Ambient", &m_Material.ambient.x);
-	//ImGui::ColorEdit4("Diffuse", &m_Material.diffuse.x);
-	//ImGui::ColorEdit4("Specular", &m_Material.specular.x);
-	//ImGui::ColorEdit4("Emissive", &m_Material.emissive.x);
-	//ImGui::InputFloat("Shininess", &m_Material.shininess, 0.0f, 128.0f);
-	//ImGui::Unindent();
-	ImGui::Text("Light Properties");
-	ImGui::Indent();
-	ImGui::DragFloat3( "Direction", &m_Light.Direction.x);
-	ImGui::ColorEdit4("Ambient", &m_Light.Ambient.x);
-	ImGui::ColorEdit4("Color", &m_Light.Diffuse.x);
-	ImGui::DragFloat("Specular Power", &m_Light.SpecularPower, 1.0f, 1.0f, 100.0f);
-	ImGui::ColorEdit4("Sky Color", &m_Light.SkyColor.x);
-	ImGui::ColorEdit4("Ground Color", &m_Light.GroundColor.x);
-	ImGui::DragFloat3("Point Light Position", &m_Light.Position.x);
-	ImGui::DragFloat3("Point Light Range", &m_Light.PointLightRange.x);
-	ImGui::Unindent();
+	ImGui::DragFloat("Shininess", &m_Material.shininess, 0.01f, 0.0f, 100.0f);
+	ImGui::DragFloat("Specular Power", &m_Material.SpecularPower, 0.01f, 0.0f, 100.0f);
+	ImGui::DragFloat4("ambient", &m_Material.ambient.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat4("diffuse", &m_Material.diffuse.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat4("specular", &m_Material.specular.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat4("emissive", &m_Material.emissive.x, 0.01f, 0.0f, 1.0f);
+
+	ImGui::DragFloat4("Sky Color", &m_Material.SkyColor.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat4("Ground Color", &m_Material.GroundColor.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat4("Ground Normal", &m_Material.GroundNormal.x, 0.01f, -1.0f, 1.0f);
+
 	ImGui::Text("Texture");
 	ImGui::Image((ImTextureID)m_Texture, ImVec2(300, 300));
 	ImGui::Text("Bump Map");

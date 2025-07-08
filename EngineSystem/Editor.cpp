@@ -40,6 +40,8 @@
 
 #include "imgui.h"
 
+#include "../Pack.h"
+
 Editor* Editor::m_pInstance;
 
 //==========================================================================
@@ -158,12 +160,21 @@ void Editor::Draw() {
 	if (activeCamera)
 		activeCamera->Draw();
 
+	for (auto & object : m_Objects) {
+		if (object->GetTag() == GameObjectTagLayer::LightTag) {
+			object->Draw(); // ライトオブジェクトの描画
+		}
+	}
+	Light::DrawGeneralLight(); // 全体のライト情報を描画
+
 	// オブジェクトをカメラに遠い順にソート
 	auto objects = m_Objects;
 	objects.sort([activeCamera](Object* a, Object* b) {
 		if (!activeCamera) return false; // activeCameraがnullptrの場合、ソートしない
 		if (a->GetTag() == GameObjectTagLayer::CameraTag || b->GetTag() == GameObjectTagLayer::CameraTag)
 			return false; // カメラオブジェクトはソートしない
+		if (a->GetTag() == GameObjectTagLayer::LightTag || b->GetTag() == GameObjectTagLayer::LightTag)
+			return false; // ライトオブジェクトはソートしない
 		if (!a->GetComponent<Transform>() || !b->GetComponent<Transform>())
 			return false; // Transformコンポーネントがない場合はソートしない
 		auto aPos = a->GetComponent<Transform>()->GetPosition();
@@ -175,13 +186,13 @@ void Editor::Draw() {
 
 	//オブジェクトの描画
 	for (auto& object : objects) {
-		if (object->GetTag() == GameObjectTagLayer::ObjectTag) {
+		if (object->GetLayer() == GameObjectLayer::ObjectLayer) {
 			object->Draw();
 		}
 	}
 	MainEngine::GetInstance()->GetRenderer()->SetRasterizerState2D();
 	for (auto& object : objects) {
-		if (object->GetTag() == GameObjectTagLayer::BillBoardTag) {
+		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
 			object->Draw();
 		}
 	}
@@ -189,7 +200,7 @@ void Editor::Draw() {
 	m_pParticleManager->DrawParticles();
 	MainEngine::GetInstance()->GetRenderer()->SetWorldViewProjection2D();
 	for (auto& object : objects) {
-		if (object->GetTag() == GameObjectTagLayer::SpriteTag) {
+		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
 			object->Draw();
 		}
 	}
@@ -289,5 +300,33 @@ int Editor::AddMaterial(Material* material)
 {
 	m_Materials.push_back(material);
 	return static_cast<int>(m_Materials.size() - 1); // 追加したマテリアルのインデックスを返す
+}
+
+void Editor::CheckCollision(Object* object)
+{
+	static float beforeLength = 0.0f;
+	float length;
+	// ObjectTagがPackTagの物に対して衝突判定
+	if (object->GetTag() == GameObjectTagLayer::PackTag) {
+		for (auto& obj : m_Objects) {
+			if (obj->GetTag() == GameObjectTagLayer::PackTag) {
+				// プレイヤーとの衝突判定
+				length = (object->GetComponent<Transform>()->GetPosition() - obj->GetComponent<Transform>()->GetPosition()).Length();
+				if ((length) < beforeLength && length < 2.0f) {
+					// 衝突した場合の処理
+					float e = BOUND_CONST;
+
+					// はねかえりの法則
+					Vector4O v0_new = (object->GetComponent<Pack>()->GetVelocity() * (200.0f - e * 200.0f) + obj->GetComponent<Pack>()->GetVelocity() * (1.0f + e) * 200.0f) / (200.0f + 200.0f);
+					Vector4O v1_new = (obj->GetComponent<Pack>()->GetVelocity() * (200.0f - e * 200.0f) + object->GetComponent<Pack>()->GetVelocity() * (1.0f + e) * 200.0f) / (200.0f + 200.0f);
+
+					object->GetComponent<Pack>()->SetVelocity(v0_new);		// ボール０の速度を更新
+					obj->GetComponent<Pack>()->SetVelocity(v1_new);		// ボール1の速度を更新
+
+				}
+				beforeLength = length;
+			}
+		}
+	}
 }
 

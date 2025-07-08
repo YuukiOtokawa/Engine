@@ -31,6 +31,7 @@ private:
 	// オブジェクトの名前とタグ
 	std::string m_Name;
 	GameObjectTag m_Tag = NoObject;
+    GameObjectLayer m_Layer = GameObjectLayer::ObjectLayer; // Layer for the object
 
 	
 	bool m_IsActive = true; // Flag to indicate if the object is active
@@ -117,6 +118,14 @@ public:
 	GameObjectTag GetTag() const {
 		return m_Tag;
 	}
+
+    void SetLayer(GameObjectLayer layer) {
+        m_Layer = layer;
+    }
+
+    GameObjectLayer GetLayer() const {
+        return m_Layer;
+    }
 
 	/// @brief オブジェクトのアクティブ状態を設定します。
 	/// @param isActive アクティブ状態に設定する場合は true、非アクティブにする場合は false を指定します。

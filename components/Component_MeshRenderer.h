@@ -44,12 +44,6 @@ public:
 	/// @brief マテリアルを設定します。
 	/// @param material 設定するマテリアル。
 	void SetMaterial(MATERIAL material) { this->m_pMaterial->SetMaterial(material); }
-	/// @brief LIGHT型の光源情報を設定します。
-	/// @param light 設定する光源情報。
-	void SetLight(LIGHT light) { 
-		this->m_pMaterial->SetLight(light);
-	}
-
 	void SetMaterial(Material* material) { this->m_pMaterial = material; }
 	void SetMaterialNum(int num) { this->m_MaterialNum = num; }
 

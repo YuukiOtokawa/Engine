@@ -6,7 +6,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 {
 	//ピクセルの法線を正規化
 	float4 normal = normalize(In.Normal);
-    float light = -dot(normal.xyz, Light.Direction.xyz); //光源計算をする
+    float light = -dot(normal.xyz, Light.DirectionalLight.direction.xyz); //光源計算をする
 
 	//テクスチャのピクセル色を取得
 	outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);
@@ -19,12 +19,12 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 	eyev = normalize(eyev);		//正規化する
 
 	//光の反射ベクトルを計算
-	float3 refv = reflect(Light.Direction.xyz, normal.xyz);
+	float3 refv = reflect(Light.DirectionalLight.direction.xyz, normal.xyz);
 	refv = normalize(refv);	//正規化する
 
 	float	specular = -dot(eyev, refv);	//鏡面反射の計算
 	specular = saturate(specular);	//値をサチュレート
-	specular = pow(specular, 30);	//ここでは３０乗してみる
+	specular = pow(specular, SpecularPower);	//ここでは３０乗してみる
 	
 	outDiffuse.rgb += specular;//スペキュラ値をデフューズとして足しこむ
 

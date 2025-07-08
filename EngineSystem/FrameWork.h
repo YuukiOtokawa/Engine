@@ -47,9 +47,17 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
     X(BillBoardTag, "BillBoard") \
     X(SpriteTag, "Sprite") \
     X(ParticleTag, "Particle") \
+    X(LightTag, "Light") \
+    X(PackTag, "Pack") \
 
 #define OBJECT_LAYER \
-	X(SystemLayer, "System")
+	X(SystemLayer, "System") \
+    X(CameraLayer, "Camera") \
+    X(ObjectLayer, "Object") \
+    X(InputSystemLayer, "InputSystem") \
+    X(LightLayer, "Light") \
+    X(BillBoardLayer, "BillBoard") \
+    X(SpriteLayer, "Sprite") \
 
 #define COMPONENT_TAG \
 	X(NoComponent, "NoComponent") \
@@ -78,14 +86,19 @@ struct VERTEX {
 
 struct MATERIAL
 {
+    BOOL textureEnable = TRUE;
+    FLOAT shininess = 0;
+    FLOAT SpecularPower = 50.0f;
+    FLOAT dummy;
+
 	Vector4O ambient;
 	Vector4O diffuse;
 	Vector4O specular;
 	Vector4O emissive;
 
-	BOOL textureEnable = TRUE;
-	float shininess = 0;
-	float dummy[2] = {}; // Padding to make it 16 bytes
+    Vector4O SkyColor;
+    Vector4O GroundColor;
+    Vector4O GroundNormal;
 };
 
 struct LIGHT {
@@ -104,6 +117,14 @@ struct LIGHT {
 	Vector4O PointLightRange;
 
 	Vector4O SpotLightAngle;
+};
+
+struct LIGHT_PARAMETER {
+    float SpecularPower;
+    float Dummy[3];
+    Vector4O SkyColor;
+    Vector4O GroundColor;
+    Vector4O GroundNormal;
 };
 
 namespace GameObjectTagLayer {

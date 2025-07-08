@@ -106,18 +106,6 @@ public:
 				OBJLoader* loader = new OBJLoader();
 				loader->Load("asset\\model\\bullet.obj", bullet);
 
-				MATERIAL material;
-				material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-				material.ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-
-				LIGHT light;
-
-				light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-				light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
-
-				bullet->GetComponent<MeshRenderer>()->SetMaterial(material);
-				bullet->GetComponent<MeshRenderer>()->SetLight(light);
-
 				bullet->GetComponent<MeshRenderer>()->SetVertexShader("BlinnPhong");
 				bullet->GetComponent<MeshRenderer>()->SetPixelShader("BlinnPhong");
 

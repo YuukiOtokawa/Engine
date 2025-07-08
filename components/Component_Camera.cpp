@@ -78,6 +78,7 @@ void Camera::DrawGUI() {
 void Camera::InitializeTag()
 {
 	owner->SetTag(GameObjectTagLayer::CameraTag);
+	owner->SetLayer(GameObjectTagLayer::CameraLayer);
 	owner->SetDrawable(false);
 }
 

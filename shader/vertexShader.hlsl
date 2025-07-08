@@ -26,7 +26,7 @@ void main(in VS_IN In, out PS_IN Out)
 // 光源計算処理
 //==========================================================================
 
-    float light = -dot(worldNormal.xyz, Light.Direction.xyz); //光源の方向ベクトルと法線ベクトルの内積を計算
+    float light = -dot(worldNormal.xyz, Light.DirectionalLight.direction.xyz); //光源の方向ベクトルと法線ベクトルの内積を計算
     light = saturate(light); //0.0f~1.0fの範囲に収める
     
     Out.TexCoord = In.TexCoord; //テクスチャ座標

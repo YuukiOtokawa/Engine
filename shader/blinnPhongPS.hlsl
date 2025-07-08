@@ -6,7 +6,9 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 {
 	
     float4 normal = normalize(In.Normal);
-    float light = -dot(normal.xyz, Light.Direction.xyz); 
+    float light = 0.0f;
+    if (Light.DirectionalLight.enable)
+    light += -dot(normal.xyz, Light.DirectionalLight.direction.xyz);
     light = saturate(light); 
 
 
@@ -18,16 +20,17 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     float3 eyev = In.WorldPosition.xyz - CameraPosition.xyz;
     eyev = normalize(eyev);
     
-    
-    float3 halfv = eyev + normalize(Light.Direction.xyz);
+    float3 halfv = 0.0f;
+    if (Light.PointLight.enable)
+    {
+        halfv += eyev + normalize(Light.DirectionalLight.direction.xyz);
+    }
     halfv = normalize(halfv);
     float specular = -dot(halfv, normal.xyz);
     specular = saturate(specular);
-    specular = pow(specular, 30);
-    
-	
-    outDiffuse.rgb += specular; 
+    specular = mul(specular, SpecularPower);
 
+    outDiffuse.rgb += specular;
 
 
 }

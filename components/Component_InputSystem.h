@@ -42,6 +42,7 @@ public:
 	void InitializeTag() override
 	{
 		owner->SetTag(GameObjectTagLayer::InputSystemTag);
+        owner->SetLayer(GameObjectLayer::InputSystemLayer);
 		owner->SetDrawable(false);
 	}
 };

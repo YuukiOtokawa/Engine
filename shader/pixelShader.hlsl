@@ -8,7 +8,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target) {
     float4 normal = normalize(In.Normal);
 	
 	//光源計算
-    float1 light = -dot(normal.xyz, Light.Direction.xyz);
+    float1 light = -dot(normal.xyz, Light.DirectionalLight.direction.xyz);
 	
 	//テクスチャのピクセル色を取得
     outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);
@@ -20,12 +20,12 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target) {
     eyev = normalize(eyev);
     
     //反射ベクトルを計算
-    float3 refv = reflect(Light.Direction.xyz, normal.xyz);
+    float3 refv = reflect(Light.DirectionalLight.direction.xyz, normal.xyz);
     refv = normalize(refv);
     
     float specular = -dot(eyev, refv);
     specular = saturate(specular);
-    specular = pow(specular, 30);
+    specular = pow(specular, SpecularPower);
     
     outDiffuse.rgb += specular;
 }

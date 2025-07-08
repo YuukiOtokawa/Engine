@@ -3,6 +3,7 @@
 
 struct ParticleData {
     Vector4O position;
+    Vector4O startPosition; // Start position for the particle
     Vector4O size;
     Vector4O velocity;
     Vector4O acceleration;
@@ -24,6 +25,7 @@ private:
     Vector4O m_Acceleration;
     ID3D11ShaderResourceView* m_Texture;
 
+    bool m_isStarted;
 public:
     Particle() {
         m_ClassID = CID_Particle;
@@ -54,6 +56,10 @@ public:
 
     void InitializeTag() {
         owner->SetTag(GameObjectTagLayer::ParticleTag);
+        owner->SetLayer(GameObjectLayer::SystemLayer);
     }
+
+    virtual void UpdateParticle(ParticleData* data) {}
+
 };
 

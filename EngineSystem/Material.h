@@ -33,8 +33,6 @@ private:
 
 	// 繝槭ユ繝ｪ繧｢繝ｫ
 	MATERIAL m_Material;
-	LIGHT m_Light;
-	// 繝�繧ｯ繧ｹ繝√Ε
 	ID3D11ShaderResourceView* m_Texture = nullptr;
 	ID3D11ShaderResourceView* m_BumpTexture = nullptr;
 
@@ -63,14 +61,6 @@ public:
 
 	void SetShader();
 
-	/// @brief 繝槭ユ繝ｪ繧｢繝ｫ繧定ｨｭ螳壹＠縺ｾ縺吶�
-	/// @param material 險ｭ螳壹☆繧貴ATERIAL蝙九�ｮ繝槭ユ繝ｪ繧｢繝ｫ縲�
-	void SetMaterial(MATERIAL material) { m_Material = material; }
-
-	/// @brief LIGHT蝙九�ｮ蛟､繧定ｨｭ螳壹＠縺ｾ縺吶�
-	/// @param light 險ｭ螳壹☆繧記IGHT蝙九�ｮ蛟､縲�
-	void SetLight(LIGHT light) { m_Light = light; }
-
 	/// @brief 繝�繧ｯ繧ｹ繝√Ε繧定ｨｭ螳壹＠縺ｾ縺吶�
 	/// @param texture 險ｭ螳壹☆繧紀D3D11ShaderResourceView蝙九�ｮ繝�繧ｯ繧ｹ繝√Ε縲�
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_Texture = texture; }
@@ -93,12 +83,8 @@ public:
 
 	void SetTextureEnable(bool enable) { m_Material.textureEnable = enable; }
 
-	/// @brief 迴ｾ蝨ｨ縺ｮ繧ｪ繝悶ず繧ｧ繧ｯ繝医�ｮ繝槭ユ繝ｪ繧｢繝ｫ繧貞叙蠕励＠縺ｾ縺吶�
-	/// @return 縺薙�ｮ繧ｪ繝悶ず繧ｧ繧ｯ繝医↓髢｢騾｣莉倥￠繧峨ｌ縺ｦ縺�繧貴ATERIAL蝙九�ｮ繝槭ユ繝ｪ繧｢繝ｫ縲�
-	MATERIAL GetMaterial() const { return m_Material; }
-	/// @brief 繝ｩ繧､繝域ュ蝣ｱ繧貞叙蠕励＠縺ｾ縺吶�
-	/// @return 繝｡繝ｳ繝舌�ｼ螟画焚 m_Light 縺ｮ蛟､繧定ｿ斐＠縺ｾ縺吶�
-	LIGHT GetLight() const { return m_Light; }
+    void SetMaterial(MATERIAL material) { m_Material = material; }
+
 	/// @brief 繝�繧ｯ繧ｹ繝√Ε繝ｪ繧ｽ繝ｼ繧ｹ繝薙Η繝ｼ繧貞叙蠕励＠縺ｾ縺吶�
 	/// @return 繝�繧ｯ繧ｹ繝√Ε繧定｡ｨ縺� ID3D11ShaderResourceView 繝昴う繝ｳ繧ｿ縲�
 	ID3D11ShaderResourceView* GetTexture() const { return m_Texture; }

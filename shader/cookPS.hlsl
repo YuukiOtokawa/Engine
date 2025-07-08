@@ -12,29 +12,39 @@ float4 main(PS_IN In) : SV_Target
 {
     float4 outDiffuse;
 	// 光源ベクトル
-    float3 lv = normalize(Light.Position.xyz - In.Position.xyz);
+    float3 lv;
+    
+    lv = Light.PointLight.position.xyz - In.Position.xyz;
+    
+    // 光源ベクトルを正規化
+    lv = normalize(lv); //光源からピクセルへのベクトルを正規化
     //物体と光源の距離
-    float ld = length(lv);
+    float ld;
+    ld = length(lv);
     // 減衰率
-    float ofs = 1.0f - (1.0f / Light.PointLightRange.x) * ld;
+    float ofs;
+    ofs = 1.0f - (1.0f / SpecularPower) * ld;
     ofs = max(ofs, 0.0f); //減衰率は０未満にならないようにする
+
     // 法線ベクトル
     float3 normal = normalize(In.Normal.xyz);
     // 明るさ
-    float light = saturate(-dot(normal.xyz, lv.xyz));
-    light = saturate(light);
-    light *= ofs; // 減衰率を掛ける
+    float light = 0.0f;
+    light += saturate(-dot(normal, lv)) * ofs; // 光源からの拡散反射を計算
     // テクスチャカラー
     outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);
-    outDiffuse.rgb *= In.Diffuse.rgb * light + Light.Ambient.rgb; //拡散反射と環境光を掛け合わせる
+    outDiffuse.rgb *= In.Diffuse.rgb * light + Light.AmbientColor.rgb; //拡散反射と環境光を掛け合わせる
     outDiffuse.a = In.Diffuse.a;
     
     //視線ベクトル
     float3 eyev = In.WorldPosition.xyz - CameraPosition.xyz;
     eyev = normalize(eyev);
     //ハーフベクトル
-    float3 halfv = eyev + lv.xyz;
+    float3 halfv = 0.0f;
+    halfv += eyev + lv;
     halfv = normalize(halfv);
+    //ハーフベクトルを計算
+    //float3 halfv = eyev + lv.xyz; //視線ベクトル
     
     //スペキュラー計算
     float specular;

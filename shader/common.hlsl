@@ -1,4 +1,3 @@
-
 cbuffer TranslationBuffer : register(b0)
 {
     matrix Translation;
@@ -58,9 +57,45 @@ struct LIGHT
     float4 SpotLightAngle;
 };
 
+struct DIRECTIONAL_LIGHT
+{
+    bool enable;
+    bool3 dummy;
+    float4 diffuse;
+    float4 direction;
+};
+
+struct POINT_LIGHT
+{
+    bool enable;
+    bool2 dummy;
+    float range;
+    float4 diffuse;
+    float4 position;
+};
+
+struct SPOT_LIGHT
+{
+    bool enable;
+    float range;
+    float innerAngle;
+    float outerAngle;
+    float4 diffuse;
+    float4 position;
+    float4 direction;
+};
+
+struct LIGHT_BUFFER
+{
+    DIRECTIONAL_LIGHT DirectionalLight;
+    POINT_LIGHT PointLight;
+    SPOT_LIGHT SpotLight;
+    float4 AmbientColor;
+};
+
 cbuffer LightBuffer : register(b5)
 {
-    LIGHT Light;
+    LIGHT_BUFFER Light;
 }
 
 cbuffer CameraBuffer : register(b6)
@@ -73,3 +108,17 @@ cbuffer ParameterBuffer : register(b7)
     float4 Parameter;
 }
 
+cbuffer MaterialBuffer : register(b8)
+{
+    bool textureEnable;
+    float Shininess;
+    float SpecularPower;
+    float Dummy;
+    float4 ambient;
+    float4 diffuse;
+    float4 specular;
+    float4 emissive;
+    float4 SkyColor;
+    float4 GroundColor;
+    float4 GroundNormal;
+};

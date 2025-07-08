@@ -70,6 +70,7 @@ void ParticleManager::UpdateParticles()
             }
 			data.velocity += data.acceleration; // Update velocity with acceleration
 			data.position += data.velocity; // Update position with velocity
+			particle->UpdateParticle(&data); // Call particle's update method
         }
     }
 }
@@ -87,7 +88,6 @@ void ParticleManager::DrawParticles()
 	light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 	light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
     light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
-    object->GetComponent<MeshRenderer>()->SetLight(light);
 
     for (auto& pair : m_Particles)
     {

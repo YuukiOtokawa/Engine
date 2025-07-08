@@ -8,7 +8,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target) {
     float4 normal = normalize(In.Normal);
 	
 	//光源計算
-    float1 light = -dot(normal.xyz, Light.Direction.xyz);
+    float1 light = -dot(normal.xyz, Light.DirectionalLight.direction.xyz);
 	
 	//テクスチャのピクセル色を取得
     outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);
@@ -21,17 +21,17 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target) {
     eyev = normalize(eyev);
     
     //ハーフベクトル
-    float3 halfv = eyev + normalize(Light.Direction.xyz);
+    float3 halfv = eyev + normalize(Light.DirectionalLight.direction.xyz);
     halfv = normalize(halfv);
     float specular = -dot(halfv, normal.xyz);
     specular = saturate(specular);
-    specular = pow(specular, 30);
+    specular = pow(specular, SpecularPower);
     
     //半球ライティング
-    float norm = dot(normal, normalize(Light.GroundNormal));
+    float norm = dot(normal, normalize(GroundNormal));
     norm = (norm + 1.0f) * 0.5f; // -1.0 ~ 1.0 -> 0.0 ~ 1.0)
-    float3 hemiColor = lerp(Light.GroundColor, Light.SkyColor, norm).xyz;
-    
-    
+    float3 hemiColor = lerp(GroundColor, SkyColor, norm).xyz;
+
+
     outDiffuse.rgb += hemiColor + specular;
 }

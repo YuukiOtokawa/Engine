@@ -53,7 +53,6 @@ public:
                 sprite->GetComponent<Transform>()->SetScale(Vector4O(1.0f, 1.0f, 1.0f));
                 sprite->GetComponent<Transform>()->SetPosition(owner->GetComponent<Transform>()->GetPosition());
                 sprite->GetComponent<MeshRenderer>()->SetMaterial(material);
-                sprite->GetComponent<MeshRenderer>()->SetLight(light);
                 auto texture2 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\explosion.png");
                 sprite->GetComponent<MeshRenderer>()->SetTexture(texture2);
 

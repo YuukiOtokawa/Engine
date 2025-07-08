@@ -121,6 +121,8 @@ public:
     {
         m_NextSceneName = sceneName;
     }
+
+    void CheckCollision(Object* object);
 };
 
 void Main();

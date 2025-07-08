@@ -7,14 +7,15 @@ void Particle::UpdateComponent()
 {
 	m_FrameCount--;
 	if (m_FrameCount <= 0) {
-		ParticleData data{
-			owner->GetComponent<Transform>()->GetPosition(),
-			m_Size,
-			m_Velocity,
-			m_Acceleration,
-			m_Texture,
-			m_LifeTime
-		};
+		ParticleData data;
+		
+		data.startPosition = owner->GetComponent<Transform>()->GetPosition();
+		data.size = m_Size;
+		data.velocity = m_Velocity;
+		data.acceleration = m_Acceleration;
+		data.texture = m_Texture;
+		data.lifeTime = m_LifeTime;
+		
 		ParticleManager::AddParticleData(this, data);
 		m_FrameCount = m_SpawnSpan;
 	}

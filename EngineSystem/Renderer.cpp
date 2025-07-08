@@ -408,9 +408,9 @@ void Renderer::CreateConstantBuffer()
 	m_pDeviceContext->VSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
 
-	hBufferDesc.ByteWidth = sizeof(LIGHT);
+	hBufferDesc.ByteWidth = sizeof(LIGHT_BUFFER);
 
-	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pLightBuffer);
+	HRESULT hr =m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pLightBuffer);
 	m_pDeviceContext->VSSetConstantBuffers(5, 1, &m_pLightBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(5, 1, &m_pLightBuffer);
 
@@ -421,6 +421,9 @@ void Renderer::CreateConstantBuffer()
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pParameterBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(7, 1, &m_pParameterBuffer);
 
+	hBufferDesc.ByteWidth = sizeof(MATERIAL);
+	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pMaterialBuffer);
+	m_pDeviceContext->PSSetConstantBuffers(8, 1, &m_pMaterialBuffer);
 }
 
 ID3D11ShaderResourceView* Renderer::TextureLoad(const std::wstring& filename)
@@ -608,7 +611,7 @@ void Renderer::SetProjectionMatrix(XMMATRIX projection)
 	m_pDeviceContext->PSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
 }
 
-void Renderer::SetLight(LIGHT light)
+void Renderer::SetLight(LIGHT_BUFFER light)
 {
 	GetDeviceContext()->UpdateSubresource(m_pLightBuffer, 0, NULL, &light, 0, 0);
 }
