@@ -24,6 +24,7 @@ class MeshFilter :
     public Component
 {
 protected:
+    int m_VertexInfoFileID = 0; // 頂点情報のファイルID
 
 	// 頂点数
 	int m_iVertexCount = 0;
@@ -41,7 +42,7 @@ protected:
 public:
 	/// @brief MeshFilter のデフォルトコンストラクタです。
 	MeshFilter() {
-        m_ClassID = CID_MeshFilter;
+        m_ClassID = CID_Component_MeshFilter;
     }
 	/// @brief 頂点数とインデックス数を指定して、MeshFilter オブジェクトを作成します。
 	/// @param vertexCount メッシュ内の頂点の数。
@@ -70,6 +71,7 @@ public:
 	void SetVertexBuffer(ID3D11Buffer* vertexBuffer, int vertexCount) {
 		m_pVertexBuffer = vertexBuffer;
 		m_iVertexCount = vertexCount;
+        owner->SetVertexCount(vertexCount);
 	}
 
 	/// @brief インデックスバッファとインデックス数を設定します。
@@ -81,6 +83,10 @@ public:
 		owner->SetIndexCount(indexCount);
 	}
 
+    void SetVertexInfoFileID(int fileID) {
+        m_VertexInfoFileID = fileID;
+    }
 
+    
 };
 

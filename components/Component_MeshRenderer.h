@@ -38,8 +38,11 @@ public:
 	void Draw() override;
 	void DrawGUI() override;
 
-    void ExportComponent() override {
-    }
+    void ImportFile(std::vector<std::string>& tokens) override;
+
+    void ExportComponent() override;
+
+    void AddExportList() override;
 
 	/// @brief マテリアルを設定します。
 	/// @param material 設定するマテリアル。
@@ -60,8 +63,36 @@ public:
 
 	/// @brief テクスチャをマテリアルに設定します。
 	/// @param texture 設定するID3D11ShaderResourceView型のテクスチャ。
-	void SetTexture(ID3D11ShaderResourceView* texture) { m_pMaterial->SetTexture(texture); }
-	void SetBumpTexture(ID3D11ShaderResourceView* texture) { m_pMaterial->SetBumpTexture(texture); }
+	void SetTexture(int texture) {
+        m_pMaterial->SetTexture(texture);
+        if (owner->HasChild()) {
+            for (auto& child : owner->GetChildren()) {
+                if (child->GetComponent<MeshRenderer>()) {
+                    child->GetComponent<MeshRenderer>()->SetTexture(texture);
+                }
+            }
+        }
+    }
+	void SetBumpTexture(int texture) {
+        m_pMaterial->SetBumpTexture(texture);
+        if (owner->HasChild()) {
+            for (auto& child : owner->GetChildren()) {
+                if (child->GetComponent<MeshRenderer>()) {
+                    child->GetComponent<MeshRenderer>()->SetBumpTexture(texture);
+                }
+            }
+        }
+    }
+	void SetToonTexture(int texture) {
+        m_pMaterial->SetToonTexture(texture);
+        if (owner->HasChild()) {
+            for (auto& child : owner->GetChildren()) {
+                if (child->GetComponent<MeshRenderer>()) {
+                    child->GetComponent<MeshRenderer>()->SetToonTexture(texture);
+                }
+            }
+        }
+    }
 
 	/// @brief タグを初期化します。
 	void InitializeTag() override;

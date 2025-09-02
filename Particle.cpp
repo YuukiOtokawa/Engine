@@ -3,6 +3,8 @@
 #include "ParticleManager.h"
 #include "Component_Transform.h"
 
+#include "MainEngine.h"
+
 void Particle::UpdateComponent()
 {
 	m_FrameCount--;
@@ -31,6 +33,20 @@ void Particle::DrawGUI()
 	ImGui::DragInt("Spawn Span", &m_SpawnSpan, 1.0f, 0.0f, 100.0f);
 	ImGui::DragInt("Life Time", &m_LifeTime, 1.0f, 0.0f, 100.0f);
 	ImGui::InputInt("Frame Count", &m_FrameCount);
-	ImGui::Image((ImTextureID)m_Texture, ImVec2(300, 300));
+	ImGui::Image((ImTextureID)MainEngine::GetInstance()->GetRenderer()->GetTexture(m_Texture), ImVec2(300, 300));
 	ImGui::Unindent();
+}
+
+void Particle::ExportComponent()
+{
+	CSVExporter::ExportVector4O(m_Velocity);
+	CSVExporter::ExportVector4O(m_Acceleration);
+	CSVExporter::ExportInt(m_SpawnSpan);
+	CSVExporter::ExportInt(m_LifeTime);
+	CSVExporter::ExportInt(m_Texture);
+}
+
+void Particle::InitializeTag() {
+	owner->SetTag(GameObjectTagLayer::ParticleTag);
+	owner->SetLayer(GameObjectLayer::SystemLayer);
 }

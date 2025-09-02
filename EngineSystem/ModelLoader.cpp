@@ -1,9 +1,12 @@
-﻿#include "ModelLoader.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include "ModelLoader.h"
 
 #include "MainEngine.h"
 
 #include "Component_Meshfilter.h"
 #include "AssimpMeshRenderer.h"
+
+#include "Component_Transform.h"
 
 void ModelLoader::LoadModel(Object* object, const char* filename)
 {
@@ -98,10 +101,49 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 		CreateShaderResourceView(device, image.GetImages(), image.GetImageCount(), metadata, &texture);
 		assert(texture);
 
-		model->Texture[aitexture->mFilename.data] = texture;
-	}
+		wchar_t* wc{};
+		mbstowcs(wc, aitexture->mFilename.C_Str(), sizeof(wc));
 
-	object->GetComponent<MeshFilter>()->SetVertexBuffer(*model->VertexBuffer, model->AiScene->mMeshes[0]->mNumVertices);
-	object->GetComponent<MeshFilter>()->SetIndexBuffer(*model->IndexBuffer, model->AiScene->mMeshes[0]->mNumFaces * 3);
-	object->GetComponent<AssimpMeshRenderer>()->SetMesh(model->Texture);
+		model->Texture[aitexture->mFilename.data].shader_resource_view = texture;
+		model->Texture[aitexture->mFilename.data].width = (int)metadata.width;
+		model->Texture[aitexture->mFilename.data].height = (int)metadata.height;
+		if (wc != NULL)
+			model->Texture[aitexture->mFilename.data].filename = wc;
+	}
+	if (model->AiScene->mNumMeshes != 1) {
+		for (unsigned int i = 0; i < model->AiScene->mNumMeshes; i++) {
+			Object* child = new Object();
+			child->SetName(model->AiScene->mMeshes[i]->mName.C_Str());
+			child->SetTag(GameObjectTagLayer::ObjectTag);
+			child->AddComponent<Transform>();
+			child->AddComponent<MeshFilter>();
+			child->AddComponent<AssimpMeshRenderer>();
+			
+			aiString texture;
+			model->AiScene->mMaterials[model->AiScene->mMeshes[i]->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &texture);
+
+			child->GetComponent<MeshFilter>()->SetVertexBuffer(model->VertexBuffer[i], model->AiScene->mMeshes[i]->mNumVertices);
+			child->GetComponent<MeshFilter>()->SetIndexBuffer(model->IndexBuffer[i], model->AiScene->mMeshes[i]->mNumFaces * 3);
+
+			if (model->Texture.size() != 0) {
+				int texID = MainEngine::GetInstance()->GetRenderer()->AddTexture(model->Texture[texture.data]);
+				child->GetComponent<AssimpMeshRenderer>()->SetTexture(texID);
+			}
+
+			object->AddChild(child);
+		}
+	}
+	else {
+		aiString texture;
+		model->AiScene->mMaterials[model->AiScene->mMeshes[0]->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &texture);
+
+		object->GetComponent<MeshFilter>()->SetVertexBuffer(model->VertexBuffer[0], model->AiScene->mMeshes[0]->mNumVertices);
+		object->GetComponent<MeshFilter>()->SetIndexBuffer(model->IndexBuffer[0], model->AiScene->mMeshes[0]->mNumFaces * 3);
+
+		if (model->Texture.size() != 0) {
+			int texID = MainEngine::GetInstance()->GetRenderer()->AddTexture(model->Texture[texture.data]);
+			object->GetComponent<AssimpMeshRenderer>()->SetTexture(texID);
+		}
+
+	}
 }

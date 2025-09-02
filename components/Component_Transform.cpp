@@ -6,6 +6,8 @@
 //									Author:Yuuki Otokawa
 // ========================================================
 #include "Component_Transform.h"
+
+#include "CSVImporter.h"
 void Transform::UpdateComponent() {
 
 }
@@ -26,4 +28,11 @@ void Transform::DrawGUI() {
 
 void Transform::InitializeTag() {
 	owner->SetTag(GameObjectTagLayer::SystemTag);
+}
+
+void Transform::ImportFile(std::vector<std::string>& tokens)
+{
+	SetPosition(CSVImporter::ImportVector4O(tokens[4], tokens[5], tokens[6], tokens[7]));
+	SetRotation(CSVImporter::ImportVector4O(tokens[8], tokens[9], tokens[10], tokens[11]));
+	SetScale(CSVImporter::ImportVector4O(tokens[12], tokens[13], tokens[14], tokens[15]));
 }

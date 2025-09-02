@@ -30,6 +30,7 @@
 
 #include "object.h"
 #include <d3d11.h>
+#include "Renderer.h"
 
 //==========================================================================
 // クラス定義
@@ -46,7 +47,7 @@ private:
 		ID3D11Buffer** VertexBuffer;
 		ID3D11Buffer** IndexBuffer;
 
-		std::unordered_map<std::string, ID3D11ShaderResourceView*> Texture;
+		std::unordered_map<std::string, Texture> Texture;
 	};
 
 public:

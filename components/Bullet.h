@@ -8,7 +8,7 @@
 #include "Billboard.h"
 
 class Bullet :
-    public MonoBehavior
+    public MonoBehaviour
 {
 private:
 	Vector4O direction = Vector4O(0, 0, 1, 0);

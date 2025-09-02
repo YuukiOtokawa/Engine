@@ -5,7 +5,7 @@
 #include "MainEngine.h"
 
 class Result :
-    public MonoBehavior
+    public MonoBehaviour
 {
 public:
     void Start() override {}

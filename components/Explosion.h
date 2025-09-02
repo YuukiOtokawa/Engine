@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "MonoBehavior.h"
 class Explosion :
-    public MonoBehavior
+    public MonoBehaviour
 {
 public:
     int frame = 0;

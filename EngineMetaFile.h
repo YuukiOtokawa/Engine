@@ -3,49 +3,79 @@
 
 #include "GUI.h"
 
+#include <string>
+#include <vector>
+
+enum ClassID {
+    CID_None = 0, // 0は予約済み
+    CID_Object = 1,
+    CID_Material,
+    CID_Component_Transform,
+    CID_Component_MeshFilter,
+    CID_Component_MeshRenderer,
+    CID_Component_InputSystem,
+    CID_Component_Light,
+    CID_Component_Camera,
+    CID_Component_EditorCamera,
+    CID_PlayerCamera,
+    CID_AssimpMeshRenderer,
+    CID_PlaneMesh,
+    CID_Animation,
+    CID_SpriteMesh,
+    CID_Billboard,
+    CID_Particle,
+    CID_CubeMesh,
+    CID_MonoBehaviour,
+};
+
 class EngineMetaFile
 {
 protected:
-    enum ClassID {
-        CID_None = 0, // 0は予約済み
-        CID_Object = 1,
-        CID_Material,
-        CID_Transform,
-        CID_MeshFilter,
-        CID_MeshRenderer,
-        CID_InputSystem,
-        CID_Camera,
-        CID_EditorCamera,
-        CID_PlayerCamera,
-        CID_AssimpMeshRenderer,
-        CID_MonoBehaviour,
-        CID_PlaneMesh,
-        CID_Animation,
-        CID_SpriteMesh,
-        CID_Billboard,
-        CID_Particle,
-        CID_CubeMesh,
-    };
 
     ClassID m_ClassID = CID_None; // ファイルID
     int m_FileID;
 
+    static int m_FileIDCounter; // ファイルIDのカウンター
+
 public:
-    EngineMetaFile(ClassID id = CID_None) : m_ClassID(id) {}
-    void Export() {
-        if (m_ClassID == CID_None) {
-            throw std::runtime_error("Component ID is not initialized.");
-        }
-        CSVExporter::ExportInt((int)m_ClassID);
-        ExportFile();
+    EngineMetaFile(ClassID id = CID_None) : m_ClassID(id) {
+        m_FileID = m_FileIDCounter++;
+    }
+
+    void CreateEngineMetaFile(ClassID classID, int fileID) {
+        m_ClassID = classID;
+        m_FileID = fileID;
+    }
+
+    void Import(std::vector<std::string>& tokens) {
+        ImportFile(tokens);
+    }
+
+    virtual void ImportFile(std::vector<std::string>& tokens) {
+        // デフォルトの実装は何もしない
     }
 
     virtual void ExportFile() {
         // デフォルトの実装は何もしない
     }
 
-    void SetFileID(ClassID id) {
+    virtual void AddExportList() {
+        // デフォルトの実装は何もしない
+    }
+
+    void SetClassID(ClassID id) {
         m_ClassID = id;
+    }
+
+    void SetFileID(int id) {
+        m_FileID = id;
+    }
+
+    ClassID GetClassID() const {
+        return m_ClassID;
+    }
+    int GetFileID() const {
+        return m_FileID;
     }
 };
 

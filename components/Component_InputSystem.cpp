@@ -34,7 +34,7 @@ InputSystem::InputSystem()
 	m_pKeyboard = Keyboard::GetInstance();
 	m_pMouse = Mouse::GetInstance(MainEngine::GetInstance()->GetWindow());
 
-	m_ClassID = CID_InputSystem;
+	m_ClassID = CID_Component_InputSystem;
 }
 
 // Update

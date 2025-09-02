@@ -5,10 +5,10 @@ class Animation :
 {
 private:
 	int m_FrameCount = 0;
-    Vector4O m_uvRect = (1, 1);
 	int m_SpriteCount = 1;
 	int m_FramePerSecond = 30;
 	bool m_Loop = true;
+	bool m_Playing = true;
 public:
     Animation() {
         m_ClassID = CID_Animation;
@@ -16,9 +16,11 @@ public:
 
 	void UpdateComponent() override;
 
-	void SetUVRect(const Vector4O& uvRect) { m_uvRect = uvRect; }
+    void ExportComponent() override;
+
 	void SetFramePerSecond(int fps) { m_FramePerSecond = fps; }
 	void SetLoop(bool loop) { m_Loop = loop; }
+	void SetPlaying(bool playing) { m_Playing = playing; }
 
 	void DrawGUI() override;
 

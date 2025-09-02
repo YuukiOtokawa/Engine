@@ -26,6 +26,9 @@
 
 #include "Material.h"
 
+#include "../AudioManager.h"
+
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -34,6 +37,7 @@ class Editor
 {
 private:
 	// オブジェクトのリスト
+    std::map<ClassID, std::list<Component*>> m_Components;
 	std::list<Object*> m_Objects;
 	std::list<Object*> m_DeleteObjects;
 
@@ -44,6 +48,8 @@ private:
 	// GUIのポインタ
 	GUI* m_pGUI = nullptr;
     ParticleManager* m_pParticleManager = nullptr;
+
+    AudioManager* m_pAudioManager = nullptr;
 
 	/// @brief Editor クラスのシングルトンパターンデフォルトコンストラクタです。
 	Editor() = default;
@@ -81,6 +87,14 @@ public:
 	/// @brief オブジェクトやリソースの後処理を行います。
 	void Finalize();
 
+    void CreateComponent(Component* component);
+
+    Component* GetComponentByFileID(int fileID);
+
+    std::list<Component*> GetComponentsByClassID(ClassID classID) {
+        return m_Components[classID];
+    }
+
 	/// @brief オブジェクトを追加します。
 	/// @param object 追加するオブジェクトへのポインタ。
 	void AddObject(Object* object);
@@ -88,34 +102,20 @@ public:
 	/// @brief 指定された名前のオブジェクトを検索して返します。
 	/// @param name 検索するオブジェクトの名前。
 	/// @return 見つかった場合は対応するObjectポインタ、見つからない場合はnullptrを返します。
-	Object* GetObject(const std::string& name)
-	{
-		for (auto object : m_Objects)
-		{
-			if (object->GetName() == name)
-			{
-				return object;
-			}
-		}
-		return nullptr;
-	}
+    Object* GetObject(const std::string& name);
 
     std::list<Object*>& GetObjects() { return m_Objects; }
     void SetObjects(const std::list<Object*>& objects) { m_Objects = objects; }
 
-	void SetActiveCamera(Object* camera)
-	{
-		if (m_pActiveCamera != nullptr)
-			m_pActiveCamera->GetComponent<Camera>()->SetActiveCamera(false);
-		
-		m_pActiveCamera = camera;
-		m_pActiveCamera->GetComponent<Camera>()->SetActiveCamera(true);
-	}
+    void ResetScene();
+
+    void SetActiveCamera(Object* camera);
 
 	Object* GetActiveCamera() const { return m_pActiveCamera; }
 
-
     int AddMaterial(Material* material);
+
+    Material* GetMaterialByFileID(int fileID);
 
     void ChangeScene(std::string sceneName)
     {

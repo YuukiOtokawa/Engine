@@ -71,13 +71,14 @@ public:
 
     void ExportComponent() override {
         CSVExporter::ExportFloat(m_IsActiveCamera);
-        CSVExporter::ExportVector4O(m_LastPosition);
         CSVExporter::ExportVector4O(m_Target);
         CSVExporter::ExportFloat(m_Fov);
         CSVExporter::ExportFloat(m_Near);
         CSVExporter::ExportFloat(m_Far);
         CSVExporter::ExportVector4O(m_Up);
     }
+
+    void ImportFile(std::vector<std::string>& tokens) override;
 
 	/// @brief ターゲットとなるVector4Oオブジェクトを設定します。
 	/// @param target 設定するVector4Oオブジェクト。

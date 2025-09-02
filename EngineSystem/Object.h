@@ -41,9 +41,15 @@ private:
 	int m_iVertexCount = 0;
 	int m_iIndexCount = 0;
 
+    Object* m_pParent = nullptr; // Pointer to the parent object, if any
+    std::list<Object*> m_Children; // List of child objects
+
+    bool m_IsOpened = false; // Flag to indicate if the object is opened in the editor
+    bool m_IsChild = false; // Flag to indicate if the object is a child of another object
+
 public:
 	// @brief コンストラクタ
-    Object() : EngineMetaFile(CID_Object) {}
+    Object(bool editable = true);
 	Object(const Object&) = delete; // Disable copy constructor
 	Object(Object&&) = delete; // Disable move constructor
 	Object& operator=(const Object&) = delete; // Disable copy assignment
@@ -94,6 +100,11 @@ public:
 
 	/// @brief コンポーネントのデータをCSV形式でエクスポートします。
     void ExportFile() override;
+
+
+    void AddExportList() override;
+
+    void ImportFile(std::vector<std::string>& tokens) override;
 
 	/// @brief 名前を設定します。
 	/// @param name 設定する名前。
@@ -150,5 +161,41 @@ public:
 	void SetIndexCount(int count) {
 		m_iIndexCount = count;
 	}
+
+    void SetParent(Object* parent) {
+        m_pParent = parent;
+        m_IsChild = (parent != nullptr);
+    }
+
+    void AddChild(Object* child) {
+        if (child) {
+            child->SetParent(this);
+            m_Children.push_back(child);
+        }
+    }
+
+    bool HasChild() {
+        return !m_Children.empty();
+    }
+
+    Object* GetParent() const {
+        return m_pParent;
+    }
+    std::list<Object*>& GetChildren() {
+        return m_Children;
+    }
+
+    void SetOpened(bool isOpened) {
+        if (isOpened)
+            m_IsOpened ^= true; // Toggle the opened state
+    }
+
+    bool IsOpened() const {
+        return m_IsOpened;
+    }
+
+    bool IsChild() const {
+        return m_IsChild;
+    }
 };
 

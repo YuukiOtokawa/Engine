@@ -33,7 +33,7 @@ private:
 
 public:
     Transform() {
-        m_ClassID = CID_Transform;
+        m_ClassID = CID_Component_Transform;
     }
 	/// @brief オブジェクトの状態を更新します。
 	void UpdateComponent() override;
@@ -49,6 +49,9 @@ public:
         CSVExporter::ExportVector4O(m_Rotation);
         CSVExporter::ExportVector4O(m_Scale);
     }
+
+    void ImportFile(std::vector<std::string>& tokens) override;
+
 
 	/// @brief 位置を設定します。
 	/// @param position 設定する位置を表す Vector4O 型の値。

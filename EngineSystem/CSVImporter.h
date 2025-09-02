@@ -6,5 +6,9 @@ class CSVImporter
 {
 public:
     static std::list<Object*> Import(const char* filePath);
+
+    static Vector4O ImportVector4O(const std::string& token1, const std::string& token2, const std::string& token3, const std::string& token4);
+private:
+    static EngineMetaFile* CreateObject(ClassID classID);
 };
 

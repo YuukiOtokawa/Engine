@@ -54,6 +54,15 @@ Editor::~Editor()
 		delete m_pGUI;
 		m_pGUI = nullptr;
 	}
+	if (m_pParticleManager) {
+		delete m_pParticleManager;
+		m_pParticleManager = nullptr;
+	}
+	if (m_pAudioManager) {
+		delete m_pAudioManager;
+		m_pAudioManager = nullptr;
+	}
+
 	// すべてのオブジェクトを削除
 	for (auto& object : m_Objects) {
 		delete object;
@@ -71,6 +80,7 @@ Editor::~Editor()
 void Editor::Initialize() {
 	m_pGUI = new GUI();
 	m_pParticleManager = ParticleManager::GetInstance();
+	m_pAudioManager = AudioManager::GetInstance();
 
 	// シェーダーの読み込み
 	{
@@ -113,9 +123,19 @@ void Editor::Initialize() {
 		//Cook-Torranceライティング
 		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "CookTorrance");
 		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/cookPS.cso", "CookTorrance");
+
+		//Cook-Torranceライティング
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/PBRVS.cso", "PBR");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/PBRPS.cso", "PBR");
+
+		//トゥーンシェーダー
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "toon1");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/toon1PS.cso", "toon1");
+		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "toon2");
+		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/toon2PS.cso", "toon2");
 	}
 
-
+	MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/Default_White.png");
 	
 
 	Main();
@@ -230,6 +250,30 @@ void Editor::Draw() {
 	//全オブジェクトの名前ボタンを描画
 	for (auto& object : m_Objects) {
 		if (!object) continue; // nullptrチェック
+
+		if (object->HasChild()) {
+			if (object->IsOpened()) {
+				object->SetOpened(ImGui::Button("-")); // 開いている場合は▼を表示
+				// 子オブジェクトの描画
+				ImGui::Indent(); // 子オブジェクトのインデント
+				for (auto& child : object->GetChildren()) {
+					if (child) { // nullptrチェック
+						if (child == m_pSelectedObject)
+							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f)); // 選択中のオブジェクトの色を変更
+						else
+							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f)); // 通常のオブジェクトの色
+						if (ImGui::Button(child->GetName().c_str())) {
+							m_pSelectedObject = child; // 選択されたオブジェクトを更新
+						}
+						ImGui::PopStyleColor();
+					}
+				}
+			}
+			else {
+				object->SetOpened(ImGui::Button("+")); // 閉じている場合は►を表示
+			}
+		}
+
 		if (object == m_pSelectedObject)
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f)); // 選択中のオブジェクトの色を変更
 		else
@@ -275,6 +319,23 @@ void Editor::Finalize() {
 
 }
 
+void Editor::CreateComponent(Component* component) {
+	m_Components[component->GetClassID()].push_back(component);
+}
+
+Component* Editor::GetComponentByFileID(int fileID) {
+	for (auto& componentPair : m_Components)
+	{
+		for (auto& component : componentPair.second)
+		{
+			if (component->GetFileID() == fileID) {
+				return component;
+			}
+		}
+	}
+	return nullptr;
+}
+
 void Editor::AddObject(Object* object)
 {
 	int copyCount = 0;
@@ -296,10 +357,46 @@ void Editor::DeleteObject(Object* object)
 	m_DeleteObjects.push_back(object);
 }
 
+Object* Editor::GetObject(const std::string& name)
+{
+	for (auto object : m_Objects)
+	{
+		if (object->GetName() == name)
+		{
+			return object;
+		}
+	}
+	return nullptr;
+}
+
+void Editor::ResetScene()
+{
+	m_Objects.clear();
+	m_Components.clear();
+	m_Materials.clear();
+}
+
+void Editor::SetActiveCamera(Object* camera)
+{
+	if (m_pActiveCamera != nullptr)
+		m_pActiveCamera->GetComponent<Camera>()->SetActiveCamera(false);
+
+	m_pActiveCamera = camera;
+	m_pActiveCamera->GetComponent<Camera>()->SetActiveCamera(true);
+}
+
 int Editor::AddMaterial(Material* material)
 {
 	m_Materials.push_back(material);
 	return static_cast<int>(m_Materials.size() - 1); // 追加したマテリアルのインデックスを返す
+}
+
+Material* Editor::GetMaterialByFileID(int fileID) {
+	for (auto& material : m_Materials) {
+		if (material->GetFileID() == fileID)
+			return material;
+	}
+	return nullptr;
 }
 
 void Editor::CheckCollision(Object* object)

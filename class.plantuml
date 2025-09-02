@@ -1,0 +1,38 @@
+@startuml
+
+class Manager {
+    - std::list<GameObject*> GameObjects
+
+    - GUI* EditorGUI
+    - ParticleManager* ParticleManager
+
+
+}
+
+class Object {
+    - int FileID
+    - ClassID classID
+
+
+}
+
+Manager o-- Object
+
+class GameObject {
+    - std::string Name
+    - ObjectTag tag
+    - SystemLayer systemLayer
+    - GameLayer gameLayer
+    - bool Active
+    - std::list<Component*> Components
+    - GameObject* Parent
+    - std::list<GameObject*> Children
+}
+
+class Component {
+    - GameObject* owner
+    - bool Active
+    - ComponentTag tag
+}
+
+@enduml

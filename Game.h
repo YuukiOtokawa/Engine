@@ -6,7 +6,7 @@
 #include "MainEngine.h"
 
 class Game :
-    public MonoBehavior
+    public MonoBehaviour
 {
 public:
     void Start() override {}

@@ -38,13 +38,36 @@ void MeshFilter::Draw() {
 
 	// オブジェクトのスケール、回転、位置を取得して行列を計算
 	{
-		auto objectScale = transform->GetScale();
-		auto objectRotation = transform->GetRotation().ToRadian();
-		auto objectPosition = transform->GetPosition();
+		if (owner->IsChild()) {
+			/// 子オブジェクトのtransformは親オブジェクトからの相対位置であるため、親オブジェクトのTransformを考慮
+			auto parentTransform = owner->GetParent()->GetComponent<Transform>();
 
-		scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
-		angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
-		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
+			auto parentScale = parentTransform->GetScale();
+			auto parentRotation = parentTransform->GetRotation().ToRadian();
+			auto parentPosition = parentTransform->GetPosition();
+
+			auto objectScale = transform->GetScale();
+			auto objectRotation = transform->GetRotation().ToRadian();
+			auto objectPosition = transform->GetPosition();
+
+			scale = XMMatrixScaling(objectScale.x * parentScale.x, objectScale.y * parentScale.y, objectScale.z * parentScale.z);
+			angle = XMMatrixRotationRollPitchYaw(objectRotation.x + parentRotation.x, objectRotation.y + parentRotation.y, objectRotation.z + parentRotation.z);
+			translation = XMMatrixTranslation(
+				objectPosition.x + parentPosition.x,
+				objectPosition.y + parentPosition.y,
+				objectPosition.z + parentPosition.z
+			);
+		}
+		else {
+			auto objectScale = transform->GetScale();
+			auto objectRotation = transform->GetRotation().ToRadian();
+			auto objectPosition = transform->GetPosition();
+
+			scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
+			angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+			translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
+		}
+
 	}
 
 	// ワールド行列を転置してシェーダーに送るための準備

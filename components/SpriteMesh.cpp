@@ -66,54 +66,76 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 }
 
 void SpriteMesh::UpdateComponent() {
-	
+	if (m_newIndex != -1) {
+
+		int x = m_newIndex % (int)m_uvRect.x;
+		int y = m_newIndex / (int)m_uvRect.x;
+		Vector4O uvOffset = Vector4O(1.0f / m_uvRect.x, 1.0f / m_uvRect.y);
+
+		D3D11_MAPPED_SUBRESOURCE msr;
+		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+		VERTEX* vertex = (VERTEX*)msr.pData;
+
+		vertex[0] = {
+			Vector4O(-1.0f, 1.0f, 0.0f),
+			Vector4O(0.0f,0.0f,-1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector4O(uvOffset.x * x, uvOffset.y * y),
+		};
+
+		vertex[1] = {
+			Vector4O(1.0f, 1.0f, 0.0f),
+			Vector4O(0.0f,0.0f,-1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector4O(uvOffset.x * (x + 1), uvOffset.y * y),
+		};
+
+		vertex[2] = {
+			Vector4O(-1.0f, -1.0f, 0.0f),
+			Vector4O(0.0f,0.0f,-1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector4O(uvOffset.x * x, uvOffset.y * (y + 1)),
+		};
+
+		vertex[3] = {
+			Vector4O(1.0f, -1.0f, 0.0f),
+			Vector4O(0.0f,0.0f,-1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector4O(uvOffset.x * (x + 1), uvOffset.y * (y + 1)),
+		};
+
+		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);
+
+		m_newIndex = -1; // リセット
+	}
+}
+
+void SpriteMesh::DrawGUI()
+{
+	ImGui::Text("Sprite Mesh");
+	ImGui::Separator();
+	ImGui::Indent();
+	ImGui::InputInt("Sprite Index", &m_spriteIndex);
+	ImGui::BeginDisabled();
+	ImGui::DragFloat2("UV Rect", &m_uvRect.x, 0.1f, 1.0f, 100.0f);
+	ImGui::EndDisabled();
+	ImGui::Unindent();
+}
+
+void SpriteMesh::ExportComponent()
+{
+	CSVExporter::ExportVector4O(m_uvRect);
 }
 
 bool SpriteMesh::SetSpriteByIndex(int index)
 {
-	int x = index % (int)m_uvRect.x;
-	int y = index / (int)m_uvRect.x;
-	Vector4O uvOffset = Vector4O(1.0f / m_uvRect.x, 1.0f / m_uvRect.y);
-
-	D3D11_MAPPED_SUBRESOURCE msr;
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-	VERTEX* vertex = (VERTEX*)msr.pData;
-
-	vertex[0] = {
-		Vector4O(-1.0f, 1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(uvOffset.x * x, uvOffset.y * y),
-	};
-
-	vertex[1] = {
-		Vector4O(1.0f, 1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(uvOffset.x * (x + 1), uvOffset.y * y),
-	};
-
-	vertex[2] = {
-		Vector4O(-1.0f, -1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(uvOffset.x * x, uvOffset.y * (y + 1)),
-	};
-
-	vertex[3] = {
-		Vector4O(1.0f, -1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
-		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(uvOffset.x * (x + 1), uvOffset.y * (y + 1)),
-	};
-
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);
 
 	if (index >= m_uvRect.x * m_uvRect.y) {
 		return false; // 範囲外のインデックス
 	}
 	else {
+		m_newIndex = index;
 		return true; // 正常に設定
 	}
 }

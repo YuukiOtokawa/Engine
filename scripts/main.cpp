@@ -25,6 +25,10 @@
 
 #include "../Pack.h"
 
+#include "../Audio.h"
+
+#include "../Score.h"
+
 
 void Main() {
 	SetSceneGame();
@@ -73,7 +77,7 @@ void SetSceneTitle()
 		sprite->GetComponent<MeshRenderer>()->SetMaterial(material);
 		light.Enable = false; // UIでは光源を無効にする
 
-		ID3D11ShaderResourceView* texture3 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/title.png");
+		int texture3 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/title.png");
 		sprite->GetComponent<MeshRenderer>()->SetTexture(texture3);
 		sprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
 		sprite->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
@@ -84,6 +88,13 @@ void SetSceneTitle()
 
 void SetSceneGame()
 {
+	//入力システム作成
+	{
+		auto input = new Object();
+		input->SetName("InputSystem");
+		input->AddComponent<InputSystem>();
+
+	}
 	//エディターカメラ作成
 	{
 		auto camera = new Object();
@@ -92,39 +103,15 @@ void SetSceneGame()
 		camera->AddComponent<EditorCamera>();
 
 		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, -7.5f));
-		camera->GetComponent<EditorCamera>()->SetTarget(Vector4O(0.0f, 5.0f, -1.5f));
+		camera->GetComponent<EditorCamera>()->SetTarget(Vector4O(0.0f, 0.0f, 0.0f));
 		Editor::GetInstance()->SetActiveCamera(camera);
 
-		Editor::GetInstance()->AddObject(camera);
-	}
-
-	//プレイヤー追尾カメラ作成
-	{
-		auto camera = new Object();
-		camera->SetName("Camera2");
-		camera->AddComponent<Transform>();
-		camera->AddComponent<Camera>();
-		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 2.5f));
-		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 5.0f, 1.5f));
-
-		camera->AddComponent<PlayerCamera>();
-
-		Editor::GetInstance()->AddObject(camera);
-	}
-
-	//入力システム作成
-	{
-		auto input = new Object();
-		input->SetName("InputSystem");
-		input->AddComponent<InputSystem>();
-
-		Editor::GetInstance()->AddObject(input);
 	}
 
 	//立方体オブジェクト作成
 	{
 		auto cube = new Object();
-		cube->SetName("Cube1");
+		cube->SetName("Cube");
 		cube->AddComponent<Transform>();
 		cube->AddComponent<CubeMesh>();
 		cube->AddComponent<MeshRenderer>();
@@ -140,12 +127,29 @@ void SetSceneGame()
 		light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
 		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
 
-		cube->GetComponent<Transform>()->SetRotation(Vector4O(2.0f, 0.0f, 2.0f));
-		cube->GetComponent<Transform>()->SetPosition(Vector4O(5.0f, 0.0f, 0.0f));
+		cube->GetComponent<Transform>()->SetRotation(Vector4O(0.0f, 0.0f, 0.0f));
+		cube->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 0.0f, 0.0f));
 		cube->GetComponent<MeshRenderer>()->SetMaterial(material);
+		cube->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		cube->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
 
-		//AddObject(cube);
 	}
+
+	/*
+	//プレイヤー追尾カメラ作成
+	{
+		auto camera = new Object();
+		camera->SetName("Camera2");
+		camera->AddComponent<Transform>();
+		camera->AddComponent<Camera>();
+		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 2.5f));
+		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 5.0f, 1.5f));
+
+		camera->AddComponent<PlayerCamera>();
+
+		//Editor::GetInstance()->AddObject(camera);
+	}
+
 
 	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
 	auto bumpTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/Normal.bmp");
@@ -160,6 +164,7 @@ void SetSceneGame()
 		MATERIAL material;
 		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
 		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+		material.SpecularPower = 0.5f;
 
 		LIGHT light;
 		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
@@ -170,17 +175,18 @@ void SetSceneGame()
 
 		plane->GetComponent<Transform>()->SetScale(Vector4O(20.0f, 1.0f, 20.0f));
 		plane->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, -5.0f, 0.0f));
-		plane->GetComponent<MeshRenderer>()->SetMaterial(material);
 		plane->GetComponent<MeshRenderer>()->SetTexture(texture);
+		plane->GetComponent<MeshRenderer>()->SetMaterial(material);
 		plane->GetComponent<MeshRenderer>()->SetBumpTexture(bumpTexture);
 
-		plane->GetComponent<MeshRenderer>()->SetVertexShader("spotLight");
-		plane->GetComponent<MeshRenderer>()->SetPixelShader("spotLight");
+		plane->GetComponent<MeshRenderer>()->SetVertexShader("pointLight");
+		plane->GetComponent<MeshRenderer>()->SetPixelShader("pointLight");
 
 		Editor::GetInstance()->AddObject(plane);
 	}
 
 	auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
+	auto toonTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/toonGray.bmp");
 
 	//プレイヤーモデルオブジェクト作成
 	{
@@ -208,158 +214,81 @@ void SetSceneGame()
 
 		model->GetComponent<MeshRenderer>()->SetMaterial(material);
 
-		model->GetComponent<MeshRenderer>()->SetVertexShader("limLight");
-		model->GetComponent<MeshRenderer>()->SetPixelShader("limLight");
-		//model->GetComponent<MeshRenderer>()->SetTexture(texture1);
+		model->GetComponent<MeshRenderer>()->SetVertexShader("toon1");
+		model->GetComponent<MeshRenderer>()->SetPixelShader("toon1");
+		model->GetComponent<MeshRenderer>()->SetToonTexture(toonTexture);
 
-		Editor::GetInstance()->GetObject("Camera2")->GetComponent<PlayerCamera>()->SetPlayer(model);
+		//Editor::GetInstance()->GetObject("Camera2")->GetComponent<PlayerCamera>()->SetPlayer(model);
 		//Editor::GetInstance()->AddObject(model);
 	}
 
-	//トーラスオブジェクト作成
 	{
-		Object* torus;
+		Object* torus = new Object();
+		torus->SetName("donut");
+		torus->AddComponent<Transform>();
+		torus->AddComponent<MeshFilter>();
+		torus->AddComponent<AssimpMeshRenderer>();
 
-		for (int i = 0; i < 3; i++)
-		{
-			torus = new Object();
-			torus->SetName("LimTorus");
-			torus->AddComponent<Transform>();
-			torus->AddComponent<MeshFilter>();
-			torus->AddComponent<AssimpMeshRenderer>();
-			torus->AddComponent<Pack>();
+		OBJLoader* loader = new OBJLoader();
+		loader->Load("asset\\model\\torus.obj", torus);
 
-			ModelLoader* loader = new ModelLoader();
-			loader->LoadModel(torus, "asset\\model\\torus.obj");
+		MATERIAL material;
+		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
 
-			MATERIAL material;
-			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+		LIGHT light;
+		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
+		light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // スポットライトの方向
+		light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // スポットライトの位置
+		light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // スポットライトの範囲
+		light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // スポットライトの角度
 
-			LIGHT light;
-			light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
-			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-			light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-			light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
-			light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
+		torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
+		torus->GetComponent<Transform>()->SetPosition(Vector4O(5.0f, 0.0f, 5.0f));
+		torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
+		torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
+		torus->GetComponent<MeshRenderer>()->SetToonTexture(toonTexture);
 
-			torus->GetComponent<Transform>()->SetPosition(Vector4O(5.0f - (10.0f * i), 0.0f, -10.0f));
-			torus->GetComponent<Transform>()->SetRotation(Vector4O(90.0f, 0.0f, 0.0f));
-			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
-			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
+		torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("toon1");
+		torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("toon1");
+		Editor::GetInstance()->AddObject(torus);
+	}
+	{
+		Object* torus1 = new Object();
+		torus1->SetName("donut1");
+		torus1->AddComponent<Transform>();
+		torus1->AddComponent<MeshFilter>();
+		torus1->AddComponent<AssimpMeshRenderer>();
 
-			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("limLight");
-			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("limLight");
+		OBJLoader* loader = new OBJLoader();
+		loader->Load("asset\\model\\torus.obj", torus1);
 
-			torus->SetTag(GameObjectTagLayer::PackTag);
+		MATERIAL material;
+		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
 
-			Editor::GetInstance()->AddObject(torus);
+		LIGHT light;
+		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
+		light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // スポットライトの方向
+		light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // スポットライトの位置
+		light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // スポットライトの範囲
+		light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // スポットライトの角度
 
-		}
-		for (int i = 0; i < 3; i++)
-		{
-			torus = new Object();
-			torus->SetName("LimTorus");
-			torus->AddComponent<Transform>();
-			torus->AddComponent<MeshFilter>();
-			torus->AddComponent<AssimpMeshRenderer>();
-			torus->AddComponent<Pack>();
+		torus1->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
+		torus1->GetComponent<Transform>()->SetPosition(Vector4O(-5.0f, 0.0f, 5.0f));
+		torus1->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
+		torus1->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
+		torus1->GetComponent<MeshRenderer>()->SetToonTexture(toonTexture);
 
-			ModelLoader* loader = new ModelLoader();
-			loader->LoadModel(torus, "asset\\model\\torus.obj");
-
-			MATERIAL material;
-			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-
-			LIGHT light;
-			light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
-			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-			light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-			light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
-			light.PointLightRange = Vector4O(10.0f, 0.0f, 0.0f, 0.0f);
-
-			torus->GetComponent<Transform>()->SetPosition(Vector4O(5.0f - (10.0f * i), 0.0f, 10.0f));
-			torus->GetComponent<Transform>()->SetRotation(Vector4O(90.0f,0.0f,0.0f));
-			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
-			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
-
-			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("limLight");
-			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("limLight");
-
-			torus->SetTag(GameObjectTagLayer::PackTag);
-
-			Editor::GetInstance()->AddObject(torus);
-
-		}
-
-		//スポットライト用トーラス
-		{
-			Object* torus = new Object();
-			torus->SetName("SpotLightTorus");
-			torus->AddComponent<Transform>();
-			torus->AddComponent<MeshFilter>();
-			torus->AddComponent<AssimpMeshRenderer>();
-
-			OBJLoader* loader = new OBJLoader();
-			loader->Load("asset\\model\\torus.obj", torus);
-
-			MATERIAL material;
-			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-
-			LIGHT light;
-			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-			light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
-			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // スポットライトの方向
-			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // スポットライトの位置
-			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // スポットライトの範囲
-			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // スポットライトの角度
-
-			torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
-			torus->GetComponent<Transform>()->SetPosition(Vector4O::Zero());
-			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
-			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
-
-			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("spotLight");
-			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("spotLight");
-			//Editor::GetInstance()->AddObject(torus);
-		}
-		//クックトランス用トーラス
-		{
-			Object* torus = new Object();
-			torus->SetName("CookTorus");
-			torus->AddComponent<Transform>();
-			torus->AddComponent<MeshFilter>();
-			torus->AddComponent<AssimpMeshRenderer>();
-
-			OBJLoader* loader = new OBJLoader();
-			loader->Load("asset\\model\\torus.obj", torus);
-
-			MATERIAL material;
-			material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-			material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-
-			LIGHT light;
-			light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-			light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f);
-			light.Direction = Vector4O(0.0f, -1.0f, 0.0f, 0.0f); // スポットライトの方向
-			light.Position = Vector4O(0.0f, 1.0f, 0.0f, 1.0f); // スポットライトの位置
-			light.PointLightRange = Vector4O(2000.0f, 1.5f, 0.0f, 0.0f); // スポットライトの範囲
-			light.SpotLightAngle = Vector4O((Vector4O::PI / 180.0f) * 30.0f, 0.0f, 0.0f, 0.0f); // スポットライトの角度
-
-			torus->GetComponent<Transform>()->SetRotation(Vector4O::Zero());
-			torus->GetComponent<Transform>()->SetPosition(Vector4O(-5.0f, 0.0f, 5.0f));
-			torus->GetComponent<AssimpMeshRenderer>()->SetMaterial(material);
-			torus->GetComponent<AssimpMeshRenderer>()->SetTexture(texture1);
-
-			torus->GetComponent<AssimpMeshRenderer>()->SetVertexShader("CookTorrance");
-			torus->GetComponent<AssimpMeshRenderer>()->SetPixelShader("CookTorrance");
-			//Editor::GetInstance()->AddObject(torus);
-		}
+		Editor::GetInstance()->AddObject(torus1);
+		torus1->GetComponent<AssimpMeshRenderer>()->SetVertexShader("toon2");
+		torus1->GetComponent<AssimpMeshRenderer>()->SetPixelShader("toon2");
 	}
 
-	ID3D11ShaderResourceView* texture2 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\explosion.png");
+
+	int texture2 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\explosion.png");
 
 	//アニメーションスプライト作成
 	{
@@ -395,7 +324,7 @@ void SetSceneGame()
 
 		//Editor::GetInstance()->AddObject(sprite);
 	}
-	ID3D11ShaderResourceView* particleTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/particle.png");
+	int particleTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/particle.png");
 	// パーティクル作成
 	{
 		Object* particle = new Object();
@@ -408,10 +337,42 @@ void SetSceneGame()
 		particle->GetComponent<Particle>()->SetAcceleration(Vector4O::Zero());
 		particle->GetComponent<Particle>()->SetVelocity(Vector4O::Zero());
 		particle->GetComponent<Particle>()->SetSpawnSpan(5);
-		Editor::GetInstance()->AddObject(particle);
+		//Editor::GetInstance()->AddObject(particle);
 	}
 
-	// ライトオブジェクト作成
+	// スポットライトオブジェクト作成
+	{
+		Object* lightObject = new Object();
+		lightObject->SetName("SpotLight");
+		lightObject->AddComponent<Transform>();
+		lightObject->AddComponent<Light>();
+
+		lightObject->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 10.0f, 0.0f));
+		lightObject->GetComponent<Light>()->SetType(LightType::LIGHTTYPE_SPOT);
+		lightObject->GetComponent<Light>()->SetDirection(Vector4O(0.0f, -1.0f, 0.0f, 0.0f));
+		lightObject->GetComponent<Light>()->SetDiffuse(Vector4O(1.0f, 1.0f, 1.0f, 1.0f));
+		lightObject->GetComponent<Light>()->SetAmbient(Vector4O(0.2f, 0.2f, 0.2f, 1.0f));
+
+		lightObject->GetComponent<Light>()->SetEnable(true);
+		Editor::GetInstance()->AddObject(lightObject);
+	}
+	// 点光源オブジェクト作成
+	{
+		Object* lightObject = new Object();
+		lightObject->SetName("PointLight");
+		lightObject->AddComponent<Transform>();
+		lightObject->AddComponent<Light>();
+
+		lightObject->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 10.0f, 0.0f));
+		lightObject->GetComponent<Light>()->SetType(LightType::LIGHTTYPE_POINT);
+		lightObject->GetComponent<Light>()->SetDiffuse(Vector4O(1.0f, 1.0f, 1.0f, 1.0f));
+		lightObject->GetComponent<Light>()->SetAmbient(Vector4O(0.2f, 0.2f, 0.2f, 1.0f));
+		lightObject->GetComponent<Light>()->SetRange(50.0f);
+		lightObject->GetComponent<Light>()->SetEnable(true);
+
+		Editor::GetInstance()->AddObject(lightObject);
+	}
+	// 平行光源オブジェクト作成
 	{
 		Object* lightObject = new Object();
 		lightObject->SetName("DirectionalLight");
@@ -426,6 +387,151 @@ void SetSceneGame()
 		lightObject->GetComponent<Light>()->SetEnable(true);
 		Editor::GetInstance()->AddObject(lightObject);
 	}
+
+	//パン作成
+	//for (int i = 0; i < 3; i++)
+	{
+		Object* donut = new Object();
+		donut->SetName("Bread");
+		donut->AddComponent<Transform>();
+		donut->AddComponent<MeshFilter>();
+		donut->AddComponent<AssimpMeshRenderer>();
+		ModelLoader* loader = new ModelLoader();
+		loader->LoadModel( donut, "asset\\model\\bread.fbx");
+
+		donut->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 0.0f));
+
+		donut->GetComponent<MeshRenderer>()->SetMaterial(new Material());
+
+		donut->GetComponent<MeshRenderer>()->SetVertexShader("toon2");	
+		donut->GetComponent<MeshRenderer>()->SetPixelShader("toon2");
+		int mainTex = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\PlainBread_Diffuse_4K.png");
+		int bump = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset\\texture\\PlainBread_Nomal.png");
+
+		donut->GetComponent<MeshRenderer>()->SetTexture(mainTex);
+		donut->GetComponent<MeshRenderer>()->SetBumpTexture(bump);
+		donut->GetComponent<MeshRenderer>()->SetToonTexture(toonTexture);
+
+		//Editor::GetInstance()->AddObject(donut);
+	}
+
+	// スカイボックスオブジェクト作成
+	{
+		Object* skyBox = new Object();
+		skyBox->SetName("SkyBox");
+		skyBox->AddComponent<Transform>();
+		skyBox->AddComponent<MeshFilter>();
+		skyBox->AddComponent<MeshRenderer>();
+		OBJLoader* loader = new OBJLoader();
+		loader->Load("asset\\model\\sky.obj", skyBox);
+
+		skyBox->GetComponent<Transform>()->SetScale(Vector4O(100.0f, 100.0f, 100.0f));
+		skyBox->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		skyBox->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+
+		int skyTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sky.jpg");
+
+		skyBox->GetComponent<MeshRenderer>()->SetTexture(skyTexture);
+
+		Editor::GetInstance()->AddObject(skyBox);
+	}
+
+	// オーディオシステム作成
+	{
+		auto audio = new Object();
+		audio->SetName("BGM");
+		audio->AddComponent<Audio>();
+
+		audio->GetComponent<Audio>()->LoadAudio("asset/sound/BGM/maou_bgm_orchestra24_1.wav");
+		audio->GetComponent<Audio>()->SetVolume(0.1f);
+		//audio->GetComponent<Audio>()->Play();
+
+		Editor::GetInstance()->AddObject(audio);
+	}
+
+	auto scoreTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/number.png");
+
+	// スコア表示スプライト
+	{
+		auto scoreSprite = new Object();
+		scoreSprite->SetName("ScoreSprite1p");
+		scoreSprite->AddComponent<Transform>();
+		scoreSprite->AddComponent<SpriteMesh>();
+		scoreSprite->AddComponent<MeshRenderer>();
+
+		scoreSprite->GetComponent<Transform>()->SetPosition(Vector4O(500.0f, -450.0f, 0.0f));
+		scoreSprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, -100.0f, 1.0f));
+		scoreSprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		scoreSprite->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		scoreSprite->GetComponent<MeshRenderer>()->SetTexture(scoreTexture);
+		scoreSprite->GetComponent<SpriteMesh>()->SetUVRect(Vector4O(5, 5));
+		scoreSprite->GetComponent<SpriteMesh>()->SetSpriteByIndex(0);
+
+		Editor::GetInstance()->AddObject(scoreSprite);
+	}
+	{
+		auto scoreSprite = new Object();
+		scoreSprite->SetName("ScoreSprite10p");
+		scoreSprite->AddComponent<Transform>();
+		scoreSprite->AddComponent<SpriteMesh>();
+		scoreSprite->AddComponent<MeshRenderer>();
+
+		scoreSprite->GetComponent<Transform>()->SetPosition(Vector4O(400.04, -450.0f, 0.0f));
+		scoreSprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, -100.0f, 1.0f));
+		scoreSprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		scoreSprite->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		scoreSprite->GetComponent<MeshRenderer>()->SetTexture(scoreTexture);
+		scoreSprite->GetComponent<SpriteMesh>()->SetUVRect(Vector4O(5, 5));
+		scoreSprite->GetComponent<SpriteMesh>()->SetSpriteByIndex(0);
+
+		Editor::GetInstance()->AddObject(scoreSprite);
+	}
+	{
+		auto scoreSprite = new Object();
+		scoreSprite->SetName("ScoreSprite100p");
+		scoreSprite->AddComponent<Transform>();
+		scoreSprite->AddComponent<SpriteMesh>();
+		scoreSprite->AddComponent<MeshRenderer>();
+
+		scoreSprite->GetComponent<Transform>()->SetPosition(Vector4O(300.0f, -450.0f, 0.0f));
+		scoreSprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, -100.0f, 1.0f));
+		scoreSprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		scoreSprite->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		scoreSprite->GetComponent<MeshRenderer>()->SetTexture(scoreTexture);
+		scoreSprite->GetComponent<SpriteMesh>()->SetUVRect(Vector4O(5, 5));
+		scoreSprite->GetComponent<SpriteMesh>()->SetSpriteByIndex(0);
+
+		Editor::GetInstance()->AddObject(scoreSprite);
+	}
+
+	// スコア管理オブジェクト
+	{
+		auto scoreManager = new Object();
+		scoreManager->SetName("ScoreManager");
+		scoreManager->AddComponent<Score>();
+		scoreManager->SetDrawable(false); // スコア管理オブジェクトは描画しない
+		Editor::GetInstance()->AddObject(scoreManager);
+	}
+
+	
+	{
+		auto toonTextureSprite = new Object();
+		toonTextureSprite->SetName("toonTextureSprite");
+		toonTextureSprite->AddComponent<Transform>();
+		toonTextureSprite->AddComponent<SpriteMesh>();
+		toonTextureSprite->AddComponent<MeshRenderer>();
+
+		toonTextureSprite->GetComponent<Transform>()->SetPosition(Vector4O(-500.0f, -450.0f, 0.0f));
+		toonTextureSprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, -100.0f, 1.0f));
+		toonTextureSprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+		toonTextureSprite->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+		toonTextureSprite->GetComponent<MeshRenderer>()->SetTexture(toonTexture);
+		toonTextureSprite->GetComponent<SpriteMesh>()->SetUVRect(Vector4O(1, 1));
+		toonTextureSprite->GetComponent<SpriteMesh>()->SetSpriteByIndex(0);
+
+		Editor::GetInstance()->AddObject(toonTextureSprite);
+	}
+	*/
 }
 
 void SetSceneResult()
@@ -471,7 +577,7 @@ void SetSceneResult()
 		sprite->GetComponent<MeshRenderer>()->SetMaterial(material);
 		light.Enable = false; // UIでは光源を無効にする
 
-		ID3D11ShaderResourceView* texture3 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/result.png");
+		int texture3 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/result.png");
 		sprite->GetComponent<MeshRenderer>()->SetTexture(texture3);
 		sprite->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
 		sprite->GetComponent<MeshRenderer>()->SetPixelShader("unlit");

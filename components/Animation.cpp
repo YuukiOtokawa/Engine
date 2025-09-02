@@ -23,11 +23,26 @@ void Animation::UpdateComponent() {
 	m_FrameCount = 0;
 }
 
+void Animation::ExportComponent()
+{
+	CSVExporter::ExportInt(m_SpriteCount);
+	CSVExporter::ExportInt(m_FramePerSecond);
+	CSVExporter::ExportInt(m_Loop);
+	CSVExporter::ExportInt(m_Playing);
+}
+
 void Animation::DrawGUI() {
 	ImGui::Separator();
 	ImGui::Text("Animation Component");
 	ImGui::Indent();
 	ImGui::Checkbox("Loop", &m_Loop);
+	if (ImGui::Button("Play")) {
+		m_Playing = true;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Stop")) {
+		m_Playing = false;
+	}
 	ImGui::InputInt("Frame Per Second", &m_FramePerSecond);
 	ImGui::BeginDisabled();
 	ImGui::InputInt("Sprite Count", &m_SpriteCount,ImGuiInputTextFlags_ReadOnly);

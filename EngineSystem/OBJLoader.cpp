@@ -5,11 +5,14 @@
 
 #include "OBJLoader.h"
 #include "MainEngine.h"
+#include "Renderer.h"
 
 #include "Material.h"
 
 #include "Component_MeshFilter.h"
 #include "Component_MeshRenderer.h"
+
+
 
 std::unordered_map<std::string, MODEL*> OBJLoader::m_ModelPool;
 
@@ -34,12 +37,6 @@ void OBJLoader::UnloadAll()
 	{
 		pair.second->VertexBuffer->Release();
 		pair.second->IndexBuffer->Release();
-
-		for (unsigned int i = 0; i < pair.second->SubsetNum; i++)
-		{
-			if (pair.second->MaterialArray[i].GetTexture())
-				pair.second->MaterialArray[i].GetTexture()->Release();
-		}
 
 		delete[] pair.second->MaterialArray;
 
@@ -69,9 +66,12 @@ void OBJLoader::Load(const char* FileName, Object* object)
 
 	}
 
+	Material* material = new Material;
+	*material = *m_Model->MaterialArray;
+
 	object->GetComponent<MeshFilter>()->SetVertexBuffer(m_Model->VertexBuffer, m_Model->VertexNum);
 	object->GetComponent<MeshFilter>()->SetIndexBuffer(m_Model->IndexBuffer, m_Model->IndexNum);
-	object->GetComponent<MeshRenderer>()->SetMaterial(m_Model->MaterialArray);
+	object->GetComponent<MeshRenderer>()->SetMaterial(material);
 	object->GetComponent<MeshRenderer>()->SetMaterialNum(m_Model->SubsetNum);
 }
 
@@ -129,7 +129,7 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 
 			Model->MaterialArray[i].SetMaterial(modelObj.SubsetArray[i].Material.Material);
 
-			Model->MaterialArray[i].SetTexture(nullptr);
+			Model->MaterialArray[i].SetTexture(-1);
 
 			Model->VertexNum = modelObj.VertexNum;
 			Model->IndexNum = modelObj.IndexNum;
@@ -143,7 +143,15 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 			LoadFromWICFile(wc, WIC_FLAGS_NONE, &metadata, image);
 			CreateShaderResourceView(renderer->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &srv);
 
-			Model->MaterialArray[i].SetTexture(srv);
+			Texture texture;
+			texture.height = (int)metadata.height;
+			texture.width = (int)metadata.width;
+			texture.shader_resource_view = srv;
+			texture.filename = wc;
+
+			int texID = MainEngine::GetInstance()->GetRenderer()->AddTexture(texture);
+
+			Model->MaterialArray[i].SetTexture(texID);
 
 			if (Model->MaterialArray[i].GetTexture())
 				Model->MaterialArray[i].SetTextureEnable(true);

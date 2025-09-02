@@ -4,6 +4,14 @@
 
 #include "MainEngine.h"
 
+#include "Editor.h"
+
+
+Object::Object(bool editable) : EngineMetaFile(CID_Object) {
+	if (editable)
+		Editor::GetInstance()->AddObject(this);
+}
+
 Object::~Object()
 {
 	for (Component* component : m_Components) {
@@ -12,9 +20,17 @@ Object::~Object()
 	}
 }
 void Object::Initialize() {}
+
+
 void Object::Update() {
 	for (auto& component : m_Components) {
 		component->UpdateComponent();
+	}
+	if (HasChild())
+	{
+		for (auto& child : m_Children) {
+			child->Update();
+		}
 	}
 }
 void Object::Draw() {
@@ -26,6 +42,12 @@ void Object::Draw() {
 		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Draw(m_iVertexCount, 0);
 	else
 		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->DrawIndexed(m_iIndexCount, 0, 0);
+	if (HasChild())
+	{
+		for (auto& child : m_Children) {
+			child->Draw();
+		}
+	}
 }
 void Object::DrawGUI(){
 	GUI::SetFontObjectName();
@@ -53,7 +75,44 @@ void Object::AddComponentClass(Component* component) {
 }
 
 void Object::ExportFile() {
+	CSVExporter::ExportString(m_Name);
+	CSVExporter::ExportInt(static_cast<int>(m_Tag));
+	CSVExporter::ExportInt(static_cast<int>(m_Layer));
 	for (Component* component : m_Components) {
-		component->ExportFile();
+		CSVExporter::ExportInt(component->GetFileID());
+	}
+	CSVExporter::ExportString("&");
+	CSVExporter::ExportInt(m_pParent != nullptr ? m_pParent->GetFileID() : -1); // Export parent ID, -1 if no parent
+	if (m_Children.empty()) {
+		CSVExporter::ExportInt(-1); // No children
+	} else {
+		for (Object* child : m_Children) {
+			CSVExporter::ExportInt(child->GetFileID());
+		}
+	}
+	CSVExporter::ExportString("&");
+}
+
+void Object::AddExportList()
+{
+	CSVExporter::AddExportList(this);
+	for (Component* component : m_Components) {
+		component->AddExportList();
+	}
+}
+
+void Object::ImportFile(std::vector<std::string>& tokens)
+{
+	m_Name = tokens[2];
+	m_Tag = static_cast<GameObjectTag>(std::stoi(tokens[3]));
+	m_Layer = static_cast<GameObjectLayer>(std::stoi(tokens[4]));
+	int i = 5;
+	while (tokens[i] != "&") {
+		int fileID = std::stoi(tokens[i]);
+		Component* component = Editor::GetInstance()->GetComponentByFileID(fileID);
+		if (component) {
+			AddComponentClass(component);
+		}
+		i++;
 	}
 }

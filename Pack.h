@@ -6,7 +6,7 @@
 #define BOUND_CONST 1.0f // はねかえり係数の定数
 
 class Pack :
-	public MonoBehavior
+	public MonoBehaviour
 {
 private:
 	static float before_length;		            // 前回のボール間の実際の距離

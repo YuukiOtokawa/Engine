@@ -77,7 +77,7 @@ void ParticleManager::UpdateParticles()
 
 void ParticleManager::DrawParticles()
 {
-    Object* object = new Object();
+    Object* object = new Object(false);
     object->AddComponent<Transform>();
 	object->AddComponent<Billboard>();
 	object->AddComponent<MeshRenderer>();
@@ -103,5 +103,5 @@ void ParticleManager::DrawParticles()
             }
 		}
     }
-    delete object;
+    object->Destroy();
 }

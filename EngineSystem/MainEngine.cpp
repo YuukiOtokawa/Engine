@@ -13,6 +13,7 @@
 #include "MainEngine.h"
 
 #include <sstream>
+
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
@@ -204,13 +205,15 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	//imGUI初期化
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 	ImGui_ImplWin32_Init(m_hWnd);
 	ImGui_ImplDX11_Init(
 		m_pRenderer->GetDevice(),
 		m_pRenderer->GetDeviceContext());
+
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ItemSpacing.y = 8.0f;
 
@@ -259,6 +262,8 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 		return true;
+
+
 	switch (message) {
 		break;
 	case WM_COMMAND:
@@ -402,6 +407,7 @@ INT_PTR MainEngine::FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, L
 				EndDialog(hDlg, LOWORD(wParam));
 				std::list<Object*> objects;
 				GetDlgItemTextA(hDlg, IDC_RICHEDIT21, buffer, sizeof(buffer));
+				Editor::GetInstance()->ResetScene();
 				objects = CSVImporter::Import(buffer);
 				if (objects.empty()) {
 					MessageBoxA(hDlg, "読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);

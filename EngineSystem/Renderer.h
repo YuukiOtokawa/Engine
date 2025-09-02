@@ -17,6 +17,7 @@
 #include <d3d11.h>
 #include "DirectXTex.h"
 
+#include <list>
 #include <map>
 
 #include "Vector4O.h"
@@ -24,22 +25,23 @@
 #include <vector>
 #include <string>
 
-#include "../Light.h"
+#include "../Component_Light.h"
 
 //==========================================================================
 // クラス定義
 //==========================================================================
+// テクスチャ構造体
+struct Texture {
+    std::wstring filename;
+    ID3D11ShaderResourceView* shader_resource_view;
+    int width = 0;
+    int height = 0;
+};
 
 class Renderer
 {
 private:
-	// テクスチャ構造体
-	struct Texture {
-		std::wstring filename;
-		ID3D11ShaderResourceView* shader_resource_view;
-		int width = 0;
-		int height = 0;
-	};
+
 
     // DirectX 11 関連のポインタ
 	ID3D11Device* m_pDevice;
@@ -96,6 +98,8 @@ private:
     // テクスチャ管理
 	std::vector<Texture> m_Textures;
 
+    std::vector<std::string> m_TextureFilePaths;
+    std::vector<std::string> m_ModelFilePaths;
 
 	/// @brief レンダーターゲットビューを作成します。
 	void CreateRenderTargetView();
@@ -174,11 +178,12 @@ public:
 	/// @brief 指定されたファイル名からテクスチャを読み込み、ID3D11ShaderResourceView ポインタを返します。
 	/// @param filename 読み込むテクスチャファイルのパスを表すワイド文字列。
 	/// @return 読み込まれたテクスチャの ID3D11ShaderResourceView ポインタ。失敗した場合は nullptr を返すことがあります。
-	ID3D11ShaderResourceView* TextureLoad(const std::wstring& filename);
+	int TextureLoad(const std::wstring& filename);
+    int AddTexture(const Texture texture);
 	/// @brief 指定されたインデックスのテクスチャリソースビューを取得します。
 	/// @param index 取得するテクスチャのインデックス。
 	/// @return 指定したインデックスに対応するID3D11ShaderResourceViewポインタ。該当するテクスチャが存在しない場合はnullptrを返すことがあります。
-	ID3D11ShaderResourceView* GetTexture(int index);
+	ID3D11ShaderResourceView** GetTexture(int index);
 	/// @brief 指定されたインデックスのテクスチャの幅を取得します。
 	/// @param index 幅を取得するテクスチャのインデックス。
 	/// @return テクスチャの幅（ピクセル単位）。
@@ -194,6 +199,14 @@ public:
 	/// @brief 指定されたキーに対応するピクセルシェーダーを設定します。
 	/// @param key 設定するピクセルシェーダーを識別するためのキー。
 	void SetPixelShader(std::string key);
+
+    std::vector<std::string> GetVertexShaderKeys() {
+        std::vector<std::string> keys;
+        for (const auto& shader : m_VertexShaders) {
+            keys.push_back(shader.first);
+        }
+        return keys;
+    }
 
 	/// @brief レンダーターゲットビューを設定します。
 	/// @param renderTargetView 設定するID3D11RenderTargetViewへのポインタ。

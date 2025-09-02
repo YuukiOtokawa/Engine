@@ -77,6 +77,7 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 // 構造体定義
 //==========================================================================
 
+
 struct VERTEX {
 	Vector4O position;
 	Vector4O normal;

@@ -37,7 +37,8 @@ protected:
 
 public:
 	// コンストラクタ
-	Component() : EngineMetaFile(CID_None) {}
+    Component();
+
     virtual ~Component() = default; // 仮想デストラクタを定義
 	
 	/// @brief オブジェクトの所有者を設定し、タグを初期化します。
@@ -61,11 +62,20 @@ public:
 
     void ExportFile() override {
         CSVExporter::ExportString("&");// コンポーネントの識別子をエクスポート
+        CSVExporter::ExportInt(static_cast<int>(GetTag()));
         ExportComponent();
     }
 
     virtual void ExportComponent() {
         // デフォルトの実装は何もしない
+    }
+
+    void AddExportList() override {
+        CSVExporter::AddExportList(this);
+    }
+
+    ComponentTag::Tag GetTag() const {
+        return tag;
     }
 };
 

@@ -48,15 +48,17 @@ void GUI::StartImGui()
 	ImGui_ImplWin32_NewFrame();
 	ImGui_ImplDX11_NewFrame();
 	NewFrame();
+
+
 	ImGui::PushFont(m_pFontDefault);
 	m_pCurrentFont = m_pFontDefault;
 
 }
 void GUI::StartHierarchy() {
-	SetNextWindowPos(ImVec2(0, 0));
-	SetNextWindowSize(ImVec2(400, 1009));
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	ImGui::SetNextWindowSize(ImVec2(400, 1009));
 
-	Begin("Hierarchy");
+	ImGui::Begin("Hierarchy");
 }
 
 void GUI::StartInspector()
@@ -68,7 +70,7 @@ void GUI::StartInspector()
 }
 
 void GUI::EndWindow() {
-	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(0.0f, 0.0f), ImVec2(1920.0f, 1080.0f),1);
+	//ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(0.0f, 0.0f), ImVec2(1920.0f, 1080.0f),1);
 	ImGui::End();
 
 

@@ -7,7 +7,7 @@ struct ParticleData {
     Vector4O size;
     Vector4O velocity;
     Vector4O acceleration;
-    ID3D11ShaderResourceView* texture;
+    int texture;
     int lifeTime;
     int frameCount = 0;
     bool enable;
@@ -23,7 +23,7 @@ private:
     Vector4O m_Size = Vector4O(1.0f, 1.0f, 1.0f); // Size of the particle
     Vector4O m_Velocity;
     Vector4O m_Acceleration;
-    ID3D11ShaderResourceView* m_Texture;
+    int m_Texture;
 
     bool m_isStarted;
 public:
@@ -34,6 +34,8 @@ public:
     void UpdateComponent() override;
 
     void DrawGUI() override;
+
+    void ExportComponent() override;
 
     void SetSize(Vector4O size) {
         m_Size = size;
@@ -50,14 +52,11 @@ public:
     void SetLifeTime(int lifeTime) {
         m_LifeTime = lifeTime;
     }
-    void SetTexture(ID3D11ShaderResourceView* texture) {
+    void SetTexture(int texture) {
         m_Texture = texture;
     }
 
-    void InitializeTag() {
-        owner->SetTag(GameObjectTagLayer::ParticleTag);
-        owner->SetLayer(GameObjectLayer::SystemLayer);
-    }
+    void InitializeTag();
 
     virtual void UpdateParticle(ParticleData* data) {}
 

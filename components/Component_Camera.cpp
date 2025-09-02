@@ -26,7 +26,7 @@ Camera::Camera()
 {
 	m_Projection = XMMatrixIdentity();
 	m_View = XMMatrixIdentity();
-	m_ClassID = CID_Camera;
+	m_ClassID = CID_Component_Camera;
 }
 
 void Camera::UpdateComponent() {
@@ -80,5 +80,15 @@ void Camera::InitializeTag()
 	owner->SetTag(GameObjectTagLayer::CameraTag);
 	owner->SetLayer(GameObjectTagLayer::CameraLayer);
 	owner->SetDrawable(false);
+}
+
+void Camera::ImportFile(std::vector<std::string>& tokens) {
+	if (std::stoi(tokens[4]) == 1)
+		Editor::GetInstance()->SetActiveCamera(owner);
+	SetTarget(Vector4O(std::stof(tokens[5]), std::stof(tokens[6]), std::stof(tokens[7]), std::stof(tokens[8])));
+	SetFov(std::stof(tokens[9]));
+	m_Near = std::stof(tokens[10]);
+	m_Far = std::stof(tokens[11]);
+	m_Up = Vector4O(std::stof(tokens[12]), std::stof(tokens[13]), std::stof(tokens[14]), std::stof(tokens[15]));
 }
 

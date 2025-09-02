@@ -24,10 +24,7 @@
 MeshRenderer::MeshRenderer()
 {
 	m_pMaterial = new Material();
-
-	m_pMaterial->DrawMaterial();
-
-	m_ClassID = CID_MeshRenderer;
+	m_ClassID = CID_Component_MeshRenderer;
 }
 
 void MeshRenderer::UpdateComponent() {
@@ -48,6 +45,22 @@ void MeshRenderer::DrawGUI() {
 	ImGui::Indent();
 	m_pMaterial->DrawGUI();
 	ImGui::Unindent();
+}
+
+void MeshRenderer::ImportFile(std::vector<std::string>& tokens)
+{
+	m_pMaterial = Editor::GetInstance()->GetMaterialByFileID(std::stoi(tokens[4]));
+}
+
+void MeshRenderer::ExportComponent()
+{
+	CSVExporter::ExportInt(m_pMaterial->GetFileID());
+}
+
+void MeshRenderer::AddExportList()
+{
+	CSVExporter::AddExportList(this);
+	CSVExporter::AddExportList(m_pMaterial);
 }
 
 void MeshRenderer::InitializeTag() {

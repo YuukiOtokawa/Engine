@@ -6,10 +6,14 @@
 
 #include "Component_Transform.h"
 
+#include "../Score.h"
+
+#include "Object.h"
+
 #include "../components/Bullet.h"
 
 class Player :
-    public MonoBehavior
+    public MonoBehaviour
 {
 private:
 	bool isControllable = true;
@@ -121,6 +125,10 @@ public:
 				Editor::GetInstance()->AddObject(bullet);
 				bulletTimer = bulletInterval;
 			}
+
+            if (keyboard->GetKeyDown(KK_P)) {
+                Editor::GetInstance()->GetObject("ScoreManager")->GetComponent<Score>()->AddScore(1);
+            }
 		}
 
 	}

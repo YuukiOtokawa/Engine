@@ -42,8 +42,10 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	RECT workArea;
 	SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
 
-	m_ClientSize.x = GetSystemMetrics(SM_CXSCREEN);
-	m_ClientSize.y = GetSystemMetrics(SM_CYSCREEN);
+	m_ClientSize.x = (float)GetSystemMetrics(SM_CXSCREEN);
+	m_ClientSize.y = (float)GetSystemMetrics(SM_CYSCREEN);
+
+	m_ClientSize = Vector4O{ renderWidth, renderHeight };
 
 	int taskbarHeight = 0;
 	//taskbarHeight = screenHeight - workArea.bottom;
@@ -52,8 +54,8 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	// スワップチェーンの設定を定義
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferCount = 1;
-	sd.BufferDesc.Width = m_ClientSize.x;
-	sd.BufferDesc.Height = m_ClientSize.y;
+	sd.BufferDesc.Width = (UINT)m_ClientSize.x;
+	sd.BufferDesc.Height = (UINT)m_ClientSize.y;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -161,8 +163,8 @@ void Renderer::CreateRenderTargetView()
 void Renderer::CreateDepthStencil()
 {
 	D3D11_TEXTURE2D_DESC td = {};
-	td.Width = m_ClientSize.x;
-	td.Height = m_ClientSize.y;
+	td.Width = (UINT)m_ClientSize.x;
+	td.Height = (UINT)m_ClientSize.y;
 	td.MipLevels = 1;
 	td.ArraySize = 1;
 	td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -426,14 +428,14 @@ void Renderer::CreateConstantBuffer()
 	m_pDeviceContext->PSSetConstantBuffers(8, 1, &m_pMaterialBuffer);
 }
 
-ID3D11ShaderResourceView* Renderer::TextureLoad(const std::wstring& filename)
+int Renderer::TextureLoad(const std::wstring& filename)
 {
 	// すでに同名のテクスチャが読み込まれていないか確認する
 	{
 		int count = 0;
 		for (auto it : m_Textures) {
 			if (it.filename == filename) {
-				return it.shader_resource_view; // すでに読み込まれていたのでidをわたす
+				return count; // すでに読み込まれていたのでidをわたす
 			}
 			count++;
 		}
@@ -448,20 +450,36 @@ ID3D11ShaderResourceView* Renderer::TextureLoad(const std::wstring& filename)
 	CreateShaderResourceView(m_pDevice, image.GetImages(), image.GetImageCount(), metadata, &texture.shader_resource_view);
 	texture.width = (int)metadata.width;
 	texture.height = (int)metadata.height;
+	
+	std::string str;
 
 	if (!texture.shader_resource_view) {
 		MessageBoxW(NULL, L"ファイルが読み込めなかった", filename.c_str(), MB_ICONEXCLAMATION | MB_OK);
-		return nullptr;
+		return 0;
 	}
 
 	m_Textures.push_back(texture);
 
-	return texture.shader_resource_view; // 新しく読み込んだテクスチャのIDを返す
+	return m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
 }
 
-ID3D11ShaderResourceView* Renderer::GetTexture(int index)
+int Renderer::AddTexture(const Texture texture)
 {
-	return m_Textures[index].shader_resource_view;
+	if (!texture.shader_resource_view) {
+		return 0;
+	}
+
+	m_Textures.push_back(texture);
+
+	return m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
+
+}
+
+ID3D11ShaderResourceView** Renderer::GetTexture(int index)
+{
+	if (index == -1)
+		return nullptr;
+	return &m_Textures[index].shader_resource_view;
 }
 
 int Renderer::GetTextureWidth(int index)
@@ -493,6 +511,11 @@ void Renderer::SetWorldViewProjection2D() {
 // C++側
 	float screenWidth = m_ClientSize.x;
 	float screenHeight = m_ClientSize.y;
+
+	if (screenWidth == 0.0f || screenHeight == 0.0f) {
+		screenWidth = 1920;
+		screenHeight = 1080;
+	}
 
 	// (0,0)が画面中央になるようにプロジェクション行列を設定
 	XMMATRIX projectionMatrix = XMMatrixOrthographicOffCenterLH(

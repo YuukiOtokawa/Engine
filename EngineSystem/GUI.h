@@ -39,6 +39,7 @@ public:
 	void StartInspector();
 	void EndWindow();
 	void EndImGui();
+    //void Begin(const char* name, ImVec2 pos, ImVec2 size);
 
 	static void SetFontDefault();
 	static void SetFontObjectName();

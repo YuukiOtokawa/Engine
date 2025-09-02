@@ -6,7 +6,7 @@
 #include "Component_Transform.h"
 #include "Component_Camera.h"
 
-class PlayerCamera : public MonoBehavior {
+class PlayerCamera : public MonoBehaviour {
 private:
 	Object* player = nullptr;
 	float lengthFrag = 10.0f;
@@ -59,6 +59,11 @@ public:
 		ImGui::InputFloat("Speed", &speed, 0.01f, 0.1f);
 		ImGui::Unindent();
 	}
+
+    void ExportComponent() override {
+        CSVExporter::ExportFloat(lengthFrag);
+        CSVExporter::ExportFloat(speed);
+    }
 
 	void SetPlayer(Object* playerObject) {
 		player = playerObject;

@@ -18,7 +18,7 @@ private:
     POINT m_OriginalScreenPosition = { 0, 0 };
 public:
     EditorCamera() {
-        m_ClassID = CID_EditorCamera;
+        m_ClassID = CID_Component_EditorCamera;
     }
     void UpdateComponent() override;
 
