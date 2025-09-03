@@ -2,7 +2,7 @@
 
 #include "FrameWork.h"
 
-class Vector3O
+struct Vector3O
 {
 public:
     float x = 0.0f;
@@ -104,7 +104,6 @@ public:
     auto operator <=(const float scalar) const -> bool { return Length() <= scalar; }
     auto operator >=(const float scalar) const -> bool { return Length() >= scalar; }
 
-    auto operator ()(const int x, const int y = 0, const int z = 0, const int w = 0) -> Vector3O& { this->x = (float)x; this->y = (float)y; this->z = (float)z; return *this; }
     auto operator ()(const float x, const float y = 0.0f, const float z = 0.0f, const float w = 0.0f) -> Vector3O& { this->x = x; this->y = y; this->z = z; return *this; }
 
 };

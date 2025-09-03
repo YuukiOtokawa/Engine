@@ -23,7 +23,6 @@
 //==========================================================================
 
 MeshFilter::MeshFilter(int vertexCount, int indexCount) : m_iVertexCount(vertexCount), m_iIndexCount(indexCount) {
-
 }
 
 void MeshFilter::UpdateComponent() {

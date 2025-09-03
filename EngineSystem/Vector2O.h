@@ -2,7 +2,7 @@
 
 #include "FrameWork.h"
 
-class Vector2O
+struct Vector2O
 {
 public:
     float x = 0.0f;

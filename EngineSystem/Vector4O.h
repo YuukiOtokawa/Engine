@@ -14,7 +14,7 @@ using namespace DirectX;
 // 繧ｯ繝ｩ繧ｹ螳夂ｾｩ
 //==========================================================================
 
-class Vector4O {
+struct Vector4O {
 public:
 	float x = 0.0f;
 	float y = 0.0f;
@@ -36,7 +36,6 @@ public:
 	Vector4O(const XMINT4 vec4) : x((float)vec4.x), y((float)vec4.y), z((float)vec4.z), w((float)vec4.w) {}
 
 	Vector4O(const float x, const float y = 0.0f, const float z = 0.0f, const float w = 0.0f) : x(x), y(y), z(z), w(w) {}
-	Vector4O(const int x, const int y = 0, const int z = 0, const int w = 0) : x((float)x), y((float)y), z((float)z), w((float)w) {}
 
 	XMFLOAT2* ToFloat2() const { return new XMFLOAT2(x, y); }
 	XMFLOAT3* ToFloat3() const { return new XMFLOAT3(x, y, z); }
@@ -143,6 +142,5 @@ public:
 	auto operator <=(const float scalar) const -> bool { return Length() <= scalar; }
 	auto operator >=(const float scalar) const -> bool { return Length() >= scalar; }
 
-	auto operator ()(const int x, const int y = 0, const int z = 0, const int w = 0) -> Vector4O& { this->x = (float)x; this->y = (float)y; this->z = (float)z; this->w = (float)w; return *this; }
 	auto operator ()(const float x, const float y = 0.0f, const float z = 0.0f, const float w = 0.0f) -> Vector4O& { this->x = x; this->y = y; this->z = z; this->w = w; return *this; }
 };
