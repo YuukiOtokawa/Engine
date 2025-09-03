@@ -251,6 +251,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animationModel.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="components\Animation.h" />
@@ -312,6 +313,7 @@
     <ClInclude Include="TornadoParticle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="animationModel.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="components\Animation.cpp" />
