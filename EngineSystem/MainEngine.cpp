@@ -276,7 +276,12 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			CSVExporter::Export(m_pEditor->GetObjects());
 			break;
 		case ID_FILE_LOAD: // 読み込み
-			FilePathDialog();
+		{
+			auto filePath = OpenFilePathDialog();
+			if (filePath != "") {
+				Editor::GetInstance()->OpenScene(filePath);
+			}
+		}
 			break;
 		case ID_FILE_EXIT: // 終了
 			if (MessageBoxA(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
@@ -376,15 +381,33 @@ void MainEngine::GetWindowsInfo()
 	GetSystemInfo(&sysInfo);
 }
 
-void MainEngine::FilePathDialog()
+#include <ShObjIdl.h> // IFileOpenDialog
+
+std::string MainEngine::OpenFilePathDialog()
 {
-    auto rs = DialogBox(m_hInstance, MAKEINTRESOURCE(IDD_DIALOG1), m_hWnd, FilePathDialogProc);
-    if (rs == -1) {
-        DWORD error = GetLastError();
-        std::stringstream ss;
-        ss << "DialogBox failed. Error code: " << error;
-        MessageBoxA(m_hWnd, ss.str().c_str(), "Dialog Error", MB_OK | MB_ICONERROR);
-    }
+    //auto rs = DialogBox(m_hInstance, MAKEINTRESOURCE(IDD_DIALOG1), m_hWnd, FilePathDialogProc);
+	IFileOpenDialog* pFileOpenDialog = nullptr;
+	auto rs = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpenDialog));
+	if (FAILED(rs)) {
+		pFileOpenDialog->Release();
+		return;
+	}
+	rs = pFileOpenDialog->Show(NULL);
+	if (FAILED(rs)) {
+		pFileOpenDialog->Release();
+		return;
+	}
+	IShellItem* pItem = nullptr;
+	rs = pFileOpenDialog->GetResult(&pItem);
+	if (FAILED(rs)) {
+		pFileOpenDialog->Release();
+		return;
+	}
+	PWSTR pszFilePath = nullptr;
+	rs = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+	pFileOpenDialog->Release();
+	pItem->Release();
+	return pszFilePath
 }
 
 INT_PTR MainEngine::FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -408,7 +431,7 @@ INT_PTR MainEngine::FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, L
 				std::list<Object*> objects;
 				GetDlgItemTextA(hDlg, IDC_RICHEDIT21, buffer, sizeof(buffer));
 				Editor::GetInstance()->ResetScene();
-				objects = CSVImporter::Import(buffer);
+				//objects = CSVImporter::Import(buffer);
 				if (objects.empty()) {
 					MessageBoxA(hDlg, "読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
 				}

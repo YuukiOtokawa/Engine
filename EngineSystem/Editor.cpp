@@ -442,3 +442,18 @@ void Editor::CheckCollision(Object* object)
 	}
 }
 
+#include "CSVImporter.h"
+
+void Editor::OpenScene(std::string sceneFilePath)
+{
+	std::list<Object*> objects;
+	Editor::GetInstance()->ResetScene();
+	objects = CSVImporter::Import(sceneFilePath);
+	if (objects.empty()) {
+		MessageBoxA(NULL, "読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
+	}
+	else {
+		Editor::GetInstance()->SetObjects(objects); // 読み込んだオブジェクトをエディターに設定
+	}
+}
+

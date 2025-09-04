@@ -102,13 +102,17 @@ void CSVExporter::ExportVertexIndexList()
 		}
 
 
-		// Write each object's data
+		// Write vertex data
 		for (const auto& vertex : vertexIndex->GetVertexInfo()) {
 			m_File << vertex.position.x << "," << vertex.position.y << "," << vertex.position.z << ",";
 			m_File << vertex.normal.x << "," << vertex.normal.y << "," << vertex.normal.z << ",";
 			m_File << vertex.color.x << "," << vertex.color.y << "," << vertex.color.z << "," << vertex.color.w << ",";
 			m_File << vertex.texcoord.x << "," << vertex.texcoord.y << "\n";
 		}
+
+		m_File << "&\n";  // Separator between vertex data and index data
+
+		// Write index data
 
 		for (const auto& index : vertexIndex->GetIndexInfo()) {
 			m_File << index;
@@ -121,7 +125,7 @@ void CSVExporter::ExportVertexIndexList()
 		// Close the file
 		m_File.close();
 
-		fileVertexInfoList << vertexIndex->GetFileID() << "," << fileName << vertexIndex->GetFilePath() << "\n";
+		fileVertexInfoList << vertexIndex->GetFileID() << "," << fileName << "," << vertexIndex->GetFilePath() << "\n";
 	}
 
 	fileVertexInfoList.close();

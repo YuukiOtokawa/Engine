@@ -129,6 +129,8 @@ public:
     }
 
     void CheckCollision(Object* object);
+
+    void OpenScene(std::string sceneFilePath);
 };
 
 void Main();

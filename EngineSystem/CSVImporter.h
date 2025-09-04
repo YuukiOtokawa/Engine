@@ -5,7 +5,7 @@
 class CSVImporter
 {
 public:
-    static std::list<Object*> Import(const char* filePath);
+    static std::list<Object*> Import(std::string filePath);
 
     static Vector4O ImportVector4O(const std::string& token1, const std::string& token2, const std::string& token3, const std::string& token4);
 private:

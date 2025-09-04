@@ -28,8 +28,124 @@
 #include <vector>
 #include <sstream>
 
-std::list<Object*> CSVImporter::Import(const char* filePath)
+std::list<Object*> CSVImporter::Import(std::string filePath)
 {
+	//==========================================================================
+	// 頂点情報の読み込み
+	//==========================================================================
+	{
+		//==========================================================================
+		// 頂点情報のリストを取得 すべての頂点情報のファイル名、ID、パスを取得
+		//==========================================================================
+
+		std::ifstream vertexList("VertexIndexInfo\\VertexIndexList.csv");
+
+		if (!vertexList.is_open()) {
+			throw std::runtime_error("Could not open file: " + std::string("VertexIndexList.csv"));
+		}
+
+		// 一行分のデータを格納する文字列
+		std::string line;
+		// 最終データを格納するvector
+		std::vector<std::vector<std::string>> data;
+
+
+		while (std::getline(vertexList, line)) {
+			// コンマで分けられた1行分のデータ
+			std::vector<std::string> tokens;
+			// 生の一行分のデータ
+			std::stringstream ss(line);
+			// コンマで分けられた一つ分のデータ
+			std::string token;
+			// コンマごとにデータを読み込んでvectorに格納
+			while (std::getline(ss, token, ',')) {
+				tokens.push_back(token);
+			}
+			// 最終データのvectorに一行分のデータを格納
+			data.push_back(tokens);
+		}
+
+		vertexList.close();
+
+		//==========================================================================
+		// リストから取得したすべての頂点情報の実データを取得、登録
+		//==========================================================================
+
+		for (auto& vertexindexinfo : data) {
+			std::ifstream file(vertexindexinfo[2]); // ファイル名で開く
+
+			if (!file.is_open()) {
+				throw std::runtime_error("Could not open file: " + filePath);
+			}
+
+			// 一行分のデータを格納する文字列
+			std::string line;
+			// 最終データを格納するvector
+			std::vector<std::vector<std::string>> vertexData;
+			std::vector<std::string> indexData;
+
+			//==========================================================================
+			// 頂点のデータとインデックスのデータを分けて取得
+			//==========================================================================
+
+			bool isVertex = true;
+			while (std::getline(vertexList, line)) {
+				// コンマで分けられた1行分のデータ
+				std::vector<std::string> tokens;
+				// 生の一行分のデータ
+				std::stringstream ss(line);
+				// コンマで分けられた一つ分のデータ
+				std::string token;
+				// コンマごとにデータを読み込んでvectorに格納
+				while (std::getline(ss, token, ',')) {
+					tokens.push_back(token);
+				}
+				if (tokens[0] == "&") {
+					isVertex = false;
+					continue;
+				}
+				// 最終データのvectorに一行分のデータを格納
+				if (isVertex)
+					vertexData.push_back(tokens);
+				else
+					indexData = tokens;
+			}
+
+			//==========================================================================
+			// VertexIndexの作成と登録
+			//==========================================================================
+
+			std::vector<VERTEX> vertices;
+			std::vector<unsigned int> indices;
+
+			for (auto& tokens : vertexData) {
+				VERTEX vertex;
+				vertex.position = Vector3O(std::stof(tokens[0]), std::stof(tokens[1]), std::stof(tokens[2]));
+				vertex.normal = Vector3O(std::stof(tokens[3]), std::stof(tokens[4]), std::stof(tokens[5]));
+				vertex.color = Vector4O(std::stof(tokens[6]), std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9]));
+				vertex.texcoord = Vector2O(std::stof(tokens[10]), std::stof(tokens[11]));
+				vertices.push_back(vertex);
+			}
+			for (auto& tokens : indexData) {
+				indices.push_back(std::stoi(tokens));
+			}
+
+			VertexIndex* vi = new VertexIndex(vertexindexinfo[1], vertices, indices);
+			vi->SetFileID(std::stoi(vertexindexinfo[0]));
+			Editor::GetInstance()->AddVertexIndex(vi);
+
+			file.close();
+		}
+
+	}
+
+
+	//==========================================================================
+	// 他ファイルの読み込み
+	// Object Component Material
+	//==========================================================================
+
+
 	// Open the CSV file
 	// 開くファイル
 	std::ifstream file(filePath);
@@ -47,7 +163,6 @@ std::list<Object*> CSVImporter::Import(const char* filePath)
 	std::vector<std::vector<std::string>> data;
 
 
-	// 2行目以降を処理
 	while (std::getline(file, line)) {
 		// Split the line by commas
 		// コンマで分かれた1個分のデータのvector
