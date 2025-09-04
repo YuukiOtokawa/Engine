@@ -26,7 +26,7 @@ public:
         m_ExportList.push_back(metaFile);
     }
 
-    void ExportVertexIndexList();
+    static void ExportVertexIndexList();
 
     static void AddVertexIndexExportList(VertexIndex* vertexIndex) {
         m_VertexIndicesExportList.push_back(vertexIndex);

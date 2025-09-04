@@ -133,13 +133,13 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(VERTEX) * (UINT)vertices.size(); // 頂点バッファの量
+		bd.ByteWidth = sizeof(VERTEX) * vertices.size(); // 頂点バッファの量
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA sd;
 		ZeroMemory(&sd, sizeof(sd));
-		sd.pSysMem = &vertices;
+		sd.pSysMem = vertices.data();
 
 		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
 	}
@@ -149,15 +149,15 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(unsigned int) * (UINT)indices.size();
+		bd.ByteWidth = sizeof(int) * indices.size();
 		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA sd;
 		ZeroMemory(&sd, sizeof(sd));
-		sd.pSysMem = &indices;
+		sd.pSysMem = indices.data();
 
-		MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
+		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
 	}
 
 }

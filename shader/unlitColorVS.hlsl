@@ -7,7 +7,7 @@ void main(in VS_IN In, out PS_IN Out)
     matrix wvp;
     wvp = mul(World, View);
     wvp = mul(wvp, Projection);
-    Out.Position = mul(In.Position, wvp);
+    Out.Position = mul(float4(In.Position, 1.0f), wvp); 
     Out.WorldPosition = float4(0.0f, 0.0f, 0.0f, 0.0f);
     Out.Normal = In.Normal;
     Out.TexCoord = In.TexCoord;

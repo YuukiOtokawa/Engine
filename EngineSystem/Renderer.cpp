@@ -45,7 +45,7 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	m_ClientSize.x = (float)GetSystemMetrics(SM_CXSCREEN);
 	m_ClientSize.y = (float)GetSystemMetrics(SM_CYSCREEN);
 
-	m_ClientSize = ( renderWidth, renderHeight );
+	m_ClientSize = Vector2O( renderWidth, renderHeight );
 
 	int taskbarHeight = 0;
 	//taskbarHeight = screenHeight - workArea.bottom;
@@ -144,7 +144,7 @@ void Renderer::BufferPresent()
 
 void Renderer::ResizeClient(int width, int height)
 {
-	m_ClientSize = ( width, height );
+	m_ClientSize = Vector2O( width, height );
 }
 
 void Renderer::CreateRenderTargetView()

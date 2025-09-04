@@ -5,14 +5,14 @@ SamplerState g_SamplerState : register(s0); //サンプラー０番
 void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 {
 	//光源からピクセルへのベクトルを計算
-    float4 lv = In.WorldPosition - Light.SpotLight.position;
+    float3 lv = In.WorldPosition - Light.SpotLight.position;
     //光源からピクセルへの距離を計算
-    float4 normal = normalize(In.Normal);
-    float light = -dot(normal.xyz, lv.xyz);
+    float3 normal = normalize(In.Normal);
+    float light = -dot(normal, lv);
     
     //減衰率を計算
-    float3 ld = length(In.WorldPosition.xyz - Light.SpotLight.position.xyz);
-    float ofs = 1.0f - (1.0f / Light.SpotLight.range.x) * ld.x;
+    float ld = length(In.WorldPosition.xyz - Light.SpotLight.position.xyz);
+    float ofs = 1.0f - (1.0f / Light.SpotLight.range.x) * ld;
     ofs = saturate(ofs); //減衰率は０～１の範囲に収める
     light += ofs;
     

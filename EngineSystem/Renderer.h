@@ -152,7 +152,9 @@ public:
 	void SetRenderTargetView() { m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView); }
 	/// @brief クライアント領域のサイズを取得します。
 	/// @return クライアント領域のサイズを表す Vector4O 型の値。
-	Vector2O GetClientSize() { return m_ClientSize; }
+	Vector2O GetClientSize() {
+        return m_ClientSize;
+    }
 
 	/// @brief 指定されたファイル名とキーから頂点シェーダーを作成します。
 	/// @param filename 頂点シェーダーのソースコードが含まれるファイルの名前。

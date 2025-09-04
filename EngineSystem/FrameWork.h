@@ -121,13 +121,6 @@ struct LIGHT {
 	Vector4O SpotLightAngle;
 };
 
-struct LIGHT_PARAMETER {
-    float SpecularPower;
-    Vector4O SkyColor;
-    Vector4O GroundColor;
-    Vector3O GroundNormal;
-};
-
 namespace GameObjectTagLayer {
 #define X(EnumName, StringName) EnumName,
 	enum GameObjectTag {

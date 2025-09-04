@@ -21,8 +21,8 @@ cbuffer ProjectionBuffer : register(b4)
 
 struct VS_IN
 {
-    float4 Position : POSITION0;
-    float4 Normal : NORMAL0;
+    float3 Position : POSITION0;
+    float3 Normal : NORMAL0;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
     
@@ -31,28 +31,27 @@ struct VS_IN
 struct PS_IN
 {
     float4 Position : SV_POSITION;
-    float4 WorldPosition : POSITION0;
-    float4 Normal : NORMAL0;
+    float3 WorldPosition : POSITION0;
+    float3 Normal : NORMAL0;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
-    
+    float3 dummy : POSITION1;
 };
 
 struct LIGHT
 {
     bool Enable;
-    bool2 Dummy;
     float SpecularPower;
-    float4 Direction;
+    float3 Direction;
     float4 Diffuse;
     float4 Ambient;
     
     float4 SkyColor;
     float4 GroundColor;
-    float4 GroundNormal;
+    float3 GroundNormal;
     
-    float4 Position;
-    float4 PointLightRange;
+    float3 Position;
+    float PointLightRange;
    
     float4 SpotLightAngle;
 };
@@ -113,12 +112,12 @@ cbuffer MaterialBuffer : register(b8)
     bool textureEnable;
     float Shininess;
     float SpecularPower;
-    float Dummy;
+    float2 Dummy;
     float4 ambient;
     float4 diffuse;
     float4 specular;
     float4 emissive;
     float4 SkyColor;
     float4 GroundColor;
-    float4 GroundNormal;
+    float3 GroundNormal;
 };

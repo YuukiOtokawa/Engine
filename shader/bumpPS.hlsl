@@ -6,10 +6,10 @@ SamplerState g_SamplerState : register(s0); //サンプラー０番
 void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 {
 	//光源からピクセルへのベクトルを計算
-    float4 lv;
+    float3 lv;
     lv = In.WorldPosition - Light.PointLight.position;
     //光源からピクセルへの距離を計算
-    float ld = length(lv.xyz);
+    float ld = length(lv);
     lv = normalize(lv); //光源からピクセルへのベクトルを正規化
 
     //減衰率を計算

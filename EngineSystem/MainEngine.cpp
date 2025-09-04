@@ -382,6 +382,8 @@ void MainEngine::GetWindowsInfo()
 }
 
 #include <ShObjIdl.h> // IFileOpenDialog
+#include <locale>
+#include <codecvt>
 
 std::string MainEngine::OpenFilePathDialog()
 {
@@ -390,24 +392,34 @@ std::string MainEngine::OpenFilePathDialog()
 	auto rs = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpenDialog));
 	if (FAILED(rs)) {
 		pFileOpenDialog->Release();
-		return;
+		return "";
 	}
 	rs = pFileOpenDialog->Show(NULL);
 	if (FAILED(rs)) {
 		pFileOpenDialog->Release();
-		return;
+		return "";
 	}
 	IShellItem* pItem = nullptr;
 	rs = pFileOpenDialog->GetResult(&pItem);
 	if (FAILED(rs)) {
 		pFileOpenDialog->Release();
-		return;
+		return "";
 	}
 	PWSTR pszFilePath = nullptr;
 	rs = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 	pFileOpenDialog->Release();
 	pItem->Release();
-	return pszFilePath
+	//std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	//std::string narrow_str = converter.to_bytes(pszFilePath);
+
+	// 代替: WideCharToMultiByte を使って wstring → string 変換
+	int len = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, nullptr, 0, nullptr, nullptr);
+	std::string narrow_str;
+	if (len > 0) {
+	    narrow_str.resize(len - 1); // null終端を除く
+	    WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &narrow_str[0], len, nullptr, nullptr);
+	}
+	return narrow_str;
 }
 
 INT_PTR MainEngine::FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)

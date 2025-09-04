@@ -5,10 +5,10 @@ SamplerState g_SamplerState : register(s0); //テクスチャの取得の仕方 rennderer.c
 
 void main(in PS_IN In, out float4 outDiffuse : SV_Target) {
 	//法線の正規化
-    float4 normal = normalize(In.Normal);
+    float3 normal = normalize(In.Normal);
 	
 	//光源計算
-    float1 light = -dot(normal.xyz, Light.DirectionalLight.direction.xyz);
+    float light = -dot(normal, Light.DirectionalLight.direction.xyz);
 
 	//テクスチャのピクセル色を取得
     outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);

@@ -32,6 +32,8 @@ void CSVExporter::Export(std::list<Object*> objects)
 	}
 	// Close the file
 	m_File.close();
+
+	ExportVertexIndexList();
 }
 
 void CSVExporter::ExportInt(int data)
@@ -92,9 +94,8 @@ void CSVExporter::ExportVertexIndexList()
 	auto fileVertexInfoList = std::ofstream("VertexIndexInfo\\VertexIndexList.csv");
 	for (auto vertexIndex : m_VertexIndicesExportList)
 	{
-		std::string fileName = "VertexIndexInfo\\" + vertexIndex->GetName() + ".csv";
 
-		m_File = std::ofstream(fileName);
+		m_File = std::ofstream(vertexIndex->GetFilePath());
 		if (!m_File.is_open()) {
 			throw std::runtime_error("Could not open file for writing.");
 			m_ExportList.clear();
@@ -125,7 +126,7 @@ void CSVExporter::ExportVertexIndexList()
 		// Close the file
 		m_File.close();
 
-		fileVertexInfoList << vertexIndex->GetFileID() << "," << fileName << "," << vertexIndex->GetFilePath() << "\n";
+		fileVertexInfoList << vertexIndex->GetFileID() << "," << vertexIndex->GetName() << "," << vertexIndex->GetFilePath() << "\n";
 	}
 
 	fileVertexInfoList.close();

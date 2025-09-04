@@ -5,8 +5,8 @@ SamplerState g_SamplerState : register(s0); //サンプラー０番
 void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 {
 	//ピクセルの法線を正規化
-	float4 normal = normalize(In.Normal);
-    float light = -dot(normal.xyz, Light.DirectionalLight.direction.xyz); //光源計算をする
+	float3 normal = normalize(In.Normal);
+    float light = -dot(normal, Light.DirectionalLight.direction.xyz); //光源計算をする
 
 	//テクスチャのピクセル色を取得
 	outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);

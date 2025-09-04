@@ -12,6 +12,7 @@ class VertexIndex : public EngineMetaFile {
 public:
     VertexIndex(std::string name, std::vector<VERTEX> vertexInfo, std::vector<unsigned int> indexInfo)
         : m_Name(name), m_VertexInfo(vertexInfo), m_IndexInfo(indexInfo) {
+        m_FilePath = "VertexIndexInfo\\" + name + ".csv";
     }
 
     std::vector<VERTEX> GetVertexInfo() const {

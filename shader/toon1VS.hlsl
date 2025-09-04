@@ -10,7 +10,7 @@ void main(in VS_IN In, out PS_IN Out)
     wvp = mul(wvp, Projection);
 
 	//ポリゴンの頂点を変換行列で変換して出力
-    Out.Position = mul(In.Position, wvp); //Position * wvp
+    Out.Position = mul(float4(In.Position, 1.0f), wvp); 
 	
 //==========================================================================
 // 法線の回転処理
