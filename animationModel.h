@@ -1,12 +1,13 @@
 ﻿#pragma once
+#define NOMINMAX
 
 #include <unordered_map>
 
-#include "assimp/cimport.h"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-#include "assimp/matrix4x4.h"
-#pragma comment (lib, "assimp-vc143-mt.lib")
+#include "cimport.h"
+#include "scene.h"
+#include "postprocess.h"
+#include "matrix4x4.h"
+#pragma comment(lib, "assimp/assimp-vc143-mt.lib")
 
 #include "component.h"
 
@@ -51,7 +52,7 @@ public:
 
 	void Load( const char *FileName );
 	void LoadAnimation( const char *FileName, const char *Name );
-	void Finalize() override;
+	void Finalize();
 	void Update(const char *AnimationName1, int Frame1);
 	void Draw() override;
 };

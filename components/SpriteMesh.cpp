@@ -18,31 +18,31 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 	//上
 
 	vertex[0] = {
-		Vector4O(-1.0f, -1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
+		Vector3O(-1.0f, -1.0f, 0.0f),
+		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 0.0f),
+		Vector2O(0.0f, 0.0f),
 	};
 
 	vertex[1] = {
-		Vector4O(1.0f, -1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
+		Vector3O(1.0f, -1.0f, 0.0f),
+		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 0.0f),
+		Vector2O(1.0f, 0.0f),
 	};
 
 	vertex[2] = {
-		Vector4O(-1.0f, 1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
+		Vector3O(-1.0f, 1.0f, 0.0f),
+		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(0.0f, 1.0f),
+		Vector2O(0.0f, 1.0f),
 	};
 
 	vertex[3] = {
-		Vector4O(1.0f, 1.0f, 0.0f),
-		Vector4O(0.0f,0.0f,-1.0f),
+		Vector3O(1.0f, 1.0f, 0.0f),
+		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-		Vector4O(1.0f, 1.0f),
+		Vector2O(1.0f, 1.0f),
 	};
 
 	HRESULT hr;
@@ -78,31 +78,31 @@ void SpriteMesh::UpdateComponent() {
 		VERTEX* vertex = (VERTEX*)msr.pData;
 
 		vertex[0] = {
-			Vector4O(-1.0f, 1.0f, 0.0f),
-			Vector4O(0.0f,0.0f,-1.0f),
+			Vector3O(-1.0f, 1.0f, 0.0f),
+			Vector3O(0.0f,0.0f,-1.0f),
 			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-			Vector4O(uvOffset.x * x, uvOffset.y * y),
+			Vector2O(uvOffset.x * x, uvOffset.y * y),
 		};
 
 		vertex[1] = {
-			Vector4O(1.0f, 1.0f, 0.0f),
-			Vector4O(0.0f,0.0f,-1.0f),
+			Vector3O(1.0f, 1.0f, 0.0f),
+			Vector3O(0.0f,0.0f,-1.0f),
 			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-			Vector4O(uvOffset.x * (x + 1), uvOffset.y * y),
+			Vector2O(uvOffset.x * (x + 1), uvOffset.y * y),
 		};
 
 		vertex[2] = {
-			Vector4O(-1.0f, -1.0f, 0.0f),
-			Vector4O(0.0f,0.0f,-1.0f),
+			Vector3O(-1.0f, -1.0f, 0.0f),
+			Vector3O(0.0f,0.0f,-1.0f),
 			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-			Vector4O(uvOffset.x * x, uvOffset.y * (y + 1)),
+			Vector2O(uvOffset.x * x, uvOffset.y * (y + 1)),
 		};
 
 		vertex[3] = {
-			Vector4O(1.0f, -1.0f, 0.0f),
-			Vector4O(0.0f,0.0f,-1.0f),
+			Vector3O(1.0f, -1.0f, 0.0f),
+			Vector3O(0.0f,0.0f,-1.0f),
 			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
-			Vector4O(uvOffset.x * (x + 1), uvOffset.y * (y + 1)),
+			Vector2O(uvOffset.x * (x + 1), uvOffset.y * (y + 1)),
 		};
 
 		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);

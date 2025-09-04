@@ -35,7 +35,7 @@ void Camera::UpdateComponent() {
 
 void Camera::Draw() {
 	// 描画領域のサイズを取得
-	Vector4O clientSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
+	Vector2O clientSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
 
 	//プロジェクション行列を作成
 	m_Projection =

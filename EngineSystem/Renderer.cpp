@@ -45,7 +45,7 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	m_ClientSize.x = (float)GetSystemMetrics(SM_CXSCREEN);
 	m_ClientSize.y = (float)GetSystemMetrics(SM_CYSCREEN);
 
-	m_ClientSize = Vector4O{ renderWidth, renderHeight };
+	m_ClientSize = ( renderWidth, renderHeight );
 
 	int taskbarHeight = 0;
 	//taskbarHeight = screenHeight - workArea.bottom;
@@ -144,7 +144,7 @@ void Renderer::BufferPresent()
 
 void Renderer::ResizeClient(int width, int height)
 {
-	m_ClientSize(width, height);
+	m_ClientSize = ( width, height );
 }
 
 void Renderer::CreateRenderTargetView()
@@ -359,9 +359,9 @@ ID3D11InputLayout* Renderer::CreateInputLayout(unsigned char* pByteCode, long by
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 4, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 8, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 6, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 10, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -460,7 +460,7 @@ int Renderer::TextureLoad(const std::wstring& filename)
 
 	m_Textures.push_back(texture);
 
-	return m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
+	return (UINT)m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
 }
 
 int Renderer::AddTexture(const Texture texture)
@@ -471,7 +471,7 @@ int Renderer::AddTexture(const Texture texture)
 
 	m_Textures.push_back(texture);
 
-	return m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
+	return (UINT)m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
 
 }
 

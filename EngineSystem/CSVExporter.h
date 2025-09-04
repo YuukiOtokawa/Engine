@@ -5,12 +5,14 @@
 
 class EngineMetaFile;
 class Object;
-class Vector4O;
+struct Vector4O;
+class VertexIndex;
 class CSVExporter
 {
 private:
     static std::ofstream m_File;
     static std::list<EngineMetaFile*> m_ExportList;
+    static std::list<VertexIndex*> m_VertexIndicesExportList;
 public:
     static void Export(std::list<Object*> objects);
 
@@ -24,5 +26,10 @@ public:
         m_ExportList.push_back(metaFile);
     }
 
+    void ExportVertexIndexList();
+
+    static void AddVertexIndexExportList(VertexIndex* vertexIndex) {
+        m_VertexIndicesExportList.push_back(vertexIndex);
+    }
 };
 

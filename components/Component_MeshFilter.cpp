@@ -106,3 +106,58 @@ void MeshFilter::InitializeTag() {
 	owner->SetVertexCount(m_iVertexCount);
 	owner->SetIndexCount(m_iIndexCount);
 }
+
+void MeshFilter::ImportFile(std::vector<std::string>& tokens)
+{
+	m_pVertexIndex = Editor::GetInstance()->GetVertexIndexByFileID(std::stoi(tokens[4]));
+
+	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
+}
+
+void MeshFilter::ExportComponent()
+{
+	CSVExporter::ExportInt(m_pVertexIndex->GetFileID());
+}
+
+void MeshFilter::AddExportList()
+{
+	CSVExporter::AddExportList(this);
+	CSVExporter::AddVertexIndexExportList(m_pVertexIndex);
+}
+
+void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigned int> indices)
+{
+	HRESULT hr;
+	{
+		// 頂点バッファ生成
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(VERTEX) * (UINT)vertices.size(); // 頂点バッファの量
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem = &vertices;
+
+		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
+	}
+
+	{
+		// インデックスバッファ
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(unsigned int) * (UINT)indices.size();
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem = &indices;
+
+		MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
+	}
+
+}

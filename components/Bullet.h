@@ -48,7 +48,7 @@ public:
 
                 light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
                 light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-                light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
+                light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
 
                 sprite->GetComponent<Transform>()->SetScale(Vector4O(1.0f, 1.0f, 1.0f));
                 sprite->GetComponent<Transform>()->SetPosition(owner->GetComponent<Transform>()->GetPosition());

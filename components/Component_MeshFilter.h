@@ -24,8 +24,6 @@ class MeshFilter :
     public Component
 {
 protected:
-    int m_VertexInfoFileID = 0; // 頂点情報のファイルID
-
 	// 頂点数
 	int m_iVertexCount = 0;
 	// インデックス数
@@ -39,6 +37,8 @@ protected:
 	// このメッシュで使用するプリミティブトポロジー
 	D3D11_PRIMITIVE_TOPOLOGY m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
+    VertexIndex* m_pVertexIndex = nullptr;
+
 public:
 	/// @brief MeshFilter のデフォルトコンストラクタです。
 	MeshFilter() {
@@ -48,6 +48,11 @@ public:
 	/// @param vertexCount メッシュ内の頂点の数。
 	/// @param indexCount メッシュ内のインデックスの数。
 	MeshFilter(int vertexCount, int indexCount);
+
+    MeshFilter(std::vector<VERTEX> vertices, std::vector<unsigned int> indices) {
+        m_ClassID = CID_Component_MeshFilter;
+        SetVertexInfo(vertices, indices);
+    }
 
 	/// @brief オブジェクトの状態を更新します（オーバーライドされたメソッド）。
 	void UpdateComponent() override;
@@ -61,6 +66,10 @@ public:
 
 	/// @brief コンポーネントに対応したタグを所有者のオブジェクトに設定します。
 	void InitializeTag() override;
+
+    void ImportFile(std::vector<std::string>& tokens) override;
+    void ExportComponent() override;
+    void AddExportList() override;
 
 	/// @brief 所有者オブジェクトのインデックス数を設定します。
 	void SetOwnerIndexCount() { owner->SetIndexCount(m_iIndexCount); }
@@ -83,10 +92,6 @@ public:
 		owner->SetIndexCount(indexCount);
 	}
 
-    void SetVertexInfoFileID(int fileID) {
-        m_VertexInfoFileID = fileID;
-    }
-
-    
+    void SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigned int> indices);
 };
 

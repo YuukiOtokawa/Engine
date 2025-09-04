@@ -7,7 +7,7 @@
 
 #include <d3d11.h>
 
-#include "Vector4O.h"
+#include "../VectorO.h"
 
 
 #include "Material.h"

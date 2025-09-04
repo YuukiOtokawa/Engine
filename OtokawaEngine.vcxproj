@@ -286,9 +286,6 @@
     <ClInclude Include="EngineSystem\Object.h" />
     <ClInclude Include="EngineSystem\OBJLoader.h" />
     <ClInclude Include="EngineSystem\Renderer.h" />
-    <ClInclude Include="EngineSystem\Vector2O.h" />
-    <ClInclude Include="EngineSystem\Vector3O.h" />
-    <ClInclude Include="EngineSystem\Vector4O.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -311,6 +308,8 @@
     <ClInclude Include="scripts\Player.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TornadoParticle.h" />
+    <ClInclude Include="VectorO.h" />
+    <ClInclude Include="VertexIndex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animationModel.cpp" />

@@ -87,7 +87,7 @@ void ParticleManager::DrawParticles()
 	LIGHT light;
 	light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 	light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-    light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
+    light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
 
     for (auto& pair : m_Particles)
     {

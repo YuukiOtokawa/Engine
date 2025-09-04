@@ -2,6 +2,8 @@
 #include "Component.h"
 
 #include <vector>
+
+#include "../VectorO.h"
 enum LightType
 {
     LIGHTTYPE_DIRECTIONAL,

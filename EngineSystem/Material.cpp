@@ -79,7 +79,7 @@ void Material::DrawGUI() {
 
 void Material::ImportFile(std::vector<std::string>& tokens)
 {
-	m_Material.SpecularPower = std::stoi(tokens[2]);
+	m_Material.SpecularPower = (FLOAT)std::stoi(tokens[2]);
 	m_VertexShader = tokens[3];
 	m_PixelShader = tokens[4];
 	m_Texture = std::stoi(tokens[5]);

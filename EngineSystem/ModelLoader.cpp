@@ -33,10 +33,10 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 
 			for (unsigned int v = 0; v < mesh->mNumVertices; v++)
 			{
-				vertex[v].position = Vector4O(mesh->mVertices[v].x, -mesh->mVertices[v].z, mesh->mVertices[v].y);
-				vertex[v].texcoord = Vector4O(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
+				vertex[v].position = Vector3O(mesh->mVertices[v].x, -mesh->mVertices[v].z, mesh->mVertices[v].y);
+				vertex[v].texcoord = Vector2O(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
 				vertex[v].color = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-				vertex[v].normal = Vector4O(mesh->mNormals[v].x, -mesh->mNormals[v].z, mesh->mNormals[v].y);
+				vertex[v].normal = Vector3O(mesh->mNormals[v].x, -mesh->mNormals[v].z, mesh->mNormals[v].y);
 			}
 
 			D3D11_BUFFER_DESC bd;

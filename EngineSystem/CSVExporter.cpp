@@ -6,6 +6,7 @@
 
 std::ofstream CSVExporter::m_File;
 std::list<EngineMetaFile*> CSVExporter::m_ExportList;
+std::list<VertexIndex*> CSVExporter::m_VertexIndicesExportList;
 
 void CSVExporter::Export(std::list<Object*> objects)
 {
@@ -81,6 +82,49 @@ void CSVExporter::ExportFileID(const int fileID)
 		return;
 	}
 	m_File << "&" << fileID << ","; // Export file ID with a prefix
+}
+
+
+#include "../VertexIndex.h"
+
+void CSVExporter::ExportVertexIndexList()
+{
+	auto fileVertexInfoList = std::ofstream("VertexIndexInfo\\VertexIndexList.csv");
+	for (auto vertexIndex : m_VertexIndicesExportList)
+	{
+		std::string fileName = "VertexIndexInfo\\" + vertexIndex->GetName() + ".csv";
+
+		m_File = std::ofstream(fileName);
+		if (!m_File.is_open()) {
+			throw std::runtime_error("Could not open file for writing.");
+			m_ExportList.clear();
+			return;
+		}
+
+
+		// Write each object's data
+		for (const auto& vertex : vertexIndex->GetVertexInfo()) {
+			m_File << vertex.position.x << "," << vertex.position.y << "," << vertex.position.z << ",";
+			m_File << vertex.normal.x << "," << vertex.normal.y << "," << vertex.normal.z << ",";
+			m_File << vertex.color.x << "," << vertex.color.y << "," << vertex.color.z << "," << vertex.color.w << ",";
+			m_File << vertex.texcoord.x << "," << vertex.texcoord.y << "\n";
+		}
+
+		for (const auto& index : vertexIndex->GetIndexInfo()) {
+			m_File << index;
+			if (&index != &vertexIndex->GetIndexInfo().back()) {
+				m_File << ",";
+			}
+		}
+
+
+		// Close the file
+		m_File.close();
+
+		fileVertexInfoList << vertexIndex->GetFileID() << "," << fileName << vertexIndex->GetFilePath() << "\n";
+	}
+
+	fileVertexInfoList.close();
 }
 
 

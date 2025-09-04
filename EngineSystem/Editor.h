@@ -28,6 +28,9 @@
 
 #include "../AudioManager.h"
 
+#include "FrameWork.h"
+
+#include "../VertexIndex.h"
 
 //==========================================================================
 // クラス定義
@@ -41,6 +44,7 @@ private:
 	std::list<Object*> m_Objects;
 	std::list<Object*> m_DeleteObjects;
 
+    std::list<VertexIndex*> m_VertexIndices; // 頂点とインデックスのリスト
     std::list<Material*> m_Materials; // マテリアルのリスト
 	// エディターウィンドウのリスト
 	std::list<EditorWindow*> m_EditorWindows;
@@ -114,8 +118,10 @@ public:
 	Object* GetActiveCamera() const { return m_pActiveCamera; }
 
     int AddMaterial(Material* material);
+    int AddVertexIndex(VertexIndex* vertexIndex);
 
     Material* GetMaterialByFileID(int fileID);
+    VertexIndex* GetVertexIndexByFileID(int fileID);
 
     void ChangeScene(std::string sceneName)
     {

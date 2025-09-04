@@ -13,7 +13,7 @@
 //==========================================================================
 
 #include <Windows.h>
-#include "Vector4O.h"
+#include "../VectorO.h"
 //#include "MatrixO.h"
 
 #undef GetObject
@@ -79,18 +79,19 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 
 
 struct VERTEX {
-	Vector4O position;
-	Vector4O normal;
+	Vector3O position;
+	Vector3O normal;
 	Vector4O color;
-	Vector4O texcoord;
+	Vector2O texcoord;
 };
+
 
 struct MATERIAL
 {
     BOOL textureEnable = TRUE;
     FLOAT shininess = 0;
     FLOAT SpecularPower = 50.0f;
-    FLOAT dummy;
+    FLOAT dummy[2] = {};
 
 	Vector4O ambient;
 	Vector4O diffuse;
@@ -99,33 +100,32 @@ struct MATERIAL
 
     Vector4O SkyColor;
     Vector4O GroundColor;
-    Vector4O GroundNormal;
+    Vector3O GroundNormal;
 };
 
 struct LIGHT {
 	BOOL Enable = true;
-	BOOL Dummy[2] = {}; // Padding to make it 16 bytes
+	//BOOL Dummy[2] = {}; // Padding to make it 16 bytes
     FLOAT SpecularPower = 100.0f;
-	Vector4O Direction;
+	Vector3O Direction;
 	Vector4O Diffuse;
 	Vector4O Ambient;
 
 	Vector4O SkyColor;
 	Vector4O GroundColor;
-	Vector4O GroundNormal;
+	Vector3O GroundNormal;
 
-	Vector4O Position;
-	Vector4O PointLightRange;
+	Vector3O Position;
+	float PointLightRange;
 
 	Vector4O SpotLightAngle;
 };
 
 struct LIGHT_PARAMETER {
     float SpecularPower;
-    float Dummy[3];
     Vector4O SkyColor;
     Vector4O GroundColor;
-    Vector4O GroundNormal;
+    Vector3O GroundNormal;
 };
 
 namespace GameObjectTagLayer {

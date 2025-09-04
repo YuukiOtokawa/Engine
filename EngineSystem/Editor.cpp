@@ -391,10 +391,25 @@ int Editor::AddMaterial(Material* material)
 	return static_cast<int>(m_Materials.size() - 1); // 追加したマテリアルのインデックスを返す
 }
 
+int Editor::AddVertexIndex(VertexIndex* vertexIndex)
+{
+	m_VertexIndices.push_back(vertexIndex);
+	return static_cast<int>(m_VertexIndices.size() - 1); // 追加した頂点とインデックスのインデックスを返す
+}
+
 Material* Editor::GetMaterialByFileID(int fileID) {
 	for (auto& material : m_Materials) {
 		if (material->GetFileID() == fileID)
 			return material;
+	}
+	return nullptr;
+}
+
+VertexIndex* Editor::GetVertexIndexByFileID(int fileID)
+{
+	for (auto& vertexIndex : m_VertexIndices) {
+		if (vertexIndex->GetFileID() == fileID)
+			return vertexIndex;
 	}
 	return nullptr;
 }

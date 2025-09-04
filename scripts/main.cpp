@@ -71,7 +71,7 @@ void SetSceneTitle()
 		LIGHT light;
 		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 		light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
+		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
 		sprite->GetComponent<Transform>()->SetScale(Vector4O(1920.0f, 1080.0f, 1.0f));
 		sprite->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 0.0f, 0.0f));
 		sprite->GetComponent<MeshRenderer>()->SetMaterial(material);
@@ -125,7 +125,7 @@ void SetSceneGame()
 
 		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 		light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
+		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
 
 		cube->GetComponent<Transform>()->SetRotation(Vector4O(0.0f, 0.0f, 0.0f));
 		cube->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 0.0f, 0.0f));
@@ -571,7 +571,7 @@ void SetSceneResult()
 		LIGHT light;
 		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 		light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
+		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
 		sprite->GetComponent<Transform>()->SetScale(Vector4O(1920.0f, 1080.0f, 1.0f));
 		sprite->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 0.0f, 0.0f));
 		sprite->GetComponent<MeshRenderer>()->SetMaterial(material);

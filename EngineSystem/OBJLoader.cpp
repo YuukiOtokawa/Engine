@@ -184,9 +184,9 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 
-	Vector4O* positionArray;
-	Vector4O* normalArray;
-	Vector4O* texcoordArray;
+	Vector3O* positionArray;
+	Vector3O* normalArray;
+	Vector2O* texcoordArray;
 
 	unsigned int	positionNum = 0;
 	unsigned int	normalNum = 0;
@@ -256,9 +256,9 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 	//メモリ確保
-	positionArray = new Vector4O[positionNum];
-	normalArray = new Vector4O[normalNum];
-	texcoordArray = new Vector4O[texcoordNum];
+	positionArray = new Vector3O[positionNum];
+	normalArray = new Vector3O[normalNum];
+	texcoordArray = new Vector2O[texcoordNum];
 
 
 	ModelObj->VertexArray = new VERTEX[vertexNum];
@@ -274,9 +274,9 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 	//要素読込
-	Vector4O* position = positionArray;
-	Vector4O* normal = normalArray;
-	Vector4O* texcoord = texcoordArray;
+	Vector3O* position = positionArray;
+	Vector3O* normal = normalArray;
+	Vector2O* texcoord = texcoordArray;
 
 	unsigned int vc = 0;
 	unsigned int ic = 0;

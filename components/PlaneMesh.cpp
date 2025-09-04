@@ -16,31 +16,31 @@ PlaneMesh::PlaneMesh() : MeshFilter(NUM_PLANE_VERTEX, NUM_PLANE_INDEX)
 	VERTEX vertex[NUM_PLANE_VERTEX];
 
 	vertex[0] = {
-		Vector4O(-1.0f, 0.0f, 1.0f), // Position
-		Vector4O(0.0f, 1.0f, 0.0f), // Normal
+		Vector3O(-1.0f, 0.0f, 1.0f), // Position
+		Vector3O(0.0f, 1.0f, 0.0f), // Normal
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f), // Color
-		Vector4O(0.0f, 0.0f) // UV
+		Vector2O(0.0f, 0.0f) // UV
 	};
 
 	vertex[1] = {
-		Vector4O(1.0f, 0.0f, 1.0f), // Position
-		Vector4O(0.0f, 1.0f, 0.0f), // Normal
+		Vector3O(1.0f, 0.0f, 1.0f), // Position
+		Vector3O(0.0f, 1.0f, 0.0f), // Normal
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f), // Color
-		Vector4O(1.0f, 0.0f) // UV
+		Vector2O(1.0f, 0.0f) // UV
 	};
 
 	vertex[2] = {
-		Vector4O(-1.0f, 0.0f, -1.0f), // Position
-		Vector4O(0.0f, 1.0f, 0.0f), // Normal
+		Vector3O(-1.0f, 0.0f, -1.0f), // Position
+		Vector3O(0.0f, 1.0f, 0.0f), // Normal
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f), // Color
-		Vector4O(0.0f, 1.0f) // UV
+		Vector2O(0.0f, 1.0f) // UV
 	};
 
 	vertex[3] = {
-		Vector4O(1.0f, 0.0f, -1.0f), // Position
-		Vector4O(0.0f, 1.0f, 0.0f), // Normal
+		Vector3O(1.0f, 0.0f, -1.0f), // Position
+		Vector3O(0.0f, 1.0f, 0.0f), // Normal
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f), // Color
-		Vector4O(1.0f, 1.0f) // UV
+		Vector2O(1.0f, 1.0f) // UV
 	};
 
 	{

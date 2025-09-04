@@ -1,4 +1,5 @@
-﻿#include "MainEngine.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include "MainEngine.h"
 #include "animationModel.h"
 
 void AnimationModel::Draw()
@@ -13,7 +14,7 @@ void AnimationModel::Draw()
 	material.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	material.textureEnable = true;
-	Renderer::SetMaterial(material);
+	//Renderer::SetMaterial(material);
 
 	for (unsigned int m = 0; m < m_AiScene->mNumMeshes; m++)
 	{
@@ -42,7 +43,7 @@ void AnimationModel::Draw()
 
 		material.diffuse = XMFLOAT4(diffuse.r, diffuse.g, diffuse.b, opacity);
 		material.ambient = material.diffuse;
-		Renderer::SetMaterial(material);
+		//Renderer::SetMaterial(material);
 
 
 		// 頂点バッファ設定
@@ -87,9 +88,9 @@ void AnimationModel::Load( const char *FileName )
 
 			for (unsigned int v = 0; v < mesh->mNumVertices; v++)
 			{
-				vertex[v].position = XMFLOAT3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);
-				vertex[v].normal = XMFLOAT3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z);
-				vertex[v].texcoord = XMFLOAT2( mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
+				vertex[v].position = Vector3O(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);
+				vertex[v].normal = Vector3O(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z);
+				vertex[v].texcoord = Vector2O( mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
 				vertex[v].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
@@ -188,7 +189,7 @@ void AnimationModel::Load( const char *FileName )
 
 
 	//テクスチャ読み込み
-	for(int i = 0; i < m_AiScene->mNumTextures; i++)
+	for(UINT i = 0; i < m_AiScene->mNumTextures; i++)
 	{
 		aiTexture* aitexture = m_AiScene->mTextures[i];
 
@@ -348,9 +349,9 @@ void AnimationModel::Update(const char *AnimationName1, int Frame1)
 			deformVertex->Normal = mesh->mNormals[v];
 			deformVertex->Normal *= outMatrix;
 
-			vertex[v].position = XMFLOAT3(deformVertex->Position.x, deformVertex->Position.y, deformVertex->Position.z);
-			vertex[v].normal = XMFLOAT3(deformVertex->Normal.x, deformVertex->Normal.y, deformVertex->Normal.z);
-			vertex[v].texcoord = XMFLOAT2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
+			vertex[v].position = Vector3O(deformVertex->Position.x, deformVertex->Position.y, deformVertex->Position.z);
+			vertex[v].normal = Vector3O(deformVertex->Normal.x, deformVertex->Normal.y, deformVertex->Normal.z);
+			vertex[v].texcoord = Vector2O(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
 			vertex[v].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
