@@ -59,6 +59,7 @@ void ParticleManager::UpdateParticles()
     {
         Particle* particle = pair.first;
         std::list<ParticleData>& dataList = pair.second;
+		std::vector<ParticleData> toRemove; // List to hold particles to be removed
         // Update each particle's data
         for (auto& data : dataList)
         {
@@ -67,16 +68,26 @@ void ParticleManager::UpdateParticles()
             if (data.frameCount >= data.lifeTime)
             {
 				data.enable = false; // Disable particle if frame count exceeds lifetime
+				toRemove.push_back(data); // Mark for removal
+				continue; // Skip further updates for this particle
             }
 			data.velocity += data.acceleration; // Update velocity with acceleration
 			data.position += data.velocity; // Update position with velocity
 			particle->UpdateParticle(&data); // Call particle's update method
+        }
+
+		// Remove particles that are marked for removal
+        for (const auto& removeData : toRemove) {
+            dataList.remove_if([&removeData](const ParticleData& d) {
+                return &d == &removeData;
+                });
         }
     }
 }
 
 void ParticleManager::DrawParticles()
 {
+	if (m_Particles.empty()) return;
     Object* object = new Object(false);
     object->AddComponent<Transform>();
 	object->AddComponent<Billboard>();

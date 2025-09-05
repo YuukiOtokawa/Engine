@@ -109,31 +109,31 @@ void SetSceneGame()
 	}
 
 	//立方体オブジェクト作成
-	{
-		auto cube = new Object();
-		cube->SetName("Cube");
-		cube->AddComponent<Transform>();
-		cube->AddComponent<CubeMesh>();
-		cube->AddComponent<MeshRenderer>();
+	//{
+	//	auto cube = new Object();
+	//	cube->SetName("Cube");
+	//	cube->AddComponent<Transform>();
+	//	cube->AddComponent<CubeMesh>();
+	//	cube->AddComponent<MeshRenderer>();
 
-		MATERIAL material;
-		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+	//	MATERIAL material;
+	//	material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+	//	material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
 
 
-		LIGHT light;
+	//	LIGHT light;
 
-		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-		light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
-		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
+	//	light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+	//	light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
+	//	light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
 
-		cube->GetComponent<Transform>()->SetRotation(Vector4O(0.0f, 0.0f, 0.0f));
-		cube->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 0.0f, 0.0f));
-		cube->GetComponent<MeshRenderer>()->SetMaterial(material);
-		cube->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
-		cube->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+	//	cube->GetComponent<Transform>()->SetRotation(Vector4O(0.0f, 0.0f, 0.0f));
+	//	cube->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 0.0f, 0.0f));
+	//	cube->GetComponent<MeshRenderer>()->SetMaterial(material);
+	//	cube->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
+	//	cube->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
 
-	}
+	//}
 
 	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
 	auto bumpTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/Normal.bmp");
