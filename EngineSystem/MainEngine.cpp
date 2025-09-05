@@ -269,8 +269,8 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-		case ID_WINDOW_NEWWINDOW: // 新規ウィンドウ
-			MessageBoxA(hWnd, "ウィンドウを作りたかった", "CreateWindow", MB_OKCANCEL | MB_DEFBUTTON2);
+		case ID_FILE_ADDOBJECT: // オブジェクト追加
+			new Object();
 			break;
 		case ID_FILE_SAVE: // 保存
 			CSVExporter::Export(m_pEditor->GetObjects());
@@ -385,7 +385,7 @@ void MainEngine::GetWindowsInfo()
 #include <locale>
 #include <codecvt>
 
-std::string MainEngine::OpenImportFileDialog()
+std::string OpenImportFileDialog()
 {
     //auto rs = DialogBox(m_hInstance, MAKEINTRESOURCE(IDD_DIALOG1), m_hWnd, FilePathDialogProc);
 	IFileOpenDialog* pFileOpenDialog = nullptr;
@@ -422,7 +422,7 @@ std::string MainEngine::OpenImportFileDialog()
 	return narrow_str;
 }
 
-std::string MainEngine::OpenExportFileDialog()
+std::string OpenExportFileDialog()
 {
 	IFileSaveDialog* pFileSaveDialog = nullptr;
 	auto rs = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL, IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSaveDialog));

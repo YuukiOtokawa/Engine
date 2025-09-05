@@ -36,6 +36,8 @@ private:
 	
 	bool m_IsActive = true; // Flag to indicate if the object is active
 	bool m_IsDrawable = true; // Flag to indicate if the object is drawable
+    bool m_IsInEditName = false;
+    char m_EditNameBuffer[20];
 
 	// 使用する頂点とインデックスの数
 	int m_iVertexCount = 0;

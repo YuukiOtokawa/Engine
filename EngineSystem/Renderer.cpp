@@ -42,10 +42,8 @@ Renderer::Renderer(HWND hWnd) : m_Handle(hWnd) {
 	RECT workArea;
 	SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
 
-	m_ClientSize.x = (float)GetSystemMetrics(SM_CXSCREEN);
-	m_ClientSize.y = (float)GetSystemMetrics(SM_CYSCREEN);
-
-	m_ClientSize = Vector2O( renderWidth, renderHeight );
+	m_ClientSize.x = (float)renderWidth;
+	m_ClientSize.y = (float)renderHeight;
 
 	int taskbarHeight = 0;
 	//taskbarHeight = screenHeight - workArea.bottom;

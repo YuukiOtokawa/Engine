@@ -282,6 +282,90 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 	return output;
 }
 
+#include <filesystem>
+
+int CSVImporter::ImportMesh(std::string filePath)
+{
+	//==========================================================================
+	// 頂点情報の読み込み
+	//==========================================================================
+
+	std::ifstream file(filePath); // ファイル名で開く
+
+	if (!file.is_open()) {
+		return -1;
+	}
+
+	// 一行分のデータを格納する文字列
+	std::string line;
+	// 最終データを格納するvector
+	std::vector<std::vector<std::string>> vertexData;
+	std::vector<std::string> indexData;
+	std::string topologyString;
+
+	//==========================================================================
+	// 頂点のデータとインデックスのデータを分けて取得
+	//==========================================================================
+
+	bool isVertex = true;
+	while (std::getline(file, line)) {
+		// コンマで分けられた1行分のデータ
+		std::vector<std::string> tokens;
+		// 生の一行分のデータ
+		std::stringstream ss(line);
+		// コンマで分けられた一つ分のデータ
+		std::string token;
+		// コンマごとにデータを読み込んでvectorに格納
+		while (std::getline(ss, token, ',')) {
+			tokens.push_back(token);
+		}
+		if (tokens[0] == "&") {
+			isVertex = false;
+			continue;
+		}
+		// 最終データのvectorに一行分のデータを格納
+		if (isVertex)
+			vertexData.push_back(tokens);
+		else {
+			// インデックスデータの格納
+			if (indexData.size() == 0)
+				indexData = tokens;
+			else
+				topologyString = tokens[0];
+		}
+	}
+
+	//==========================================================================
+	// VertexIndexの作成と登録
+	//==========================================================================
+
+	std::vector<VERTEX> vertices;
+	std::vector<unsigned int> indices;
+
+	for (auto& tokens : vertexData) {
+		VERTEX vertex;
+		vertex.position = Vector3O(std::stof(tokens[0]), std::stof(tokens[1]), std::stof(tokens[2]));
+		vertex.normal = Vector3O(std::stof(tokens[3]), std::stof(tokens[4]), std::stof(tokens[5]));
+		vertex.color = Vector4O(std::stof(tokens[6]), std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9]));
+		vertex.texcoord = Vector2O(std::stof(tokens[10]), std::stof(tokens[11]));
+		vertices.push_back(vertex);
+	}
+	for (auto& tokens : indexData) {
+		indices.push_back(std::stoi(tokens));
+	}
+
+	std::filesystem::path p = filePath;
+
+	std::string filename = p.stem().string();
+
+	VertexIndex* vi = new VertexIndex(filename, vertices, indices);
+	vi->SetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(std::stoi(topologyString)));
+	
+	file.close();
+
+	return Editor::GetInstance()->AddVertexIndex(vi);
+}
+
 EngineMetaFile* CSVImporter::CreateObject(ClassID classID)
 {
 	switch (classID) {

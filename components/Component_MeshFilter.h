@@ -71,6 +71,8 @@ public:
     void ExportComponent() override;
     void AddExportList() override;
 
+    void SetMesh(int fileID);
+
 	/// @brief 所有者オブジェクトのインデックス数を設定します。
 	void SetOwnerIndexCount() { owner->SetIndexCount(m_iIndexCount); }
 

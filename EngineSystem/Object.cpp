@@ -8,6 +8,7 @@
 
 
 Object::Object(bool editable) : EngineMetaFile(CID_Object) {
+	m_Name = "Object";
 	if (editable)
 		Editor::GetInstance()->AddObject(this);
 }
@@ -50,9 +51,36 @@ void Object::Draw() {
 		}
 	}
 }
+
+#include "../Inspector.h"
+
 void Object::DrawGUI(){
 	GUI::SetFontObjectName();
-	ImGui::Text(GetName().c_str());
+	if (m_IsInEditName) {
+		// 編集モードに入る
+		ImGui::SetKeyboardFocusHere();
+		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
+
+		if (ImGui::InputText("##ObjectName", m_EditNameBuffer, IM_ARRAYSIZE(m_EditNameBuffer), flags)) {
+			// Enterキーが押された場合、編集モードを終了
+			m_IsInEditName = false;
+			m_Name = m_EditNameBuffer;
+		}
+
+		if (ImGui::IsItemDeactivated()) {
+			// フォーカスが外れた場合、編集モードを終了
+			m_IsInEditName = false;
+		}
+	} else {
+		// 通常表示モード
+		ImGui::Text("%s", m_Name.c_str());
+		if (ImGui::IsItemClicked()) {
+			// クリックされた場合、編集モードに入る
+			m_IsInEditName = true;
+			strcpy_s(m_EditNameBuffer, m_Name.c_str());
+		}
+	}
+	//ImGui::Text(GetName().c_str());
 	GUI::SetFontDefault();
 	
 	ImGui::Text("Tag: %s", GameObjectTagLayer::GameObjectTagString[GetTag()]);
@@ -60,6 +88,11 @@ void Object::DrawGUI(){
 	for (auto& component : m_Components) {
 		component->DrawGUI();
 	}
+
+	OpenPopup();
+
+	BeginPopup(this);
+
 }
 void Object::Finalize() {}
 

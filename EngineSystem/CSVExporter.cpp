@@ -17,7 +17,7 @@ void CSVExporter::Export(std::list<Object*> objects)
 	}
 
 	// Open a file for writing
-	auto filePath = MainEngine::GetInstance()->OpenExportFileDialog();
+	auto filePath = OpenExportFileDialog();
 	m_File = std::ofstream(filePath);
 	if (!m_File.is_open()) {
 		throw std::runtime_error("Could not open file for writing.");

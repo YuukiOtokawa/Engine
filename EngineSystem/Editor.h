@@ -103,6 +103,7 @@ public:
 	/// @param object 追加するオブジェクトへのポインタ。
 	void AddObject(Object* object);
 	void DeleteObject(Object* object);
+    void CreateObject();
 	/// @brief 指定された名前のオブジェクトを検索して返します。
 	/// @param name 検索するオブジェクトの名前。
 	/// @return 見つかった場合は対応するObjectポインタ、見つからない場合はnullptrを返します。

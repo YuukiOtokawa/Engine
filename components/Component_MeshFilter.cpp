@@ -88,10 +88,25 @@ void MeshFilter::Draw() {
 
 }
 
+#include "../Inspector.h"
 void MeshFilter::DrawGUI() {
 	ImGui::Separator();
 	ImGui::Text("Mesh Filter");
 
+	ImGui::Text("VertexIndex:");
+	ImGui::Indent();
+
+	if (m_pVertexIndex) {
+		ImGui::Text("%s", m_pVertexIndex->GetName().c_str());
+	}
+	else {
+		ImGui::Text("No VertexIndex assigned.");
+	}
+
+	if (ImGui::Button("Set Mesh", ImVec2(150.0f, 30.0f)))
+		GetMesh(this);
+
+	ImGui::Unindent();
 }
 
 void MeshFilter::SetOwner(Object* owner) {
@@ -112,6 +127,11 @@ void MeshFilter::ImportFile(std::vector<std::string>& tokens)
 {
 	m_pVertexIndex = Editor::GetInstance()->GetVertexIndexByFileID(std::stoi(tokens[4]));
 
+	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
+}
+
+void MeshFilter::SetMesh(int fileID) {
+	m_pVertexIndex = Editor::GetInstance()->GetVertexIndexByFileID(fileID);
 	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
 }
 

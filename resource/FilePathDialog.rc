@@ -180,7 +180,7 @@ IDC_CURSOR2             CURSOR                  "cursor2.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Ribbon
+// RT_RIBBON_XML
 //
 
 IDR_RIBBON1             RT_RIBBON_XML           "ribbon1.mfcribbon-ms"

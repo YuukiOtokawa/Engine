@@ -357,6 +357,11 @@ void Editor::DeleteObject(Object* object)
 	m_DeleteObjects.push_back(object);
 }
 
+void Editor::CreateObject()
+{
+	Object* newObject = new Object();
+}
+
 Object* Editor::GetObject(const std::string& name)
 {
 	for (auto object : m_Objects)

@@ -15,6 +15,10 @@
 #include "Renderer.h"
 #include "Editor.h"
 
+std::string OpenImportFileDialog();
+std::string OpenExportFileDialog();
+
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -130,8 +134,6 @@ public:
 
 	void GetWindowsInfo();
 
-    std::string OpenImportFileDialog();
-    std::string OpenExportFileDialog();
 
     static INT_PTR CALLBACK FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 };

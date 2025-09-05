@@ -302,6 +302,7 @@
     <ClInclude Include="input\Keyboard.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="Component_Light.h" />
+    <ClInclude Include="Inspector.h" />
     <ClInclude Include="MathO.h" />
     <ClInclude Include="Pack.h" />
     <ClInclude Include="Particle.h" />
@@ -354,6 +355,7 @@
     <ClCompile Include="input\Keyboard.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="Component_Light.cpp" />
+    <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="Score.cpp" />
