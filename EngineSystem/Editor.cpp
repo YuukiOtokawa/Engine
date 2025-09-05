@@ -374,6 +374,8 @@ void Editor::ResetScene()
 	m_Objects.clear();
 	m_Components.clear();
 	m_Materials.clear();
+	m_VertexIndices.clear();
+	MainEngine::GetInstance()->GetRenderer()->ResetTexture();
 }
 
 void Editor::SetActiveCamera(Object* camera)

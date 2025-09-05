@@ -182,6 +182,8 @@ public:
 	/// @return 読み込まれたテクスチャの ID3D11ShaderResourceView ポインタ。失敗した場合は nullptr を返すことがあります。
 	int TextureLoad(const std::wstring& filename, int fileID = -1);
     int AddTexture(Texture* texture);
+
+    void ResetTexture();
 	/// @brief 指定されたインデックスのテクスチャリソースビューを取得します。
 	/// @param index 取得するテクスチャのインデックス。
 	/// @return 指定したインデックスに対応するID3D11ShaderResourceViewポインタ。該当するテクスチャが存在しない場合はnullptrを返すことがあります。

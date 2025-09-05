@@ -482,6 +482,15 @@ int Renderer::AddTexture(Texture* texture)
 
 }
 
+void Renderer::ResetTexture()
+{
+	for (auto it : m_Textures) {
+		SAFE_RELEASE(it->shader_resource_view);
+		delete it;
+	}
+	m_Textures.clear();
+}
+
 ID3D11ShaderResourceView** Renderer::GetTexture(int index)
 {
 	if (index == -1)
