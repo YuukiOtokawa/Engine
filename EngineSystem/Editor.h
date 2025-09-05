@@ -123,10 +123,7 @@ public:
     Material* GetMaterialByFileID(int fileID);
     VertexIndex* GetVertexIndexByFileID(int fileID);
 
-    void ChangeScene(std::string sceneName)
-    {
-        m_NextSceneName = sceneName;
-    }
+    void ChangeScene(std::string sceneName);
 
     void CheckCollision(Object* object);
 

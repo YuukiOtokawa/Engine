@@ -135,22 +135,6 @@ void SetSceneGame()
 
 	}
 
-	/*
-	//プレイヤー追尾カメラ作成
-	{
-		auto camera = new Object();
-		camera->SetName("Camera2");
-		camera->AddComponent<Transform>();
-		camera->AddComponent<Camera>();
-		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 2.5f));
-		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 5.0f, 1.5f));
-
-		camera->AddComponent<PlayerCamera>();
-
-		//Editor::GetInstance()->AddObject(camera);
-	}
-
-
 	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
 	auto bumpTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/Normal.bmp");
 	//平面オブジェクト作成
@@ -169,9 +153,9 @@ void SetSceneGame()
 		LIGHT light;
 		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 0.2f);
-		light.Direction = Vector4O(0.2f, -1.0f, -1.0f, 0.0f);
-		light.Position = Vector4O(0.0f, 2.0f, -0.5f, 1.0f);
-		light.PointLightRange = Vector4O(100.0f, 0.0f, 0.0f, 0.0f);
+		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
+		light.Position = Vector3O(0.0f, 2.0f, -0.5f);
+		light.PointLightRange = 100.0f;
 
 		plane->GetComponent<Transform>()->SetScale(Vector4O(20.0f, 1.0f, 20.0f));
 		plane->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, -5.0f, 0.0f));
@@ -182,8 +166,24 @@ void SetSceneGame()
 		plane->GetComponent<MeshRenderer>()->SetVertexShader("pointLight");
 		plane->GetComponent<MeshRenderer>()->SetPixelShader("pointLight");
 
-		Editor::GetInstance()->AddObject(plane);
 	}
+
+	/*
+	//プレイヤー追尾カメラ作成
+	{
+		auto camera = new Object();
+		camera->SetName("Camera2");
+		camera->AddComponent<Transform>();
+		camera->AddComponent<Camera>();
+		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, 2.5f));
+		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 5.0f, 1.5f));
+
+		camera->AddComponent<PlayerCamera>();
+
+		//Editor::GetInstance()->AddObject(camera);
+	}
+
+
 
 	auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
 	auto toonTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/toonGray.bmp");

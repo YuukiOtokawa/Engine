@@ -6,7 +6,6 @@
 
 CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 {
-	m_ClassID = CID_CubeMesh;
 	// 頂点情報の作成
 	std::vector<VERTEX> vertex(NUM_CUBE_VERTEX);
 
@@ -241,6 +240,7 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 	//}
 
 	m_pVertexIndex = new VertexIndex("Cube", vertex, index);
+	m_pVertexIndex->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	Editor::GetInstance()->AddVertexIndex(m_pVertexIndex);
 

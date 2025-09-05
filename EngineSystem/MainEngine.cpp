@@ -277,7 +277,7 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case ID_FILE_LOAD: // 読み込み
 		{
-			auto filePath = OpenFilePathDialog();
+			auto filePath = OpenImportFileDialog();
 			if (filePath != "") {
 				Editor::GetInstance()->OpenScene(filePath);
 			}
@@ -385,7 +385,7 @@ void MainEngine::GetWindowsInfo()
 #include <locale>
 #include <codecvt>
 
-std::string MainEngine::OpenFilePathDialog()
+std::string MainEngine::OpenImportFileDialog()
 {
     //auto rs = DialogBox(m_hInstance, MAKEINTRESOURCE(IDD_DIALOG1), m_hWnd, FilePathDialogProc);
 	IFileOpenDialog* pFileOpenDialog = nullptr;
@@ -418,6 +418,41 @@ std::string MainEngine::OpenFilePathDialog()
 	if (len > 0) {
 	    narrow_str.resize(len - 1); // null終端を除く
 	    WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &narrow_str[0], len, nullptr, nullptr);
+	}
+	return narrow_str;
+}
+
+std::string MainEngine::OpenExportFileDialog()
+{
+	IFileSaveDialog* pFileSaveDialog = nullptr;
+	auto rs = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL, IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSaveDialog));
+	if (FAILED(rs)) {
+		pFileSaveDialog->Release();
+		return "";
+	}
+	pFileSaveDialog->SetFileName(L"scene.csv");
+	pFileSaveDialog->SetDefaultExtension(L"csv");
+	rs = pFileSaveDialog->Show(NULL);
+	if (FAILED(rs)) {
+		pFileSaveDialog->Release();
+		return "";
+	}
+	IShellItem* pItem = nullptr;
+	rs = pFileSaveDialog->GetResult(&pItem);
+	if (FAILED(rs)) {
+		pFileSaveDialog->Release();
+		return "";
+	}
+	PWSTR pszFilePath = nullptr;
+	rs = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+	pFileSaveDialog->Release();
+	pItem->Release();
+
+	int len = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, nullptr, 0, nullptr, nullptr);
+	std::string narrow_str;
+	if (len > 0) {
+		narrow_str.resize(len - 1); // null終端を除く
+		WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &narrow_str[0], len, nullptr, nullptr);
 	}
 	return narrow_str;
 }

@@ -38,6 +38,7 @@ void Object::Draw() {
 		component->Draw();
 	}
 	if (m_IsDrawable == false) return;
+	if (m_iVertexCount == 0) return;
 	if (m_iIndexCount == 0)
 		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Draw(m_iVertexCount, 0);
 	else
@@ -70,7 +71,6 @@ void Object::Destroy()
 
 void Object::AddComponentClass(Component* component) {
 	component->SetOwner(this);
-	component->InitializeTag();
 	m_Components.push_back(component);
 }
 

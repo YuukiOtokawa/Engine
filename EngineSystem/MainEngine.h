@@ -130,9 +130,8 @@ public:
 
 	void GetWindowsInfo();
 
-    std::string OpenFilePathDialog();
-
-    
+    std::string OpenImportFileDialog();
+    std::string OpenExportFileDialog();
 
     static INT_PTR CALLBACK FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 };

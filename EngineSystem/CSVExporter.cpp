@@ -4,6 +4,8 @@
 
 #include "Component_Transform.h"
 
+#include "MainEngine.h"
+
 std::ofstream CSVExporter::m_File;
 std::list<EngineMetaFile*> CSVExporter::m_ExportList;
 std::list<VertexIndex*> CSVExporter::m_VertexIndicesExportList;
@@ -15,7 +17,8 @@ void CSVExporter::Export(std::list<Object*> objects)
 	}
 
 	// Open a file for writing
-	m_File = std::ofstream("exported_objects.csv");
+	auto filePath = MainEngine::GetInstance()->OpenExportFileDialog();
+	m_File = std::ofstream(filePath);
 	if (!m_File.is_open()) {
 		throw std::runtime_error("Could not open file for writing.");
 		m_ExportList.clear();
@@ -121,6 +124,8 @@ void CSVExporter::ExportVertexIndexList()
 				m_File << ",";
 			}
 		}
+		m_File << "\n";
+		m_File << std::to_string(vertexIndex->GetPrimitiveTopology());
 
 
 		// Close the file

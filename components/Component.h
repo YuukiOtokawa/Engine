@@ -45,7 +45,6 @@ public:
 	/// @param obj 新しい所有者となるObject型のポインタ。
 	virtual void SetOwner(Object* obj) { 
 		owner = obj;
-		InitializeTag();
 	}
 
 	/// @brief タグを初期化する純粋仮想関数です。

@@ -374,6 +374,7 @@ void Editor::ResetScene()
 	m_Objects.clear();
 	m_Components.clear();
 	m_Materials.clear();
+	m_VertexIndices.clear();
 }
 
 void Editor::SetActiveCamera(Object* camera)
@@ -443,6 +444,19 @@ void Editor::CheckCollision(Object* object)
 }
 
 #include "CSVImporter.h"
+
+void Editor::ChangeScene(std::string sceneName)
+{
+	std::list<Object*> objects;
+	Editor::GetInstance()->ResetScene();
+	objects = CSVImporter::Import("Scenes\\" + sceneName);
+	if (objects.empty()) {
+		MessageBoxA(NULL, "読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
+	}
+	else {
+		Editor::GetInstance()->SetObjects(objects); // 読み込んだオブジェクトをエディターに設定
+	}
+}
 
 void Editor::OpenScene(std::string sceneFilePath)
 {

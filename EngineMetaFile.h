@@ -19,12 +19,9 @@ enum ClassID {
     CID_Component_EditorCamera,
     CID_PlayerCamera,
     CID_AssimpMeshRenderer,
-    CID_PlaneMesh,
     CID_Animation,
-    CID_SpriteMesh,
     CID_Billboard,
     CID_Particle,
-    CID_CubeMesh,
     CID_MonoBehaviour,
 };
 

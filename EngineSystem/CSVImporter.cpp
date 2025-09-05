@@ -83,13 +83,14 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 			// 最終データを格納するvector
 			std::vector<std::vector<std::string>> vertexData;
 			std::vector<std::string> indexData;
+			std::string topologyString;
 
 			//==========================================================================
 			// 頂点のデータとインデックスのデータを分けて取得
 			//==========================================================================
 
 			bool isVertex = true;
-			while (std::getline(vertexList, line)) {
+			while (std::getline(file, line)) {
 				// コンマで分けられた1行分のデータ
 				std::vector<std::string> tokens;
 				// 生の一行分のデータ
@@ -107,8 +108,12 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 				// 最終データのvectorに一行分のデータを格納
 				if (isVertex)
 					vertexData.push_back(tokens);
-				else
-					indexData = tokens;
+				else {
+					if (indexData.size() == 0)
+						indexData = tokens;
+					else
+						topologyString = tokens[0];
+				}
 			}
 
 			//==========================================================================
@@ -130,7 +135,9 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 				indices.push_back(std::stoi(tokens));
 			}
 
+
 			VertexIndex* vi = new VertexIndex(vertexindexinfo[1], vertices, indices);
+			vi->SetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(std::stoi(topologyString)));
 			vi->SetFileID(std::stoi(vertexindexinfo[0]));
 			Editor::GetInstance()->AddVertexIndex(vi);
 
@@ -249,18 +256,12 @@ EngineMetaFile* CSVImporter::CreateObject(ClassID classID)
 			return new PlayerCamera();
 		case CID_AssimpMeshRenderer:
 			return new AssimpMeshRenderer();
-		case CID_PlaneMesh:
-			return new PlaneMesh();
 		case CID_Animation:
 			return new Animation();
-		case CID_SpriteMesh:
-			return new SpriteMesh();
 		case CID_Billboard:
 			return new Billboard();
 		case CID_Particle:
 			return new Particle();
-		case CID_CubeMesh:
-			return new CubeMesh();
 		case CID_MonoBehaviour:
 			return nullptr;
 		case CID_None:

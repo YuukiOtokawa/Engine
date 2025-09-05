@@ -12,8 +12,7 @@
 
 PlaneMesh::PlaneMesh() : MeshFilter(NUM_PLANE_VERTEX, NUM_PLANE_INDEX)
 {
-	m_ClassID = CID_PlaneMesh;
-	VERTEX vertex[NUM_PLANE_VERTEX];
+	std::vector<VERTEX> vertex(NUM_PLANE_VERTEX);
 
 	vertex[0] = {
 		Vector3O(-1.0f, 0.0f, 1.0f), // Position
@@ -43,44 +42,15 @@ PlaneMesh::PlaneMesh() : MeshFilter(NUM_PLANE_VERTEX, NUM_PLANE_INDEX)
 		Vector2O(1.0f, 1.0f) // UV
 	};
 
-	{
-		// 頂点バッファ生成
-		D3D11_BUFFER_DESC bd;
-		ZeroMemory(&bd, sizeof(bd));
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(VERTEX) * NUM_PLANE_VERTEX; // 頂点バッファの量
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-
-		D3D11_SUBRESOURCE_DATA sd;
-		ZeroMemory(&sd, sizeof(sd));
-		sd.pSysMem = vertex;
-
-		MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
-	}
-
-	// インデックス設定
-	UINT index[NUM_PLANE_INDEX] = {
+	std::vector<UINT> index = {
 		0, 1, 2, 3
 	};
 
-	{
-		// インデックスバッファ
-		D3D11_BUFFER_DESC bd;
-		ZeroMemory(&bd, sizeof(bd));
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(unsigned int) * NUM_PLANE_INDEX;
-		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		bd.CPUAccessFlags = 0;
+	m_pVertexIndex = new VertexIndex("Plane", vertex, index);
+	m_pVertexIndex->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-		D3D11_SUBRESOURCE_DATA sd;
-		ZeroMemory(&sd, sizeof(sd));
-		sd.pSysMem = index;
+	Editor::GetInstance()->AddVertexIndex(m_pVertexIndex);
 
-		MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
-
-	}
-
-	m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
 }
 

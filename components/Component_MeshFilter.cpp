@@ -23,6 +23,7 @@
 //==========================================================================
 
 MeshFilter::MeshFilter(int vertexCount, int indexCount) : m_iVertexCount(vertexCount), m_iIndexCount(indexCount) {
+	m_ClassID = CID_Component_MeshFilter;
 }
 
 void MeshFilter::UpdateComponent() {
@@ -160,4 +161,14 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
 	}
 
+	m_PrimitiveTopology = m_pVertexIndex->GetPrimitiveTopology();
+	m_iVertexCount = vertices.size();
+	m_iIndexCount = indices.size();
+
+	// 起動時とシーン読み込み時でownerが入るタイミングが違うため、if文が必要
+	// できれば解消したい
+	if (owner) {
+		owner->SetVertexCount(m_iVertexCount);
+		owner->SetIndexCount(m_iIndexCount);
+	}
 }

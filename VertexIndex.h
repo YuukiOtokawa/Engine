@@ -9,6 +9,7 @@ class VertexIndex : public EngineMetaFile {
     std::vector<unsigned int> m_IndexInfo;
     std::string m_Name;
     std::string m_FilePath;
+    D3D11_PRIMITIVE_TOPOLOGY m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 public:
     VertexIndex(std::string name, std::vector<VERTEX> vertexInfo, std::vector<unsigned int> indexInfo)
         : m_Name(name), m_VertexInfo(vertexInfo), m_IndexInfo(indexInfo) {
@@ -29,5 +30,11 @@ public:
     }
     std::string GetFilePath() const {
         return m_FilePath;
+    }
+    void SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY topology) {
+        m_PrimitiveTopology = topology;
+    }
+    D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology() const {
+        return m_PrimitiveTopology;
     }
 };
