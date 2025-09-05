@@ -374,7 +374,6 @@ void Editor::ResetScene()
 	m_Objects.clear();
 	m_Components.clear();
 	m_Materials.clear();
-	m_VertexIndices.clear();
 }
 
 void Editor::SetActiveCamera(Object* camera)
@@ -394,8 +393,14 @@ int Editor::AddMaterial(Material* material)
 
 int Editor::AddVertexIndex(VertexIndex* vertexIndex)
 {
+	for (auto& vi : m_VertexIndices) {
+		if (vi->GetFileID() == vertexIndex->GetFileID()) {
+			// 同じ名前の頂点とインデックスが存在する場合は、追加しない
+			return vi->GetFileID();
+		}
+	}
 	m_VertexIndices.push_back(vertexIndex);
-	return static_cast<int>(m_VertexIndices.size() - 1); // 追加した頂点とインデックスのインデックスを返す
+	return vertexIndex->GetFileID(); // 追加した頂点とインデックスのインデックスを返す
 }
 
 Material* Editor::GetMaterialByFileID(int fileID) {

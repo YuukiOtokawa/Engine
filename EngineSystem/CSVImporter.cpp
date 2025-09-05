@@ -7,6 +7,7 @@
 #include "Component_MeshFilter.h"
 #include "Material.h"
 
+#include "MainEngine.h"
 #include "Editor.h"
 
 // 必要な派生クラスのヘッダーをインクルード
@@ -38,7 +39,7 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 		// 頂点情報のリストを取得 すべての頂点情報のファイル名、ID、パスを取得
 		//==========================================================================
 
-		std::ifstream vertexList("VertexIndexInfo\\VertexIndexList.csv");
+		std::ifstream vertexList("AssetList\\VertexIndexList.csv");
 
 		if (!vertexList.is_open()) {
 			throw std::runtime_error("Could not open file: " + std::string("VertexIndexList.csv"));
@@ -72,6 +73,9 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 		//==========================================================================
 
 		for (auto& vertexindexinfo : data) {
+			if (Editor::GetInstance()->GetVertexIndexByFileID(std::stoi(vertexindexinfo[0])) != nullptr)
+				continue;
+
 			std::ifstream file(vertexindexinfo[2]); // ファイル名で開く
 
 			if (!file.is_open()) {
@@ -146,6 +150,53 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 
 	}
 
+	//==========================================================================
+	// テクスチャデータの読み込み
+	//==========================================================================
+
+	{
+		std::ifstream textureList("AssetList\\TextureList.csv");
+
+		if (!textureList.is_open()) {
+			throw std::runtime_error("Could not open file: " + std::string("TextureList.csv"));
+		}
+
+		// 一行分のデータを格納する文字列
+		std::string line;
+		// 最終データを格納するvector
+		std::vector<std::vector<std::string>> data;
+
+
+		while (std::getline(textureList, line)) {
+			// コンマで分けられた1行分のデータ
+			std::vector<std::string> tokens;
+			// 生の一行分のデータ
+			std::stringstream ss(line);
+			// コンマで分けられた一つ分のデータ
+			std::string token;
+			// コンマごとにデータを読み込んでvectorに格納
+			while (std::getline(ss, token, ',')) {
+				tokens.push_back(token);
+			}
+			// 最終データのvectorに一行分のデータを格納
+			data.push_back(tokens);
+		}
+
+		textureList.close();
+
+		for (auto& textureinfo : data) {
+			int len = MultiByteToWideChar(CP_UTF8, 0, textureinfo[1].c_str(), -1, nullptr, 0);
+			std::wstring wideStringFilePath;
+			if (len > 0) {
+				wideStringFilePath.resize(len - 1); // null終端を除く
+				MultiByteToWideChar(CP_UTF8, 0, textureinfo[1].c_str(), -1, &wideStringFilePath[0], len);
+			}
+
+			MainEngine::GetInstance()->GetRenderer()->TextureLoad(wideStringFilePath, std::stoi(textureinfo[0]));
+		}
+
+
+	}
 
 	//==========================================================================
 	// 他ファイルの読み込み

@@ -31,5 +31,7 @@ public:
     static void AddVertexIndexExportList(VertexIndex* vertexIndex) {
         m_VertexIndicesExportList.push_back(vertexIndex);
     }
+
+    static void ExportTextureInfoList();
 };
 

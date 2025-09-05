@@ -273,6 +273,11 @@ void Renderer::CreateSamplerState()
 	m_pDevice->CreateSamplerState(&samplerDesc, &m_pSamplerState);
 }
 
+std::vector<Texture*> Renderer::GetTextureInfo()
+{
+	return m_Textures;
+}
+
 std::string Renderer::CreateVertexShader(std::string filename, std::string key)
 {
 	if (m_VertexShaders.find(key) != m_VertexShaders.end()) {
@@ -428,16 +433,14 @@ void Renderer::CreateConstantBuffer()
 	m_pDeviceContext->PSSetConstantBuffers(8, 1, &m_pMaterialBuffer);
 }
 
-int Renderer::TextureLoad(const std::wstring& filename)
+int Renderer::TextureLoad(const std::wstring& filename, int fileID)
 {
 	// すでに同名のテクスチャが読み込まれていないか確認する
 	{
-		int count = 0;
 		for (auto it : m_Textures) {
-			if (it.filename == filename) {
-				return count; // すでに読み込まれていたのでidをわたす
+			if (it->filename == filename) {
+				return it->GetFileID(); // すでに読み込まれていたのでidをわたす
 			}
-			count++;
 		}
 
 	}
@@ -446,32 +449,36 @@ int Renderer::TextureLoad(const std::wstring& filename)
 	ScratchImage image;
 	LoadFromWICFile(filename.c_str(), WIC_FLAGS_NONE, &metadata, image);
 
-	Texture texture;
-	CreateShaderResourceView(m_pDevice, image.GetImages(), image.GetImageCount(), metadata, &texture.shader_resource_view);
-	texture.width = (int)metadata.width;
-	texture.height = (int)metadata.height;
+	Texture* texture = new Texture();
+	CreateShaderResourceView(m_pDevice, image.GetImages(), image.GetImageCount(), metadata, &texture->shader_resource_view);
+	texture->width = (int)metadata.width;
+	texture->height = (int)metadata.height;
+	texture->filename = filename;
 	
 	std::string str;
 
-	if (!texture.shader_resource_view) {
+	if (!texture->shader_resource_view) {
 		MessageBoxW(NULL, L"ファイルが読み込めなかった", filename.c_str(), MB_ICONEXCLAMATION | MB_OK);
 		return 0;
 	}
+
+	if (fileID != -1)
+		texture->SetFileID(fileID);
 
 	m_Textures.push_back(texture);
 
 	return (UINT)m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
 }
 
-int Renderer::AddTexture(const Texture texture)
+int Renderer::AddTexture(Texture* texture)
 {
-	if (!texture.shader_resource_view) {
+	if (!texture->shader_resource_view) {
 		return 0;
 	}
 
 	m_Textures.push_back(texture);
 
-	return (UINT)m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
+	return texture->GetFileID(); // 新しく読み込んだテクスチャのIDを返す
 
 }
 
@@ -479,17 +486,17 @@ ID3D11ShaderResourceView** Renderer::GetTexture(int index)
 {
 	if (index == -1)
 		return nullptr;
-	return &m_Textures[index].shader_resource_view;
+	return &m_Textures[index]->shader_resource_view;
 }
 
 int Renderer::GetTextureWidth(int index)
 {
-	return m_Textures[index].width;
+	return m_Textures[index]->width;
 }
 
 int Renderer::GetTextureHeight(int index)
 {
-	return m_Textures[index].height;
+	return m_Textures[index]->height;
 }
 
 void Renderer::SetVertexShader(std::string key)

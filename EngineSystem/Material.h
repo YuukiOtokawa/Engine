@@ -33,9 +33,9 @@ private:
 
 	// マテリアルとテクスチャ番号
 	MATERIAL m_Material;
-	int m_Texture = 0;
-	int m_BumpTexture = 0;
-    int m_ToonTexture = 0;
+	int m_TextureFileID = 0;
+	int m_BumpTextureFileID = 0;
+    int m_ToonTextureFileID = 0;
 
 	unsigned int	StartIndex = 0;
 	unsigned int	IndexNum = 0;
@@ -68,11 +68,11 @@ public:
 
 	/// @brief 繝�繧ｯ繧ｹ繝√Ε繧定ｨｭ螳壹＠縺ｾ縺吶�
 	/// @param texture 險ｭ螳壹☆繧紀D3D11ShaderResourceView蝙九�ｮ繝�繧ｯ繧ｹ繝√Ε縲�
-	void SetTexture(int texture) { m_Texture = texture; }
+	void SetTexture(int texture) { m_TextureFileID = texture; }
 	/// @brief 繝舌Φ繝励�槭ャ繝励ユ繧ｯ繧ｹ繝√Ε繧定ｨｭ螳壹＠縺ｾ縺吶�
 	/// @param bumpTexture 險ｭ螳壹☆繧紀D3D11ShaderResourceView蝙九�ｮ繝舌Φ繝励�槭ャ繝励ユ繧ｯ繧ｹ繝√Ε縲�
-	void SetBumpTexture(int bumpTexture) { m_BumpTexture = bumpTexture; }
-    void SetToonTexture(int toonTexture) { m_ToonTexture = toonTexture; }
+	void SetBumpTexture(int bumpTexture) { m_BumpTextureFileID = bumpTexture; }
+    void SetToonTexture(int toonTexture) { m_ToonTextureFileID = toonTexture; }
 
 	/// @brief 鬆らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励ｒ蜿門ｾ励＠縺ｾ縺吶�
 	/// @return 譬ｼ邏阪＆繧後※縺�繧矩�らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励�
@@ -93,6 +93,6 @@ public:
 
 	/// @brief 繝�繧ｯ繧ｹ繝√Ε繝ｪ繧ｽ繝ｼ繧ｹ繝薙Η繝ｼ繧貞叙蠕励＠縺ｾ縺吶�
 	/// @return 繝�繧ｯ繧ｹ繝√Ε繧定｡ｨ縺� ID3D11ShaderResourceView 繝昴う繝ｳ繧ｿ縲�
-	int GetTexture() const { return m_Texture; }
+	int GetTexture() const { return m_TextureFileID; }
 };
 

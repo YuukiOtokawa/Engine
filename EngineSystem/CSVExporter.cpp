@@ -37,6 +37,7 @@ void CSVExporter::Export(std::list<Object*> objects)
 	m_File.close();
 
 	ExportVertexIndexList();
+	ExportTextureInfoList();
 }
 
 void CSVExporter::ExportInt(int data)
@@ -91,10 +92,28 @@ void CSVExporter::ExportFileID(const int fileID)
 
 
 #include "../VertexIndex.h"
+#include <unordered_set>
+#include <sstream>
 
 void CSVExporter::ExportVertexIndexList()
 {
-	auto fileVertexInfoList = std::ofstream("VertexIndexInfo\\VertexIndexList.csv");
+	auto fileVertexInfoData = std::ifstream("AssetList\\VertexIndexList.csv");
+	std::unordered_set<std::string> existing_lines;
+
+	if (fileVertexInfoData.is_open()) {
+		std::string line;
+		while (std::getline(fileVertexInfoData, line)) {
+			std::stringstream ss(line);
+			std::string token;
+			while (std::getline(ss, token, ',')) {
+				existing_lines.insert(token);
+				break;
+			}
+		}
+		fileVertexInfoData.close();
+	}
+
+	auto fileVertexInfoList = std::ofstream("AssetList\\VertexIndexList.csv", std::ios::out | std::ios::app);
 	for (auto vertexIndex : m_VertexIndicesExportList)
 	{
 
@@ -131,10 +150,52 @@ void CSVExporter::ExportVertexIndexList()
 		// Close the file
 		m_File.close();
 
+		if (existing_lines.find(std::to_string(vertexIndex->GetFileID())) != existing_lines.end())
+			continue; // Skip if this FileID already exists
+
 		fileVertexInfoList << vertexIndex->GetFileID() << "," << vertexIndex->GetName() << "," << vertexIndex->GetFilePath() << "\n";
 	}
 
 	fileVertexInfoList.close();
+}
+
+void CSVExporter::ExportTextureInfoList()
+{
+	auto fileTextureData = std::ifstream("AssetList\\VertexIndexList.csv");
+	std::unordered_set<std::string> existing_lines;
+
+	if (fileTextureData.is_open()) {
+		std::string line;
+		while (std::getline(fileTextureData, line)) {
+			std::stringstream ss(line);
+			std::string token;
+			while (std::getline(ss, token, ',')) {
+				existing_lines.insert(token);
+				break;
+			}
+		}
+		fileTextureData.close();
+	}
+
+	auto textureList = MainEngine::GetInstance()->GetRenderer()->GetTextureInfo();
+
+	auto fileTextureInfoList = std::ofstream("AssetList\\TextureList.csv");
+	for (const auto& texture : textureList)
+	{
+		if (texture->GetFileID() == 0) continue;
+		const WCHAR* filename = texture->filename.c_str();
+		int len = WideCharToMultiByte(CP_UTF8, 0, filename, -1, nullptr, 0, nullptr, nullptr);
+		std::string narrowStringFilePath;
+		if (len > 0) {
+			narrowStringFilePath.resize(len - 1); // null終端を除く
+			WideCharToMultiByte(CP_UTF8, 0, filename, -1, &narrowStringFilePath[0], len, nullptr, nullptr);
+		}
+
+		if (existing_lines.find(std::to_string(texture->GetFileID())) != existing_lines.end())
+			continue; // Skip if this FileID already exists
+
+		fileTextureInfoList << texture->GetFileID() << "," << narrowStringFilePath << "\n";
+	}
 }
 
 

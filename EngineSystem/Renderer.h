@@ -31,7 +31,8 @@
 // クラス定義
 //==========================================================================
 // テクスチャ構造体
-struct Texture {
+class Texture : public EngineMetaFile {
+public:
     std::wstring filename;
     ID3D11ShaderResourceView* shader_resource_view;
     int width = 0;
@@ -96,10 +97,7 @@ private:
 	std::string m_CurrentPixelShaderKey;
 
     // テクスチャ管理
-	std::vector<Texture> m_Textures;
-
-    std::vector<std::string> m_TextureFilePaths;
-    std::vector<std::string> m_ModelFilePaths;
+	std::vector<Texture*> m_Textures;
 
 	/// @brief レンダーターゲットビューを作成します。
 	void CreateRenderTargetView();
@@ -156,6 +154,8 @@ public:
         return m_ClientSize;
     }
 
+    std::vector<Texture*> GetTextureInfo();
+
 	/// @brief 指定されたファイル名とキーから頂点シェーダーを作成します。
 	/// @param filename 頂点シェーダーのソースコードが含まれるファイルの名前。
 	/// @param key シェーダーを識別または取得するためのキー。
@@ -180,12 +180,12 @@ public:
 	/// @brief 指定されたファイル名からテクスチャを読み込み、ID3D11ShaderResourceView ポインタを返します。
 	/// @param filename 読み込むテクスチャファイルのパスを表すワイド文字列。
 	/// @return 読み込まれたテクスチャの ID3D11ShaderResourceView ポインタ。失敗した場合は nullptr を返すことがあります。
-	int TextureLoad(const std::wstring& filename);
-    int AddTexture(const Texture texture);
+	int TextureLoad(const std::wstring& filename, int fileID = -1);
+    int AddTexture(Texture* texture);
 	/// @brief 指定されたインデックスのテクスチャリソースビューを取得します。
 	/// @param index 取得するテクスチャのインデックス。
 	/// @return 指定したインデックスに対応するID3D11ShaderResourceViewポインタ。該当するテクスチャが存在しない場合はnullptrを返すことがあります。
-	ID3D11ShaderResourceView** GetTexture(int index);
+	ID3D11ShaderResourceView** GetTexture(int fileID);
 	/// @brief 指定されたインデックスのテクスチャの幅を取得します。
 	/// @param index 幅を取得するテクスチャのインデックス。
 	/// @return テクスチャの幅（ピクセル単位）。

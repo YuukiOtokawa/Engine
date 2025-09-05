@@ -31,12 +31,12 @@ void Material::DrawMaterial()
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderer();
 
-	if (m_Texture != -1)
-		renderer->GetDeviceContext()->PSSetShaderResources(0, 1, renderer->GetTexture(m_Texture));
-	if (m_BumpTexture != -1)
-		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, renderer->GetTexture(m_BumpTexture));
-	if (m_ToonTexture != -1)
-		renderer->GetDeviceContext()->PSSetShaderResources(2, 1, renderer->GetTexture(m_ToonTexture));
+	if (m_TextureFileID != -1)
+		renderer->GetDeviceContext()->PSSetShaderResources(0, 1, renderer->GetTexture(m_TextureFileID));
+	if (m_BumpTextureFileID != -1)
+		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, renderer->GetTexture(m_BumpTextureFileID));
+	if (m_ToonTextureFileID != -1)
+		renderer->GetDeviceContext()->PSSetShaderResources(2, 1, renderer->GetTexture(m_ToonTextureFileID));
 
 	renderer->SetMaterialBuffer(m_Material);
 
@@ -71,9 +71,9 @@ void Material::DrawGUI() {
 	}
 
 	ImGui::Text("Texture");
-	ImGui::Image((ImTextureID)(*renderer->GetTexture(m_Texture)), ImVec2(300, 300));
+	ImGui::Image((ImTextureID)(*renderer->GetTexture(m_TextureFileID)), ImVec2(300, 300));
 	ImGui::Text("Bump Map");
-	ImGui::Image((ImTextureID)(*renderer->GetTexture(m_BumpTexture)), ImVec2(300, 300));
+	ImGui::Image((ImTextureID)(*renderer->GetTexture(m_BumpTextureFileID)), ImVec2(300, 300));
 
 }
 
@@ -82,8 +82,8 @@ void Material::ImportFile(std::vector<std::string>& tokens)
 	m_Material.SpecularPower = (FLOAT)std::stoi(tokens[2]);
 	m_VertexShader = tokens[3];
 	m_PixelShader = tokens[4];
-	m_Texture = std::stoi(tokens[5]);
-	m_BumpTexture = std::stoi(tokens[6]);
+	m_TextureFileID = std::stoi(tokens[5]);
+	m_BumpTextureFileID = std::stoi(tokens[6]);
 }
 
 void Material::ExportFile()
@@ -91,8 +91,8 @@ void Material::ExportFile()
 	CSVExporter::ExportInt(m_Material.SpecularPower);
 	CSVExporter::ExportString(m_VertexShader);
 	CSVExporter::ExportString(m_PixelShader);
-	CSVExporter::ExportInt(m_Texture);
-	CSVExporter::ExportInt(m_BumpTexture);
+	CSVExporter::ExportInt(m_TextureFileID);
+	CSVExporter::ExportInt(m_BumpTextureFileID);
 }
 
 void Material::SetVertexShaderKey(std::string key)

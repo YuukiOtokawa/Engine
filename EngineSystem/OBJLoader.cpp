@@ -143,11 +143,11 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 			LoadFromWICFile(wc, WIC_FLAGS_NONE, &metadata, image);
 			CreateShaderResourceView(renderer->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &srv);
 
-			Texture texture;
-			texture.height = (int)metadata.height;
-			texture.width = (int)metadata.width;
-			texture.shader_resource_view = srv;
-			texture.filename = wc;
+			Texture* texture = new Texture;
+			texture->height = (int)metadata.height;
+			texture->width = (int)metadata.width;
+			texture->shader_resource_view = srv;
+			texture->filename = wc;
 
 			int texID = MainEngine::GetInstance()->GetRenderer()->AddTexture(texture);
 

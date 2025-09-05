@@ -104,11 +104,11 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 		wchar_t* wc{};
 		mbstowcs(wc, aitexture->mFilename.C_Str(), sizeof(wc));
 
-		model->Texture[aitexture->mFilename.data].shader_resource_view = texture;
-		model->Texture[aitexture->mFilename.data].width = (int)metadata.width;
-		model->Texture[aitexture->mFilename.data].height = (int)metadata.height;
+		model->Texture[aitexture->mFilename.data]->shader_resource_view = texture;
+		model->Texture[aitexture->mFilename.data]->width = (int)metadata.width;
+		model->Texture[aitexture->mFilename.data]->height = (int)metadata.height;
 		if (wc != NULL)
-			model->Texture[aitexture->mFilename.data].filename = wc;
+			model->Texture[aitexture->mFilename.data]->filename = wc;
 	}
 	if (model->AiScene->mNumMeshes != 1) {
 		for (unsigned int i = 0; i < model->AiScene->mNumMeshes; i++) {

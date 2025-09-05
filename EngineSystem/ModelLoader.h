@@ -46,7 +46,7 @@ private:
 		ID3D11Buffer** VertexBuffer;
 		ID3D11Buffer** IndexBuffer;
 
-		std::unordered_map<std::string, Texture> Texture;
+		std::unordered_map<std::string, Texture*> Texture;
 	};
 
 public:

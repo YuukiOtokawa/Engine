@@ -432,6 +432,26 @@ std::string MainEngine::OpenExportFileDialog()
 	}
 	pFileSaveDialog->SetFileName(L"scene.csv");
 	pFileSaveDialog->SetDefaultExtension(L"csv");
+
+	// COM_FILTERSPEC構造体の配列を定義
+	const COMDLG_FILTERSPEC rgSpec[] =
+	{
+		{ L"CSVファイル (*.csv)", L"*.csv" },
+		{ L"テキストファイル (*.txt)", L"*.txt" },
+		{ L"すべてのファイル (*.*)", L"*.*" },
+	};
+
+	// SetFileTypesでファイルの種類を設定
+	rs = pFileSaveDialog->SetFileTypes(ARRAYSIZE(rgSpec), rgSpec);
+
+	if (FAILED(rs)) {
+		pFileSaveDialog->Release();
+		return "";
+	}
+	
+	// デフォルトで選択されるインデックスを設定（0から始まる）
+	rs = pFileSaveDialog->SetFileTypeIndex(1); // CSVファイルがデフォルトで選択される
+	
 	rs = pFileSaveDialog->Show(NULL);
 	if (FAILED(rs)) {
 		pFileSaveDialog->Release();
