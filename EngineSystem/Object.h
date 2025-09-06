@@ -100,6 +100,8 @@ public:
 		return nullptr; // Return nullptr if no matching component is found
 	}
 
+    void DeleteComponent(Component* component);
+
 	/// @brief コンポーネントのデータをCSV形式でエクスポートします。
     void ExportFile() override;
 

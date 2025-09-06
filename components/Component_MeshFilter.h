@@ -16,6 +16,8 @@
 
 #include <d3d11.h>
 
+#include "../ComponentFactory.h"
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -40,6 +42,8 @@ protected:
     VertexIndex* m_pVertexIndex = nullptr;
 
 public:
+    DECLARE_COMPONENT(MeshFilter)
+
 	/// @brief MeshFilter のデフォルトコンストラクタです。
 	MeshFilter() {
         m_ClassID = CID_Component_MeshFilter;

@@ -16,6 +16,8 @@
 
 #include "../EngineSystem/Material.h"
 
+#include "../ComponentFactory.h"
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -29,6 +31,8 @@ private:
 	int m_MaterialNum = 1;
 
 public:
+    DECLARE_COMPONENT(MeshRenderer)
+
 	/// @brief MeshRenderer クラスの新しいインスタンスを作成します。
 	MeshRenderer();
 

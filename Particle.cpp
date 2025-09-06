@@ -5,6 +5,8 @@
 
 #include "MainEngine.h"
 
+REGISTER_COMPONENT(Particle)
+
 void Particle::UpdateComponent()
 {
 	m_FrameCount--;
@@ -25,8 +27,6 @@ void Particle::UpdateComponent()
 
 void Particle::DrawGUI()
 {
-	ImGui::Indent();
-	ImGui::Text("Particle Component");
 	ImGui::Separator();
 	ImGui::DragFloat3("Velocity", &m_Velocity.x, 0.1f, -100.0f, 100.0f);
 	ImGui::DragFloat3("Acceleration", &m_Acceleration.x, 0.1f, -100.0f, 100.0f);

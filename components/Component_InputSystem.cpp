@@ -13,6 +13,8 @@
 #include "Component_InputSystem.h"
 #include "MainEngine.h"
 
+REGISTER_COMPONENT(InputSystem)
+
 //==========================================================================
 // static変数の宣言
 //==========================================================================
@@ -47,5 +49,4 @@ void InputSystem::UpdateComponent()
 }
 
 void InputSystem::DrawGUI() {
-	ImGui::Text("Input System");
 }

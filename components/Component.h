@@ -40,6 +40,8 @@ public:
     Component();
 
     virtual ~Component() = default; // 仮想デストラクタを定義
+
+    virtual const char* GetComponentName() const = 0;
 	
 	/// @brief オブジェクトの所有者を設定し、タグを初期化します。
 	/// @param obj 新しい所有者となるObject型のポインタ。

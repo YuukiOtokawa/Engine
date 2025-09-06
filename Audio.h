@@ -3,6 +3,8 @@
 
 #include <xaudio2.h>
 
+#include "../ComponentFactory.h"
+
 class Audio :
     public Component
 {
@@ -17,6 +19,8 @@ private:
     int m_LoopCount = 0;
 
 public:
+    DECLARE_COMPONENT(Audio)
+
     Audio() = default;
     ~Audio() = default;
 

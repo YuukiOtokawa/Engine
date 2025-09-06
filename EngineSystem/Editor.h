@@ -92,6 +92,7 @@ public:
 	void Finalize();
 
     void CreateComponent(Component* component);
+    void DeleteComponent(Component* component);
 
     Component* GetComponentByFileID(int fileID);
 
@@ -132,6 +133,4 @@ public:
 };
 
 void Main();
-void SetSceneTitle();
 void SetSceneGame();
-void SetSceneResult();

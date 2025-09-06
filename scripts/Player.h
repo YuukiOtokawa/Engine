@@ -10,7 +10,7 @@
 
 #include "Object.h"
 
-#include "../components/Bullet.h"
+//#include "../components/Bullet.h"
 
 class Player :
     public MonoBehaviour
@@ -97,34 +97,35 @@ public:
 			transform->SetRotation(newAngle);
 
 			if (keyboard->GetKeyDown(KK_F)&&
-				bulletTimer <= 0.0f) {
-				// 蠑ｾ繧堤匱蟆�
-				Object* bullet = new Object();
+				bulletTimer <= 0.0f)
+   //         {
+			//	// 蠑ｾ繧堤匱蟆�
+			//	Object* bullet = new Object();
 
-				bullet->SetName("Bullet");
-				bullet->AddComponent<Transform>();
-				bullet->AddComponent<MeshFilter>();
-				bullet->AddComponent<MeshRenderer>();
-				bullet->AddComponent<Bullet>();
+			//	bullet->SetName("Bullet");
+			//	bullet->AddComponent<Transform>();
+			//	bullet->AddComponent<MeshFilter>();
+			//	bullet->AddComponent<MeshRenderer>();
+			//	//bullet->AddComponent<Bullet>();
 
-				OBJLoader* loader = new OBJLoader();
-				loader->Load("asset\\model\\bullet.obj", bullet);
+			//	OBJLoader* loader = new OBJLoader();
+			//	loader->Load("asset\\model\\bullet.obj", bullet);
 
-				bullet->GetComponent<MeshRenderer>()->SetVertexShader("BlinnPhong");
-				bullet->GetComponent<MeshRenderer>()->SetPixelShader("BlinnPhong");
+			//	bullet->GetComponent<MeshRenderer>()->SetVertexShader("BlinnPhong");
+			//	bullet->GetComponent<MeshRenderer>()->SetPixelShader("BlinnPhong");
 
-				bullet->GetComponent<Bullet>()->SetSpeed(bulletSpeed);
-				bullet->GetComponent<Bullet>()->SetLifeTime(bulletLifeTime);
+			//	bullet->GetComponent<Bullet>()->SetSpeed(bulletSpeed);
+			//	bullet->GetComponent<Bullet>()->SetLifeTime(bulletLifeTime);
 
-				bullet->GetComponent<Transform>()->SetPosition(transform->GetPosition());
-				bullet->GetComponent<Bullet>()->SetDirection(m_Direction);
+			//	bullet->GetComponent<Transform>()->SetPosition(transform->GetPosition());
+			//	bullet->GetComponent<Bullet>()->SetDirection(m_Direction);
 
-				auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
-				bullet->GetComponent<MeshRenderer>()->SetTexture(texture1);
+			//	auto texture1 = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/gravel 1.jpg");
+			//	bullet->GetComponent<MeshRenderer>()->SetTexture(texture1);
 
-				Editor::GetInstance()->AddObject(bullet);
-				bulletTimer = bulletInterval;
-			}
+			//	Editor::GetInstance()->AddObject(bullet);
+			//	bulletTimer = bulletInterval;
+			//}
 
             if (keyboard->GetKeyDown(KK_P)) {
                 Editor::GetInstance()->GetObject("ScoreManager")->GetComponent<Score>()->AddScore(1);

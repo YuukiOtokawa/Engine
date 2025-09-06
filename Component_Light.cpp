@@ -4,6 +4,8 @@
 
 #include "Component_Transform.h"
 
+REGISTER_COMPONENT(Light)
+
 Vector4O Light::m_Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f); // 環境光の色
 DIRECTIONAL_LIGHT Light::m_DirectionalLight = {};
 POINT_LIGHT Light::m_PointLight = {};
@@ -71,8 +73,6 @@ void Light::DrawGeneralLight()
 
 void Light::DrawGUI()
 {
-	ImGui::Text("Light");
-	ImGui::Separator();
 	ImGui::Indent();
 	ImGui::Combo("Type", reinterpret_cast<int*>(&m_Type), "Directional\0Point\0Spot\0\0");
 	ImGui::Checkbox("Enable", &m_isEnable);

@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "../VectorO.h"
+
+#include "../ComponentFactory.h"
 enum LightType
 {
     LIGHTTYPE_DIRECTIONAL,
@@ -67,6 +69,8 @@ private:
     
 
 public:
+    DECLARE_COMPONENT(Light)
+
     Light() = default;
 
     void InitializeTag() override;

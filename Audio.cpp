@@ -2,6 +2,8 @@
 
 #include "AudioManager.h"
 
+REGISTER_COMPONENT(Audio)
+
 void Audio::LoadAudio(const char *filename)
 {
 	int index = -1;

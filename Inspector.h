@@ -3,8 +3,7 @@
 class Object;
 class MeshFilter;
 
-void OpenPopup();
-void BeginPopup(Object* object);
+void AddComponentPopup(Object* object);
 
 void GetMesh(MeshFilter* meshFilter);
 

@@ -8,6 +8,11 @@
 #include "Component_Transform.h"
 
 #include "CSVImporter.h"
+
+
+
+REGISTER_COMPONENT(Transform)
+
 void Transform::UpdateComponent() {
 
 }
@@ -17,8 +22,6 @@ void Transform::Draw() {
 }
 
 void Transform::DrawGUI() {
-	ImGui::Separator();
-	ImGui::Text("Transform");
 	ImGui::Indent();
 	ImGui::InputFloat3("Position", &m_Position.x, "%.2f");
 	ImGui::InputFloat3("Rotation", &m_Rotation.x, "%.2f");

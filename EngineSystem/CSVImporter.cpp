@@ -387,8 +387,6 @@ EngineMetaFile* CSVImporter::CreateObject(ClassID classID)
 			return new Camera();
 		case CID_Component_EditorCamera:
 			return new EditorCamera();
-		case CID_PlayerCamera:
-			return new PlayerCamera();
 		case CID_AssimpMeshRenderer:
 			return new AssimpMeshRenderer();
 		case CID_Animation:

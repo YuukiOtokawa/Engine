@@ -6,6 +6,8 @@
 
 #include "Editor.h"
 
+#define COMPONENT_NAME(ComponentType) \
+	return #ComponentType;
 
 Object::Object(bool editable) : EngineMetaFile(CID_Object) {
 	m_Name = "Object";
@@ -85,14 +87,23 @@ void Object::DrawGUI(){
 	
 	ImGui::Text("Tag: %s", GameObjectTagLayer::GameObjectTagString[GetTag()]);
 
+	Component* toDelete = nullptr;
+
 	for (auto& component : m_Components) {
+		ImGui::Separator();
+		ImGui::Text(component->GetComponentName());
+		ImGui::SameLine();
+		if (ImGui::Button("x")) {
+			toDelete = component;
+		}
 		component->DrawGUI();
 	}
 
-	OpenPopup();
+	AddComponentPopup(this);
 
-	BeginPopup(this);
-
+	if (toDelete) {
+		DeleteComponent(toDelete);
+	}
 }
 void Object::Finalize() {}
 
@@ -105,6 +116,13 @@ void Object::Destroy()
 void Object::AddComponentClass(Component* component) {
 	component->SetOwner(this);
 	m_Components.push_back(component);
+}
+
+void Object::DeleteComponent(Component* component)
+{
+	m_Components.remove(component);
+	Editor::GetInstance()->DeleteComponent(component);
+	component = nullptr;
 }
 
 void Object::ExportFile() {

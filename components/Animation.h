@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Component.h"
+#include "../ComponentFactory.h"
 class Animation :
     public Component
 {
@@ -10,6 +11,7 @@ private:
 	bool m_Loop = true;
 	bool m_Playing = true;
 public:
+    DECLARE_COMPONENT(Animation)
     Animation() {
         m_ClassID = CID_Animation;
     }

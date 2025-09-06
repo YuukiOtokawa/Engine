@@ -15,6 +15,7 @@
 #include "Component.h"
 #include "../VectorO.h"
 #include "FrameWork.h"
+#include "../ComponentFactory.h"
 
 //==========================================================================
 // クラス定義
@@ -47,7 +48,9 @@ private:
 	Vector4O m_Up = Vector4O::Up();
 
 public:
-	// コンストラクタ
+    DECLARE_COMPONENT(Camera)
+
+    // コンストラクタ
     Camera();
 
 	/// @brief 投影行列を取得します。

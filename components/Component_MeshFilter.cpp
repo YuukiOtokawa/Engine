@@ -18,6 +18,8 @@
 
 #include "MainEngine.h"
 
+REGISTER_COMPONENT(MeshFilter)
+
 //==========================================================================
 // メンバ関数定義
 //==========================================================================
@@ -32,6 +34,7 @@ void MeshFilter::UpdateComponent() {
 
 void MeshFilter::Draw() {
 	auto transform = owner->GetComponent<Transform>();
+	if (!transform) return;
 
 	// 行列の宣言
 	XMMATRIX scale, angle, translation;
@@ -90,8 +93,6 @@ void MeshFilter::Draw() {
 
 #include "../Inspector.h"
 void MeshFilter::DrawGUI() {
-	ImGui::Separator();
-	ImGui::Text("Mesh Filter");
 
 	ImGui::Text("VertexIndex:");
 	ImGui::Indent();

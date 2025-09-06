@@ -18,6 +18,7 @@
 #include "Mouse.h"
 #include "Gamepad.h"
 
+#include "../ComponentFactory.h"
 
 class InputSystem :
     public Component
@@ -28,6 +29,8 @@ private:
 	static Mouse* m_pMouse;
 
 public:
+    DECLARE_COMPONENT(InputSystem)
+
 	InputSystem();
 
 	//蜷�繝�繝舌う繧ｹ縺ｮ蜈･蜉帛､縺ｮ蜿門ｾ励�ｻ譖ｴ譁ｰ

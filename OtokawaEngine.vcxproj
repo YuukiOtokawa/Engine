@@ -257,10 +257,10 @@
     <ClInclude Include="animationModel.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="components\Animation.h" />
     <ClInclude Include="components\AssimpMeshRenderer.h" />
     <ClInclude Include="components\Billboard.h" />
-    <ClInclude Include="components\Bullet.h" />
     <ClInclude Include="components\Component.h" />
     <ClInclude Include="components\Component_Camera.h" />
     <ClInclude Include="components\Component_CubeMesh.h" />
@@ -307,8 +307,12 @@
     <ClInclude Include="Pack.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleManager.h" />
+    <ClInclude Include="PlayerControl.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="Script.h" />
+    <ClInclude Include="ScriptComponent.h" />
+    <ClInclude Include="ScriptFactory.h" />
     <ClInclude Include="scripts\Player.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TornadoParticle.h" />
@@ -319,6 +323,7 @@
     <ClCompile Include="animationModel.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="ComponentFactory.cpp" />
     <ClCompile Include="components\Animation.cpp" />
     <ClCompile Include="components\AssimpMeshRenderer.cpp" />
     <ClCompile Include="components\Billboard.cpp" />
@@ -330,6 +335,7 @@
     <ClCompile Include="components\Component_MeshRenderer.cpp" />
     <ClCompile Include="components\Component_Transform.cpp" />
     <ClCompile Include="components\EditorCamera.cpp" />
+    <ClCompile Include="components\MonoBehavior.cpp" />
     <ClCompile Include="components\PlaneMesh.cpp" />
     <ClCompile Include="components\SpriteMesh.cpp" />
     <ClCompile Include="EngineMetaFile.cpp" />
@@ -358,7 +364,10 @@
     <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
+    <ClCompile Include="PlayerControl.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="ScriptComponent.cpp" />
     <ClCompile Include="scripts\main.cpp" />
   </ItemGroup>
   <ItemGroup>

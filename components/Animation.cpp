@@ -5,6 +5,8 @@
 
 #include "imgui.h"
 
+REGISTER_COMPONENT(Animation)
+
 void Animation::UpdateComponent() {
 	if (m_FrameCount < 60.0f / m_FramePerSecond) {
 		m_FrameCount++;

@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Component.h"
 
+#include "../ComponentFactory.h"
+
 struct ParticleData {
     Vector4O position;
     Vector4O startPosition; // Start position for the particle
@@ -17,16 +19,17 @@ class Particle :
     public Component
 {
 private:
-    int m_SpawnSpan;
+    int m_SpawnSpan = 0;
     int m_FrameCount = 0;
-    int m_LifeTime;
+    int m_LifeTime = 0;
     Vector4O m_Size = Vector4O(1.0f, 1.0f, 1.0f); // Size of the particle
     Vector4O m_Velocity;
     Vector4O m_Acceleration;
-    int m_Texture;
+    int m_Texture = -1;
 
     bool m_isStarted;
 public:
+    DECLARE_COMPONENT(Particle)
     Particle() {
         m_ClassID = CID_Particle;
     }

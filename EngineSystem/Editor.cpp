@@ -34,7 +34,7 @@
 #include "Player.h"
 #include "PlayerCamera.h"
 
-#include "Bullet.h"
+//#include "Bullet.h"
 #include "Billboard.h"
 #include "Animation.h"
 
@@ -294,25 +294,6 @@ void Editor::Draw() {
 	// レンダリングバッファの内容を画面に表示
 	MainEngine::GetInstance()->GetRenderer()->BufferPresent();
 
-	if (m_NextSceneName != "") {
-		for (auto& object : m_Objects) {
-			delete object; // すべてのオブジェクトを削除
-		}
-		m_Objects.clear(); // オブジェクトリストをクリア
-		m_pActiveCamera = nullptr;
-		m_pSelectedObject = nullptr;
-
-		if (m_NextSceneName == "Title") {
-			SetSceneTitle(); // タイトルシーンをセット
-		}
-		else if (m_NextSceneName == "Result") {
-			SetSceneResult(); // リザルトシーンをセット
-		}
-		else if (m_NextSceneName == "Game") {
-			SetSceneGame(); // ゲームシーンをセット
-		}
-		m_NextSceneName = ""; // シーン名をリセット
-	}
 }
 
 void Editor::Finalize() {
@@ -321,6 +302,15 @@ void Editor::Finalize() {
 
 void Editor::CreateComponent(Component* component) {
 	m_Components[component->GetClassID()].push_back(component);
+}
+
+void Editor::DeleteComponent(Component* component) {
+	auto& compList = m_Components[component->GetClassID()];
+	auto it = std::find(compList.begin(), compList.end(), component);
+	if (it != compList.end()) {
+		compList.erase(it);
+		delete component;
+	}
 }
 
 Component* Editor::GetComponentByFileID(int fileID) {

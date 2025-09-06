@@ -16,6 +16,8 @@
 
 #include "../VectorO.h"
 
+#include "../ComponentFactory.h"
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -32,6 +34,8 @@ private:
 	Vector4O m_Scale = Vector4O(1.0f, 1.0f, 1.0f);
 
 public:
+    DECLARE_COMPONENT(Transform)
+
     Transform() {
         m_ClassID = CID_Component_Transform;
     }

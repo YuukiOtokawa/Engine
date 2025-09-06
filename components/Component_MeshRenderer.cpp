@@ -17,6 +17,8 @@
 
 #include "MainEngine.h"
 
+REGISTER_COMPONENT(MeshRenderer)
+
 //==========================================================================
 // メンバ関数定義
 //==========================================================================
@@ -40,8 +42,6 @@ void MeshRenderer::Draw() {
 }
 
 void MeshRenderer::DrawGUI() {
-	ImGui::Separator();
-	ImGui::Text("Mesh Renderer");
 	ImGui::Indent();
 	m_pMaterial->DrawGUI();
 	ImGui::Unindent();

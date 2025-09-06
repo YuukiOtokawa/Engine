@@ -22,6 +22,8 @@
 // メンバ関数定義
 //==========================================================================
 
+REGISTER_COMPONENT(Camera)
+
 Camera::Camera()
 {
 	m_Projection = XMMatrixIdentity();
@@ -61,8 +63,6 @@ void Camera::Draw() {
 }
 
 void Camera::DrawGUI() {
-	ImGui::Separator();
-	ImGui::Text("Camera Component");
 	ImGui::Indent();
 	ImGui::BeginDisabled();
 	ImGui::Checkbox("Active", &m_IsActiveCamera);
