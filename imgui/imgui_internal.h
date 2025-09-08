@@ -1,4 +1,4 @@
-// dear imgui, v1.91.9b
+﻿// dear imgui, v1.91.9b
 // (internal structures/api)
 
 // You may use this file to debug, understand or extend Dear ImGui features but we don't provide any guarantee of forward compatibility.
@@ -1694,10 +1694,10 @@ struct IMGUI_API ImGuiTypingSelectState
     ImGuiID         FocusScope;
     int             LastRequestFrame = 0;
     float           LastRequestTime = 0.0f;
-    bool            SingleCharModeLock = false; // After a certain single char repeat count we lock into SingleCharMode. Two benefits: 1) buffer never fill, 2) we can provide an immediate SingleChar mode without timer elapsing.
+    bool            SingleCharm_Modelock = false; // After a certain single char repeat count we lock into SingleCharMode. Two benefits: 1) buffer never fill, 2) we can provide an immediate SingleChar mode without timer elapsing.
 
     ImGuiTypingSelectState() { memset(this, 0, sizeof(*this)); }
-    void            Clear()  { SearchBuffer[0] = 0; SingleCharModeLock = false; } // We preserve remaining data for easier debugging
+    void            Clear()  { SearchBuffer[0] = 0; SingleCharm_Modelock = false; } // We preserve remaining data for easier debugging
 };
 
 //-----------------------------------------------------------------------------

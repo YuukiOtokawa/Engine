@@ -50,9 +50,9 @@ public:
 
 	/// @brief マテリアルを設定します。
 	/// @param material 設定するマテリアル。
-	void SetMaterial(MATERIAL material) { this->m_pMaterial->SetMaterial(material); }
 	void SetMaterial(Material* material) { this->m_pMaterial = material; }
 	void SetMaterialNum(int num) { this->m_MaterialNum = num; }
+    Material* GetMaterial() const { return this->m_pMaterial; }
 
 	/// @brief 頂点シェーダーを指定されたキーで設定します。
 	/// @param key 設定する頂点シェーダーのキー。
@@ -67,36 +67,36 @@ public:
 
 	/// @brief テクスチャをマテリアルに設定します。
 	/// @param texture 設定するID3D11ShaderResourceView型のテクスチャ。
-	void SetTexture(int texture) {
-        m_pMaterial->SetTexture(texture);
-        if (owner->HasChild()) {
-            for (auto& child : owner->GetChildren()) {
-                if (child->GetComponent<MeshRenderer>()) {
-                    child->GetComponent<MeshRenderer>()->SetTexture(texture);
-                }
-            }
-        }
-    }
-	void SetBumpTexture(int texture) {
-        m_pMaterial->SetBumpTexture(texture);
-        if (owner->HasChild()) {
-            for (auto& child : owner->GetChildren()) {
-                if (child->GetComponent<MeshRenderer>()) {
-                    child->GetComponent<MeshRenderer>()->SetBumpTexture(texture);
-                }
-            }
-        }
-    }
-	void SetToonTexture(int texture) {
-        m_pMaterial->SetToonTexture(texture);
-        if (owner->HasChild()) {
-            for (auto& child : owner->GetChildren()) {
-                if (child->GetComponent<MeshRenderer>()) {
-                    child->GetComponent<MeshRenderer>()->SetToonTexture(texture);
-                }
-            }
-        }
-    }
+	//void SetTexture(int texture) {
+ //       m_pMaterial->SetTexture(texture);
+ //       if (owner->HasChild()) {
+ //           for (auto& child : owner->GetChildren()) {
+ //               if (child->GetComponent<MeshRenderer>()) {
+ //                   child->GetComponent<MeshRenderer>()->SetTexture(texture);
+ //               }
+ //           }
+ //       }
+ //   }
+	//void SetBumpTexture(int texture) {
+ //       m_pMaterial->SetBumpTexture(texture);
+ //       if (owner->HasChild()) {
+ //           for (auto& child : owner->GetChildren()) {
+ //               if (child->GetComponent<MeshRenderer>()) {
+ //                   child->GetComponent<MeshRenderer>()->SetBumpTexture(texture);
+ //               }
+ //           }
+ //       }
+ //   }
+	//void SetToonTexture(int texture) {
+ //       m_pMaterial->SetToonTexture(texture);
+ //       if (owner->HasChild()) {
+ //           for (auto& child : owner->GetChildren()) {
+ //               if (child->GetComponent<MeshRenderer>()) {
+ //                   child->GetComponent<MeshRenderer>()->SetToonTexture(texture);
+ //               }
+ //           }
+ //       }
+ //   }
 
 	/// @brief タグを初期化します。
 	void InitializeTag() override;

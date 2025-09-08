@@ -668,4 +668,3 @@ void Renderer::SetParameter(Vector4O position)
 {
 	GetDeviceContext()->UpdateSubresource(m_pCameraBuffer, 0, NULL, &position, 0, 0);
 }
-

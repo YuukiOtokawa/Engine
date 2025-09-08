@@ -31,18 +31,22 @@ void Material::DrawMaterial()
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderer();
 
-	ID3D11ShaderResourceView** srv;
-	srv = renderer->GetTexture(m_TextureFileID);
-	if (srv != nullptr)
-		renderer->GetDeviceContext()->PSSetShaderResources(0, 1, srv);
-	srv = renderer->GetTexture(m_BumpTextureFileID);
-	if (srv != nullptr)
-		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, srv);
-	srv = renderer->GetTexture(m_ToonTextureFileID);
-	if (srv != nullptr)
-		renderer->GetDeviceContext()->PSSetShaderResources(2, 1, srv);
+	for (auto subMaterial : m_SubMaterial) {
+		ID3D11ShaderResourceView** srv;
+		srv = renderer->GetTexture(m_TextureFileID);
+		if (srv != nullptr)
+			renderer->GetDeviceContext()->PSSetShaderResources(0, 1, srv);
+		srv = renderer->GetTexture(m_BumpTextureFileID);
+		if (srv != nullptr)
+			renderer->GetDeviceContext()->PSSetShaderResources(1, 1, srv);
+		srv = renderer->GetTexture(m_ToonTextureFileID);
+		if (srv != nullptr)
+			renderer->GetDeviceContext()->PSSetShaderResources(2, 1, srv);
 
-	renderer->SetMaterialBuffer(m_Material);
+		renderer->SetMaterialBuffer(m_Material);
+
+	}
+
 
 }
 

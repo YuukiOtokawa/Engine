@@ -20,6 +20,17 @@
 
 #include "../EngineMetaFile.h"
 
+#include <vector>
+
+struct SUB_MATERIAL
+{
+    std::string name;
+    MATERIAL material;
+    int textureID = -1;
+    int bumpTextureID = -1;
+    int toonTextureID = -1;
+};
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -32,10 +43,8 @@ private:
     std::string m_PixelShader{};
 
 	// マテリアルとテクスチャ番号
-	MATERIAL m_Material;
-	int m_TextureFileID = 0;
-	int m_BumpTextureFileID = 0;
-    int m_ToonTextureFileID = 0;
+
+    std::vector<SUB_MATERIAL*> m_SubMaterial;
 
 	unsigned int	StartIndex = 0;
 	unsigned int	IndexNum = 0;
@@ -66,6 +75,9 @@ public:
 
 	void SetShader();
 
+    void AddSubMaterial(SUB_MATERIAL* subMaterial) { m_SubMaterial.push_back(subMaterial); }
+    void SetSubMaterials(std::vector<SUB_MATERIAL*> subMaterials) { m_SubMaterial = subMaterials; }
+    /*
 	/// @brief 繝�繧ｯ繧ｹ繝√Ε繧定ｨｭ螳壹＠縺ｾ縺吶�
 	/// @param texture 險ｭ螳壹☆繧紀D3D11ShaderResourceView蝙九�ｮ繝�繧ｯ繧ｹ繝√Ε縲�
 	void SetTexture(int texture) { m_TextureFileID = texture; }
@@ -73,6 +85,7 @@ public:
 	/// @param bumpTexture 險ｭ螳壹☆繧紀D3D11ShaderResourceView蝙九�ｮ繝舌Φ繝励�槭ャ繝励ユ繧ｯ繧ｹ繝√Ε縲�
 	void SetBumpTexture(int bumpTexture) { m_BumpTextureFileID = bumpTexture; }
     void SetToonTexture(int toonTexture) { m_ToonTextureFileID = toonTexture; }
+    */
 
 	/// @brief 鬆らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励ｒ蜿門ｾ励＠縺ｾ縺吶�
 	/// @return 譬ｼ邏阪＆繧後※縺�繧矩�らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励�
@@ -87,6 +100,7 @@ public:
 	unsigned int GetStartIndex() const { return StartIndex; }
 	unsigned int GetIndexNum() const { return IndexNum; }
 
+    /*
 	void SetTextureEnable(bool enable) { m_Material.textureEnable = enable; }
 
     void SetMaterial(MATERIAL material) { m_Material = material; }
@@ -94,5 +108,6 @@ public:
 	/// @brief 繝�繧ｯ繧ｹ繝√Ε繝ｪ繧ｽ繝ｼ繧ｹ繝薙Η繝ｼ繧貞叙蠕励＠縺ｾ縺吶�
 	/// @return 繝�繧ｯ繧ｹ繝√Ε繧定｡ｨ縺� ID3D11ShaderResourceView 繝昴う繝ｳ繧ｿ縲�
 	int GetTexture() const { return m_TextureFileID; }
+    */
 };
 

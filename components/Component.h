@@ -26,8 +26,6 @@ using namespace ComponentTag;
 class Component : public EngineMetaFile
 {
 protected:
-    // コンポーネントの所有者オブジェクト
-	Object* owner = nullptr;
 
     // trueならコンポーネントはアクティブであることを示すフラグ
 	bool isActive = true;
@@ -36,6 +34,9 @@ protected:
 	Tag tag = NoComponent;
 
 public:
+    // コンポーネントの所有者オブジェクト
+	Object* owner = nullptr;
+
 	// コンストラクタ
     Component();
 

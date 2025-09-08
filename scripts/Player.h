@@ -109,7 +109,7 @@ public:
 			//	//bullet->AddComponent<Bullet>();
 
 			//	OBJLoader* loader = new OBJLoader();
-			//	loader->Load("asset\\model\\bullet.obj", bullet);
+			//	loader->Load("asset\\m_Model\\bullet.obj", bullet);
 
 			//	bullet->GetComponent<MeshRenderer>()->SetVertexShader("BlinnPhong");
 			//	bullet->GetComponent<MeshRenderer>()->SetPixelShader("BlinnPhong");

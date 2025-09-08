@@ -56,12 +56,30 @@ void AddComponentPopup(Object* object)
 }
 
 #include "CSVImporter.h"
+#include "FBXImporter.h"
 #include "MainEngine.h"
 
 #include "Component_MeshFilter.h"
+#include <filesystem>
 void GetMesh(MeshFilter* meshFilter)
 {
-	int fileID = CSVImporter::ImportMesh(OpenImportFileDialog());
-	if (fileID == -1) return;
-	meshFilter->SetMesh(fileID);
+	std::string filePath = OpenImportFileDialog();
+
+	// ファイルパスオブジェクト
+	std::filesystem::path path(filePath);
+
+	// 拡張子を取得して小文字に変換
+	std::string extension = path.extension().string();
+	std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char c) { return std::tolower(c); });
+
+	if (extension == ".csv") {
+		int fileID = CSVImporter::ImportMesh(filePath);
+		if (fileID == -1) return;
+		meshFilter->SetMesh(fileID);
+	}
+
+	if (extension == ".fbx") {
+		FBXImporter fbxImporter;
+		fbxImporter.LoadFBX(filePath.c_str(), meshFilter->owner);
+	}
 }
