@@ -25,6 +25,7 @@
 #include "MonoBehavior.h"
 #include "Component_InputSystem.h"
 #include "../Component_Light.h"
+#include "../ScriptComponent.h"
 
 #include <vector>
 #include <sstream>
@@ -395,8 +396,8 @@ EngineMetaFile* CSVImporter::CreateObject(ClassID classID)
 			return new Billboard();
 		case CID_Particle:
 			return new Particle();
-		case CID_MonoBehaviour:
-			return nullptr;
+		case CID_Script:
+			return new ScriptComponent();
 		case CID_None:
 		default:
 			return nullptr;

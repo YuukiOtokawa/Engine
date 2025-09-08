@@ -31,12 +31,16 @@ void Material::DrawMaterial()
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderer();
 
-	if (m_TextureFileID != -1)
-		renderer->GetDeviceContext()->PSSetShaderResources(0, 1, renderer->GetTexture(m_TextureFileID));
-	if (m_BumpTextureFileID != -1)
-		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, renderer->GetTexture(m_BumpTextureFileID));
-	if (m_ToonTextureFileID != -1)
-		renderer->GetDeviceContext()->PSSetShaderResources(2, 1, renderer->GetTexture(m_ToonTextureFileID));
+	ID3D11ShaderResourceView** srv;
+	srv = renderer->GetTexture(m_TextureFileID);
+	if (srv != nullptr)
+		renderer->GetDeviceContext()->PSSetShaderResources(0, 1, srv);
+	srv = renderer->GetTexture(m_BumpTextureFileID);
+	if (srv != nullptr)
+		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, srv);
+	srv = renderer->GetTexture(m_ToonTextureFileID);
+	if (srv != nullptr)
+		renderer->GetDeviceContext()->PSSetShaderResources(2, 1, srv);
 
 	renderer->SetMaterialBuffer(m_Material);
 
@@ -70,11 +74,16 @@ void Material::DrawGUI() {
 		m_PixelShader = keys[current_shader_index];
 	}
 
+	ID3D11ShaderResourceView** srv;
 	ImGui::Text("Texture");
-	ImGui::Image((ImTextureID)(*renderer->GetTexture(m_TextureFileID)), ImVec2(300, 300));
-	ImGui::Text("Bump Map");
-	ImGui::Image((ImTextureID)(*renderer->GetTexture(m_BumpTextureFileID)), ImVec2(300, 300));
+	srv = renderer->GetTexture(m_TextureFileID);
+	if (srv != nullptr)
+		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
 
+	ImGui::Text("Bump Map");
+	srv = renderer->GetTexture(m_BumpTextureFileID);
+	if (srv != nullptr)
+	ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
 }
 
 void Material::ImportFile(std::vector<std::string>& tokens)

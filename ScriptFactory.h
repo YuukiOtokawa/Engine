@@ -50,13 +50,12 @@ private:
 // 修正後のマクロ
 #define REGISTER_SCRIPT(ClassName) \
     namespace { \
-        /* 構造体名を Registrar に修正 */ \
         struct Registrar_##ClassName { \
-            /* コンストラクタ名を構造体名と完全に一致させる */ \
             Registrar_##ClassName() { \
                 ScriptFactory::GetInstance().RegisterScript(#ClassName, []() -> Script* { return new ClassName(); }); \
             } \
         }; \
-        /* 変数名も修正 */ \
         static Registrar_##ClassName registrar_##ClassName; \
-    }
+    } \
+    /* GetName()を実装する行を追加 */ \
+    const char* ClassName::GetScriptName() const { return #ClassName; }

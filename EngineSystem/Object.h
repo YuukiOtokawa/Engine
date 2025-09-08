@@ -77,10 +77,11 @@ public:
 	/// @tparam ...Args コンポーネントのコンストラクタ引数テンプレート
 	/// @param ...args コンポーネントのコンストラクタ引数
 	template<typename T, typename... Args>
-	void AddComponent(Args&&... args) {
+    T* AddComponent(Args&&... args) {
 		static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
 		T* component = new T(std::forward<Args>(args)...);
 		AddComponentClass(component);
+        return component;
 	}
 
 	/// @brief コンポーネントクラスを追加します。

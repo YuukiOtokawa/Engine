@@ -90,6 +90,7 @@ void Object::DrawGUI(){
 	Component* toDelete = nullptr;
 
 	for (auto& component : m_Components) {
+		ImGui::PushID(component->GetFileID());
 		ImGui::Separator();
 		ImGui::Text(component->GetComponentName());
 		ImGui::SameLine();
@@ -97,6 +98,7 @@ void Object::DrawGUI(){
 			toDelete = component;
 		}
 		component->DrawGUI();
+		ImGui::PopID();
 	}
 
 	AddComponentPopup(this);

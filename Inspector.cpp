@@ -5,6 +5,8 @@
 #include "Object.h"
 
 #include "../ComponentFactory.h"
+#include "../ScriptFactory.h"
+#include "../ScriptComponent.h"
 
 void AddComponentPopup(Object* object)
 {
@@ -22,11 +24,29 @@ void AddComponentPopup(Object* object)
 		auto names = ComponentFactory::GetInstance()->GetRegisteredComponentNames();
 
 		for (const auto& name : names) {
+			if (name == "ScriptComponent") continue;
+
 			if (ImGui::Selectable(name.c_str())) {
 				Component* newComponent = ComponentFactory::GetInstance()->CreateComponent(name);
 				if (newComponent) {
 					object->AddComponentClass(newComponent);
 				}
+				ImGui::CloseCurrentPopup();
+			}
+
+		}
+		auto scriptNames = ScriptFactory::GetInstance().GetRegisteredScriptNames();
+		for (const auto& scriptName : scriptNames) {
+			if (ImGui::Selectable(scriptName.c_str())) {
+					
+				auto* scriptComp = object->AddComponent<ScriptComponent>();
+
+				Script* newScript = ScriptFactory::GetInstance().CreateScript(scriptName);
+
+				if (newScript && scriptComp) {
+					scriptComp->SetScript(std::unique_ptr<Script>(newScript));
+				}
+
 				ImGui::CloseCurrentPopup();
 			}
 		}

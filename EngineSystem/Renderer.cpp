@@ -465,7 +465,7 @@ int Renderer::TextureLoad(const std::wstring& filename, int fileID)
 
 	m_Textures.push_back(texture);
 
-	return (UINT)m_Textures.size() - 1; // 新しく読み込んだテクスチャのIDを返す
+	return texture->GetFileID(); // 新しく読み込んだテクスチャのIDを返す
 }
 
 int Renderer::AddTexture(Texture* texture)
@@ -489,11 +489,16 @@ void Renderer::ResetTexture()
 	m_Textures.clear();
 }
 
+#include "Editor.h"
+
 ID3D11ShaderResourceView** Renderer::GetTexture(int index)
 {
-	if (index == -1)
-		return nullptr;
-	return &m_Textures[index]->shader_resource_view;
+	for (auto it : m_Textures) {
+		if (it->GetFileID() == index) {
+			return &it->shader_resource_view;
+		}
+	}
+	return nullptr;
 }
 
 int Renderer::GetTextureWidth(int index)

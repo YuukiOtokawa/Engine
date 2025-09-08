@@ -33,6 +33,7 @@
 // テクスチャ構造体
 class Texture : public EngineMetaFile {
 public:
+    Texture() : EngineMetaFile() {}
     std::wstring filename;
     ID3D11ShaderResourceView* shader_resource_view;
     int width = 0;

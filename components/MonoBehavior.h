@@ -11,7 +11,7 @@ private:
 public:
 
     MonoBehaviour() {
-        m_ClassID = CID_MonoBehaviour;
+        m_ClassID = CID_Script;
     }
     virtual void Start() = 0;
     virtual void Update() = 0;

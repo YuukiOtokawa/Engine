@@ -22,7 +22,7 @@ enum ClassID {
     CID_Animation,
     CID_Billboard,
     CID_Particle,
-    CID_MonoBehaviour,
+    CID_Script,
 };
 
 class EngineMetaFile
