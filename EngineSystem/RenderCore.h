@@ -272,5 +272,13 @@ public:
     void SetMaterialBuffer(MATERIAL material) {
         m_pDeviceContext->UpdateSubresource(m_pMaterialBuffer, 0, NULL, &material, 0, 0);
     }
+
+    void ResetRenderTarget() {
+        m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
+    }
+
+    void ResetViewPort() {
+        CreateViewPort();
+    }
 };
 

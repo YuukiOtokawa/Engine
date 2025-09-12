@@ -30,7 +30,7 @@ void Object::Initialize() {}
 
 void Object::Update() {
 	for (auto& component : m_Components) {
-		component->UpdateComponent();
+		component->Update();
 	}
 	if (HasChild())
 	{
@@ -126,6 +126,7 @@ void Object::Destroy()
 void Object::AddComponentClass(Component* component) {
 	component->SetOwner(this);
 	m_Components.push_back(component);
+	Editor::GetInstance()->CreateComponent(component);
 }
 
 void Object::DeleteComponent(Component* component)

@@ -44,7 +44,7 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 		Vector2O(1.0f, 1.0f),
 	};
 
-	m_pVertexIndex = new VertexIndex("Plane", vertex);
+	m_pVertexIndex = new VertexIndex("Sprite", vertex);
 	m_pVertexIndex->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	Editor::GetInstance()->AddVertexIndex(m_pVertexIndex);

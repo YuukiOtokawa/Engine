@@ -63,6 +63,11 @@ public:
 		return m_View;
 	}
 
+    void Start() override {
+        owner->SetTag(GameObjectTag::CameraTag);
+        owner->SetLayer(GameObjectLayer::CameraLayer);
+    }
+
     /// @brief コンポーネントの状態を更新します。
     void UpdateComponent() override;
 	/// @brief 描画処理を実行します。

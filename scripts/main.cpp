@@ -14,6 +14,7 @@
 #include "PlaneMesh.h"
 #include "Player.h"	
 #include "AssimpMeshRenderer.h"
+#include "../RenderTexture.h"
 
 #include "../Particle.h"
 
@@ -127,8 +128,8 @@ void SetSceneGame()
 		sprite->AddComponent<SpriteMesh>();
 		sprite->AddComponent<MeshRenderer>();
 
-		sprite->SetTag(GameObjectTag::SpriteTag);
-		sprite->SetLayer(GameObjectLayer::SpriteLayer);
+		sprite->SetTag(GameObjectTag::ObjectTag);
+		sprite->SetLayer(GameObjectLayer::ObjectLayer);
 
 		MATERIAL material;
 		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 0);
@@ -148,6 +149,8 @@ void SetSceneGame()
 		sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("unlit");
 
 		sprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, 100.0f, 1.0f));
+
+		sprite->AddComponent<RenderTexture>();
 	}
 
 	/*

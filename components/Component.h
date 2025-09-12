@@ -17,6 +17,8 @@
 
 #include "../EngineMetaFile.h"
 
+#include "../ComponentFactory.h"
+
 using namespace ComponentTag;
 
 //==========================================================================
@@ -29,6 +31,8 @@ protected:
 
     // trueならコンポーネントはアクティブであることを示すフラグ
 	bool isActive = true;
+
+    bool isStarted = false;
 
 	// コンポーネントのタグ
 	Tag tag = NoComponent;
@@ -52,6 +56,16 @@ public:
 
 	/// @brief タグを初期化する純粋仮想関数です。
 	virtual void InitializeTag() = 0;
+
+    virtual void Start() {}
+
+    virtual void Update() {
+        if (!isStarted) {
+            Start();
+            isStarted = true;
+        }
+        UpdateComponent();
+    }
 
 	/// @brief コンポーネントを更新する純粋仮想関数です。
 	virtual void UpdateComponent() = 0;

@@ -58,6 +58,7 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
     X(LightLayer, "Light") \
     X(BillBoardLayer, "BillBoard") \
     X(SpriteLayer, "Sprite") \
+    X(RenderTextureLayer, "RenderTexture") \
 
 #define COMPONENT_TAG \
 	X(NoComponent, "NoComponent") \
@@ -91,7 +92,7 @@ struct MATERIAL
     BOOL textureEnable = TRUE;
     FLOAT shininess = 0;
     FLOAT SpecularPower = 50.0f;
-    FLOAT dummy[1] = {};                // dummyを1個に変更して16バイト境界にアライメント
+    FLOAT RGBShift = 0.5f;
 
     Vector4O ambient = Vector4O::One();
     Vector4O diffuse = Vector4O::One();
@@ -101,7 +102,9 @@ struct MATERIAL
     Vector4O SkyColor = Vector4O::One();
     Vector4O GroundColor = Vector4O::One();
     Vector3O GroundNormal = Vector3O::Up();
-    FLOAT padding = 0.0f;               // GroundNormalを16バイト境界にアライメントするためのパディング
+    float MosaicSize = 1.5f;
+    Vector2O Aspect = Vector2O(1.0f, 1.0f);
+    Vector2O BlockSize = Vector2O(32.0f, 32.0f);               // GroundNormalを16バイト境界にアライメントするためのパディング
 };
 
 struct LIGHT {

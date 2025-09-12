@@ -48,7 +48,7 @@ public:
     void InitializeBuffers();
 
     void UpdateComponent() override;
-    void Draw() override; // ここにメインの描画ロジックを
+    void Render() override; // ここにメインの描画ロジックを
     void DrawGUI() override;
 
     void InitializeTag() override;

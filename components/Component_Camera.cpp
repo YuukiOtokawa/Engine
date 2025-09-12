@@ -49,6 +49,9 @@ void Camera::Draw() {
 		);
 
 	//カメラ行列を作成
+	if (owner->GetComponent<Transform>()->GetPosition() == m_Target)
+		m_Target.z += 1.0f;
+
 	XMVECTOR eyev = XMLoadFloat3(m_Target.ToFloat3());										// カメラの視線ベクトル
 	XMVECTOR pos = XMLoadFloat3(owner->GetComponent<Transform>()->GetPosition().ToFloat3());	// カメラの位置ベクトル
 	XMVECTOR up = XMLoadFloat3(m_Up.ToFloat3());												// カメラの上方向ベクトル

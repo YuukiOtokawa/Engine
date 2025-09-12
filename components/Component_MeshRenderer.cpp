@@ -29,7 +29,7 @@ void MeshRenderer::UpdateComponent() {
 }
 
 #include "Component_MeshFilter.h"
-void MeshRenderer::Draw() {
+void MeshRenderer::Render() {
 	if (!m_bIsVisible) return;
 
 	// 1. 所有者オブジェクトからMeshFilterコンポーネントを取得
@@ -91,8 +91,10 @@ void MeshRenderer::Draw() {
     MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(meshFilter->m_PrimitiveTopology);
 
     // 5. シェーダーとマテリアルのプロパティを設定する (すでにあなたのコードに記述されています)
-    m_pMaterial->SetShader();
-    m_pMaterial->DrawMaterial();
+	auto ownerScale = transform->GetScale();
+	m_pMaterial->GetMaterial()->Aspect = Vector2O(ownerScale.x,ownerScale.y);
+	m_pMaterial->SetShader();
+	m_pMaterial->DrawMaterial();
 
     // 6. 最終的な描画呼び出しを実行する
 	if (meshFilter->m_iVertexCount == 0) return;

@@ -309,6 +309,7 @@ int CSVImporter::ImportMesh(std::string filePath)
 	//==========================================================================
 
 	bool isVertex = true;
+	bool isIndex = true;
 	while (std::getline(file, line)) {
 		// コンマで分けられた1行分のデータ
 		std::vector<std::string> tokens;
@@ -320,20 +321,20 @@ int CSVImporter::ImportMesh(std::string filePath)
 		while (std::getline(ss, token, ',')) {
 			tokens.push_back(token);
 		}
-		if (tokens[0] == "&") {
+		if (!token.empty() && tokens[0] == "&") {
 			isVertex = false;
 			continue;
 		}
 		// 最終データのvectorに一行分のデータを格納
 		if (isVertex)
 			vertexData.push_back(tokens);
-		else {
-			// インデックスデータの格納
-			if (indexData.size() == 0)
-				indexData = tokens;
-			else
-				topologyString = tokens[0];
+		else if (isIndex) {
+			indexData = tokens;
+			isIndex = false;
 		}
+		else
+			topologyString = tokens[0];
+		
 	}
 
 	//==========================================================================

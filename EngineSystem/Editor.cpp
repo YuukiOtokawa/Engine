@@ -136,6 +136,9 @@ void Editor::Initialize() {
 
 		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "mosaic");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/mosaicPS.cso", "mosaic");
+
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "RGBShift");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/RGBShiftPS.cso", "RGBShift");
 	}
 
 	MainEngine::GetInstance()->GetRenderCore()->TextureLoad(L"asset/texture/Default_White.png");
@@ -161,20 +164,32 @@ void Editor::Update() {
 	m_pParticleManager->UpdateParticles();
 }
 
+#include "../RenderTexture.h"
 void Editor::Draw() {
 
+	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+
+	for (auto renderTextureComponent : m_Components[CID_Component_RenderTexture]) {
+		static_cast<RenderTexture*>(renderTextureComponent)->DrawRenderTexture();
+	}
+
+	renderCore->ResetRenderTarget();
+	renderCore->ResetViewPort();
+
+
 	//レンダリングバッファクリア
-	MainEngine::GetInstance()->GetRenderCore()->BufferClear();
+	renderCore->BufferClear();
 
 //==========================================================================
 // オブジェクト描画処理
 //==========================================================================
 
+
 	//使用するカメラを設定
 	Object* activeCamera = nullptr;
 	for (auto& object : m_Objects) {
-		if (object->GetTag() == GameObjectTagLayer::CameraTag &&
-			object->GetComponent<Camera>()->IsActiveCamera()) {
+		auto cameraComp = object->GetComponent<Camera>();
+		if (cameraComp && cameraComp->IsActiveCamera()) {
 			activeCamera = object;
 		}
 	}
@@ -298,6 +313,65 @@ void Editor::Draw() {
 
 	// レンダリングバッファの内容を画面に表示
 	MainEngine::GetInstance()->GetRenderCore()->BufferPresent();
+
+}
+
+void Editor::DrawGame(Object* camera, Object* renderTexture)
+{
+//==========================================================================
+// オブジェクト描画処理
+//==========================================================================
+
+	camera->Draw();
+
+	for (auto& object : m_Objects) {
+		if (object->GetTag() == GameObjectTagLayer::LightTag) {
+			object->Draw(); // ライトオブジェクトの描画
+		}
+	}
+	Light::DrawGeneralLight(); // 全体のライト情報を描画
+
+	// オブジェクトをカメラに遠い順にソート
+	auto objects = m_Objects;
+	objects.sort([camera](Object* a, Object* b) {
+		if (!camera) return false; // activeCameraがnullptrの場合、ソートしない
+		if (a->GetTag() == GameObjectTagLayer::CameraTag || b->GetTag() == GameObjectTagLayer::CameraTag)
+			return false; // カメラオブジェクトはソートしない
+		if (a->GetTag() == GameObjectTagLayer::LightTag || b->GetTag() == GameObjectTagLayer::LightTag)
+			return false; // ライトオブジェクトはソートしない
+		if (!a->GetComponent<Transform>() || !b->GetComponent<Transform>())
+			return false; // Transformコンポーネントがない場合はソートしない
+		auto aPos = a->GetComponent<Transform>()->GetPosition();
+		auto bPos = b->GetComponent<Transform>()->GetPosition();
+		auto aLength = (aPos - camera->GetComponent<Transform>()->GetPosition()).Length();
+		auto bLength = (bPos - camera->GetComponent<Transform>()->GetPosition()).Length();
+		return aLength > bLength; // 遠い順にソート
+				 });
+
+	//オブジェクトの描画
+	for (auto& object : objects) {
+		if (object->GetLayer() == GameObjectLayer::ObjectLayer) {
+			object->Draw();
+		}
+	}
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	for (auto& object : objects) {
+		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
+			object->Draw();
+		}
+	}
+	//パーティクルの描画
+	m_pParticleManager->DrawParticles();
+
+	// 2D描画
+	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+	for (auto& object : objects) {
+		if (object == renderTexture) continue;
+		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
+			object->Draw();
+		}
+	}
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
 
 }
 

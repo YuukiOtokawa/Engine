@@ -88,6 +88,8 @@ public:
 	void Update();
 	/// @brief オブジェクトの描画処理を実行します。
 	void Draw();
+
+    void DrawGame(Object* camera, Object* renderTexture);
 	/// @brief オブジェクトやリソースの後処理を行います。
 	void Finalize();
 
@@ -99,6 +101,7 @@ public:
     std::list<Component*> GetComponentsByClassID(ClassID classID) {
         return m_Components[classID];
     }
+
 
 	/// @brief オブジェクトを追加します。
 	/// @param object 追加するオブジェクトへのポインタ。

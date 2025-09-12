@@ -5,6 +5,8 @@
 
 class EngineMetaFile;
 class Object;
+struct Vector2O;
+struct Vector3O;
 struct Vector4O;
 class VertexIndex;
 class CSVExporter
@@ -19,6 +21,8 @@ public:
     static void ExportInt(int data);
     static void ExportFloat(float data);
     static void ExportString(const std::string data);
+    static void ExportVector2O(const Vector2O data);
+    static void ExportVector3O(const Vector3O data);
     static void ExportVector4O(const Vector4O data);
     static void ExportFileID(const int fileID);
 

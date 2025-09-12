@@ -214,8 +214,10 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ItemSpacing.y = 8.0f;
+	style.WindowPadding = ImVec2(0.0f, 0.0f);
 
 	// 指定のウィンドウハンドルのウィンドウを指定の方法で表示
 	ShowWindow(m_hWnd, SW_MAXIMIZE);

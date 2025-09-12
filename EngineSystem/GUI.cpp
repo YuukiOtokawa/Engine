@@ -14,6 +14,8 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 
+#include "imgui_internal.h"
+
 #include "MainEngine.h"
 
 //==========================================================================
@@ -32,6 +34,7 @@ ImFont* GUI::m_pCurrentFont = nullptr;
 
 void GUI::Initialize() {
 	auto io = ImGui::GetIO();
+
 
 	//フォント設定
 	// 通常のフォントを設定
@@ -53,18 +56,51 @@ void GUI::StartImGui()
 	ImGui::PushFont(m_pFontDefault);
 	m_pCurrentFont = m_pFontDefault;
 
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+
+	ImGui::Begin("DockSpace", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus);
+
+	m_DockSpaceID = ImGui::GetID("DockSpace");
+
+	ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+
+	ImGui::DockSpace(m_DockSpaceID, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+	if (m_IsFirstFrame) {
+		m_IsFirstFrame = false;
+
+		ImGui::DockBuilderRemoveNode(m_DockSpaceID);
+		ImGui::DockBuilderAddNode(m_DockSpaceID, ImGuiDockNodeFlags_DockSpace);
+		ImGui::DockBuilderSetNodeSize(m_DockSpaceID, viewport->Size);
+
+		ImGuiID dockMainID = m_DockSpaceID;
+		ImGuiID dockRightID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Right, 0.25f, nullptr, &dockMainID);
+		ImGuiID dockLeftID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Left, 0.25f, nullptr, &dockMainID);
+
+		ImGui::DockBuilderDockWindow("Inspector", dockRightID);
+		ImGui::DockBuilderDockWindow("Hierarchy", dockLeftID);
+
+		ImGui::DockBuilderFinish(m_DockSpaceID);
+	}
+
+	ImGui::End();
+
 }
 void GUI::StartHierarchy() {
-	ImGui::SetNextWindowPos(ImVec2(0, 0));
-	ImGui::SetNextWindowSize(ImVec2(400, 1009));
+	if (m_IsFirstFrameHierarchy) {
+		m_IsFirstFrameHierarchy = false;
+	}
 
 	ImGui::Begin("Hierarchy");
 }
 
 void GUI::StartInspector()
 {
-	SetNextWindowPos(ImVec2(1920 - 400, 0));
-	SetNextWindowSize(ImVec2(400, 1009));
+	if (m_IsFirstFrameInspector) {
+		m_IsFirstFrameInspector = false;
+	}
 
 	Begin("Inspector");
 }

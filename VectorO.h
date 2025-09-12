@@ -265,6 +265,26 @@ public:
     XMINT3 ToInt3() const { return XMINT3((int)x, (int)y, (int)z); }
     XMINT4 ToInt4() const { return XMINT4((int)x, (int)y, (int)z, (int)w); }
 
+    Vector2O XX() const { return Vector2O(x, x); }
+    Vector2O XY() const { return Vector2O(x, y); }
+    Vector2O XZ() const { return Vector2O(x, z); }
+    Vector2O XW() const { return Vector2O(x, w); }
+    Vector2O YX() const { return Vector2O(y, x); }
+    Vector2O YY() const { return Vector2O(y, y); }
+    Vector2O YZ() const { return Vector2O(y, z); }
+    Vector2O YW() const { return Vector2O(y, w); }
+    Vector2O ZX() const { return Vector2O(z, x); }
+    Vector2O ZY() const { return Vector2O(z, y); }
+    Vector2O ZZ() const { return Vector2O(z, z); }
+    Vector2O ZW() const { return Vector2O(z, w); }
+    Vector2O WX() const { return Vector2O(w, x); }
+    Vector2O WY() const { return Vector2O(w, y); }
+    Vector2O WZ() const { return Vector2O(w, z); }
+    Vector2O WW() const { return Vector2O(w, w); }
+
+    Vector3O XYZ() const { return Vector3O(x, y, z); }
+
+
     static Vector4O Zero() { return Vector4O(0.0f, 0.0f, 0.0f, 0.0f); }
     static Vector4O One() { return Vector4O(1.0f, 1.0f, 1.0f, 1.0f); }
     static Vector4O Up() { return Vector4O(0.0f, 1.0f, 0.0f, 0.0f); }

@@ -28,13 +28,13 @@ struct Property {
 
 class Script 
 {
-    Object* gameobject = nullptr;
 
     friend class ScriptComponent;
 
     std::vector<Property> m_Properties;
 
 protected:
+    Object* gameobject = nullptr;
     void AddProperty(const std::string& name, PropertyType type, void* data) {
         m_Properties.push_back({ name, type, data });
     }

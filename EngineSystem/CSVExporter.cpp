@@ -20,7 +20,6 @@ void CSVExporter::Export(std::list<Object*> objects)
 	auto filePath = OpenExportFileDialog();
 	m_File = std::ofstream(filePath);
 	if (!m_File.is_open()) {
-		throw std::runtime_error("Could not open file for writing.");
 		m_ExportList.clear();
 		return;
 	}
@@ -68,6 +67,26 @@ void CSVExporter::ExportString(const std::string data)
 		return;
 	}
 	m_File << "" << data << ",";
+}
+
+void CSVExporter::ExportVector2O(const Vector2O data)
+{
+	if (!m_File.is_open())
+	{
+		throw std::runtime_error("File is not open for writing.");
+		return;
+	}
+	m_File << data.x << "," << data.y << ",";
+}
+
+void CSVExporter::ExportVector3O(const Vector3O data)
+{
+	if (!m_File.is_open())
+	{
+		throw std::runtime_error("File is not open for writing.");
+		return;
+	}
+	m_File << data.x << "," << data.y << "," << data.z << ",";
 }
 
 void CSVExporter::ExportVector4O(const Vector4O data)

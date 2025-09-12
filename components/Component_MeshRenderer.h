@@ -36,7 +36,7 @@ public:
     }
 
     void UpdateComponent() override;
-    void Draw() override; // ここにメインの描画ロジックを記述します
+    void Render() override; // ここにメインの描画ロジックを記述します
     void DrawGUI() override;
     void ImportFile(std::vector<std::string>& tokens) override;
     void ExportComponent() override;

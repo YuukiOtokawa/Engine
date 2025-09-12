@@ -17,8 +17,7 @@ private:
     XMINT2 m_OriginalCursorPosition = { 0, 0 };
     POINT m_OriginalScreenPosition = { 0, 0 };
 public:
-    EditorCamera() {
-        m_ClassID = CID_Component_EditorCamera;
+    EditorCamera() : Camera() {
     }
     void UpdateComponent() override;
 

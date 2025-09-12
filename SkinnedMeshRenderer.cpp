@@ -32,11 +32,12 @@ SkinnedMeshRenderer::SkinnedMeshRenderer()
 
 SkinnedMeshRenderer::~SkinnedMeshRenderer()
 {
-	for (unsigned int m = 0; m < m_pAiScene->mNumMeshes; m++)
-	{
-		m_pVertexBuffer[m]->Release();
-		m_pIndexBuffer[m]->Release();
-	}
+	if (m_pAiScene)
+		for (unsigned int m = 0; m < m_pAiScene->mNumMeshes; m++)
+		{
+			m_pVertexBuffer[m]->Release();
+			m_pIndexBuffer[m]->Release();
+		}
 
 	delete[] m_pVertexBuffer;
 	delete[] m_pIndexBuffer;
@@ -348,7 +349,7 @@ void SkinnedMeshRenderer::UpdateComponent() {
 	m_CurrentFrame++;
 }
 
-void SkinnedMeshRenderer::Draw() {
+void SkinnedMeshRenderer::Render() {
 
 	if (!m_pVertexBuffer || !m_pIndexBuffer || !m_pMaterial) return;
 

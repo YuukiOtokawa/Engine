@@ -26,6 +26,8 @@ public:
     bool CastShadows() const { return m_bCastShadows; }
 
     // 子クラスが実装しなければならない純粋仮想関数
-    virtual void Draw() override = 0;
+    virtual void Render() = 0;
+
+    void Draw() override;
 };
 

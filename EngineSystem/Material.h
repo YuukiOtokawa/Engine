@@ -95,5 +95,7 @@ public:
     /// @brief 繝�繧ｯ繧ｹ繝√Ε繝ｪ繧ｽ繝ｼ繧ｹ繝薙Η繝ｼ繧貞叙蠕励＠縺ｾ縺吶�
     /// @return 繝�繧ｯ繧ｹ繝√Ε繧定｡ｨ縺� ID3D11ShaderResourceView 繝昴う繝ｳ繧ｿ縲�
     int GetTexture() const { return m_TextureFileID; }
+
+    MATERIAL* GetMaterial() { return &m_Material; }
 };
 

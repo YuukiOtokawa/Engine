@@ -113,7 +113,7 @@ cbuffer MaterialBuffer : register(b8)
     
     float Shininess;
     float SpecularPower;
-    float dummy;
+    float rgbShiftAmount;
     float4 ambient;
     float4 diffuse;
     float4 specular;
@@ -121,5 +121,7 @@ cbuffer MaterialBuffer : register(b8)
     float4 SkyColor;
     float4 GroundColor;
     float3 GroundNormal;
-    float padding;
+    float MosaicSize;
+    float2 AspectRatio; // ’Ç‰Á
+    float2 BlockSize;
 };

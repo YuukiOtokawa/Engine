@@ -24,6 +24,13 @@ private:
 	static ImFont* m_pFontObjectName;
 	static ImFont* m_pCurrentFont;
 
+    bool m_IsFirstFrame = true;
+
+    bool m_IsFirstFrameHierarchy = true;
+    bool m_IsFirstFrameInspector = true;
+
+    ImGuiID m_DockSpaceID = 0;
+
 	/// @brief レンダーターゲットを作成します。
 	void CreateRenderTarget();
 	/// @brief レンダーターゲットをクリーンアップします。
