@@ -23,7 +23,7 @@ void main(in VS_IN In, out PS_IN Out)
     Out.WorldPosition = mul(In.Position, world); // ワールド座標も正しく計算
     Out.Normal = normalize(mul(float4(In.Normal.xyz, 0.0f), world)); // 法線も変換
     Out.TexCoord = In.TexCoord;
-    Out.Diffuse = In.Diffuse;
+    Out.Diffuse = In.Diffuse * diffuse; // マテリアルの拡散反射色を掛け合わせる
 	
 }
 

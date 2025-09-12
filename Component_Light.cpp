@@ -20,7 +20,7 @@ void Light::InitializeTag()
 
 void Light::Draw()
 {
-	auto renderer = MainEngine::GetInstance()->GetRenderer();
+	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 
 	switch (m_Type)
 	{
@@ -59,7 +59,7 @@ void Light::Draw()
 
 void Light::DrawGeneralLight()
 {
-	auto renderer = MainEngine::GetInstance()->GetRenderer();
+	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 	LIGHT_BUFFER lightBuffer = {};
 	lightBuffer.ambient = m_Ambient;
 	lightBuffer.directionalLight = m_DirectionalLight;

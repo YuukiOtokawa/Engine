@@ -36,16 +36,16 @@ void Billboard::Draw() {
 		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
 	}
 
-	MainEngine::GetInstance()->GetRenderer()->SetTranslationMatrix(translation);
-	MainEngine::GetInstance()->GetRenderer()->SetScaleMatrix(scale);
-	MainEngine::GetInstance()->GetRenderer()->SetAngleMatrix(angle);
+	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
+	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
+	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
 
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
 
 }

@@ -5,7 +5,7 @@
 
 #include "OBJLoader.h"
 #include "MainEngine.h"
-#include "Renderer.h"
+#include "RenderCore.h"
 
 #include "Material.h"
 
@@ -77,7 +77,7 @@ void OBJLoader::Load(const char* FileName, Object* object)
 
 void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 {
-	Renderer* renderer = MainEngine::GetInstance()->GetRenderer();
+	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
 
 	MODEL_OBJ modelObj;
 	LoadObj(FileName, &modelObj);
@@ -149,7 +149,7 @@ void OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 			texture->shader_resource_view = srv;
 			texture->filename = wc;
 
-			int texID = MainEngine::GetInstance()->GetRenderer()->AddTexture(texture);
+			int texID = MainEngine::GetInstance()->GetRenderCore()->AddTexture(texture);
 
 			Model->MaterialArray[i].SetTexture(texID);
 

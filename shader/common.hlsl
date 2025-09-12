@@ -110,9 +110,10 @@ cbuffer ParameterBuffer : register(b7)
 cbuffer MaterialBuffer : register(b8)
 {
     bool textureEnable;
+    
     float Shininess;
     float SpecularPower;
-    float2 Dummy;
+    float dummy;
     float4 ambient;
     float4 diffuse;
     float4 specular;
@@ -120,4 +121,5 @@ cbuffer MaterialBuffer : register(b8)
     float4 SkyColor;
     float4 GroundColor;
     float3 GroundNormal;
+    float padding;
 };

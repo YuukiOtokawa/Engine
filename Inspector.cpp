@@ -80,6 +80,11 @@ void GetMesh(MeshFilter* meshFilter)
 
 	if (extension == ".fbx") {
 		FBXImporter fbxImporter;
-		fbxImporter.LoadFBX(filePath.c_str(), meshFilter->owner);
+		fbxImporter.LoadFBX(filePath.c_str());
 	}
+}
+
+std::string GetOpenFilePath()
+{
+	return std::string();
 }

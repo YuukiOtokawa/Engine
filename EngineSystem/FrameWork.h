@@ -79,10 +79,10 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 
 
 struct VERTEX {
-	Vector3O position;
-	Vector3O normal;
-	Vector4O color;
-	Vector2O texcoord;
+    Vector3O position = { 0.0f,0.0f,0.0f };
+	Vector3O normal = { 0.0f,0.0f,0.0f };
+	Vector4O color = { 0.0f,0.0f,0.0f,0.0f };
+	Vector2O texcoord = { 0.0f,0.0f };
 };
 
 
@@ -91,16 +91,17 @@ struct MATERIAL
     BOOL textureEnable = TRUE;
     FLOAT shininess = 0;
     FLOAT SpecularPower = 50.0f;
-    FLOAT dummy[2] = {};
+    FLOAT dummy[1] = {};                // dummyを1個に変更して16バイト境界にアライメント
 
-	Vector4O ambient;
-	Vector4O diffuse;
-	Vector4O specular;
-	Vector4O emissive;
+    Vector4O ambient = Vector4O::One();
+    Vector4O diffuse = Vector4O::One();
+    Vector4O specular = Vector4O::One();
+    Vector4O emissive = Vector4O::One();
 
-    Vector4O SkyColor;
-    Vector4O GroundColor;
-    Vector3O GroundNormal;
+    Vector4O SkyColor = Vector4O::One();
+    Vector4O GroundColor = Vector4O::One();
+    Vector3O GroundNormal = Vector3O::Up();
+    FLOAT padding = 0.0f;               // GroundNormalを16バイト境界にアライメントするためのパディング
 };
 
 struct LIGHT {
@@ -116,7 +117,7 @@ struct LIGHT {
 	Vector3O GroundNormal;
 
 	Vector3O Position;
-	float PointLightRange;
+	FLOAT PointLightRange;
 
 	Vector4O SpotLightAngle;
 };

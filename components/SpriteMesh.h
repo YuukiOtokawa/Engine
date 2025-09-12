@@ -28,6 +28,6 @@ public:
         owner->SetTag(GameObjectTagLayer::SpriteTag);
     }
 
-    void Draw() override;
+    //void Draw() override;
 };
 

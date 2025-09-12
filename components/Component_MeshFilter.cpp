@@ -32,64 +32,6 @@ void MeshFilter::UpdateComponent() {
 
 }
 
-void MeshFilter::Draw() {
-	auto transform = owner->GetComponent<Transform>();
-	if (!transform) return;
-
-	// 行列の宣言
-	XMMATRIX scale, angle, translation;
-
-	// オブジェクトのスケール、回転、位置を取得して行列を計算
-	{
-		if (owner->IsChild()) {
-			/// 子オブジェクトのtransformは親オブジェクトからの相対位置であるため、親オブジェクトのTransformを考慮
-			auto parentTransform = owner->GetParent()->GetComponent<Transform>();
-
-			auto parentScale = parentTransform->GetScale();
-			auto parentRotation = parentTransform->GetRotation().ToRadian();
-			auto parentPosition = parentTransform->GetPosition();
-
-			auto objectScale = transform->GetScale();
-			auto objectRotation = transform->GetRotation().ToRadian();
-			auto objectPosition = transform->GetPosition();
-
-			scale = XMMatrixScaling(objectScale.x * parentScale.x, objectScale.y * parentScale.y, objectScale.z * parentScale.z);
-			angle = XMMatrixRotationRollPitchYaw(objectRotation.x + parentRotation.x, objectRotation.y + parentRotation.y, objectRotation.z + parentRotation.z);
-			translation = XMMatrixTranslation(
-				objectPosition.x + parentPosition.x,
-				objectPosition.y + parentPosition.y,
-				objectPosition.z + parentPosition.z
-			);
-		}
-		else {
-			auto objectScale = transform->GetScale();
-			auto objectRotation = transform->GetRotation().ToRadian();
-			auto objectPosition = transform->GetPosition();
-
-			scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
-			angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
-			translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
-		}
-
-	}
-
-	// ワールド行列を転置してシェーダーに送るための準備
-	MainEngine::GetInstance()->GetRenderer()->SetTranslationMatrix(translation);
-	MainEngine::GetInstance()->GetRenderer()->SetScaleMatrix(scale);
-	MainEngine::GetInstance()->GetRenderer()->SetAngleMatrix(angle);
-
-	// シェーダーに頂点バッファを設定
-	UINT stride = sizeof(VERTEX);
-	UINT offset = 0;
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-
-	// シェーダーにインデックスバッファを設定
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	// プリミティブトポロジを設定
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
-
-}
 
 #include "../Inspector.h"
 void MeshFilter::DrawGUI() {
@@ -163,9 +105,10 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = vertices.data();
 
-		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
+		hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
 	}
 
+	if (indices.size() != 0)
 	{
 		// インデックスバッファ
 		D3D11_BUFFER_DESC bd;
@@ -179,7 +122,7 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = indices.data();
 
-		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
+		hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
 	}
 
 	m_PrimitiveTopology = m_pVertexIndex->GetPrimitiveTopology();

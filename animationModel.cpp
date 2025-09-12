@@ -5,7 +5,7 @@
 void AnimationModel::Draw()
 {
 	// プリミティブトポロジ設定
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	// マテリアル設定
@@ -37,7 +37,7 @@ void AnimationModel::Draw()
 		}
 		else
 		{
-			MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture[texture.data]);
+			MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture[texture.data]);
 			material.textureEnable = true;
 		}
 
@@ -49,13 +49,13 @@ void AnimationModel::Draw()
 		// 頂点バッファ設定
 		UINT stride = sizeof(VERTEX);
 		UINT offset = 0;
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer[m], &stride, &offset);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer[m], &stride, &offset);
 
 		// インデックスバッファ設定
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetIndexBuffer(m_IndexBuffer[m], DXGI_FORMAT_R32_UINT, 0);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_IndexBuffer[m], DXGI_FORMAT_R32_UINT, 0);
 
 		// ポリゴン描画
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->DrawIndexed(mesh->mNumFaces * 3, 0, 0);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(mesh->mNumFaces * 3, 0, 0);
 	}
 }
 
@@ -105,7 +105,7 @@ void AnimationModel::Load( const char *FileName )
 			ZeroMemory(&sd, sizeof(sd));
 			sd.pSysMem = vertex;
 
-			MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd,
+			MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd,
 											&m_VertexBuffer[m]);
 
 			delete[] vertex;
@@ -138,7 +138,7 @@ void AnimationModel::Load( const char *FileName )
 			ZeroMemory(&sd, sizeof(sd));
 			sd.pSysMem = index;
 
-			MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer[m]);
+			MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer[m]);
 
 			delete[] index;
 		}
@@ -199,7 +199,7 @@ void AnimationModel::Load( const char *FileName )
 		TexMetadata metadata;
 		ScratchImage image;
 		LoadFromWICMemory(aitexture->pcData, aitexture->mWidth, WIC_FLAGS_NONE, &metadata, image);
-		CreateShaderResourceView(MainEngine::GetInstance()->GetRenderer()->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &texture);
+		CreateShaderResourceView(MainEngine::GetInstance()->GetRenderCore()->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &texture);
 		assert(texture);
 
 		m_Texture[aitexture->mFilename.data] = texture;
@@ -320,7 +320,7 @@ void AnimationModel::Update(const char *AnimationName1, int Frame1)
 		aiMesh* mesh = m_AiScene->mMeshes[m];
 
 		D3D11_MAPPED_SUBRESOURCE ms;
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Map(m_VertexBuffer[m], 0, D3D11_MAP_WRITE_DISCARD, 0, &ms);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Map(m_VertexBuffer[m], 0, D3D11_MAP_WRITE_DISCARD, 0, &ms);
 
 		VERTEX* vertex = (VERTEX*)ms.pData;
 

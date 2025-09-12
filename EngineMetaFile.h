@@ -13,6 +13,7 @@ enum ClassID {
     CID_Component_Transform,
     CID_Component_MeshFilter,
     CID_Component_MeshRenderer,
+    CID_Component_SkinnedMeshRenderer,
     CID_Component_InputSystem,
     CID_Component_Light,
     CID_Component_Camera,

@@ -12,7 +12,7 @@
 
 SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 {
-	VERTEX vertex[SPRITE_VERTICES];
+	std::vector<VERTEX> vertex(SPRITE_VERTICES);
 
 	//上
 
@@ -44,23 +44,12 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 		Vector2O(1.0f, 1.0f),
 	};
 
-	HRESULT hr;
-	{
-		// 頂点バッファ生成
-		D3D11_BUFFER_DESC bd;
-		ZeroMemory(&bd, sizeof(bd));
-		bd.Usage = D3D11_USAGE_DYNAMIC;
-		bd.ByteWidth = sizeof(VERTEX) * SPRITE_VERTICES; // 頂点バッファの量
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	m_pVertexIndex = new VertexIndex("Plane", vertex);
+	m_pVertexIndex->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-		D3D11_SUBRESOURCE_DATA sd;
-		ZeroMemory(&sd, sizeof(sd));
-		sd.pSysMem = vertex;
+	Editor::GetInstance()->AddVertexIndex(m_pVertexIndex);
 
-		hr = MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
-	}
-	m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
 
 }
 
@@ -72,7 +61,7 @@ void SpriteMesh::UpdateComponent() {
 		Vector4O uvOffset = Vector4O(1.0f / m_uvRect.x, 1.0f / m_uvRect.y);
 
 		D3D11_MAPPED_SUBRESOURCE msr;
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
 		VERTEX* vertex = (VERTEX*)msr.pData;
 
@@ -104,7 +93,7 @@ void SpriteMesh::UpdateComponent() {
 			Vector2O(uvOffset.x * (x + 1), uvOffset.y * (y + 1)),
 		};
 
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);
 
 		m_newIndex = -1; // リセット
 	}
@@ -139,42 +128,42 @@ bool SpriteMesh::SetSpriteByIndex(int index)
 	}
 }
 
-void SpriteMesh::Draw()
-{
-	auto transform = owner->GetComponent<Transform>();
-
-	// 行列の宣言
-	XMMATRIX scale, angle, translation;
-
-	// オブジェクトのスケール、回転、位置を取得して行列を計算
-	{
-		auto objectScale = transform->GetScale();
-		auto objectRotation = transform->GetRotation().ToRadian();
-		auto objectPosition = transform->GetPosition();
-
-		// 1920.1080で画面いっぱいに表示
-		objectScale.x = objectScale.x * 0.5f;
-		objectScale.y = objectScale.y * 0.5f;
-
-		scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
-		angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
-		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
-	}
-
-	// ワールド行列を転置してシェーダーに送るための準備
-	MainEngine::GetInstance()->GetRenderer()->SetTranslationMatrix(translation);
-	MainEngine::GetInstance()->GetRenderer()->SetScaleMatrix(scale);
-	MainEngine::GetInstance()->GetRenderer()->SetAngleMatrix(angle);
-
-	// シェーダーに頂点バッファを設定
-	UINT stride = sizeof(VERTEX);
-	UINT offset = 0;
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-
-	// シェーダーにインデックスバッファを設定
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	// プリミティブトポロジを設定
-	MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
-
-}
+//void SpriteMesh::Draw()
+//{
+//	auto transform = owner->GetComponent<Transform>();
+//
+//	// 行列の宣言
+//	XMMATRIX scale, angle, translation;
+//
+//	// オブジェクトのスケール、回転、位置を取得して行列を計算
+//	{
+//		auto objectScale = transform->GetScale();
+//		auto objectRotation = transform->GetRotation().ToRadian();
+//		auto objectPosition = transform->GetPosition();
+//
+//		// 1920.1080で画面いっぱいに表示
+//		objectScale.x = objectScale.x * 0.5f;
+//		objectScale.y = objectScale.y * 0.5f;
+//
+//		scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
+//		angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+//		translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
+//	}
+//
+//	// ワールド行列を転置してシェーダーに送るための準備
+//	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
+//	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
+//	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+//
+//	// シェーダーに頂点バッファを設定
+//	UINT stride = sizeof(VERTEX);
+//	UINT offset = 0;
+//	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+//
+//	// シェーダーにインデックスバッファを設定
+//	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+//
+//	// プリミティブトポロジを設定
+//	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
+//
+//}

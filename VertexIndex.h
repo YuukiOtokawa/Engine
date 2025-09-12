@@ -11,7 +11,8 @@ class VertexIndex : public EngineMetaFile {
     std::string m_FilePath;
     D3D11_PRIMITIVE_TOPOLOGY m_PrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 public:
-    VertexIndex(std::string name, std::vector<VERTEX> vertexInfo, std::vector<unsigned int> indexInfo)
+    VertexIndex() {}
+    VertexIndex(std::string name, std::vector<VERTEX> vertexInfo, std::vector<unsigned int> indexInfo = {})
         : m_Name(name), m_VertexInfo(vertexInfo), m_IndexInfo(indexInfo) {
         m_FilePath = "VertexIndexInfo\\" + name + ".csv";
     }
@@ -21,6 +22,9 @@ public:
     }
     std::vector<unsigned int> GetIndexInfo() const {
         return m_IndexInfo;
+    }
+    void SetName(std::string name) {
+        m_Name = name;
     }
     std::string GetName() const {
         return m_Name;
@@ -36,5 +40,12 @@ public:
     }
     D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology() const {
         return m_PrimitiveTopology;
+    }
+
+    void SetVertexInfo(std::vector<VERTEX> vertexInfo) {
+        m_VertexInfo = vertexInfo;
+    }
+    void SetIndexInfo(std::vector<unsigned int> indexInfo) {
+        m_IndexInfo = indexInfo;
     }
 };

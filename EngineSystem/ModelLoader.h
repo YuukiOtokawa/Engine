@@ -29,7 +29,7 @@
 #pragma comment(lib, "assimp/assimp-vc143-mt.lib")
 #include "object.h"
 #include <d3d11.h>
-#include "Renderer.h"
+#include "RenderCore.h"
 
 //==========================================================================
 // クラス定義

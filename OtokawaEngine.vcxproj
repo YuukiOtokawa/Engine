@@ -175,6 +175,15 @@
     <FxCompile Include="shader\limLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>
+    <FxCompile Include="shader\mosaicPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="shader\PBRPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -258,7 +267,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="animationModel.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="ComponentFactory.h" />
@@ -289,11 +297,10 @@
     <ClInclude Include="EngineSystem\MainEngine.h" />
     <ClInclude Include="EngineSystem\Material.h" />
     <ClInclude Include="EngineSystem\MatrixO.h" />
-    <ClInclude Include="EngineSystem\ModelLoader.h" />
     <ClInclude Include="EngineSystem\Object.h" />
-    <ClInclude Include="EngineSystem\OBJLoader.h" />
-    <ClInclude Include="EngineSystem\Renderer.h" />
+    <ClInclude Include="EngineSystem\RenderCore.h" />
     <ClInclude Include="FBXImporter.h" />
+    <ClInclude Include="FieldMeshRenderer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -315,19 +322,20 @@
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="PlayerControl.h" />
     <ClInclude Include="Properties.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptComponent.h" />
     <ClInclude Include="ScriptFactory.h" />
     <ClInclude Include="scripts\Player.h" />
+    <ClInclude Include="SkinnedMeshRenderer.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TornadoParticle.h" />
     <ClInclude Include="VectorO.h" />
     <ClInclude Include="VertexIndex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="animationModel.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="ComponentFactory.cpp" />
@@ -354,11 +362,10 @@
     <ClCompile Include="EngineSystem\GUI.cpp" />
     <ClCompile Include="EngineSystem\MainEngine.cpp" />
     <ClCompile Include="EngineSystem\Material.cpp" />
-    <ClCompile Include="EngineSystem\ModelLoader.cpp" />
     <ClCompile Include="EngineSystem\Object.cpp" />
-    <ClCompile Include="EngineSystem\OBJLoader.cpp" />
-    <ClCompile Include="EngineSystem\Renderer.cpp" />
+    <ClCompile Include="EngineSystem\RenderCore.cpp" />
     <ClCompile Include="FBXImporter.cpp" />
+    <ClCompile Include="FieldMeshRenderer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
@@ -374,10 +381,12 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="PlayerControl.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptComponent.cpp" />
     <ClCompile Include="scripts\main.cpp" />
+    <ClCompile Include="SkinnedMeshRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\bitmap1.bmp" />

@@ -15,8 +15,8 @@ void main(in VS_IN In, out PS_IN Out)
     worldNormal = normalize(worldNormal);
     Out.Normal = worldNormal;
 
-    Out.Diffuse = In.Diffuse;
-	
+    Out.Diffuse = In.Diffuse * diffuse;
+
     Out.TexCoord = In.TexCoord;
 
 	

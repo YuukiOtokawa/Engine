@@ -85,57 +85,60 @@ void Editor::Initialize() {
 	// シェーダーの読み込み
 	{
 		//光源計算無し
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/unlitTextureVS.cso", "unlit");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/unlitTexturePS.cso", "unlit");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/unlitTextureVS.cso", "unlit");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/unlitTexturePS.cso", "unlit");
 
 		//頂点ライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/vertexDirectionalLightingVS.cso", "vertex");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/vertexDirectionalLightingPS.cso", "vertex");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/vertexDirectionalLightingVS.cso", "vertex");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/vertexDirectionalLightingPS.cso", "vertex");
 
 		//ピクセルライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/pixelLightingVS.cso", "pixel");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/pixelLightingPS.cso", "pixel");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/pixelLightingVS.cso", "pixel");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pixelLightingPS.cso", "pixel");
 
 		//BlinnPhongライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "BlinnPhong");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/blinnPhongPS.cso", "BlinnPhong");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "BlinnPhong");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/blinnPhongPS.cso", "BlinnPhong");
 
 		//半球ライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/hemisphereLightingVS.cso", "hemisphere");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/hemisphereLightingPS.cso", "hemisphere");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/hemisphereLightingVS.cso", "hemisphere");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/hemisphereLightingPS.cso", "hemisphere");
 
 		//点光源ライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "pointLight");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/pointLightingBlinnPhongPS.cso", "pointLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "pointLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pointLightingBlinnPhongPS.cso", "pointLight");
 
 		//スポットライトライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/spotLightingVS.cso", "spotLight");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/spotLightingPS.cso", "spotLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/spotLightingVS.cso", "spotLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/spotLightingPS.cso", "spotLight");
 
 		//リムライトライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "limLight");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/limLightingPS.cso", "limLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "limLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/limLightingPS.cso", "limLight");
 
 		//法線マップ
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/bumpVS.cso", "normal");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/bumpPS.cso", "normal");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/bumpVS.cso", "normal");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/bumpPS.cso", "normal");
 
 		//Cook-Torranceライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "CookTorrance");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/cookPS.cso", "CookTorrance");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "CookTorrance");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/cookPS.cso", "CookTorrance");
 
 		//Cook-Torranceライティング
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/PBRVS.cso", "PBR");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/PBRPS.cso", "PBR");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/PBRVS.cso", "PBR");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PBRPS.cso", "PBR");
 
 		//トゥーンシェーダー
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "toon1");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/toon1PS.cso", "toon1");
-		MainEngine::GetInstance()->GetRenderer()->CreateVertexShader("cso/blinnPhongVS.cso", "toon2");
-		MainEngine::GetInstance()->GetRenderer()->CreatePixelShader("cso/toon2PS.cso", "toon2");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "toon1");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon1PS.cso", "toon1");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "toon2");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon2PS.cso", "toon2");
+
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "mosaic");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/mosaicPS.cso", "mosaic");
 	}
 
-	MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/Default_White.png");
+	MainEngine::GetInstance()->GetRenderCore()->TextureLoad(L"asset/texture/Default_White.png");
 	
 
 	Main();
@@ -161,7 +164,7 @@ void Editor::Update() {
 void Editor::Draw() {
 
 	//レンダリングバッファクリア
-	MainEngine::GetInstance()->GetRenderer()->BufferClear();
+	MainEngine::GetInstance()->GetRenderCore()->BufferClear();
 
 //==========================================================================
 // オブジェクト描画処理
@@ -210,7 +213,7 @@ void Editor::Draw() {
 			object->Draw();
 		}
 	}
-	MainEngine::GetInstance()->GetRenderer()->SetRasterizerState2D();
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
 			object->Draw();
@@ -218,13 +221,15 @@ void Editor::Draw() {
 	}
 	//パーティクルの描画
 	m_pParticleManager->DrawParticles();
-	MainEngine::GetInstance()->GetRenderer()->SetWorldViewProjection2D();
+
+	// 2D描画
+	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
 			object->Draw();
 		}
 	}
-	MainEngine::GetInstance()->GetRenderer()->SetRasterizerState3D();
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
 
 //==========================================================================
 // GUI描画処理
@@ -292,7 +297,7 @@ void Editor::Draw() {
 	m_pGUI->EndImGui();
 
 	// レンダリングバッファの内容を画面に表示
-	MainEngine::GetInstance()->GetRenderer()->BufferPresent();
+	MainEngine::GetInstance()->GetRenderCore()->BufferPresent();
 
 }
 
@@ -370,7 +375,7 @@ void Editor::ResetScene()
 	m_Components.clear();
 	m_Materials.clear();
 	m_VertexIndices.clear();
-	MainEngine::GetInstance()->GetRenderer()->ResetTexture();
+	MainEngine::GetInstance()->GetRenderCore()->ResetTexture();
 }
 
 void Editor::SetActiveCamera(Object* camera)

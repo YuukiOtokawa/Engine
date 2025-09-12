@@ -1694,10 +1694,10 @@ struct IMGUI_API ImGuiTypingSelectState
     ImGuiID         FocusScope;
     int             LastRequestFrame = 0;
     float           LastRequestTime = 0.0f;
-    bool            SingleCharm_Modelock = false; // After a certain single char repeat count we lock into SingleCharMode. Two benefits: 1) buffer never fill, 2) we can provide an immediate SingleChar mode without timer elapsing.
+    bool            SingleCharModeLock = false; // After a certain single char repeat count we lock into SingleCharMode. Two benefits: 1) buffer never fill, 2) we can provide an immediate SingleChar mode without timer elapsing.
 
     ImGuiTypingSelectState() { memset(this, 0, sizeof(*this)); }
-    void            Clear()  { SearchBuffer[0] = 0; SingleCharm_Modelock = false; } // We preserve remaining data for easier debugging
+    void            Clear()  { SearchBuffer[0] = 0; SingleCharModeLock = false; } // We preserve remaining data for easier debugging
 };
 
 //-----------------------------------------------------------------------------

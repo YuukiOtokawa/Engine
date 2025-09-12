@@ -84,8 +84,8 @@ void SetSceneGame()
 
 	//}
 
-	auto texture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/sura.jpg");
-	auto bumpTexture = MainEngine::GetInstance()->GetRenderer()->TextureLoad(L"asset/texture/Normal.bmp");
+	auto texture = MainEngine::GetInstance()->GetRenderCore()->TextureLoad(L"asset/texture/sura.jpg");
+	auto bumpTexture = MainEngine::GetInstance()->GetRenderCore()->TextureLoad(L"asset/texture/Normal.bmp");
 	//平面オブジェクト作成
 	{
 		Object* plane = new Object();
@@ -108,13 +108,46 @@ void SetSceneGame()
 
 		plane->GetComponent<Transform>()->SetScale(Vector4O(20.0f, 1.0f, 20.0f));
 		plane->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, -5.0f, 0.0f));
-		plane->GetComponent<MeshRenderer>()->SetTexture(texture);
-		plane->GetComponent<MeshRenderer>()->SetMaterial(material);
-		plane->GetComponent<MeshRenderer>()->SetBumpTexture(bumpTexture);
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetTexture(texture);
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetBumpTexture(bumpTexture);
 
-		plane->GetComponent<MeshRenderer>()->SetVertexShader("pointLight");
-		plane->GetComponent<MeshRenderer>()->SetPixelShader("pointLight");
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
 
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("pointLight");
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("pointLight");
+
+	}
+
+	//スプライトオブジェクト作成
+	{
+		Object* sprite = new Object();
+		sprite->SetName("Sprite1");
+		sprite->AddComponent<Transform>();
+		sprite->AddComponent<SpriteMesh>();
+		sprite->AddComponent<MeshRenderer>();
+
+		sprite->SetTag(GameObjectTag::SpriteTag);
+		sprite->SetLayer(GameObjectLayer::SpriteLayer);
+
+		MATERIAL material;
+		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 0);
+		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+		material.SpecularPower = 0.5f;
+
+		LIGHT light;
+		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 0.2f);
+		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
+		light.Position = Vector3O(0.0f, 2.0f, -0.5f);
+		light.PointLightRange = 100.0f;
+
+		sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
+
+		sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("unlit");
+		sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("unlit");
+
+		sprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, 100.0f, 1.0f));
 	}
 
 	/*

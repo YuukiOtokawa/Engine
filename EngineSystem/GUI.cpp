@@ -108,8 +108,8 @@ void GUI::SetFontObjectName()
 
 void GUI::CreateRenderTarget() {
 	ID3D11Texture2D* pBackBuffer;
-	MainEngine::GetInstance()->GetRenderer()->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-	MainEngine::GetInstance()->GetRenderer()->GetDevice()->CreateRenderTargetView(pBackBuffer, nullptr, &m_mainRenderTargetView);
+	MainEngine::GetInstance()->GetRenderCore()->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+	MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateRenderTargetView(pBackBuffer, nullptr, &m_mainRenderTargetView);
 	pBackBuffer->Release();
 }
 

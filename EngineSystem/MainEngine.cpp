@@ -195,7 +195,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 
-	m_pRenderer = new Renderer(m_hWnd);
+	m_pRenderer = new RenderCore(m_hWnd);
 
 	m_pEditor = Editor::GetInstance();
 

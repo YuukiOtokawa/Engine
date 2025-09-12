@@ -93,8 +93,8 @@ void ParticleManager::DrawParticles()
 	object->AddComponent<Billboard>();
 	object->AddComponent<MeshRenderer>();
 	object->GetComponent<Transform>()->SetScale(Vector4O(1.0f, 1.0f, 1.0f));
-    object->GetComponent<MeshRenderer>()->SetVertexShader("unlit");
-    object->GetComponent<MeshRenderer>()->SetPixelShader("unlit");
+    object->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("unlit");
+    object->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("unlit");
 	LIGHT light;
 	light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 	light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);
@@ -103,7 +103,7 @@ void ParticleManager::DrawParticles()
     for (auto& pair : m_Particles)
     {
 		object->GetComponent<Transform>()->SetScale(pair.second.begin()->size); // Set scale based on the first particle's size
-		object->GetComponent<MeshRenderer>()->SetTexture(pair.second.begin()->texture);
+		object->GetComponent<MeshRenderer>()->GetMaterial()->SetTexture(pair.second.begin()->texture);
         for (auto& data : pair.second)
         {
             if (data.enable) // Only draw enabled particles

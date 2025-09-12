@@ -193,7 +193,7 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 				MultiByteToWideChar(CP_UTF8, 0, textureinfo[1].c_str(), -1, &wideStringFilePath[0], len);
 			}
 
-			MainEngine::GetInstance()->GetRenderer()->TextureLoad(wideStringFilePath, std::stoi(textureinfo[0]));
+			MainEngine::GetInstance()->GetRenderCore()->TextureLoad(wideStringFilePath, std::stoi(textureinfo[0]));
 		}
 
 

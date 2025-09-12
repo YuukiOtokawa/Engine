@@ -9,6 +9,9 @@
 #define COMPONENT_NAME(ComponentType) \
 	return #ComponentType;
 
+
+
+
 Object::Object(bool editable) : EngineMetaFile(CID_Object) {
 	m_Name = "Object";
 	if (editable)
@@ -41,11 +44,6 @@ void Object::Draw() {
 		component->Draw();
 	}
 	if (m_IsDrawable == false) return;
-	if (m_iVertexCount == 0) return;
-	if (m_iIndexCount == 0)
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->Draw(m_iVertexCount, 0);
-	else
-		MainEngine::GetInstance()->GetRenderer()->GetDeviceContext()->DrawIndexed(m_iIndexCount, 0, 0);
 	if (HasChild())
 	{
 		for (auto& child : m_Children) {
@@ -85,7 +83,17 @@ void Object::DrawGUI(){
 	//ImGui::Text(GetName().c_str());
 	GUI::SetFontDefault();
 	
-	ImGui::Text("Tag: %s", GameObjectTagLayer::GameObjectTagString[GetTag()]);
+	ImGui::SetNextItemWidth(150.0f);
+	int currentTag = static_cast<int>(m_Tag);
+	if (ImGui::Combo("Tag", &currentTag, GameObjectTagLayer::GameObjectTagString, IM_ARRAYSIZE(GameObjectTagLayer::GameObjectTagString))) {
+		m_Tag = static_cast<GameObjectTag>(currentTag);
+	}
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(150.0f);
+	int currentLayer = static_cast<int>(m_Layer);
+	if (ImGui::Combo("Layer", &currentLayer, GameObjectTagLayer::GameObjectLayerString, IM_ARRAYSIZE(GameObjectTagLayer::GameObjectLayerString))) {
+		m_Layer = static_cast<GameObjectLayer>(currentLayer);
+	}
 
 	Component* toDelete = nullptr;
 

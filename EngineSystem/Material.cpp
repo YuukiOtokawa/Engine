@@ -29,36 +29,32 @@ auto key_getter = [](void* data, int idx, const char** out_text) -> bool {
 
 void Material::DrawMaterial()
 {
-	auto renderer = MainEngine::GetInstance()->GetRenderer();
+	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 
-	for (auto subMaterial : m_SubMaterial) {
-		ID3D11ShaderResourceView** srv;
-		srv = renderer->GetTexture(m_TextureFileID);
-		if (srv != nullptr)
-			renderer->GetDeviceContext()->PSSetShaderResources(0, 1, srv);
-		srv = renderer->GetTexture(m_BumpTextureFileID);
-		if (srv != nullptr)
-			renderer->GetDeviceContext()->PSSetShaderResources(1, 1, srv);
-		srv = renderer->GetTexture(m_ToonTextureFileID);
-		if (srv != nullptr)
-			renderer->GetDeviceContext()->PSSetShaderResources(2, 1, srv);
+	ID3D11ShaderResourceView** srv;
+	srv = renderer->GetTexture(m_TextureFileID);
+	if (srv != nullptr)
+		renderer->GetDeviceContext()->PSSetShaderResources(0, 1, srv);
+	srv = renderer->GetTexture(m_BumpTextureFileID);
+	if (srv != nullptr)
+		renderer->GetDeviceContext()->PSSetShaderResources(1, 1, srv);
+	srv = renderer->GetTexture(m_ToonTextureFileID);
+	if (srv != nullptr)
+		renderer->GetDeviceContext()->PSSetShaderResources(2, 1, srv);
 
-		renderer->SetMaterialBuffer(m_Material);
-
-	}
-
+	renderer->SetMaterialBuffer(m_Material);
 
 }
 
 void Material::DrawGUI() {
-	Renderer* renderer = MainEngine::GetInstance()->GetRenderer();
+	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
 	static int current_shader_index = 0;
 
-	auto keys = MainEngine::GetInstance()->GetRenderer()->GetVertexShaderKeys();
+	auto keys = MainEngine::GetInstance()->GetRenderCore()->GetVertexShaderKeys();
 	current_shader_index = (int)std::distance(
 		keys.begin(),
 		std::find(keys.begin(), keys.end(), m_VertexShader)
-		);
+	);
 
 	ImGui::Text("Material Properties");
 	ImGui::DragFloat("Shininess", &m_Material.shininess, 0.01f, 0.0f, 100.0f);
@@ -87,7 +83,7 @@ void Material::DrawGUI() {
 	ImGui::Text("Bump Map");
 	srv = renderer->GetTexture(m_BumpTextureFileID);
 	if (srv != nullptr)
-	ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
 }
 
 void Material::ImportFile(std::vector<std::string>& tokens)
@@ -120,7 +116,7 @@ void Material::SetPixelShaderKey(std::string key)
 
 void Material::SetShader()
 {
-	auto renderer = MainEngine::GetInstance()->GetRenderer();
+	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 	renderer->SetVertexShader(m_VertexShader);
 	renderer->SetPixelShader(m_PixelShader);
 }

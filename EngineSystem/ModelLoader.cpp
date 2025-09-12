@@ -10,7 +10,7 @@
 
 void ModelLoader::LoadModel(Object* object, const char* filename)
 {
-	ID3D11Device* device = MainEngine::GetInstance()->GetRenderer()->GetDevice();
+	ID3D11Device* device = MainEngine::GetInstance()->GetRenderCore()->GetDevice();
 	MODEL* model = new MODEL;
 
 
@@ -126,7 +126,7 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 			child->GetComponent<MeshFilter>()->SetIndexBuffer(model->IndexBuffer[i], model->AiScene->mMeshes[i]->mNumFaces * 3);
 
 			if (model->Texture.size() != 0) {
-				int texID = MainEngine::GetInstance()->GetRenderer()->AddTexture(model->Texture[texture.data]);
+				int texID = MainEngine::GetInstance()->GetRenderCore()->AddTexture(model->Texture[texture.data]);
 				child->GetComponent<AssimpMeshRenderer>()->SetTexture(texID);
 			}
 
@@ -141,7 +141,7 @@ void ModelLoader::LoadModel(Object* object, const char* filename)
 		object->GetComponent<MeshFilter>()->SetIndexBuffer(model->IndexBuffer[0], model->AiScene->mMeshes[0]->mNumFaces * 3);
 
 		if (model->Texture.size() != 0) {
-			int texID = MainEngine::GetInstance()->GetRenderer()->AddTexture(model->Texture[texture.data]);
+			int texID = MainEngine::GetInstance()->GetRenderCore()->AddTexture(model->Texture[texture.data]);
 			object->GetComponent<AssimpMeshRenderer>()->SetTexture(texID);
 		}
 

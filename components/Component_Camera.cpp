@@ -37,7 +37,7 @@ void Camera::UpdateComponent() {
 
 void Camera::Draw() {
 	// 描画領域のサイズを取得
-	Vector2O clientSize = MainEngine::GetInstance()->GetRenderer()->GetClientSize();
+	Vector2O clientSize = MainEngine::GetInstance()->GetRenderCore()->GetClientSize();
 
 	//プロジェクション行列を作成
 	m_Projection =
@@ -55,10 +55,10 @@ void Camera::Draw() {
 	m_View = XMMatrixLookAtLH(pos, eyev, up);
 
 	//カメラ行列をセット
-	MainEngine::GetInstance()->GetRenderer()->SetViewMatrix(m_View);
-	MainEngine::GetInstance()->GetRenderer()->SetProjectionMatrix(m_Projection);
+	MainEngine::GetInstance()->GetRenderCore()->SetViewMatrix(m_View);
+	MainEngine::GetInstance()->GetRenderCore()->SetProjectionMatrix(m_Projection);
 	//カメラ座標セット
-	MainEngine::GetInstance()->GetRenderer()->SetCamera(owner->GetComponent<Transform>()->GetPosition());
+	MainEngine::GetInstance()->GetRenderCore()->SetCamera(owner->GetComponent<Transform>()->GetPosition());
 
 }
 

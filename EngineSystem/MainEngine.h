@@ -12,7 +12,7 @@
 // ヘッダーインクルード
 //==========================================================================
 
-#include "Renderer.h"
+#include "RenderCore.h"
 #include "Editor.h"
 
 std::string OpenImportFileDialog();
@@ -35,7 +35,7 @@ private:
 	};
 
 	// レンダラーとエディターのポインタ
-	Renderer* m_pRenderer = nullptr;
+	RenderCore* m_pRenderer = nullptr;
 	Editor* m_pEditor = nullptr;
 
 	// ログファイルのポインタ
@@ -128,7 +128,7 @@ public:
 	HINSTANCE GetInstanceHandle() { return m_hInstance; }
 	/// @brief レンダラーオブジェクトを取得します。
 	/// @return m_pRenderer へのポインタ。
-	Renderer* GetRenderer() { return m_pRenderer; }
+	RenderCore* GetRenderCore() { return m_pRenderer; }
 
 	static void ErrorMessage(std::string message, std::string title);
 

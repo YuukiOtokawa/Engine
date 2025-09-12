@@ -129,6 +129,10 @@ public:
         : x(x), y(y), z(z) {
     }
 
+    Vector3O(const XMFLOAT3 vec)
+        : x(vec.x), y(vec.y), z(vec.z) {
+    }
+
     static Vector3O Zero() { return Vector3O(0.0f, 0.0f, 0.0f); }
     static Vector3O One() { return Vector3O(1.0f, 1.0f, 1.0f); }
     static Vector3O Up() { return Vector3O(0.0f, 1.0f, 0.0f); }
@@ -185,7 +189,10 @@ public:
         return *this;
     }
 
-
+    auto operator =(const XMFLOAT4& vec) -> Vector3O& {
+        x = vec.x; y = vec.y; z = vec.z;
+        return *this;
+    }
     auto operator +(const Vector3O& vec) const -> Vector3O { return Vector3O(x + vec.x, y + vec.y, z + vec.z); }
     auto operator -(const Vector3O& vec) const -> Vector3O { return Vector3O(x - vec.x, y - vec.y, z - vec.z); }
     auto operator *(const Vector3O& vec) const -> Vector3O { return Vector3O(x * vec.x, y * vec.y, z * vec.z); }
@@ -224,7 +231,7 @@ public:
     auto operator >=(const float scalar) const -> bool { return Length() >= scalar; }
 
     auto operator ()(const float x, const float y = 0.0f, const float z = 0.0f, const float w = 0.0f) -> Vector3O& { this->x = x; this->y = y; this->z = z; return *this; }
-
+    auto operator ()(const XMFLOAT3& vec) -> Vector3O& { x = vec.x; y = vec.y; z = vec.z; return *this; }
 };
 
 

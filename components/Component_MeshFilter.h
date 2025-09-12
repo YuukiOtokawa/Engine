@@ -41,6 +41,7 @@ protected:
 
     VertexIndex* m_pVertexIndex = nullptr;
 
+    friend class MeshRenderer;
 public:
     DECLARE_COMPONENT(MeshFilter)
 
@@ -61,7 +62,6 @@ public:
 	/// @brief オブジェクトの状態を更新します（オーバーライドされたメソッド）。
 	void UpdateComponent() override;
 	/// @brief 描画処理を実行します。
-	void Draw() override;
 	void DrawGUI() override;
 
 	/// @brief コンポーネントの所有者オブジェクトを設定します。
@@ -89,6 +89,8 @@ public:
         owner->SetVertexCount(vertexCount);
 	}
 
+    ID3D11Buffer** GetVertexBuffer() { return &m_pVertexBuffer; }
+
 	/// @brief インデックスバッファとインデックス数を設定します。
 	/// @param indexBuffer 設定するID3D11Buffer型のインデックスバッファへのポインタ。
 	/// @param indexCount インデックスの数。
@@ -97,6 +99,10 @@ public:
 		m_iIndexCount = indexCount;
 		owner->SetIndexCount(indexCount);
 	}
+
+    ID3D11Buffer* GetIndexBuffer() const { return m_pIndexBuffer; }
+
+    D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology() const { return m_PrimitiveTopology; }
 
     void SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigned int> indices);
 };

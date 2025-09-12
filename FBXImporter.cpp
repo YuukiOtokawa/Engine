@@ -5,51 +5,35 @@
 #include "Component_MeshFilter.h"
 #include "ModelAnimator.h"
 
-void FBXImporter::LoadFBX(const char* filename, Object* target)
+#include <queue>
+
+void FBXImporter::LoadFBX(const char* filename)
 {
 	m_Model = new FBXMODEL;
+	m_Bone = new std::unordered_map<std::string, BONE>;
 
 	const std::string m_ModelPath(filename);
 
 	m_Model->AiScene = aiImportFile(filename, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
 	assert(m_Model->AiScene);
 
-	m_Model->vertexBuffer = new ID3D11Buffer * [m_Model->AiScene->mNumMeshes];
-	m_Model->indexBuffer = new ID3D11Buffer * [m_Model->AiScene->mNumMeshes];
-
 	m_DeformVertex = new std::vector<DEFORM_VERTEX>[m_Model->AiScene->mNumMeshes];
 	CreateBone(m_Model->AiScene->mRootNode);
 
-	LoadVertexIndex(m_ModelPath);
+	//LoadVertexIndex(m_ModelPath);
 
-	LoadTexture(m_ModelPath);
+	//LoadTexture(m_ModelPath);
 
-	LoadAnimation(m_ModelPath, "Base");
+	//LoadAnimation(m_ModelPath, "Base");
 
-	CreateMaterial();
+	//CreateMaterial();
 
-	MeshFilter* meshFilter = target->GetComponent<MeshFilter>();
-	if (!meshFilter)
-		meshFilter = target->AddComponent<MeshFilter>();
-
-	meshFilter->SetMesh(m_VertexIndex->GetFileID());
-
-	MeshRenderer* meshRenderer = target->GetComponent<MeshRenderer>();
-	if (!meshRenderer)
-		meshRenderer = target->AddComponent<MeshRenderer>();
-	
-	auto material = meshRenderer->GetMaterial();
-	material->SetSubMaterials(m_SubMaterial);
-
-	ModelAnimator* animator = target->GetComponent<ModelAnimator>();
-	if (!animator)
-		animator = target->AddComponent<ModelAnimator>();
-	animator->SetAnimation(m_Animation);
 
 }
 
 void FBXImporter::LoadVertexIndex(std::string filename)
 {
+	m_VertexIndex = new VertexIndex*[m_Model->AiScene->mNumMeshes];
 	for (unsigned int m = 0; m < m_Model->AiScene->mNumMeshes; m++) {
 		aiMesh* mesh = m_Model->AiScene->mMeshes[m];
 
@@ -87,8 +71,8 @@ void FBXImporter::LoadVertexIndex(std::string filename)
 			}
 		}
 
-		m_VertexIndex = new VertexIndex(filename.substr(filename.find_last_of('/') + 1), vertices, indices);
-		m_VertexIndex->SetFilePath(filename);
+		m_VertexIndex[m] = new VertexIndex(filename.substr(filename.find_last_of('/') + 1), vertices, indices);
+		m_VertexIndex[m]->SetFilePath(filename);
 
 		// 頂点データ初期化
 		for (unsigned int v = 0; v < mesh->mNumVertices; v++) {
@@ -110,16 +94,18 @@ void FBXImporter::LoadVertexIndex(std::string filename)
 		for (unsigned int b = 0; b < mesh->mNumBones; b++) {
 			aiBone* bone = mesh->mBones[b];
 
-			m_Bone[bone->mName.C_Str()].offsetMatrix = bone->mOffsetMatrix;
 
-			// 変形後頂点にボーンデータ格納
-			for (unsigned int w = 0; w < bone->mNumWeights; w++) {
+			m_Bone->at(bone->mName.C_Str()).offsetMatrix = bone->mOffsetMatrix;
+
+			//変形後頂点にボーンデータ格納
+			for (unsigned int w = 0; w < bone->mNumWeights; w++)
+			{
 				aiVertexWeight weight = bone->mWeights[w];
 
 				int num = m_DeformVertex[m][weight.mVertexId].boneNum;
 
-				m_DeformVertex[m][weight.mVertexId].boneName[num] = bone->mName.C_Str();
 				m_DeformVertex[m][weight.mVertexId].boneWeight[num] = weight.mWeight;
+				m_DeformVertex[m][weight.mVertexId].boneName[num] = bone->mName.C_Str();
 				m_DeformVertex[m][weight.mVertexId].boneNum++;
 
 				assert(m_DeformVertex[m][weight.mVertexId].boneNum <= 4);
@@ -131,7 +117,7 @@ void FBXImporter::LoadVertexIndex(std::string filename)
 
 void FBXImporter::LoadTexture(std::string filename)
 {
-	Renderer* renderer = MainEngine::GetInstance()->GetRenderer();
+	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
 
 	for (UINT i = 0; i < m_Model->AiScene->mNumTextures; i++)
 	{
@@ -143,7 +129,7 @@ void FBXImporter::LoadTexture(std::string filename)
 		TexMetadata metadata;
 		ScratchImage image;
 		LoadFromWICMemory(aitexture->pcData, aitexture->mWidth, WIC_FLAGS_NONE, &metadata, image);
-		CreateShaderResourceView(MainEngine::GetInstance()->GetRenderer()->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &srv);
+		CreateShaderResourceView(MainEngine::GetInstance()->GetRenderCore()->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &srv);
 		assert(srv);
 
 		Texture* texture = new Texture();
@@ -151,20 +137,24 @@ void FBXImporter::LoadTexture(std::string filename)
 		texture->filename = std::wstring(aitexture->mFilename.C_Str(), aitexture->mFilename.C_Str() + strlen(aitexture->mFilename.C_Str()));
 		texture->height = metadata.height;
 		texture->width = metadata.width;
+		texture->toExport = false;
 
 		m_TextureFileID[aitexture->mFilename.data] = renderer->AddTexture(texture);
 	}
 }
 
-void FBXImporter::LoadAnimation(std::string filename, const char* name) {
-	
-	m_Animation[name] = aiImportFile(filename.c_str(), aiProcess_ConvertToLeftHanded);
-	assert(m_Animation[name]);
+#include <filesystem>
+
+std::pair<const aiScene*, std::string> FBXImporter::LoadAnimation(std::string filename) {
+	auto animation = aiImportFile(filename.c_str(), aiProcess_ConvertToLeftHanded);
+	std::filesystem::path path(filename);
+	assert(animation);
+	return { animation, path.filename().string() };
 }
 
 void FBXImporter::CreateMaterial()
 {
-	ID3D11Device* device = MainEngine::GetInstance()->GetRenderer()->GetDevice();
+	ID3D11Device* device = MainEngine::GetInstance()->GetRenderCore()->GetDevice();
 	// テクスチャ読み込み
 	for (UINT i = 0; i < m_Model->AiScene->mNumMeshes; i++) {
 		aiMaterial* aimaterial = m_Model->AiScene->mMaterials[m_Model->AiScene->mMeshes[i]->mMaterialIndex];
@@ -173,34 +163,38 @@ void FBXImporter::CreateMaterial()
 		aiColor3D diffuse;
 		float opacity;
 		aimaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texture);
-		aimaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
-		aimaterial->Get(AI_MATKEY_OPACITY, opacity);
+		//aimaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
+		//aimaterial->Get(AI_MATKEY_OPACITY, opacity);
 
-		SUB_MATERIAL* subMaterial = new SUB_MATERIAL;
+		//Material* material = new Material;
 
-		if (texture == aiString("")) {
-			subMaterial->textureID = -1;
-			subMaterial->material.textureEnable = false;
-		}
-		else {
-			subMaterial->material.textureEnable = true;
-			subMaterial->textureID = m_TextureFileID[texture.data];
-		}
+		//if (texture == aiString("")) {
+		//	material->SetTexture(-1);
+		//	material->SetTextureEnable(false);
+		//}
+		//else {
+		//	material->SetTextureEnable(true);
+		//	material->SetTexture(m_TextureFileID[texture.data]);
+		//}
 
-		subMaterial->material.diffuse = Vector4O(diffuse.r, diffuse.g, diffuse.b, opacity);
-		subMaterial->material.ambient = subMaterial->material.diffuse;
+		//MATERIAL mat;
+		//mat.diffuse = Vector4O(diffuse.r, diffuse.g, diffuse.b, opacity);
+		//mat.ambient = mat.diffuse;
 
-		m_SubMaterial.push_back(subMaterial);
+		//material->SetMaterial(mat);
+
+		//m_Materials.push_back(material);
 	}
 }
 
 void FBXImporter::CreateBone(aiNode* node)
 {
-	BONE bone;
-	
-	m_Bone[node->mName.C_Str()] = bone;
+	BONE bone = {};
 
-	for (unsigned int i = 0; i < node->mNumChildren; i++) {
-		CreateBone(node->mChildren[i]);
+	m_Bone->emplace(node->mName.C_Str(), bone);
+
+	for (unsigned int n = 0; n < node->mNumChildren; n++)
+	{
+		CreateBone(node->mChildren[n]);
 	}
 }

@@ -33,7 +33,7 @@ void Particle::DrawGUI()
 	ImGui::DragInt("Spawn Span", &m_SpawnSpan, 1.0f, 0.0f, 100.0f);
 	ImGui::DragInt("Life Time", &m_LifeTime, 1.0f, 0.0f, 100.0f);
 	ImGui::InputInt("Frame Count", &m_FrameCount);
-	ImGui::Image((ImTextureID)MainEngine::GetInstance()->GetRenderer()->GetTexture(m_Texture), ImVec2(300, 300));
+	ImGui::Image((ImTextureID)MainEngine::GetInstance()->GetRenderCore()->GetTexture(m_Texture), ImVec2(300, 300));
 	ImGui::Unindent();
 }
 
