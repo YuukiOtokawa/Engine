@@ -18,6 +18,8 @@
 
 #include "MainEngine.h"
 
+#include "Component_Transform.h"
+
 //==========================================================================
 // 名前空間定義
 //==========================================================================
@@ -52,6 +54,7 @@ void GUI::StartImGui()
 	ImGui_ImplDX11_NewFrame();
 	NewFrame();
 
+	//ImGuizmo::BeginFrame();
 
 	ImGui::PushFont(m_pFontDefault);
 	m_pCurrentFont = m_pFontDefault;
@@ -87,6 +90,9 @@ void GUI::StartImGui()
 
 	ImGui::End();
 
+	auto camera = Editor::GetInstance()->GetActiveCamera()->GetComponent<Camera>();
+
+	//ImGuizmo::Manipulate((float*)&camera->GetView(), (float*)&camera->GetProjection(), ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, (float*)&Editor::GetInstance()->GetActiveCamera()->GetComponent<Transform>()->GetWorldMatrix(), nullptr, nullptr);
 }
 void GUI::StartHierarchy() {
 	if (m_IsFirstFrameHierarchy) {

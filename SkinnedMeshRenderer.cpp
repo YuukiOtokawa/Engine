@@ -257,37 +257,73 @@ void SkinnedMeshRenderer::GetTexture()
 void SkinnedMeshRenderer::UpdateComponent() {
 	if (!m_pAiScene || !m_pDeformVertex || !m_pBoneMap || m_pAiScene->mNumMeshes == 0) return;
 
-	if (m_pAnimation->count(m_CurrentAnimation) == 0) return;
-
-	if (!m_pAnimation->at(m_CurrentAnimation)->HasAnimations()) return;
-
-	aiAnimation* animation = m_pAnimation->at(m_CurrentAnimation)->mAnimations[0];
+	aiAnimation* currentAnimation = m_pAnimation->at(m_CurrentAnimation)->mAnimations[0];
+	aiAnimation* nextAnimation = m_pAnimation->at(m_NextAnimation)->mAnimations[0];
 
 	for (auto pair : *m_pBoneMap) {
+
 		BONE* bone = &(m_pBoneMap->at(pair.first));
 
-		aiNodeAnim* nodeAnim = nullptr;
+		aiNodeAnim* currentNodeAnim = nullptr;
+		aiNodeAnim* nextNodeAnim = nullptr;
 
-		for (unsigned int c = 0; c < animation->mNumChannels; c++) {
-			if (animation->mChannels[c]->mNodeName == aiString(pair.first)) {
-				nodeAnim = animation->mChannels[c];
+
+		// CurrentAnimation
+		for (unsigned int c = 0; c < currentAnimation->mNumChannels; c++) {
+			if (currentAnimation->mChannels[c]->mNodeName == aiString(pair.first)) {
+				currentNodeAnim = currentAnimation->mChannels[c];
 				break;
 			}
 		}
+		
+		aiQuaternion currentRotation;
+		aiVector3D currentPosition;
+		int currentFrameKey;
 
-		aiQuaternion rot;
-		aiVector3D pos;
-		int f;
+		if (currentNodeAnim) {
+			currentFrameKey = m_CurrentAnimationFrame % currentNodeAnim->mNumPositionKeys;
+			currentRotation = currentNodeAnim->mRotationKeys[currentFrameKey].mValue;
 
-		if (nodeAnim) {
-			f = m_CurrentFrame % nodeAnim->mNumPositionKeys;
-			rot = nodeAnim->mRotationKeys[f].mValue;
-
-			f = m_CurrentFrame % nodeAnim->mNumPositionKeys;
-			pos = nodeAnim->mPositionKeys[f].mValue;
+			currentFrameKey = m_CurrentAnimationFrame % currentNodeAnim->mNumPositionKeys;
+			currentPosition = currentNodeAnim->mPositionKeys[currentFrameKey].mValue;
 		}
 
-		bone->animationMatrix = aiMatrix4x4(aiVector3D(1.0f, 1.0f, 1.0f), rot, pos);
+
+		if (m_CurrentAnimation == m_NextAnimation || !nextAnimation) {
+			bone->animationMatrix = aiMatrix4x4(aiVector3D(1.0f, 1.0f, 1.0f), currentRotation, currentPosition);
+			continue;
+		}
+		else
+		{
+			// NextAnimation
+			for (unsigned int c = 0; c < nextAnimation->mNumChannels; c++) {
+				if (nextAnimation->mChannels[c]->mNodeName == aiString(pair.first)) {
+					nextNodeAnim = nextAnimation->mChannels[c];
+					break;
+				}
+			}
+
+			aiQuaternion nextRotation;
+			aiVector3D nextPosition;
+			int nextFrameKey;
+
+			if (nextNodeAnim) {
+				nextFrameKey = m_NextAnimationFrame % nextNodeAnim->mNumPositionKeys;
+				nextRotation = nextNodeAnim->mRotationKeys[nextFrameKey].mValue;
+
+				nextFrameKey = m_NextAnimationFrame % nextNodeAnim->mNumPositionKeys;
+				nextPosition = nextNodeAnim->mPositionKeys[nextFrameKey].mValue;
+			}
+
+			// 線形補間
+			aiVector3D pos;
+			pos = currentPosition * (1.0f - m_BlendRate) + nextPosition * m_BlendRate;
+
+			aiQuaternion rot;
+			aiQuaternion::Interpolate(rot, currentRotation, nextRotation, m_BlendRate);
+
+			bone->animationMatrix = aiMatrix4x4(aiVector3D(1.0f, 1.0f, 1.0f), rot, pos);
+		}
 	}
 
 	//再帰的にボーンマトリクスを更新
@@ -295,6 +331,16 @@ void SkinnedMeshRenderer::UpdateComponent() {
 										 aiQuaternion((float)AI_MATH_PI, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f));
 
 	UpdateBoneMatrix(m_pAiScene->mRootNode, aiMatrix4x4());
+
+	if (m_CurrentAnimation != m_NextAnimation)
+	{
+		m_BlendRate += 1.0f / (60.0f * m_AnimationBlendTime); // 60fpsでm_BlendTime秒かけて補間
+		if (m_BlendRate >= 1.0f) {
+			m_CurrentAnimation = m_NextAnimation;
+			m_CurrentAnimationFrame = m_NextAnimationFrame;
+			m_BlendRate = 0.0f;
+		}
+	}
 
 
 	//頂点変換（CPUスキニング）
@@ -346,7 +392,7 @@ void SkinnedMeshRenderer::UpdateComponent() {
 		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Unmap(m_pVertexBuffer[m], 0);
 	}
 
-	m_CurrentFrame++;
+	m_CurrentAnimationFrame++;
 }
 
 void SkinnedMeshRenderer::Render() {
@@ -453,16 +499,14 @@ void SkinnedMeshRenderer::DrawGUI() {
 	else {
 		ImGui::Text("No model assigned.");
 	}
-	std::string filepath;
 	if (ImGui::Button("Set Mesh", ImVec2(150.0f, 30.0f)))
-		filepath = OpenImportFileDialog();
+		m_MeshFilePath = OpenImportFileDialog();
 
 	FBXImporter importer;
-	if (!filepath.empty()) {
-		importer.LoadFBX(filepath.c_str());
+	if (!m_MeshFilePath.empty()) {
+		importer.LoadFBX(m_MeshFilePath.c_str());
 		SetMeshData(nullptr, importer.GetBone(), importer.GetAiScene());
 		InitializeBuffers();
-		filepath = "";
 	}
 
 	ImGui::Unindent();
@@ -475,6 +519,14 @@ void SkinnedMeshRenderer::DrawGUI() {
 	else {
 		ImGui::Text("Current Animation: %s", m_CurrentAnimation.c_str());
 	}
+
+	if (m_NextAnimation != m_CurrentAnimation && !m_NextAnimation.empty()) {
+		ImGui::Text("Next Animation: %s", m_NextAnimation.c_str());
+		ImGui::Text("Swap Frame: %d", m_NextAnimationFrame);
+	}
+
+	ImGui::InputInt("Swap Frame", &m_NextAnimationFrame);
+
 	if (!m_pAnimation->empty()) {
 		std::vector<const char*> animationNames;
 		for (const auto& pair : *m_pAnimation) {
@@ -483,16 +535,19 @@ void SkinnedMeshRenderer::DrawGUI() {
 		if (ImGui::Combo("Animations", &animationIndex, animationNames.data(), static_cast<int>(animationNames.size()))) {
 			auto it = m_pAnimation->begin();
 			std::advance(it, animationIndex);
-			m_CurrentAnimation = it->first;
+			SetNextAnimation(it->first);
 		}
 	}
+
+	std::string filepath;
+
 	if (ImGui::Button("Add Animation")) {
 		filepath = OpenImportFileDialog();
 	}
 	if (!filepath.empty()) {
 		auto animation = importer.LoadAnimation(filepath.c_str());
 		m_pAnimation->emplace(animation.second, animation.first);
-		filepath = "";
+		m_AnimationFilePathMap.emplace(animation.second, filepath);
 	}
 
 	m_pMaterial->DrawGUI();
@@ -500,6 +555,48 @@ void SkinnedMeshRenderer::DrawGUI() {
 	ImGui::Unindent();
 }
 
+void SkinnedMeshRenderer::SetNextAnimation(std::string animationKey)
+{
+	if (m_pAnimation->count(animationKey) == 0) return;
+	if (m_CurrentAnimation == animationKey) return;
+	if (!m_pAnimation->at(animationKey)->HasAnimations()) return;
+	m_NextAnimation = animationKey;
+	m_NextAnimationFrame = 0;
+}
+
+void SkinnedMeshRenderer::AddExportList()
+{
+	CSVExporter::AddExportList(this);
+	if (m_pMaterial)
+		m_pMaterial->AddExportList();
+}
+
+void SkinnedMeshRenderer::ExportComponent()
+{
+	CSVExporter::ExportString(m_MeshFilePath);
+	CSVExporter::ExportInt((int)m_pAnimation->size());
+	for (const auto& pair : *m_pAnimation) {
+		CSVExporter::ExportString(pair.first);
+		CSVExporter::ExportString(m_AnimationFilePathMap[pair.first]);
+	}
+	CSVExporter::ExportInt(m_pMaterial->GetFileID());
+}
+
+void SkinnedMeshRenderer::ImportFile(std::vector<std::string>& tokens)
+{
+	m_MeshFilePath = tokens[4];
+	FBXImporter importer;
+	if (!m_MeshFilePath.empty()) {
+		importer.LoadFBX(m_MeshFilePath.c_str());
+		SetMeshData(nullptr, importer.GetBone(), importer.GetAiScene());
+		InitializeBuffers();
+	}
+
+
+}
+
 void SkinnedMeshRenderer::InitializeTag()
 {
+
+
 }

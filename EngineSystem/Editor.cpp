@@ -496,34 +496,6 @@ VertexIndex* Editor::GetVertexIndexByFileID(int fileID)
 	return nullptr;
 }
 
-void Editor::CheckCollision(Object* object)
-{
-	static float beforeLength = 0.0f;
-	float length;
-	// ObjectTagがPackTagの物に対して衝突判定
-	if (object->GetTag() == GameObjectTagLayer::PackTag) {
-		for (auto& obj : m_Objects) {
-			if (obj->GetTag() == GameObjectTagLayer::PackTag) {
-				// プレイヤーとの衝突判定
-				length = (object->GetComponent<Transform>()->GetPosition() - obj->GetComponent<Transform>()->GetPosition()).Length();
-				if ((length) < beforeLength && length < 2.0f) {
-					// 衝突した場合の処理
-					float e = BOUND_CONST;
-
-					// はねかえりの法則
-					Vector4O v0_new = (object->GetComponent<Pack>()->GetVelocity() * (200.0f - e * 200.0f) + obj->GetComponent<Pack>()->GetVelocity() * (1.0f + e) * 200.0f) / (200.0f + 200.0f);
-					Vector4O v1_new = (obj->GetComponent<Pack>()->GetVelocity() * (200.0f - e * 200.0f) + object->GetComponent<Pack>()->GetVelocity() * (1.0f + e) * 200.0f) / (200.0f + 200.0f);
-
-					object->GetComponent<Pack>()->SetVelocity(v0_new);		// ボール０の速度を更新
-					obj->GetComponent<Pack>()->SetVelocity(v1_new);		// ボール1の速度を更新
-
-				}
-				beforeLength = length;
-			}
-		}
-	}
-}
-
 #include "CSVImporter.h"
 
 void Editor::ChangeScene(std::string sceneName)

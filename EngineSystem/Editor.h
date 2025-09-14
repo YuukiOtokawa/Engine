@@ -130,8 +130,6 @@ public:
 
     void ChangeScene(std::string sceneName);
 
-    void CheckCollision(Object* object);
-
     void OpenScene(std::string sceneFilePath);
 };
 

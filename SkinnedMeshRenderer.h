@@ -15,9 +15,13 @@ private:
     std::unordered_map<std::string, BONE>* m_pBoneMap;
     const aiScene* m_pAiScene = nullptr;
     std::unordered_map<std::string, const aiScene*>* m_pAnimation;
+    std::unordered_map<std::string, std::string> m_AnimationFilePathMap;
     std::unordered_map<std::string, int>* m_pTextureFID;
 
+    std::string m_MeshFilePath;
+
     std::string m_CurrentAnimation;
+    std::string m_NextAnimation;
 
     int m_NumMeshes = 0;
 
@@ -26,7 +30,11 @@ private:
 
     std::vector<Transform*> m_pBones;
 
-    int m_CurrentFrame = 0;
+    int m_CurrentAnimationFrame = 0;
+    int m_NextAnimationFrame = 0;
+
+    float m_BlendRate = 0.0f;
+    float m_AnimationBlendTime = 0.2f;
 
     void UpdateBoneMatrix(aiNode* node, aiMatrix4x4 parentMatrix);
     void GetTexture();
@@ -50,6 +58,12 @@ public:
     void UpdateComponent() override;
     void Render() override; // ここにメインの描画ロジックを
     void DrawGUI() override;
+
+    void SetNextAnimation(std::string animationKey);
+
+    void AddExportList() override;
+    void ExportComponent() override;
+    void ImportFile(std::vector<std::string>& tokens) override;
 
     void InitializeTag() override;
 };
