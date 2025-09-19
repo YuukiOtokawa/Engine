@@ -114,11 +114,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>OtokawaEngine;resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -126,7 +126,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex_Debug.lib;DirectXTex_Release.lib;d3d11.lib;Winmm.lib;ole32.lib
-;uuid.lib</AdditionalDependencies>
+;uuid.lib;advapi32.lib;ws2_32.lib</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -141,12 +141,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>OtokawaEngine;resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -155,7 +155,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex_Debug.lib;DirectXTex_Release.lib;d3d11.lib;Winmm.lib;ole32.lib
-;uuid.lib</AdditionalDependencies>
+;uuid.lib;advapi32.lib;ws2_32.lib</AdditionalDependencies>
     </Link>
     <FxCompile>
       <DisableOptimizations>false</DisableOptimizations>
@@ -203,7 +203,6 @@
     <ClCompile Include="code\components\Component_Transform.cpp" />
     <ClCompile Include="code\components\EditorCamera.cpp" />
     <ClCompile Include="code\components\MeshField.cpp" />
-    <ClCompile Include="code\components\MonoBehavior.cpp" />
     <ClCompile Include="code\components\Particle.cpp" />
     <ClCompile Include="code\components\PlaneMesh.cpp" />
     <ClCompile Include="code\components\Renderer.cpp" />
@@ -243,6 +242,20 @@
     <ClCompile Include="code\input\Gamepad.cpp" />
     <ClCompile Include="code\input\Keyboard.cpp" />
     <ClCompile Include="code\input\Mouse.cpp" />
+    <ClCompile Include="RuntimeCompiler\BuildTool.cpp" />
+    <ClCompile Include="RuntimeCompiler\Compiler_PlatformPosix.cpp" />
+    <ClCompile Include="RuntimeCompiler\Compiler_PlatformWindows.cpp" />
+    <ClCompile Include="RuntimeCompiler\FileChangeNotifier.cpp" />
+    <ClCompile Include="RuntimeCompiler\SimpleFileWatcher\FileWatcher.cpp" />
+    <ClCompile Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherLinux.cpp" />
+    <ClCompile Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherOSX.cpp" />
+    <ClCompile Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherWin32.cpp" />
+    <ClCompile Include="RuntimeObjectSystem\ObjectFactorySystem\ObjectFactorySystem.cpp" />
+    <ClCompile Include="RuntimeObjectSystem\ObjectInterfacePerModuleSource.cpp" />
+    <ClCompile Include="RuntimeObjectSystem\RuntimeObjectSystem.cpp" />
+    <ClCompile Include="RuntimeObjectSystem\RuntimeObjectSystem_PlatformPosix.cpp" />
+    <ClCompile Include="RuntimeObjectSystem\RuntimeObjectSystem_PlatformWindows.cpp" />
+    <ClCompile Include="RuntimeObjectSystem\SimpleSerializer\SimpleSerializer.cpp" />
     <ClCompile Include="scripts\GameManager.cpp" />
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
@@ -316,6 +329,34 @@
     <ClInclude Include="code\input\Gamepad.h" />
     <ClInclude Include="code\input\Keyboard.h" />
     <ClInclude Include="code\input\Mouse.h" />
+    <ClInclude Include="RuntimeCompiler\AUArray.h" />
+    <ClInclude Include="RuntimeCompiler\BuildTool.h" />
+    <ClInclude Include="RuntimeCompiler\CompileOptions.h" />
+    <ClInclude Include="RuntimeCompiler\Compiler.h" />
+    <ClInclude Include="RuntimeCompiler\FileChangeNotifier.h" />
+    <ClInclude Include="RuntimeCompiler\FileSystemUtils.h" />
+    <ClInclude Include="RuntimeCompiler\ICompilerLogger.h" />
+    <ClInclude Include="RuntimeCompiler\IFileChangeNotifier.h" />
+    <ClInclude Include="RuntimeCompiler\SimpleFileWatcher\FileWatcher.h" />
+    <ClInclude Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherImpl.h" />
+    <ClInclude Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherLinux.h" />
+    <ClInclude Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherOSX.h" />
+    <ClInclude Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherWin32.h" />
+    <ClInclude Include="RuntimeCompiler\SimpleFileWatcher\FileWatcherWin32_AltImpl.h" />
+    <ClInclude Include="RuntimeObjectSystem\IObject.h" />
+    <ClInclude Include="RuntimeObjectSystem\IObjectFactorySystem.h" />
+    <ClInclude Include="RuntimeObjectSystem\IRuntimeObjectSystem.h" />
+    <ClInclude Include="RuntimeObjectSystem\ISimpleSerializer.h" />
+    <ClInclude Include="RuntimeObjectSystem\ObjectFactorySystem\ObjectFactorySystem.h" />
+    <ClInclude Include="RuntimeObjectSystem\ObjectInterface.h" />
+    <ClInclude Include="RuntimeObjectSystem\ObjectInterfacePerModule.h" />
+    <ClInclude Include="RuntimeObjectSystem\RuntimeInclude.h" />
+    <ClInclude Include="RuntimeObjectSystem\RuntimeLinkLibrary.h" />
+    <ClInclude Include="RuntimeObjectSystem\RuntimeObjectSystem.h" />
+    <ClInclude Include="RuntimeObjectSystem\RuntimeProtector.h" />
+    <ClInclude Include="RuntimeObjectSystem\RuntimeSourceDependency.h" />
+    <ClInclude Include="RuntimeObjectSystem\RuntimeTracking.h" />
+    <ClInclude Include="RuntimeObjectSystem\SimpleSerializer\SimpleSerializer.h" />
     <ClInclude Include="scripts\Game.h" />
     <ClInclude Include="scripts\GameManager.h" />
     <ClInclude Include="scripts\Pack.h" />
