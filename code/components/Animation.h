@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Component.h"
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 class Animation :
     public Component
 {

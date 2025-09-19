@@ -6,7 +6,7 @@
 
 #include "Editor.h"
 
-#include "../CollisionManager.h"
+#include "CollisionManager.h"
 
 #define COMPONENT_NAME(ComponentType) \
 	return #ComponentType;
@@ -78,7 +78,7 @@ void Object::Draw() {
 	}
 }
 
-#include "../Inspector.h"
+#include "Inspector.h"
 
 void Object::DrawGUI(){
 	GUI::SetFontObjectName();

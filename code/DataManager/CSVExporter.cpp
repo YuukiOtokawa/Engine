@@ -110,7 +110,7 @@ void CSVExporter::ExportFileID(const int fileID)
 }
 
 
-#include "../VertexIndex.h"
+#include "VertexIndex.h"
 #include <unordered_set>
 #include <sstream>
 

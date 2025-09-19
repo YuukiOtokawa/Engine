@@ -20,12 +20,12 @@
 #include <list>
 #include <map>
 
-#include "../VectorO.h"
+#include "VectorO.h"
 
 #include <vector>
 #include <string>
 
-#include "../Component_Light.h"
+#include "Component_Light.h"
 
 //==========================================================================
 // クラス定義

@@ -16,7 +16,7 @@
 
 #include "FrameWork.h"
 
-#include "../EngineMetaFile.h"
+#include "EngineMetaFile.h"
 
 // 名前空間定義
 

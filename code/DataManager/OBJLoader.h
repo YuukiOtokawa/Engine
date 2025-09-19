@@ -7,7 +7,7 @@
 
 #include <d3d11.h>
 
-#include "../VectorO.h"
+#include "VectorO.h"
 
 
 #include "Material.h"
@@ -47,7 +47,7 @@ struct MODEL_OBJ
 	unsigned int	SubsetNum;
 };
 
-#include "../VertexIndex.h"
+#include "VertexIndex.h"
 struct MODEL
 {
     VertexIndex* pVertexIndex;

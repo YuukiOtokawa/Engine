@@ -6,7 +6,7 @@
 
 #include "Component_Transform.h"
 
-#include "../Score.h"
+#include "Score.h"
 
 #include "Object.h"
 

@@ -18,7 +18,7 @@
 
 #include <string>
 
-#include "../EngineMetaFile.h"
+#include "EngineMetaFile.h"
 
 //==========================================================================
 // クラス定義

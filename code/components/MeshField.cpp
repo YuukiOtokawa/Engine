@@ -2,7 +2,7 @@
 
 #include "MainEngine.h"
 
-#include "components/Component_Transform.h"
+#include "Component_Transform.h"
 
 REGISTER_COMPONENT(MeshField)
 

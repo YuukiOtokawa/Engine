@@ -13,9 +13,9 @@
 //==========================================================================
 
 #include "Component.h"
-#include "../VectorO.h"
+#include "VectorO.h"
 #include "FrameWork.h"
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
 //==========================================================================
 // クラス定義

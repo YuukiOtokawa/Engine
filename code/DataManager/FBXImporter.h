@@ -18,7 +18,7 @@
 #include "matrix4x4.h"
 
 
-#pragma comment(lib, "assimp/assimp-vc143-mt.lib")
+#pragma comment(lib, "code/assimp/assimp-vc143-mt.lib")
 #include <d3d11.h>
 #include "RenderCore.h"
 

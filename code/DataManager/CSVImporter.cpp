@@ -19,15 +19,15 @@
 #include "Animation.h"
 #include "SpriteMesh.h"
 #include "Billboard.h"
-#include "../Particle.h"
+#include "Particle.h"
 #include "Component_CubeMesh.h"
 #include "MonoBehavior.h"
 #include "Component_InputSystem.h"
-#include "../Component_Light.h"
-#include "../ScriptComponent.h"
-#include "../RenderTexture.h"
-#include "../SkinnedMeshRenderer.h"
-#include "../Collider.h"
+#include "Component_Light.h"
+#include "ScriptComponent.h"
+#include "RenderTexture.h"
+#include "SkinnedMeshRenderer.h"
+#include "Collider.h"
 
 #include <vector>
 #include <sstream>

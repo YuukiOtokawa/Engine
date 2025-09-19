@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "../VectorO.h"
+#include "VectorO.h"
 
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 enum LightType
 {
     LIGHTTYPE_DIRECTIONAL,

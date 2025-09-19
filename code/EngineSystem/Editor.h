@@ -22,17 +22,17 @@
 #include "GUI.h"
 #include "Component_Camera.h"
 
-#include "../ParticleManager.h"
+#include "ParticleManager.h"
 
 #include "Material.h"
 
-#include "../AudioManager.h"
+#include "AudioManager.h"
 
 #include "FrameWork.h"
 
-#include "../VertexIndex.h"
+#include "VertexIndex.h"
 
-#include "../CollisionManager.h"
+#include "CollisionManager.h"
 
 //==========================================================================
 // クラス定義

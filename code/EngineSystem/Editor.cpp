@@ -27,7 +27,6 @@
 
 #include "Component_InputSystem.h"
 
-#include "ModelLoader.h"
 #include "OBJLoader.h"
 
 #include "Player.h"
@@ -39,10 +38,10 @@
 
 #include "imgui.h"
 
-#include "../Pack.h"
+#include "Pack.h"
 
-#include "../PostProcessTexture.h"
-#include "../PostProcessRenderer.h"
+#include "PostProcessTexture.h"
+#include "PostProcessRenderer.h"
 
 Editor* Editor::m_pInstance;
 
@@ -199,7 +198,7 @@ void Editor::Update() {
 	}
 }
 
-#include "../RenderTexture.h"
+#include "RenderTexture.h"
 void Editor::Draw() {
 
 	auto renderCore = MainEngine::GetInstance()->GetRenderCore();

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Component.h"
 
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
 struct ParticleData {
     Vector4O position;

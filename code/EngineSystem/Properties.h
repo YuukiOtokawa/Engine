@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../VectorO.h"
-#include "../EngineMetaFile.h"
+#include "VectorO.h"
+#include "EngineMetaFile.h"
 
 #define REGISTER_PROPERTY(type, name) \
     if constexpr (std::is_same_v<decltype(type), int>) { \

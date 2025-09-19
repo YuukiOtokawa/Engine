@@ -13,7 +13,7 @@
 //==========================================================================
 
 #include <Windows.h>
-#include "../VectorO.h"
+#include "VectorO.h"
 //#include "MatrixO.h"
 
 #undef GetObject

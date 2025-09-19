@@ -3,7 +3,7 @@
 
 #include <xaudio2.h>
 
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
 class Audio :
     public Component

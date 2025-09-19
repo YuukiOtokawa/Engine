@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Component.h"
 #include "Script.h"
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
 #include <memory>
 #include "ScriptFactory.h"

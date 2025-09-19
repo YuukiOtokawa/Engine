@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "../Renderer.h"
-#include "../VertexIndex.h"
+#include "Renderer.h"
+#include "VertexIndex.h"
 class MeshField :
     public Renderer
 {

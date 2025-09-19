@@ -15,9 +15,9 @@
 #include "FrameWork.h"
 #include "Object.h"
 
-#include "../EngineMetaFile.h"
+#include "EngineMetaFile.h"
 
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
 using namespace ComponentTag;
 

@@ -18,7 +18,7 @@
 #include "Mouse.h"
 #include "Gamepad.h"
 
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
 class InputSystem :
     public Component

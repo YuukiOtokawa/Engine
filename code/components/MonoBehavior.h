@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Component.h"
 
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
 class MonoBehaviour :
     public Component

@@ -33,7 +33,7 @@ void MeshFilter::UpdateComponent() {
 }
 
 
-#include "../Inspector.h"
+#include "Inspector.h"
 void MeshFilter::DrawGUI() {
 
 	ImGui::Text("VertexIndex:");

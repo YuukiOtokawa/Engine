@@ -16,9 +16,9 @@
 
 #include <d3d11.h>
 
-#include "../ComponentFactory.h"
+#include "ComponentFactory.h"
 
-#include "../VertexIndex.h"
+#include "VertexIndex.h"
 
 //==========================================================================
 // クラス定義

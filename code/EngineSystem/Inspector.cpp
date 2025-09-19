@@ -4,9 +4,9 @@
 
 #include "Object.h"
 
-#include "../ComponentFactory.h"
-#include "../ScriptFactory.h"
-#include "../ScriptComponent.h"
+#include "ComponentFactory.h"
+#include "ScriptFactory.h"
+#include "ScriptComponent.h"
 
 void AddComponentPopup(Object* object)
 {

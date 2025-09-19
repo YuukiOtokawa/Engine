@@ -8,26 +8,25 @@
 #include "PlayerCamera.h"
 #include "EditorCamera.h"
 #include "OBJLoader.h"
-#include "ModelLoader.h"
 #include "Component_InputSystem.h"
 #include "Component_CubeMesh.h"
 #include "PlaneMesh.h"
 #include "Player.h"	
-#include "../RenderTexture.h"
+#include "RenderTexture.h"
 
-#include "../Particle.h"
+#include "Particle.h"
 
-#include "../Title.h"
-#include "../Game.h"
-#include "../Result.h"
+#include "Title.h"
+#include "Game.h"
+#include "Result.h"
 
-#include "../TornadoParticle.h"
+#include "TornadoParticle.h"
 
-#include "../Pack.h"
+#include "Pack.h"
 
-#include "../Audio.h"
+#include "Audio.h"
 
-#include "../Score.h"
+#include "Score.h"
 
 
 void Main() {

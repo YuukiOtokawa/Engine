@@ -4,7 +4,7 @@
 #include <vector>
 #include <variant> // void* に代わる型安全な代替手段として std::variant を使用することも検討できます。
 
-#include "../Properties.h"
+#include "Properties.h"
 
 class Object;
 
