@@ -10,8 +10,6 @@
 
 REGISTER_SCRIPT(PlayerControl)
 
-
-
 void PlayerControl::Start()
 {
 }

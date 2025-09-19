@@ -23,7 +23,7 @@
 
 class Camera : public Component
 {
-private:
+protected:
 	bool m_IsActiveCamera = false;
 
     // 前フレームの位置

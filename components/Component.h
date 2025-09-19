@@ -59,6 +59,8 @@ public:
 
     virtual void Start() {}
 
+    virtual void OnDestroy() {}
+
     virtual void Update() {
         if (!isStarted) {
             Start();
@@ -93,5 +95,9 @@ public:
     ComponentTag::Tag GetTag() const {
         return tag;
     }
+
+    virtual void OnCollisionEnter(Object* object) {}
+    virtual void OnCollisionStay(Object* object) {}
+    virtual void OnCollisionExit(Object* object) {}
 };
 

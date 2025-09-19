@@ -57,6 +57,7 @@ void AddComponentPopup(Object* object)
 
 #include "CSVImporter.h"
 #include "FBXImporter.h"
+#include "OBJLoader.h"
 #include "MainEngine.h"
 
 #include "Component_MeshFilter.h"
@@ -81,6 +82,11 @@ void GetMesh(MeshFilter* meshFilter)
 	if (extension == ".fbx") {
 		FBXImporter fbxImporter;
 		fbxImporter.LoadFBX(filePath.c_str());
+	}
+
+	if (extension == ".obj") {
+		OBJLoader objLoader;
+		objLoader.Load(filePath.c_str(), meshFilter->owner);
 	}
 }
 

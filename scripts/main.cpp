@@ -13,7 +13,6 @@
 #include "Component_CubeMesh.h"
 #include "PlaneMesh.h"
 #include "Player.h"	
-#include "AssimpMeshRenderer.h"
 #include "../RenderTexture.h"
 
 #include "../Particle.h"
@@ -48,7 +47,7 @@ void SetSceneGame()
 	//エディターカメラ作成
 	{
 		auto camera = new Object();
-		camera->SetName("MainCamera");
+		camera->SetName("EditorCamera");
 		camera->AddComponent<Transform>();
 		camera->AddComponent<EditorCamera>();
 
@@ -115,43 +114,43 @@ void SetSceneGame()
 
 		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
 
-		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("pointLight");
-		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("pointLight");
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("unlit");
+		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("unlit");
 
 	}
 
 	//スプライトオブジェクト作成
-	{
-		Object* sprite = new Object();
-		sprite->SetName("Sprite1");
-		sprite->AddComponent<Transform>();
-		sprite->AddComponent<SpriteMesh>();
-		sprite->AddComponent<MeshRenderer>();
+	//{
+	//	Object* sprite = new Object();
+	//	sprite->SetName("Sprite1");
+	//	sprite->AddComponent<Transform>();
+	//	sprite->AddComponent<SpriteMesh>();
+	//	sprite->AddComponent<MeshRenderer>();
 
-		sprite->SetTag(GameObjectTag::ObjectTag);
-		sprite->SetLayer(GameObjectLayer::ObjectLayer);
+	//	sprite->SetTag(GameObjectTag::ObjectTag);
+	//	sprite->SetLayer(GameObjectLayer::ObjectLayer);
 
-		MATERIAL material;
-		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 0);
-		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-		material.SpecularPower = 0.5f;
+	//	MATERIAL material;
+	//	material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 0);
+	//	material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
+	//	material.SpecularPower = 0.5f;
 
-		LIGHT light;
-		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 0.2f);
-		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
-		light.Position = Vector3O(0.0f, 2.0f, -0.5f);
-		light.PointLightRange = 100.0f;
+	//	LIGHT light;
+	//	light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
+	//	light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 0.2f);
+	//	light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
+	//	light.Position = Vector3O(0.0f, 2.0f, -0.5f);
+	//	light.PointLightRange = 100.0f;
 
-		sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
+	//	sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
 
-		sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("unlit");
-		sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("unlit");
+	//	sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("unlit");
+	//	sprite->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("unlit");
 
-		sprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, 100.0f, 1.0f));
+	//	sprite->GetComponent<Transform>()->SetScale(Vector4O(100.0f, 100.0f, 1.0f));
 
-		sprite->AddComponent<RenderTexture>();
-	}
+	//	sprite->AddComponent<RenderTexture>();
+	//}
 
 	/*
 	//プレイヤー追尾カメラ作成

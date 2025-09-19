@@ -25,6 +25,8 @@ enum ClassID {
     CID_Billboard,
     CID_Particle,
     CID_Script,
+    CID_Component_Collider,
+    CID_Component_MeshField,
 };
 
 class EngineMetaFile
@@ -75,6 +77,14 @@ public:
     }
     int GetFileID() const {
         return m_FileID;
+    }
+
+    virtual void OnCollisionEnter(Object* target) {}
+    virtual void OnCollisionStay(Object* target) {}
+    virtual void OnCollisionExit(Object* target) {}
+
+    static void ResetFileIDCounter() {
+        m_FileIDCounter = 0;
     }
 };
 

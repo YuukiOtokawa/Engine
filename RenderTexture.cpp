@@ -230,6 +230,7 @@ void RenderTexture::DrawGUI()
 {
 	static int cameraIndex = -1;
 	std::list<Component*> cameras = Editor::GetInstance()->GetComponentsByClassID(CID_Component_Camera);
+	
 	std::vector<std::string> cameraNameStrings;
 	std::vector<const char*> cameraNames;
 

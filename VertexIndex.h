@@ -45,6 +45,9 @@ public:
     void SetVertexInfo(std::vector<VERTEX> vertexInfo) {
         m_VertexInfo = vertexInfo;
     }
+    void SetVertexInfo(const VERTEX* vertexInfo, int count) {
+        m_VertexInfo[count] = *vertexInfo;
+    }
     void SetIndexInfo(std::vector<unsigned int> indexInfo) {
         m_IndexInfo = indexInfo;
     }

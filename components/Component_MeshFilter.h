@@ -18,6 +18,8 @@
 
 #include "../ComponentFactory.h"
 
+#include "../VertexIndex.h"
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -102,8 +104,15 @@ public:
 
     ID3D11Buffer* GetIndexBuffer() const { return m_pIndexBuffer; }
 
+    int GetVertexCount() const { return m_iVertexCount; }
+    int GetIndexCount() const { return m_iIndexCount; }
+
     D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology() const { return m_PrimitiveTopology; }
 
     void SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigned int> indices);
+    void SetVertexInfo(VertexIndex* vertexIndex) {
+        m_pVertexIndex = vertexIndex;
+        SetVertexInfo(vertexIndex->GetVertexInfo(), vertexIndex->GetIndexInfo());
+    }
 };
 

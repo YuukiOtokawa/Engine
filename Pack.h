@@ -37,7 +37,6 @@ public:
             // 画面外に出た場合の処理
             velocity.z *= -1.0f; // Z軸方向の速度を反転
         }
-        Editor::GetInstance()->CheckCollision(owner); // 衝突判定を行う
     }
 	void DrawGUI() override {
 		// GUI描画処理

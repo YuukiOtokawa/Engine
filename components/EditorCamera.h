@@ -18,8 +18,20 @@ private:
     POINT m_OriginalScreenPosition = { 0, 0 };
 public:
     EditorCamera() : Camera() {
+        m_ClassID = CID_Component_EditorCamera;
     }
     void UpdateComponent() override;
+
+    void ExportComponent() override {
+        CSVExporter::ExportFloat(m_IsActiveCamera);
+        CSVExporter::ExportVector4O(m_Target);
+        CSVExporter::ExportFloat(m_Fov);
+        CSVExporter::ExportFloat(m_Near);
+        CSVExporter::ExportFloat(m_Far);
+        CSVExporter::ExportVector4O(m_Up);
+    }
+
+    void ImportFile(std::vector<std::string>& tokens) override;
 
 };
 

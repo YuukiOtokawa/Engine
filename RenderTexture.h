@@ -7,6 +7,7 @@
 class RenderTexture :
     public Component
 {
+protected:
     ID3D11Texture2D* m_pRenderTargetTexture = nullptr;
     ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
 
