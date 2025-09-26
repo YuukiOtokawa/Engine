@@ -16,7 +16,6 @@
 
 #include "VectorO.h"
 
-#include "ComponentFactory.h"
 
 //==========================================================================
 // クラス定義
@@ -35,12 +34,11 @@ private:
 
 public:
     DECLARE_COMPONENT(Transform)
-
     Transform() {
         m_ClassID = CID_Component_Transform;
     }
 	/// @brief オブジェクトの状態を更新します。
-	void UpdateComponent() override;
+	void Update() override;
 	/// @brief 描画処理を実行します。
 	void Draw() override;
 	void DrawGUI() override;

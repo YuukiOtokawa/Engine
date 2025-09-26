@@ -21,7 +21,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 
 #include <Psapi.h>
 
@@ -35,6 +35,8 @@
 #include "CSVImporter.h"
 #include "resource.h"
 #include <Richedit.h>
+
+#include "SystemLog.h"
 
 constexpr auto WINDOW_CREATE_FAILED = -1;
 
@@ -66,6 +68,7 @@ int APIENTRY WinMain(
 	return param;
 }
 
+
 int MainEngine::SystemLoop()
 {
 	while (WM_QUIT != m_Message.message) {
@@ -76,7 +79,6 @@ int MainEngine::SystemLoop()
 			DispatchMessage(&m_Message);
 		}
 		else {
-
 			m_dwCurrentTime = timeGetTime(); // システム時刻を取得
 			if ((m_dwCurrentTime - m_dwFPSLastTime) >= 1000) // 1秒ごとに実行
 			{
@@ -88,6 +90,7 @@ int MainEngine::SystemLoop()
 			}
 			if ((m_dwCurrentTime - m_dwExecLastTime) >= (1000 / 60)) // 1/60秒ごとに実行
 			{
+				m_dwDeltaTime = m_dwCurrentTime - m_dwExecLastTime;
 				m_dwExecLastTime = m_dwCurrentTime; // 処理した時刻を保存
 #ifdef _DEBUG // デバッグ版の時だけFPSを表示する
 				std::stringstream caption;
@@ -192,7 +195,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 // システム初期化
 //==========================================================================
 
-
+	// COMライブラリの初期化
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 
 	m_pRenderer = new RenderCore(m_hWnd);
@@ -217,7 +220,6 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ItemSpacing.y = 8.0f;
-	style.WindowPadding = ImVec2(0.0f, 0.0f);
 
 	// 指定のウィンドウハンドルのウィンドウを指定の方法で表示
 	ShowWindow(m_hWnd, SW_MAXIMIZE);

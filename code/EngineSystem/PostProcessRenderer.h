@@ -11,9 +11,10 @@ class PostProcessRenderer :
     void CalcGaussianWeight(float);
 
 public:
+    DECLARE_COMPONENT(PostProcessRenderer)
     PostProcessRenderer();
 
-    void UpdateComponent() override;
+    void Update() override;
 
     void DrawPostProcess(int n);
 

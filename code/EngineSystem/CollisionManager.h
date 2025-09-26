@@ -5,6 +5,10 @@
 #include <map>
 #include <unordered_map>
 
+#include "Collider.h"
+
+using namespace ColliderParameter;
+
 // 使い方
 //
 // Colliderをオブジェクトにアタッチ
@@ -97,8 +101,28 @@ public:
 
 private:
     // オブジェクトペアを正規化（常により小さいポインタを最初に配置）
-    ObjectPair NormalizeObjectPair(Object* obj1, Object* obj2);
+    static ObjectPair NormalizeObjectPair(Object* obj1, Object* obj2);
     
     // 衝突状態を更新（Enter, Stay, Exitの判定）
     void UpdateCollisionStates();
+
+
+    // 衝突判定関数
+    static bool CollideSphereSphere(Object* obj1, Object* obj2);
+    static bool CollideBoxBox(Object* obj1, Object* obj2);
+    static bool CollideBoxSphere(Object* obj1, Object* obj2);
+    static bool CollideSphereBox(Object* obj1, Object* obj2) { return CollideBoxSphere(obj2, obj1); }
+    static bool CollideMeshFieldSphere(Object* obj1, Object* obj2);
+    static bool CollideSphereMeshField(Object* obj1, Object* obj2) { return CollideMeshFieldSphere(obj2, obj1); }
+    static bool CollideMeshFieldBox(Object* obj1, Object* obj2);
+    static bool CollideBoxMeshField(Object* obj1, Object* obj2) { return CollideMeshFieldBox(obj2, obj1); }
+
+    using CollisionFunc = bool(*)(Object*, Object*);
+
+    CollisionFunc CollisionMatrix[(int)ColliderType::COLLIDER_TYPE_MAX][(int)ColliderType::COLLIDER_TYPE_MAX] = {
+        { CollideBoxBox,       CollideBoxSphere,        CollideBoxMeshField     },
+        { CollideSphereBox,    CollideSphereSphere,     CollideSphereMeshField  },
+        { CollideMeshFieldBox, CollideMeshFieldSphere,  CollideMeshFieldBox     }
+    };
+
 };

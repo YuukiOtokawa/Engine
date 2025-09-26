@@ -94,7 +94,7 @@ RenderTexture::~RenderTexture()
 
 #include "Component_Transform.h"
 
-void RenderTexture::UpdateComponent()
+void RenderTexture::Update()
 {
 	if (!m_pCamera) return;
 

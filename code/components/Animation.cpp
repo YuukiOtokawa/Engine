@@ -7,7 +7,7 @@
 
 REGISTER_COMPONENT(Animation)
 
-void Animation::UpdateComponent() {
+void Animation::Update() {
 	if (m_FrameCount < 60.0f / m_FramePerSecond) {
 		m_FrameCount++;
 		return;

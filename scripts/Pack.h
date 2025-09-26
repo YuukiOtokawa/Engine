@@ -23,7 +23,7 @@ public:
 	void Start() override {
 		// 初期化処理
 	}
-    void Update() override {
+    void OnUpdate() override {
         // 更新処理
         auto transform = owner->GetComponent<Transform>();
         if (transform) {

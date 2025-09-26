@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "Component.h"
 
-#include "ComponentFactory.h"
-
 struct ParticleData {
     Vector4O position;
     Vector4O startPosition; // Start position for the particle
@@ -34,7 +32,7 @@ public:
         m_ClassID = CID_Particle;
     }
 
-    void UpdateComponent() override;
+    void Update() override;
 
     void DrawGUI() override;
 

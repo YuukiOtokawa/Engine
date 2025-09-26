@@ -10,7 +10,7 @@ class Title :
 public:
     void Start() override {}
 
-    void Update() override {
+    void OnUpdate() override {
         if (InputSystem::GetKeyboard()->GetInstance()->GetKeyDown(KK_ENTER)) {
             Editor::GetInstance()->ChangeScene("Game");
         }

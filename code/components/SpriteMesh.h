@@ -11,7 +11,7 @@ private:
 public:
 	SpriteMesh();
 
-	void UpdateComponent() override;
+	void Update() override;
 
     void DrawGUI() override;
     void ExportComponent() override;

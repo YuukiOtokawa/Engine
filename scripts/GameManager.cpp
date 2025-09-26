@@ -1,6 +1,5 @@
 ﻿#include "GameManager.h"
 
-#include "ScriptFactory.h"
 
 REGISTER_SCRIPT(GameManager)
 

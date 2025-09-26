@@ -367,14 +367,14 @@ public:
 
     auto operator [](const int index) const -> float { return (index == 0) ? x : (index == 1) ? y : (index == 2) ? z : w; }
 
-    auto operator +(const int scalar) const -> Vector4O { return Vector4O(x + (float)scalar, y + (float)scalar, z + (float)scalar, w + (float)scalar); }
-    auto operator -(const int scalar) const -> Vector4O { return Vector4O(x - (float)scalar, y - (float)scalar, z - (float)scalar, w - (float)scalar); }
-    auto operator *(const int scalar) const -> Vector4O { return Vector4O(x * (float)scalar, y * (float)scalar, z * (float)scalar, w * (float)scalar); }
-    auto operator /(const int scalar) const -> Vector4O { return Vector4O(x / (float)scalar, y / (float)scalar, z / (float)scalar, w / (float)scalar); }
-    auto operator +=(const int scalar) -> Vector4O& { x += (float)scalar; y += (float)scalar; z += (float)scalar; w += (float)scalar; return *this; }
-    auto operator -=(const int scalar) -> Vector4O& { x -= (float)scalar; y -= (float)scalar; z -= (float)scalar; w -= (float)scalar; return *this; }
-    auto operator *=(const int scalar) -> Vector4O& { x *= (float)scalar; y *= (float)scalar; z *= (float)scalar; w *= (float)scalar; return *this; }
-    auto operator /=(const int scalar) -> Vector4O& { x /= (float)scalar; y /= (float)scalar; z /= (float)scalar; w /= (float)scalar; return *this; }
+    //auto operator +(const int scalar) const -> Vector4O { return Vector4O(x + (float)scalar, y + (float)scalar, z + (float)scalar, w + (float)scalar); }
+    //auto operator -(const int scalar) const -> Vector4O { return Vector4O(x - (float)scalar, y - (float)scalar, z - (float)scalar, w - (float)scalar); }
+    //auto operator *(const int scalar) const -> Vector4O { return Vector4O(x * (float)scalar, y * (float)scalar, z * (float)scalar, w * (float)scalar); }
+    //auto operator /(const int scalar) const -> Vector4O { return Vector4O(x / (float)scalar, y / (float)scalar, z / (float)scalar, w / (float)scalar); }
+    //auto operator +=(const int scalar) -> Vector4O& { x += (float)scalar; y += (float)scalar; z += (float)scalar; w += (float)scalar; return *this; }
+    //auto operator -=(const int scalar) -> Vector4O& { x -= (float)scalar; y -= (float)scalar; z -= (float)scalar; w -= (float)scalar; return *this; }
+    //auto operator *=(const int scalar) -> Vector4O& { x *= (float)scalar; y *= (float)scalar; z *= (float)scalar; w *= (float)scalar; return *this; }
+    //auto operator /=(const int scalar) -> Vector4O& { x /= (float)scalar; y /= (float)scalar; z /= (float)scalar; w /= (float)scalar; return *this; }
 
     auto operator ==(const float scalar) const -> bool { return Length() == scalar; }
     auto operator !=(const float scalar) const -> bool { return Length() != scalar; }

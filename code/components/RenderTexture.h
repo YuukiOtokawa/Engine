@@ -29,7 +29,7 @@ public:
     RenderTexture();
     ~RenderTexture();
 
-    void UpdateComponent() override;
+    void Update() override;
     void DrawRenderTexture();
     void DrawGUI() override;
     void InitializeTag() override;

@@ -21,7 +21,9 @@
 // メンバ関数
 //==========================================================================
 
-void EditorCamera::UpdateComponent()
+REGISTER_COMPONENT(EditorCamera)
+
+void EditorCamera::Update()
 {
 	auto keyboard = InputSystem::GetKeyboard();
 	auto mouse = InputSystem::GetMouse();

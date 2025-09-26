@@ -7,6 +7,8 @@
 #include "Component_MeshFilter.h"
 #include "Component_Transform.h"
 
+REGISTER_COMPONENT(PostProcessRenderer)
+
 // 引数 分散値
 void PostProcessRenderer::CalcGaussianWeight(float dispersion)
 {
@@ -51,7 +53,7 @@ PostProcessRenderer::PostProcessRenderer() : MeshRenderer()
 	m_pPostProcessMaterial[1] = material;
 }
 
-void PostProcessRenderer::UpdateComponent()
+void PostProcessRenderer::Update()
 {
 	float ofs = 0.4f;
 

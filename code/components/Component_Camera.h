@@ -15,8 +15,6 @@
 #include "Component.h"
 #include "VectorO.h"
 #include "FrameWork.h"
-#include "ComponentFactory.h"
-
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -49,7 +47,6 @@ protected:
 
 public:
     DECLARE_COMPONENT(Camera)
-
     // コンストラクタ
     Camera();
 
@@ -69,7 +66,7 @@ public:
     }
 
     /// @brief コンポーネントの状態を更新します。
-    void UpdateComponent() override;
+    void Update() override;
 	/// @brief 描画処理を実行します。
 	void Draw() override;
   

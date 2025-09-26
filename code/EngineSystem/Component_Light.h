@@ -5,7 +5,6 @@
 
 #include "VectorO.h"
 
-#include "ComponentFactory.h"
 enum LightType
 {
     LIGHTTYPE_DIRECTIONAL,
@@ -70,7 +69,6 @@ private:
 
 public:
     DECLARE_COMPONENT(Light)
-
     Light() = default;
 
     void InitializeTag() override;
@@ -78,7 +76,7 @@ public:
     static void DrawGeneralLight();
     void DrawGUI() override;
 
-    void UpdateComponent() override {
+    void Update() override {
         // ライトの更新処理が必要な場合はここに記述
     }
 

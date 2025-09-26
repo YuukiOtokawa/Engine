@@ -1,11 +1,12 @@
 ﻿#pragma once
 
-#include "Script.h"
 #include <string>
 #include <vector>
 #include <map>
 #include <functional>
 #include <iostream>
+
+class Script;
 
 using ScriptCreator = std::function<Script* ()>;
 
@@ -59,3 +60,6 @@ private:
     } \
     /* GetName()を実装する行を追加 */ \
     const char* ClassName::GetScriptName() const { return #ClassName; }
+
+#define DECLARE_SCRIPT(ClassName) \
+    const char* GetScriptName() const override;

@@ -46,10 +46,10 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	m_ClientSize.y = (float)renderHeight;
 
 	int taskbarHeight = 0;
-	//taskbarHeight = screenHeight - workArea.bottom;
-	//m_ClientSize.y -= taskbarHeight;
+	taskbarHeight = renderHeight - workArea.bottom;
+	m_ClientSize.y -= taskbarHeight;
 
-	m_ClientSize = Vector2O(1920, 1020);
+	//m_ClientSize = Vector2O(1920, 1030);
 
 	// スワップチェーンの設定を定義
 	DXGI_SWAP_CHAIN_DESC sd = {};
@@ -163,7 +163,7 @@ void RenderCore::BeginPE(int n)
 
 void RenderCore::ResizeClient(int width, int height)
 {
-	m_ClientSize = Vector2O( width, height );
+	//m_ClientSize = Vector2O( width, height );
 }
 
 void RenderCore::CreateRenderTargetView()

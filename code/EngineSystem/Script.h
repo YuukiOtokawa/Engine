@@ -5,7 +5,9 @@
 #include <variant> // void* に代わる型安全な代替手段として std::variant を使用することも検討できます。
 
 #include "Properties.h"
+#include "ScriptFactory.h"
 
+struct ISimpleSerializer;
 class Object;
 
 enum class PropertyType {
@@ -26,12 +28,14 @@ struct Property {
     void* Data;
 };
 
-class Script 
+class Script
 {
+    
 
     friend class ScriptComponent;
 
     std::vector<Property> m_Properties;
+
 
 protected:
     Object* gameobject = nullptr;

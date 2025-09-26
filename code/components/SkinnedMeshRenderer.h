@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "Renderer.h"
 
-#include "ComponentFactory.h"
 #include "FBXImporter.h"
 #include <unordered_map>
 
@@ -55,7 +54,7 @@ public:
 
     void InitializeBuffers();
 
-    void UpdateComponent() override;
+    void Update() override;
     void Render() override; // ここにメインの描画ロジックを
     void DrawGUI() override;
 

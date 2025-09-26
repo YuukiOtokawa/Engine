@@ -9,7 +9,7 @@ void Score::Start()
 	m_pScoreSprite1p = Editor::GetInstance()->GetObject("ScoreSprite1p")->GetComponent<SpriteMesh>();
 }
 
-void Score::Update()
+void Score::OnUpdate()
 {
 
 }

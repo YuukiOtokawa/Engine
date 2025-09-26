@@ -3,8 +3,6 @@
 
 #include <xaudio2.h>
 
-#include "ComponentFactory.h"
-
 class Audio :
     public Component
 {
@@ -20,7 +18,6 @@ private:
 
 public:
     DECLARE_COMPONENT(Audio)
-
     Audio() = default;
     ~Audio() = default;
 
@@ -28,7 +25,7 @@ public:
         owner->SetDrawable(false); // Disable drawing for audio components
     }
 
-    void UpdateComponent() override {}
+    void Update() override {}
 
     void ExportComponent() override {}
 

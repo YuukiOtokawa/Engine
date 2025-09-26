@@ -30,7 +30,7 @@ public:
 
     }
 
-    void Update() override {
+    void OnUpdate() override {
 		if (bulletTimer > 0.0f) {
 			bulletTimer -= 1.0f / 60.0f;
 			if (bulletTimer < 0.0f) {

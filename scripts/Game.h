@@ -11,7 +11,7 @@ class Game :
 public:
     void Start() override {}
 
-    void Update() override {
+    void OnUpdate() override {
         if (InputSystem::GetKeyboard()->GetInstance()->GetKeyDown(KK_ESCAPE)) {
             Editor::GetInstance()->ChangeScene("Result");
         }

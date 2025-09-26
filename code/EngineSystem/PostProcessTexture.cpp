@@ -5,6 +5,8 @@
 #include "Component_Transform.h"
 #include "PostProcessRenderer.h"
 
+REGISTER_COMPONENT(PostProcessTexture)
+
 PostProcessTexture::PostProcessTexture()
 {
 	for (int i = 0; i < 3; i++) {
@@ -16,7 +18,7 @@ PostProcessTexture::PostProcessTexture()
 	}
 }
 
-void PostProcessTexture::UpdateComponent()
+void PostProcessTexture::Update()
 {
 	//m_pCamera = Editor::GetInstance()->GetActiveCamera();
 

@@ -32,7 +32,7 @@ void Object::Initialize() {}
 
 void Object::Update() {
 	for (auto& component : m_Components) {
-		component->Update();
+		component->OnUpdate();
 	}
 	if (HasChild())
 	{
@@ -158,6 +158,7 @@ void Object::AddComponentClass(Component* component, bool isInGame) {
 
 void Object::DeleteComponent(Component* component)
 {
+	component->OnDestroy();
 	m_Components.remove(component);
 	Editor::GetInstance()->DeleteComponent(component);
 	component = nullptr;

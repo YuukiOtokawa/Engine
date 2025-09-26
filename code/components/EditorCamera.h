@@ -17,10 +17,11 @@ private:
     XMINT2 m_OriginalCursorPosition = { 0, 0 };
     POINT m_OriginalScreenPosition = { 0, 0 };
 public:
+    DECLARE_COMPONENT(EditorCamera)
     EditorCamera() : Camera() {
         m_ClassID = CID_Component_EditorCamera;
     }
-    void UpdateComponent() override;
+    void Update() override;
 
     void ExportComponent() override {
         CSVExporter::ExportFloat(m_IsActiveCamera);

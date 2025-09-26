@@ -8,9 +8,10 @@ class PostProcessTexture :
 {
     Texture* m_pPostProcessTexture[3] = {};
 public:
+    DECLARE_COMPONENT(PostProcessTexture)
     PostProcessTexture();
 
-    void UpdateComponent() override;
+    void Update() override;
 
     void SetShaderResourceView(Texture* texture, int n);
 

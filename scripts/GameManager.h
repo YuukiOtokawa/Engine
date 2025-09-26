@@ -9,9 +9,9 @@ class GameManager :
 
 public:
     GameManager() {
-        REGISTER_PROPERTY(m_TitleSceneName, "TitleSceneName");
-        REGISTER_PROPERTY(m_GameSceneName, "GameSceneName");
-        REGISTER_PROPERTY(m_ResultSceneName, "ResultSceneName");
+        //REGISTER_PROPERTY(m_TitleSceneName, "TitleSceneName");
+        //REGISTER_PROPERTY(m_GameSceneName, "GameSceneName");
+        //REGISTER_PROPERTY(m_ResultSceneName, "ResultSceneName");
     }
     void Start() override;
     void Update() override;
@@ -21,6 +21,7 @@ public:
         m_ResultSceneName = tokens[7];
     }
     void Export() override;
-    const char* GetScriptName() const override;
+
+    DECLARE_SCRIPT(GameManager)
 };
 

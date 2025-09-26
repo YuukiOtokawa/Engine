@@ -3,7 +3,7 @@
 class PlayerControl :
     public Script
 {
-    float m_Speed = 5.0f;
+    float m_Speed = 1.0f;
 public:
     PlayerControl() {
         REGISTER_PROPERTY(m_Speed, "Speed");

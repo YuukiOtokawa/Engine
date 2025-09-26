@@ -19,7 +19,7 @@ public:
 	void Start() override {
 
 	}
-	void Update() override {
+	void OnUpdate() override {
 		if (player == nullptr) return;
 
 		Transform* playerTransform = player->GetComponent<Transform>();

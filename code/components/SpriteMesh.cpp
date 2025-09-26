@@ -53,7 +53,7 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 
 }
 
-void SpriteMesh::UpdateComponent() {
+void SpriteMesh::Update() {
 	if (m_newIndex != -1) {
 
 		int x = m_newIndex % (int)m_uvRect.x;

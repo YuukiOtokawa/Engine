@@ -16,8 +16,6 @@
 
 #include <d3d11.h>
 
-#include "ComponentFactory.h"
-
 #include "VertexIndex.h"
 
 //==========================================================================
@@ -46,7 +44,6 @@ protected:
     friend class MeshRenderer;
 public:
     DECLARE_COMPONENT(MeshFilter)
-
 	/// @brief MeshFilter のデフォルトコンストラクタです。
 	MeshFilter() {
         m_ClassID = CID_Component_MeshFilter;
@@ -62,7 +59,7 @@ public:
     }
 
 	/// @brief オブジェクトの状態を更新します（オーバーライドされたメソッド）。
-	void UpdateComponent() override;
+	void Update() override;
 	/// @brief 描画処理を実行します。
 	void DrawGUI() override;
 

@@ -14,7 +14,7 @@ private:
     SpriteMesh* m_pScoreSprite100p = nullptr; // スコア表示用のスプライト
 public:
     void Start() override;
-    void Update() override;
+    void OnUpdate() override;
     void AddScore(int score);
 };
 

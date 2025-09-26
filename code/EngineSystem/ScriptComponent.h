@@ -12,7 +12,6 @@ class ScriptComponent :
     std::unique_ptr<Script> m_ScriptInstance;
 public:
     DECLARE_COMPONENT(ScriptComponent)
-
     ScriptComponent() {
         tag = ScriptTag;
         m_ClassID = CID_Script;
@@ -23,7 +22,7 @@ public:
     void InitializeTag() override {
     }
 
-    void UpdateComponent() override {
+    void Update() override {
         if (m_ScriptInstance) {
             m_ScriptInstance->Update();
         }

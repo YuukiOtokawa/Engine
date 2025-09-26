@@ -9,11 +9,9 @@
 
 #include "CSVImporter.h"
 
-
-
 REGISTER_COMPONENT(Transform)
 
-void Transform::UpdateComponent() {
+void Transform::Update() {
 
 }
 

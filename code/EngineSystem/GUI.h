@@ -39,6 +39,11 @@ private:
 	/// @brief レンダーターゲットをクリーンアップします。
 	void CleanupRenderTarget();
 
+    void SetWindowPadding();
+    void SetItemPadding();
+
+    void Begin(const char* name);
+
     // DirectX 11のレンダリングターゲットビュー
 	ID3D11RenderTargetView* m_mainRenderTargetView = nullptr;
 public:
@@ -49,7 +54,7 @@ public:
 	void StartInspector();
 	void EndWindow();
 	void EndImGui();
-    //void Begin(const char* name, ImVec2 pos, ImVec2 size);
+
 
 	static void SetFontDefault();
 	static void SetFontObjectName();

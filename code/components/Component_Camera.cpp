@@ -31,7 +31,7 @@ Camera::Camera()
 	m_ClassID = CID_Component_Camera;
 }
 
-void Camera::UpdateComponent() {
+void Camera::Update() {
 	
 }
 

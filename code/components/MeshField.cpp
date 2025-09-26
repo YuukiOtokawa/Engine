@@ -4,8 +4,6 @@
 
 #include "Component_Transform.h"
 
-REGISTER_COMPONENT(MeshField)
-
 //==========================================================================
 // メッシュフィールドコンポーネント
 // 指定したサイズとセルサイズに基づいてメッシュフィールドを生成し、描画します。
@@ -14,6 +12,7 @@ REGISTER_COMPONENT(MeshField)
 // MeshSizeパラメータで縦横それぞれの方向の頂点数を指定します。
 //==========================================================================
 
+REGISTER_COMPONENT(MeshField)
 
 void MeshField::CreateMesh()
 {
@@ -135,7 +134,7 @@ MeshField::~MeshField()
 	}
 }
 
-void MeshField::UpdateComponent()
+void MeshField::Update()
 {
 
 }
@@ -176,7 +175,7 @@ void MeshField::Render()
 			);
 		}
 		else {
-			auto objectScale = transform->GetScale() * 0.01f;
+			auto objectScale = transform->GetScale();
 			auto objectRotation = transform->GetRotation().ToRadian();
 			auto objectPosition = transform->GetPosition();
 
@@ -238,4 +237,13 @@ void MeshField::DrawGUI()
 void MeshField::InitializeTag()
 {
 
+}
+
+float MeshField::GetHeight(int x, int z)
+{
+	// 指定した位置の頂点の高さを返す
+	if (x < 0 || x >= m_MeshSize[0] || z < 0 || z >= m_MeshSize[1]) {
+		return 0.0f; // 範囲外の場合は0を返す
+	}
+	return m_VertexIndex.GetVertexInfo()[x * (int)m_MeshSize[1] + z].position.y;
 }

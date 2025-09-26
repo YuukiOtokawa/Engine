@@ -14,9 +14,9 @@ public:
         m_ClassID = CID_Script;
     }
     virtual void Start() = 0;
-    virtual void Update() = 0;
+    virtual void OnUpdate() = 0;
 
-    void UpdateComponent() override;
+    void Update() override;
 
     void InitializeTag() override
     {

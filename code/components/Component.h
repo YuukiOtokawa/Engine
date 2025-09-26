@@ -61,16 +61,16 @@ public:
 
     virtual void OnDestroy() {}
 
-    virtual void Update() {
+    virtual void OnUpdate() {
         if (!isStarted) {
             Start();
             isStarted = true;
         }
-        UpdateComponent();
+        Update();
     }
 
 	/// @brief コンポーネントを更新する純粋仮想関数です。
-	virtual void UpdateComponent() = 0;
+	virtual void Update() = 0;
 
 	/// @brief 図形やオブジェクトを描画するための仮想関数です。
 	virtual void Draw() {}

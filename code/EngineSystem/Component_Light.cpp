@@ -4,12 +4,12 @@
 
 #include "Component_Transform.h"
 
-REGISTER_COMPONENT(Light)
-
 Vector4O Light::m_Ambient = Vector4O(0.2f, 0.2f, 0.2f, 1.0f); // 環境光の色
 DIRECTIONAL_LIGHT Light::m_DirectionalLight = {};
 POINT_LIGHT Light::m_PointLight = {};
 SPOT_LIGHT Light::m_SpotLight = {};
+
+REGISTER_COMPONENT(Light)
 
 void Light::InitializeTag()
 {

@@ -19,14 +19,19 @@ class MeshField :
 
     void CreateMesh();
     void CreateBuffer();
+
+    friend class MeshFieldCollider;
 public:
     DECLARE_COMPONENT(MeshField)
+
     // コンストラクタ。
     MeshField();
     virtual ~MeshField();
-    void UpdateComponent() override;
+    void Update() override;
     void Render() override; // ここにメインの描画ロジックを
     void DrawGUI() override;
     void InitializeTag() override;
+
+    float GetHeight(int x, int z);
 };
 

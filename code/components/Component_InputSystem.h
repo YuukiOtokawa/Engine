@@ -18,8 +18,6 @@
 #include "Mouse.h"
 #include "Gamepad.h"
 
-#include "ComponentFactory.h"
-
 class InputSystem :
     public Component
 {
@@ -30,11 +28,10 @@ private:
 
 public:
     DECLARE_COMPONENT(InputSystem)
-
 	InputSystem();
 
 	//蜷�繝�繝舌う繧ｹ縺ｮ蜈･蜉帛､縺ｮ蜿門ｾ励�ｻ譖ｴ譁ｰ
-	void UpdateComponent() override;
+	void Update() override;
 	void DrawGUI() override;
 
 	//蜷�遞ｮ繧ｲ繝�繧ｿ繝ｼ

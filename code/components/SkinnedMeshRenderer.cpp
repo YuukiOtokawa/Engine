@@ -5,6 +5,8 @@
 
 #include "RenderCore.h"
 
+REGISTER_COMPONENT(SkinnedMeshRenderer)
+
 XMMATRIX ConvertMatrix(const aiMatrix4x4& from) {
 	XMMATRIX to;
 	to.r[0] = XMVectorSet(from.a1, from.b1, from.c1, from.d1);
@@ -13,8 +15,6 @@ XMMATRIX ConvertMatrix(const aiMatrix4x4& from) {
 	to.r[3] = XMVectorSet(from.a4, from.b4, from.c4, from.d4);
 	return XMMatrixTranspose(to);
 }
-
-REGISTER_COMPONENT(SkinnedMeshRenderer)
 
 SkinnedMeshRenderer::SkinnedMeshRenderer()
 {
@@ -254,11 +254,31 @@ void SkinnedMeshRenderer::GetTexture()
 	}
 }
 
-void SkinnedMeshRenderer::UpdateComponent() {
+void SkinnedMeshRenderer::Update() {
 	if (!m_pAiScene || !m_pDeformVertex || !m_pBoneMap || m_pAiScene->mNumMeshes == 0) return;
 
-	aiAnimation* currentAnimation = m_pAnimation->at(m_CurrentAnimation)->mAnimations[0];
-	aiAnimation* nextAnimation = m_pAnimation->at(m_NextAnimation)->mAnimations[0];
+	aiAnimation* currentAnimation = nullptr;
+	aiAnimation* nextAnimation = nullptr;
+
+	if (m_CurrentAnimation != "") {
+		currentAnimation = m_pAnimation->at(m_CurrentAnimation)->mAnimations[0];
+
+		if (m_NextAnimation != "") {
+			nextAnimation = m_pAnimation->at(m_NextAnimation)->mAnimations[0];
+
+		}
+	}
+	else {
+		if (m_NextAnimation != "") {
+			m_CurrentAnimation = m_NextAnimation;
+			currentAnimation = m_pAnimation->at(m_CurrentAnimation)->mAnimations[0];
+			nextAnimation = m_pAnimation->at(m_NextAnimation)->mAnimations[0];
+		}
+		else
+			return;
+	}
+	
+
 
 	for (auto pair : *m_pBoneMap) {
 
@@ -266,7 +286,6 @@ void SkinnedMeshRenderer::UpdateComponent() {
 
 		aiNodeAnim* currentNodeAnim = nullptr;
 		aiNodeAnim* nextNodeAnim = nullptr;
-
 
 		// CurrentAnimation
 		for (unsigned int c = 0; c < currentAnimation->mNumChannels; c++) {
@@ -499,14 +518,16 @@ void SkinnedMeshRenderer::DrawGUI() {
 	else {
 		ImGui::Text("No model assigned.");
 	}
+	FBXImporter importer;
 	if (ImGui::Button("Set Mesh", ImVec2(150.0f, 30.0f)))
+	{
 		m_MeshFilePath = OpenImportFileDialog();
 
-	FBXImporter importer;
-	if (!m_MeshFilePath.empty()) {
-		importer.LoadFBX(m_MeshFilePath.c_str());
-		SetMeshData(nullptr, importer.GetBone(), importer.GetAiScene());
-		InitializeBuffers();
+		if (!m_MeshFilePath.empty()) {
+			importer.LoadFBX(m_MeshFilePath.c_str());
+			SetMeshData(nullptr, importer.GetBone(), importer.GetAiScene());
+			InitializeBuffers();
+		}
 	}
 
 	ImGui::Unindent();

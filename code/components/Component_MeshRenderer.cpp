@@ -17,14 +17,14 @@
 
 #include "MainEngine.h"
 
-REGISTER_COMPONENT(MeshRenderer)
 
 //==========================================================================
 // メンバ関数定義
 //==========================================================================
 
+REGISTER_COMPONENT(MeshRenderer)
 
-void MeshRenderer::UpdateComponent() {
+void MeshRenderer::Update() {
 
 }
 

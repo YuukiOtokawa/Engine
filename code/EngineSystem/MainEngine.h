@@ -18,10 +18,12 @@
 std::string OpenImportFileDialog();
 std::string OpenExportFileDialog();
 
-
 //==========================================================================
 // クラス定義
 //==========================================================================
+
+class CompileSystem;
+struct SystemTable;
 
 class MainEngine
 {
@@ -50,6 +52,7 @@ private:
 	DWORD m_dwFPSLastTime = 0;
 	DWORD m_dwCurrentTime = 0;
 	DWORD m_dwFrameCount = 0;
+    DWORD m_dwDeltaTime = 0;
 
 	// フレームレート制限用変数
 	int m_FramePerSecond = 0;
@@ -60,8 +63,8 @@ private:
 	//メインウィンドウハンドル
 	HWND m_hWnd = NULL;
 
-	
-
+    CompileSystem* m_pCompiler;
+    SystemTable* m_pSystemTable;
 
 	// インスタンスハンドル
 	HINSTANCE m_hInstance = NULL;
@@ -136,5 +139,6 @@ public:
 
 
     static INT_PTR CALLBACK FilePathDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+
 };
 

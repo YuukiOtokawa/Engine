@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "Component.h"
-#include "ComponentFactory.h"
 class Animation :
     public Component
 {
@@ -16,7 +15,7 @@ public:
         m_ClassID = CID_Animation;
     }
 
-	void UpdateComponent() override;
+	void Update() override;
 
     void ExportComponent() override;
 

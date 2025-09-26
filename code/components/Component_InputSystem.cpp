@@ -13,8 +13,6 @@
 #include "Component_InputSystem.h"
 #include "MainEngine.h"
 
-REGISTER_COMPONENT(InputSystem)
-
 //==========================================================================
 // static変数の宣言
 //==========================================================================
@@ -26,6 +24,8 @@ Mouse* InputSystem::m_pMouse;
 //==========================================================================
 // メンバ関数定義
 //==========================================================================
+
+REGISTER_COMPONENT(InputSystem)
 
 InputSystem::InputSystem()
 {
@@ -40,7 +40,7 @@ InputSystem::InputSystem()
 }
 
 // Update
-void InputSystem::UpdateComponent()
+void InputSystem::Update()
 {
 	// 入力デバイスの更新処理を呼び出す
 	m_pGamePad->Update();

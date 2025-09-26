@@ -43,6 +43,8 @@
 #include "PostProcessTexture.h"
 #include "PostProcessRenderer.h"
 
+#include "SystemLog.h"
+
 Editor* Editor::m_pInstance;
 
 //==========================================================================
@@ -363,6 +365,13 @@ void Editor::Draw() {
 
 	// レンダリングバッファの内容を画面に表示
 	MainEngine::GetInstance()->GetRenderCore()->BufferPresent();
+
+	auto guiCursor = ImGui::GetIO().MousePos;
+	std::string cursorPos = std::to_string(guiCursor.x) + ", " + std::to_string(guiCursor.y);
+	SystemLog::Log(0, cursorPos);
+	cursorPos = std::to_string(InputSystem::GetMouse()->GetPosition().x) + ", " + std::to_string(InputSystem::GetMouse()->GetPosition().y);
+	SystemLog::Log(1, cursorPos);
+
 
 }
 

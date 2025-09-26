@@ -18,17 +18,17 @@
 
 #include "MainEngine.h"
 
-REGISTER_COMPONENT(MeshFilter)
-
 //==========================================================================
 // メンバ関数定義
 //==========================================================================
+
+REGISTER_COMPONENT(MeshFilter)
 
 MeshFilter::MeshFilter(int vertexCount, int indexCount) : m_iVertexCount(vertexCount), m_iIndexCount(indexCount) {
 	m_ClassID = CID_Component_MeshFilter;
 }
 
-void MeshFilter::UpdateComponent() {
+void MeshFilter::Update() {
 
 }
 

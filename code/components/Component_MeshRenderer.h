@@ -15,8 +15,6 @@
 #include "Renderer.h"
 
 
-#include "ComponentFactory.h"
-
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -35,7 +33,7 @@ public:
         m_pMaterial = new Material();
     }
 
-    void UpdateComponent() override;
+    void Update() override;
     void Render() override; // ここにメインの描画ロジックを記述します
     void DrawGUI() override;
     void ImportFile(std::vector<std::string>& tokens) override;

@@ -24,8 +24,6 @@
 // 名前空間定義
 //==========================================================================
 
-using namespace ImGui;
-
 ImFont* GUI::m_pFontDefault = nullptr;
 ImFont* GUI::m_pFontObjectName = nullptr;
 ImFont* GUI::m_pCurrentFont = nullptr;
@@ -50,9 +48,9 @@ void GUI::Initialize() {
 
 void GUI::StartImGui()
 {
-	ImGui_ImplWin32_NewFrame();
 	ImGui_ImplDX11_NewFrame();
-	NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 
 	//ImGuizmo::BeginFrame();
 
@@ -99,7 +97,7 @@ void GUI::StartHierarchy() {
 		m_IsFirstFrameHierarchy = false;
 	}
 
-	ImGui::Begin("Hierarchy");
+	Begin("Hierarchy");
 }
 
 void GUI::StartInspector()
@@ -129,7 +127,7 @@ void GUI::EndImGui()
 		m_pCurrentFont = nullptr;
 	}
 
-	Render();
+	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
@@ -157,4 +155,21 @@ void GUI::CreateRenderTarget() {
 
 void GUI::CleanupRenderTarget() {
 	if (m_mainRenderTargetView) { m_mainRenderTargetView->Release(); m_mainRenderTargetView = nullptr; }
+}
+
+void GUI::SetWindowPadding()
+{
+	ImGui::GetStyle().WindowPadding = ImVec2(8.0f, 8.0f);
+}
+
+void GUI::SetItemPadding()
+{
+	ImGui::GetStyle().WindowPadding = ImVec2(0.0f, 0.0f);
+}
+
+void GUI::Begin(const char* name)
+{
+	SetWindowPadding();
+	ImGui::Begin(name);
+	SetItemPadding();
 }

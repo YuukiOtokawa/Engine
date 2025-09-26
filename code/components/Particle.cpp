@@ -7,7 +7,7 @@
 
 REGISTER_COMPONENT(Particle)
 
-void Particle::UpdateComponent()
+void Particle::Update()
 {
 	m_FrameCount--;
 	if (m_FrameCount <= 0) {

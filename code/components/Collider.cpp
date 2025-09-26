@@ -4,8 +4,9 @@
 
 #include "ComponentFactory.h"
 
-REGISTER_COMPONENT(Collider)
+#include "Component_Transform.h"
 
+REGISTER_COMPONENT(Collider)
 
 void Collider::Start()
 {
@@ -17,7 +18,7 @@ void Collider::OnDestroy()
 	CollisionManager::GetInstance()->RemoveCollisionObject(owner);
 }
 
-void Collider::UpdateComponent()
+void Collider::Update()
 {
 }
 
@@ -35,6 +36,17 @@ void Collider::DrawGUI()
 	ImGui::Unindent();
 
 	ImGui::Unindent();
+}
+
+Vector3O Collider::GetCollisionSize() const {
+	auto transform = owner->GetComponent<Transform>();
+
+	if (transform) {
+		return m_CollisionSize * transform->GetScale().XYZ();
+	}
+	else {
+		return m_CollisionSize;
+	}
 }
 
 void Collider::OnCollisionEnter(Object* target)

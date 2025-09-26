@@ -1,13 +1,14 @@
 ﻿#include "CollisionManager.h"
 
 #include "Component_Transform.h"
-#include "Collider.h"
 #include "Object.h"
 
 CollisionManager* CollisionManager::m_pInstance = nullptr;
 std::list<Object*> CollisionManager::m_CollisionObjects;
 std::unordered_map<ObjectPair, CollisionState, ObjectPairHash> CollisionManager::m_CollisionPairs;
 std::unordered_map<ObjectPair, CollisionState, ObjectPairHash> CollisionManager::m_PreviousCollisionPairs;
+
+
 
 void CollisionManager::AddCollisionObject(Object* object)
 {
@@ -61,34 +62,19 @@ void CollisionManager::CheckCollisions()
             Object* obj1 = *it1;
             Object* obj2 = *it2;
             
-            auto transform1 = obj1->GetComponent<Transform>();
-            auto transform2 = obj2->GetComponent<Transform>();
-            if (!transform1 || !transform2) continue;
-
-            // 簡単なAABBの例として、位置と固定サイズを使用
-            Vector4O pos1 = transform1->GetPosition();
-            Vector4O pos2 = transform2->GetPosition();
-            
-            Vector4O distance = pos1 - pos2;
-            
-            // 衝突判定（簡単な距離ベース）
-			float collisionDistanceX = transform1->GetScale().x + transform2->GetScale().x;
-			float collisionDistanceY = transform1->GetScale().y + transform2->GetScale().y;
-			float collisionDistanceZ = transform1->GetScale().z + transform2->GetScale().z;
-            bool isColliding = false;
-
-			if (abs(distance.x) <= collisionDistanceX&&
-				abs(distance.y) <= collisionDistanceY&&
-				abs(distance.z) <= collisionDistanceZ) {
-				isColliding = true;
-			}
-
-            if (isColliding)
+            auto collider1 = obj1->GetComponent<Collider>();
+            auto collider2 = obj2->GetComponent<Collider>();
+            if (!collider1 || !collider2) continue;
+            ColliderParameter::ColliderType type1 = collider1->m_ColliderType;
+            ColliderParameter::ColliderType type2 = collider2->m_ColliderType;
+            // 衝突判定関数を呼び出し
+            if (CollisionMatrix[(int)type1][(int)type2](obj1, obj2))
             {
                 // 衝突している場合、現在の状態を記録
                 ObjectPair pair = NormalizeObjectPair(obj1, obj2);
                 m_CollisionPairs[pair] = CollisionState::Stay; // 一旦Stayとして記録
-            }
+			}
+
         }
     }
     
@@ -189,4 +175,113 @@ void CollisionManager::UpdateCollisionStates()
             m_CollisionPairs[prevPair] = CollisionState::Exit;
         }
     }
+
+    std::unordered_map< ObjectPair, CollisionState, ObjectPairHash> toDelete;
+
+	// 前フレームでExit状態で今フレーム衝突していないペアを削除
+    for (const auto& [prevPair, prevState] : m_PreviousCollisionPairs)
+    {
+        if (prevState != CollisionState::Exit)
+            continue;
+
+        auto currentIt = m_CollisionPairs.find(prevPair);
+        if (currentIt == m_CollisionPairs.end())
+        {
+            toDelete.insert({ prevPair,prevState });
+        }
+    }
+
+    for (const auto& deletePair : toDelete) {
+		deletePair.first.first->GetComponent<Collider>()->OnCollisionExit(deletePair.first.second);
+		deletePair.first.second->GetComponent<Collider>()->OnCollisionExit(deletePair.first.first);
+		m_PreviousCollisionPairs.erase(deletePair.first);
+    }
+}
+
+bool CollisionManager::CollideSphereSphere(Object* obj1, Object* obj2)
+{
+    return false;
+}
+
+bool CollisionManager::CollideBoxBox(Object* obj1, Object* obj2)
+{
+
+    auto transform1 = obj1->GetComponent<Transform>();
+    auto transform2 = obj2->GetComponent<Transform>();
+    if (!transform1 || !transform2) return false;
+
+    auto collider1 = obj1->GetComponent<Collider>();
+    auto collider2 = obj2->GetComponent<Collider>();
+    if (!collider1 || !collider2) return false;
+
+    // 簡単なAABBの例として、位置と固定サイズを使用
+    Vector4O pos1 = transform1->GetPosition();
+    Vector4O pos2 = transform2->GetPosition();
+
+    Vector4O distance = pos1 - pos2;
+
+    // 衝突判定（簡単な距離ベース）
+    float collisionDistanceX = collider1->GetCollisionSize().x + collider2->GetCollisionSize().x;
+    float collisionDistanceY = collider1->GetCollisionSize().y + collider2->GetCollisionSize().y;
+    float collisionDistanceZ = collider1->GetCollisionSize().z + collider2->GetCollisionSize().z;
+    bool isColliding = false;
+
+    if (abs(distance.x) <= collisionDistanceX &&
+        abs(distance.y) <= collisionDistanceY &&
+        abs(distance.z) <= collisionDistanceZ) {
+        isColliding = true;
+    }
+
+    if (isColliding)
+    {
+        // 衝突している場合、現在の状態を記録
+        ObjectPair pair = NormalizeObjectPair(obj1, obj2);
+        m_CollisionPairs[pair] = CollisionState::Stay; // 一旦Stayとして記録
+    }
+}
+
+bool CollisionManager::CollideBoxSphere(Object* obj1, Object* obj2)
+{
+	return false;
+}
+
+bool CollisionManager::CollideMeshFieldSphere(Object* obj1, Object* obj2)
+{
+    return false;
+}
+
+#include "MeshFieldCollider.h"
+#include "Rigidbody.h"
+bool CollisionManager::CollideMeshFieldBox(Object* obj1, Object* obj2)
+{
+	auto transformMesh = obj1->GetComponent<Transform>();
+	auto transformBox = obj2->GetComponent<Transform>();
+	if (!transformBox || !transformMesh) return false;
+
+	auto colliderMesh = obj1->GetComponent<MeshFieldCollider>();
+	auto colliderBox = obj2->GetComponent<Collider>();
+	if (!colliderBox || !colliderMesh) return false;
+
+	// 簡単なAABBの例として、位置と固定サイズを使用
+	Vector4O posBox = transformBox->GetPosition();
+    float posBoxUnder = posBox.y - transformBox->GetScale().y;
+	Vector4O posMesh = transformMesh->GetPosition();
+	float height = colliderMesh->GetHeight(posBox.XYZ());
+
+    if (height == D3D11_FLOAT32_MAX)
+        return false;
+
+    if (posBoxUnder > height + posMesh.y)
+    {
+		return false;
+	}
+
+    auto bodyBox = obj2->GetComponent<Rigidbody>();
+
+    if (bodyBox) {
+	    transformBox->SetPosition(Vector4O(posBox.x, posBox.y + (height - posBoxUnder), posBox.z));
+        bodyBox->SetVelocity(0.0f);
+    }
+
+	return true;
 }
