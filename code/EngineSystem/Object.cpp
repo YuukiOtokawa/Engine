@@ -126,12 +126,23 @@ void Object::DrawGUI(){
 	for (auto& component : m_Components) {
 		ImGui::PushID(component->GetFileID());
 		ImGui::Separator();
-		ImGui::Text(component->GetComponentName());
-		ImGui::SameLine();
-		if (ImGui::Button("x")) {
-			toDelete = component;
+		if (ImGui::TreeNodeEx(component->GetComponentName(), ImGuiTreeNodeFlags_DefaultOpen)) {
+			ImGui::SameLine();
+			if (ImGui::Button("x")) {
+				toDelete = component;
+			}
+
+			component->DrawGUI();
+			ImGui::TreePop();
 		}
-		component->DrawGUI();
+		else {
+			ImGui::SameLine();
+			if (ImGui::Button("x")) {
+				toDelete = component;
+			}
+
+		}
+
 		ImGui::PopID();
 	}
 
@@ -141,6 +152,7 @@ void Object::DrawGUI(){
 		DeleteComponent(toDelete);
 	}
 }
+
 void Object::Finalize() {}
 
 void Object::Destroy()

@@ -41,6 +41,11 @@ void Material::DrawMaterial()
 	srv = renderer->GetTexture(m_ToonTextureFileID);
 	if (srv != nullptr)
 		renderer->GetDeviceContext()->PSSetShaderResources(2, 1, srv);
+	srv = renderer->GetTexture(m_EnvTextureFileID);
+	if (srv != nullptr)
+		renderer->GetDeviceContext()->PSSetShaderResources(3, 1, srv);
+
+
 
 	renderer->SetMaterialBuffer(m_Material);
 
@@ -94,8 +99,45 @@ void Material::DrawGUI() {
 
 	ImGui::Text("Bump Map");
 	srv = renderer->GetTexture(m_BumpTextureFileID);
-	if (srv != nullptr)
+	if (srv != nullptr) {
 		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+		if (ImGui::IsItemClicked()) {
+			// クリックされた場合、編集モードに入る
+			auto filename = OpenImportFileDialog();
+
+			if (filename != "") {
+				m_BumpTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
+			}
+		}
+	}
+
+	ImGui::Text("Toon Texture");
+	srv = renderer->GetTexture(m_ToonTextureFileID);
+	if (srv != nullptr) {
+		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+		if (ImGui::IsItemClicked()) {
+			// クリックされた場合、編集モードに入る
+			auto filename = OpenImportFileDialog();
+
+			if (filename != "") {
+				m_ToonTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
+			}
+		}
+	}
+
+	ImGui::Text("Enviroment Texture");
+	srv = renderer->GetTexture(m_EnvTextureFileID);
+	if (srv != nullptr) {
+		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+		if (ImGui::IsItemClicked()) {
+			// クリックされた場合、編集モードに入る
+			auto filename = OpenImportFileDialog();
+
+			if (filename != "") {
+				m_EnvTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
+			}
+		}
+	}
 }
 
 void Material::ImportFile(std::vector<std::string>& tokens)

@@ -31,6 +31,7 @@ private:
 
     bool m_IsFirstFrameHierarchy = true;
     bool m_IsFirstFrameInspector = true;
+    bool m_IsFirstFrameSceneView = true;
 
     ImGuiID m_DockSpaceID = 0;
 
@@ -52,6 +53,7 @@ public:
 	void StartImGui();
 	void StartHierarchy();
 	void StartInspector();
+    void StartSceneView();
 	void EndWindow();
 	void EndImGui();
 

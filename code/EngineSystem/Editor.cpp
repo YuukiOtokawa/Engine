@@ -151,6 +151,9 @@ void Editor::Initialize() {
 		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "GaussianVS_H");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_V.cso", "GaussianPS_V");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_H.cso", "GaussianPS_H");
+
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/WaveVS.cso", "Wave");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/WavePS.cso", "Wave");
 	}
 
 	Main();
@@ -287,23 +290,31 @@ void Editor::Draw() {
 //==========================================================================
 
 	//renderCore->BeginPE(1);
-	//MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
-
-
 	renderCore->BufferClear();
 	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
 
 
-	m_pPostProcessSprite->GetComponent<PostProcessTexture>()->SetShaderResourceView(renderCore->GetPostProcessTexture(0), 0);
-	m_pPostProcessSprite->GetComponent<PostProcessRenderer>()->DrawPostProcess(0);
+	//MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+
+
+	//m_pPostProcessSprite->GetComponent<PostProcessTexture>()->SetShaderResourceView(renderCore->GetPostProcessTexture(0), 0);
+	//m_pPostProcessSprite->GetComponent<PostProcessRenderer>()->DrawPostProcess(0);
 
 	//m_pPostProcessSprite->GetComponent<PostProcessTexture>()->SetShaderResourceView(renderCore->GetPostProcessTexture(1), 1);
 	//m_pPostProcessSprite->GetComponent<PostProcessRenderer>()->DrawPostProcess(1);
 
 
-	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
+	//MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
+
+
 	//ImGuiの初期化
 	m_pGUI->StartImGui();
+
+	//シーンビューウィンドウの描画開始
+	m_pGUI->StartSceneView();
+	auto tex = renderCore->GetPostProcessTexture(0);
+	ImGui::Image((ImTextureID)tex->shader_resource_view, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y), ImVec2(0, 0), ImVec2(1, 1));
+	m_pGUI->EndWindow();
 
 
 	//インスペクタウィンドウの描画開始

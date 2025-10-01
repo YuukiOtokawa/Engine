@@ -29,6 +29,21 @@ public:
 
     void DrawGUI() override;
 
+    void ExportComponent() override {
+        CSVExporter::ExportFloat(m_IsKinematic);
+        CSVExporter::ExportFloat(m_MovableX);
+        CSVExporter::ExportFloat(m_MovableY);
+        CSVExporter::ExportFloat(m_MovableZ);
+        CSVExporter::ExportFloat(m_RotableX);
+        CSVExporter::ExportFloat(m_RotableY);
+        CSVExporter::ExportFloat(m_RotableZ);
+        CSVExporter::ExportFloat(m_Mass);
+        CSVExporter::ExportFloat(m_Drag);
+        CSVExporter::ExportFloat(m_Gravity);
+        CSVExporter::ExportFloat(m_Bounce);
+        CSVExporter::ExportVector4O(m_Velocity);
+    }
+
     void OnCollisionEnter(Object* target) override;
     void OnCollisionStay(Object* target) override;
     void OnCollisionExit(Object* target) override;

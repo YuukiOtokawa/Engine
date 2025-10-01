@@ -285,6 +285,9 @@
     <ClCompile Include="code\EngineSystem\SystemLog.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="WaveMeshField.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\EngineSystem\AudioManager.h">
@@ -533,6 +536,9 @@
     <ClInclude Include="code\EngineSystem\SystemLog.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="WaveMeshField.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="code\shader\limLightingPS.hlsl">
@@ -638,6 +644,12 @@
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\hemisphereLightingVS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\WaveVS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\WavePS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
   </ItemGroup>

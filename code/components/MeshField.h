@@ -4,6 +4,7 @@
 class MeshField :
     public Renderer
 {
+protected:
     int m_MeshSize[2] = {10,10};
     Vector2O m_CellSize = { 1.0f,1.0f };
 
@@ -31,6 +32,15 @@ public:
     void Render() override; // ここにメインの描画ロジックを
     void DrawGUI() override;
     void InitializeTag() override;
+
+    void ExportComponent() override {
+        CSVExporter::ExportInt(m_VertexIndex.GetFileID());
+
+        CSVExporter::ExportInt(m_MeshSize[0]);
+        CSVExporter::ExportInt(m_MeshSize[1]);
+        CSVExporter::ExportVector2O(m_CellSize);
+    }
+    void ImportFile(std::vector<std::string>& tokens) override;
 
     float GetHeight(int x, int z);
 };

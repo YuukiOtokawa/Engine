@@ -26,6 +26,8 @@ void Collider::DrawGUI()
 {
 	ImGui::Indent();
 
+	ImGui::DragFloat3("Collision Size", &m_CollisionSize.x, 0.1f, 0.0f, 100.0f);
+
 	ImGui::Text("Collision Detected");
 	ImGui::Indent();
 

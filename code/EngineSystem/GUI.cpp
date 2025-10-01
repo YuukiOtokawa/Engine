@@ -77,11 +77,14 @@ void GUI::StartImGui()
 		ImGui::DockBuilderSetNodeSize(m_DockSpaceID, viewport->Size);
 
 		ImGuiID dockMainID = m_DockSpaceID;
-		ImGuiID dockRightID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Right, 0.25f, nullptr, &dockMainID);
-		ImGuiID dockLeftID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Left, 0.25f, nullptr, &dockMainID);
+		ImGuiID dockInspectorID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Right, 0.25f, nullptr, &dockMainID);
+		ImGuiID dockHierarchyID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Left, 0.25f, nullptr, &dockMainID);
+		ImGuiID dockSceneViewID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Up, 0.75f, nullptr, &dockMainID);
 
-		ImGui::DockBuilderDockWindow("Inspector", dockRightID);
-		ImGui::DockBuilderDockWindow("Hierarchy", dockLeftID);
+
+		ImGui::DockBuilderDockWindow("Inspector", dockInspectorID);
+		ImGui::DockBuilderDockWindow("Hierarchy", dockHierarchyID);
+		ImGui::DockBuilderDockWindow("Scene View", dockSceneViewID);
 
 		ImGui::DockBuilderFinish(m_DockSpaceID);
 	}
@@ -107,6 +110,15 @@ void GUI::StartInspector()
 	}
 
 	Begin("Inspector");
+}
+
+void GUI::StartSceneView()
+{
+	if (m_IsFirstFrameSceneView) {
+		m_IsFirstFrameSceneView = false;
+	}
+
+	Begin("Scene View");
 }
 
 void GUI::EndWindow() {

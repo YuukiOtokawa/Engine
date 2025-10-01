@@ -239,6 +239,17 @@ void MeshField::InitializeTag()
 
 }
 
+void MeshField::ImportFile(std::vector<std::string>& tokens)
+{
+	//int vertexIndexFID = std::stoi(tokens[6]);
+	//m_VertexIndex.ImportFile(DataManager::GetInstance()->GetMetaFileTokens(vertexIndexFID));
+	//m_MeshSize[0] = std::stoi(tokens[1]);
+	//m_MeshSize[1] = std::stoi(tokens[2]);
+	//m_CellSize = CSVImporter::ImportVector2O(tokens, 3);
+	//CreateMesh();
+	//CreateBuffer();
+}
+
 float MeshField::GetHeight(int x, int z)
 {
 	// 指定した位置の頂点の高さを返す

@@ -38,6 +38,7 @@ struct PS_IN
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
     float3 dummy : POSITION1;
+    
 };
 
 struct LIGHT

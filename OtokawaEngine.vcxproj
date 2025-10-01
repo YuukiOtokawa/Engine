@@ -254,6 +254,7 @@
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
     <ClCompile Include="scripts\Score.cpp" />
+    <ClCompile Include="WaveMeshField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\components\Animation.h" />
@@ -338,6 +339,7 @@
     <ClInclude Include="scripts\Score.h" />
     <ClInclude Include="scripts\Title.h" />
     <ClInclude Include="scripts\TornadoParticle.h" />
+    <ClInclude Include="WaveMeshField.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="code\shader\blinnPhongPS.hlsl">
@@ -478,6 +480,18 @@
     </FxCompile>
     <FxCompile Include="code\shader\vertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\WavePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\WaveVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>

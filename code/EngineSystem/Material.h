@@ -36,6 +36,7 @@ private:
     int m_TextureFileID = 0;
     int m_BumpTextureFileID = 0;
     int m_ToonTextureFileID = 0;
+    int m_EnvTextureFileID = 0;
 
     unsigned int	StartIndex = 0;
     unsigned int	IndexNum = 0;
@@ -78,6 +79,7 @@ public:
     /// @param bumpTexture 險ｭ螳壹☆繧紀D3D11ShaderResourceView蝙九�ｮ繝舌Φ繝励�槭ャ繝励ユ繧ｯ繧ｹ繝√Ε縲�
     void SetBumpTexture(int bumpTexture) { m_BumpTextureFileID = bumpTexture; }
     void SetToonTexture(int toonTexture) { m_ToonTextureFileID = toonTexture; }
+    void SetEnvTexture(int envTexture) { m_EnvTextureFileID = envTexture; }
 
     /// @brief 鬆らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励ｒ蜿門ｾ励＠縺ｾ縺吶�
     /// @return 譬ｼ邏阪＆繧後※縺�繧矩�らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励�
