@@ -192,6 +192,8 @@
     <ResourceCompile Include="resource\FilePathDialog.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\Compile\FileChangeChecker.cpp" />
+    <ClCompile Include="code\Compile\FileWatcher.cpp" />
     <ClCompile Include="code\components\Animation.cpp" />
     <ClCompile Include="code\components\Audio.cpp" />
     <ClCompile Include="code\components\Billboard.cpp" />
@@ -225,6 +227,7 @@
     <ClCompile Include="code\EngineSystem\Editor.cpp" />
     <ClCompile Include="code\EngineSystem\EditorView.cpp" />
     <ClCompile Include="code\EngineSystem\EditorWindow.cpp" />
+    <ClCompile Include="code\EngineSystem\EngineConsole.cpp" />
     <ClCompile Include="code\EngineSystem\EngineMetaFile.cpp" />
     <ClCompile Include="code\EngineSystem\GUI.cpp" />
     <ClCompile Include="code\EngineSystem\Inspector.cpp" />
@@ -257,6 +260,10 @@
     <ClCompile Include="WaveMeshField.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\Compile\CompileFileSystem.h" />
+    <ClInclude Include="code\Compile\FileChangeChecker.h" />
+    <ClInclude Include="code\Compile\FileWatcher.h" />
+    <ClInclude Include="code\Compile\FileWatcher_Alt.h" />
     <ClInclude Include="code\components\Animation.h" />
     <ClInclude Include="code\components\Audio.h" />
     <ClInclude Include="code\components\Billboard.h" />
@@ -294,6 +301,7 @@
     <ClInclude Include="code\EngineSystem\Editor.h" />
     <ClInclude Include="code\EngineSystem\EditorView.h" />
     <ClInclude Include="code\EngineSystem\EditorWindow.h" />
+    <ClInclude Include="code\EngineSystem\EngineConsole.h" />
     <ClInclude Include="code\EngineSystem\EngineMetaFile.h" />
     <ClInclude Include="code\EngineSystem\FrameWork.h" />
     <ClInclude Include="code\EngineSystem\GUI.h" />
@@ -330,6 +338,7 @@
     <ClInclude Include="code\input\Gamepad.h" />
     <ClInclude Include="code\input\Keyboard.h" />
     <ClInclude Include="code\input\Mouse.h" />
+    <ClInclude Include="resource\resource.h" />
     <ClInclude Include="scripts\Game.h" />
     <ClInclude Include="scripts\GameManager.h" />
     <ClInclude Include="scripts\Pack.h" />

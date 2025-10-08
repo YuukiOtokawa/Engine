@@ -13,6 +13,7 @@
 #define IDC_CURSOR2                     108
 #define IDR_RIBBON1                     110
 #define IDD_DIALOG2                     111
+#define IDR_MENU2                       113
 #define IDC_RICHEDIT21                  1002
 #define IDC_LIST1                       1008
 #define ID_FILE_SAVE                    40001
@@ -30,7 +31,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        113
+#define _APS_NEXT_RESOURCE_VALUE        114
 #define _APS_NEXT_COMMAND_VALUE         40015
 #define _APS_NEXT_CONTROL_VALUE         1009
 #define _APS_NEXT_SYMED_VALUE           101

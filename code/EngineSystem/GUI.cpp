@@ -77,14 +77,22 @@ void GUI::StartImGui()
 		ImGui::DockBuilderSetNodeSize(m_DockSpaceID, viewport->Size);
 
 		ImGuiID dockMainID = m_DockSpaceID;
+		// 右にInspector
 		ImGuiID dockInspectorID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Right, 0.25f, nullptr, &dockMainID);
+		// 左にHierarchy
 		ImGuiID dockHierarchyID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Left, 0.25f, nullptr, &dockMainID);
-		ImGuiID dockSceneViewID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Up, 0.75f, nullptr, &dockMainID);
-
+		// 下にConsole（全幅）
+		ImGuiID dockConsoleID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Down, 0.25f, nullptr, &dockMainID);
+		// Consoleの上にScene View
+		ImGuiID dockSceneViewID = dockMainID;
+		// Scene Viewの左下にSystem Monitor
+		ImGuiID dockSystemMonitorID = ImGui::DockBuilderSplitNode(dockConsoleID, ImGuiDir_Left, 0.5f, nullptr, &dockConsoleID);
 
 		ImGui::DockBuilderDockWindow("Inspector", dockInspectorID);
 		ImGui::DockBuilderDockWindow("Hierarchy", dockHierarchyID);
 		ImGui::DockBuilderDockWindow("Scene View", dockSceneViewID);
+		ImGui::DockBuilderDockWindow("System Monitor", dockSystemMonitorID);
+		ImGui::DockBuilderDockWindow("Console", dockConsoleID);
 
 		ImGui::DockBuilderFinish(m_DockSpaceID);
 	}
@@ -118,7 +126,23 @@ void GUI::StartSceneView()
 		m_IsFirstFrameSceneView = false;
 	}
 
-	Begin("Scene View");
+	Begin("Scene View", ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+}
+
+void GUI::StartSystemMonitor()
+{
+	if (m_IsFirstFrameSystemMonitor) {
+		m_IsFirstFrameSystemMonitor = false;
+	}
+	Begin("System Monitor");
+}
+
+void GUI::StartConsole()
+{
+	if (m_IsFirstFrameSystemMonitor) {
+		m_IsFirstFrameSystemMonitor = false;
+	}
+	Begin("Console");
 }
 
 void GUI::EndWindow() {
@@ -142,7 +166,6 @@ void GUI::EndImGui()
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
-
 
 void GUI::SetFontDefault()
 {
@@ -179,9 +202,9 @@ void GUI::SetItemPadding()
 	ImGui::GetStyle().WindowPadding = ImVec2(0.0f, 0.0f);
 }
 
-void GUI::Begin(const char* name)
+void GUI::Begin(const char* name, ImGuiWindowFlags flag)
 {
 	SetWindowPadding();
-	ImGui::Begin(name);
+	ImGui::Begin(name, nullptr, flag);
 	SetItemPadding();
 }

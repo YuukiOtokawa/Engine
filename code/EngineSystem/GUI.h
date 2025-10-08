@@ -32,6 +32,7 @@ private:
     bool m_IsFirstFrameHierarchy = true;
     bool m_IsFirstFrameInspector = true;
     bool m_IsFirstFrameSceneView = true;
+    bool m_IsFirstFrameSystemMonitor = true;
 
     ImGuiID m_DockSpaceID = 0;
 
@@ -43,7 +44,7 @@ private:
     void SetWindowPadding();
     void SetItemPadding();
 
-    void Begin(const char* name);
+    void Begin(const char* name, ImGuiWindowFlags flag = ImGuiWindowFlags_None);
 
     // DirectX 11のレンダリングターゲットビュー
 	ID3D11RenderTargetView* m_mainRenderTargetView = nullptr;
@@ -54,9 +55,10 @@ public:
 	void StartHierarchy();
 	void StartInspector();
     void StartSceneView();
+    void StartSystemMonitor();
+    void StartConsole();
 	void EndWindow();
 	void EndImGui();
-
 
 	static void SetFontDefault();
 	static void SetFontObjectName();

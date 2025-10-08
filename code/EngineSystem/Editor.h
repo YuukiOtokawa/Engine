@@ -74,6 +74,8 @@ private:
 
     std::string m_NextSceneName = "";
 
+    bool m_isSceneViewHovered = false;
+
 public:
 	/// @brief エディタークラスのシングルトンインスタンスを取得します。
 	/// @return Editor クラスの唯一のインスタンスへのポインタ。
@@ -137,6 +139,8 @@ public:
     void ChangeScene(std::string sceneName);
 
     void OpenScene(std::string sceneFilePath);
+
+    bool GetIsSceneViewHovered() const { return m_isSceneViewHovered; }
 };
 
 void Main();

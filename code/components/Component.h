@@ -78,6 +78,14 @@ public:
 	/// @brief GUI を描画するための仮想関数です。
 	virtual void DrawGUI() {}
 
+    void RightClickMenu() override;
+
+    void Destroy() {
+        if (owner) {
+            owner->DeleteComponent(this);
+        }
+    }
+
     void ExportFile() override {
         CSVExporter::ExportString("&");// コンポーネントの識別子をエクスポート
         CSVExporter::ExportInt(static_cast<int>(GetTag()));

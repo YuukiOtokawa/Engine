@@ -8,6 +8,8 @@
 #include "Component_InputSystem.h"
 #include "Component_Transform.h"
 
+#include "EngineConsole.h"
+
 REGISTER_SCRIPT(PlayerControl)
 
 void PlayerControl::Start()
@@ -31,6 +33,10 @@ void PlayerControl::Update()
 			gameobject->GetComponent<Transform>()->GetPosition() +
 			Vector4O(0.0f, 0.0f, -1.0f) * m_Speed
 		);
+	}
+
+	if (keyboard->GetKeyDown(KK_ENTER)) {
+		EngineConsole::Log("Enter Key Pressed", LogLevel::Info);
 	}
 }
 

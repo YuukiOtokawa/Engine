@@ -22,8 +22,8 @@ std::string OpenExportFileDialog();
 // クラス定義
 //==========================================================================
 
-class CompileSystem;
-struct SystemTable;
+class Time;
+class EngineConsole;
 
 class MainEngine
 {
@@ -47,15 +47,6 @@ private:
 	static DWORD g_CountFPS;
 
 
-	// FPS制限用時間計測変数
-	DWORD m_dwExecLastTime = 0;
-	DWORD m_dwFPSLastTime = 0;
-	DWORD m_dwCurrentTime = 0;
-	DWORD m_dwFrameCount = 0;
-    DWORD m_dwDeltaTime = 0;
-
-	// フレームレート制限用変数
-	int m_FramePerSecond = 0;
 
 	// メッセージ構造体
 	MSG m_Message = {};
@@ -63,8 +54,9 @@ private:
 	//メインウィンドウハンドル
 	HWND m_hWnd = NULL;
 
-    CompileSystem* m_pCompiler;
-    SystemTable* m_pSystemTable;
+    Time* m_pTimeSystem = nullptr;
+
+    EngineConsole* m_pEngineConsole = nullptr;
 
 	// インスタンスハンドル
 	HINSTANCE m_hInstance = NULL;

@@ -98,7 +98,7 @@ void EditorCamera::Update()
 		SetTarget(GetTarget() + movement);
 	}
 
-	if (isDragging && mouse->GetRepeat(RightButton)) {
+	if (isDragging && mouse->GetRepeat(RightButton) && Editor::GetInstance()->GetIsSceneViewHovered()) {
 		// マウスの現在位置を取得
 		XMINT2 currentMousePos = mouse->GetPosition();
 

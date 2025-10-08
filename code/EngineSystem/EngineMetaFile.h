@@ -79,6 +79,8 @@ public:
         return m_FileID;
     }
 
+    virtual void RightClickMenu() {}
+
     virtual void OnCollisionEnter(Object* target) {}
     virtual void OnCollisionStay(Object* target) {}
     virtual void OnCollisionExit(Object* target) {}

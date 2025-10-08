@@ -31,6 +31,10 @@ void Object::Initialize() {}
 
 
 void Object::Update() {
+	for (auto& component : m_DeleteComponents) {
+		DeleteComponent(component);
+	}
+
 	for (auto& component : m_Components) {
 		component->OnUpdate();
 	}
@@ -121,26 +125,30 @@ void Object::DrawGUI(){
 		m_Layer = static_cast<GameObjectLayer>(currentLayer);
 	}
 
-	Component* toDelete = nullptr;
-
 	for (auto& component : m_Components) {
 		ImGui::PushID(component->GetFileID());
 		ImGui::Separator();
-		if (ImGui::TreeNodeEx(component->GetComponentName(), ImGuiTreeNodeFlags_DefaultOpen)) {
-			ImGui::SameLine();
-			if (ImGui::Button("x")) {
-				toDelete = component;
+
+		auto isOpen = ImGui::TreeNodeEx(component->GetComponentName(), ImGuiTreeNodeFlags_DefaultOpen);
+		RightClickMenu();
+		ImGui::SameLine();
+		if (ImGui::Button("x")) {
+			m_DeleteComponents.push_back(component);
+		}
+
+		if (isOpen) {
+			ImGui::BeginChild(component->GetComponentName(), ImVec2(0,0), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_Border);
+
+			if (ImGui::BeginPopupContextWindow(m_Name.c_str())) {
+				if (ImGui::Selectable("Delete Object")) {
+					Destroy();
+				}
+				ImGui::EndPopup();
 			}
 
 			component->DrawGUI();
+			ImGui::EndChild();
 			ImGui::TreePop();
-		}
-		else {
-			ImGui::SameLine();
-			if (ImGui::Button("x")) {
-				toDelete = component;
-			}
-
 		}
 
 		ImGui::PopID();
@@ -148,9 +156,18 @@ void Object::DrawGUI(){
 
 	AddComponentPopup(this);
 
-	if (toDelete) {
-		DeleteComponent(toDelete);
+}
+
+void Object::RightClickMenu()
+{
+	if (ImGui::BeginPopupContextItem(m_Name.c_str())) {
+		if (ImGui::Selectable("Delete Object")) {
+			Destroy();
+		}
+		ImGui::EndPopup();
 	}
+
+
 }
 
 void Object::Finalize() {}

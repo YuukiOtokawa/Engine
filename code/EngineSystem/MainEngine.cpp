@@ -38,6 +38,9 @@
 
 #include "SystemLog.h"
 
+#include "TimeSystem.h"
+#include "EngineConsole.h"
+
 constexpr auto WINDOW_CREATE_FAILED = -1;
 
 MainEngine* MainEngine::m_pInstance = nullptr;
@@ -79,29 +82,26 @@ int MainEngine::SystemLoop()
 			DispatchMessage(&m_Message);
 		}
 		else {
-			m_dwCurrentTime = timeGetTime(); // システム時刻を取得
-			if ((m_dwCurrentTime - m_dwFPSLastTime) >= 1000) // 1秒ごとに実行
+			m_pTimeSystem->Update();
+			//if ((m_dwCurrentTime - m_dwFPSLastTime) >= 1000) // 1秒ごとに実行
+			//{
+
+			//	m_FramePerSecond = m_dwFrameCount;
+			//	m_dwFPSLastTime = m_dwCurrentTime; // FPSを測定した時刻を保存
+			//	m_dwFrameCount = 0; // カウントをクリア
+			//}
+			if ((Time::currentTime - Time::lastTime) >= (1000 / 60)) // 1/60秒ごとに実行
 			{
-#ifdef _DEBUG
-				m_FramePerSecond = m_dwFrameCount;
-#endif
-				m_dwFPSLastTime = m_dwCurrentTime; // FPSを測定した時刻を保存
-				m_dwFrameCount = 0; // カウントをクリア
-			}
-			if ((m_dwCurrentTime - m_dwExecLastTime) >= (1000 / 60)) // 1/60秒ごとに実行
-			{
-				m_dwDeltaTime = m_dwCurrentTime - m_dwExecLastTime;
-				m_dwExecLastTime = m_dwCurrentTime; // 処理した時刻を保存
-#ifdef _DEBUG // デバッグ版の時だけFPSを表示する
+				m_pTimeSystem->FrameUpdate();
+
 				std::stringstream caption;
-				caption << WINDOW_CAPTION << " FPS: " << m_FramePerSecond;
+				caption << WINDOW_CAPTION << " FPS: " << Time::FramePerSecond();
 				SetWindowTextA(m_hWnd, caption.str().c_str());
-#endif
+
 				// ここがエンジン処理
 				m_pEditor->Update();
 				m_pEditor->Draw();
 
-				m_dwFrameCount++; // 処理回数のカウントを加算
 			}
 			else {
 				Sleep(0);
@@ -198,10 +198,19 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	// COMライブラリの初期化
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 
+	// レンダラーの初期化
 	m_pRenderer = new RenderCore(m_hWnd);
 
+	// エディターの初期化
 	m_pEditor = Editor::GetInstance();
 
+	// 時間管理システムの初期化
+	m_pTimeSystem = new Time;
+
+	// コンソールウィンドウの初期化
+	m_pEngineConsole = new EngineConsole;
+
+	// ログコンソールの初期化
 	AllocConsole();
 	freopen_s(&m_pFile, "CONOUT$", "w", stdout);
 
@@ -226,8 +235,7 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 
 	timeBeginPeriod(1); // 分解能を設定
 
-	m_dwExecLastTime = m_dwFPSLastTime = timeGetTime(); // システム時刻をミリ秒単位で取得
-	m_dwCurrentTime = m_dwFrameCount = 0;
+	m_pTimeSystem->Reset();
 
 	m_pEditor->Initialize();
 

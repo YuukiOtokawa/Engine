@@ -10,6 +10,7 @@
 // ヘッダーインクルード
 //==========================================================================
 
+#define NOMINMAX
 
 
 
@@ -44,6 +45,11 @@
 #include "PostProcessRenderer.h"
 
 #include "SystemLog.h"
+#include "TimeSystem.h"
+#include "EngineConsole.h"
+
+#include <numeric>
+
 
 Editor* Editor::m_pInstance;
 
@@ -312,8 +318,64 @@ void Editor::Draw() {
 
 	//シーンビューウィンドウの描画開始
 	m_pGUI->StartSceneView();
+
 	auto tex = renderCore->GetPostProcessTexture(0);
-	ImGui::Image((ImTextureID)tex->shader_resource_view, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y), ImVec2(0, 0), ImVec2(1, 1));
+
+	// テクスチャサイズ取得（例: tex->width, tex->height で取得できる場合）
+	ImVec2 texSize = ImVec2((float)tex->width, (float)tex->height);
+	ImVec2 avail = ImGui::GetWindowSize();
+
+	// 拡大・縮小倍率を計算
+	float scaleX = texSize.x / avail.x;
+	float scaleY = texSize.y / avail.y;
+	float scale = 1.0f;
+
+	if (scaleX < 1.0f) {
+		if (scaleY >= 1.0f) {
+			scale = 1.0f / scaleX;
+		}
+		else if (scaleY < 1.0f) {
+			scale = std::max(1.0f / scaleX, 1.0f / scaleY);
+		}
+		
+	}
+	else if (scaleY < 1.0f) {
+		if (scaleX >= 1.0f) {
+			scale = 1.0f / scaleY;
+		}
+	}
+	else {
+		scale = 1.0f / std::min(scaleX, scaleY);
+	}
+
+	ImVec2 drawSize = ImVec2(texSize.x * scale, texSize.y * scale);
+
+	// テクスチャを中央に配置するためのオフセット計算
+	ImVec2 offset = ImVec2(
+		(avail.x - drawSize.x) * 0.5f,
+		(avail.y - drawSize.y) * 0.5f
+	);
+
+	// カーソル位置を中央に移動
+	ImGui::SetCursorPos(offset);
+
+	ImGui::Image((ImTextureID)tex->shader_resource_view, drawSize, ImVec2(0, 0), ImVec2(1, 1));
+	m_isSceneViewHovered = ImGui::IsItemHovered();
+
+	m_pGUI->EndWindow();
+
+	//システムモニターウィンドウの描画開始
+	m_pGUI->StartSystemMonitor();
+
+	Time::DrawFPSGraph();
+
+	m_pGUI->EndWindow();
+
+	//コンソールウィンドウの描画開始
+	m_pGUI->StartConsole();
+
+	EngineConsole::Draw();
+
 	m_pGUI->EndWindow();
 
 
@@ -348,6 +410,7 @@ void Editor::Draw() {
 						if (ImGui::Button(child->GetName().c_str())) {
 							m_pSelectedObject = child; // 選択されたオブジェクトを更新
 						}
+						object->RightClickMenu();
 						ImGui::PopStyleColor();
 					}
 				}
@@ -365,8 +428,20 @@ void Editor::Draw() {
 		if (ImGui::Button(object->GetName().c_str())){
 			m_pSelectedObject = object;// 選択されたオブジェクトを更新
 		}
+		object->RightClickMenu();
 
 		ImGui::PopStyleColor();
+	}
+
+	// --- ヒエラルキーの空きスペースの右クリック処理 ---
+	// この関数が右クリックを検知してくれます
+	if (ImGui::BeginPopupContextWindow("HierarchyWindowContextMenu", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
+	{
+		if (ImGui::MenuItem("Create Empty Object"))
+		{
+			new Object();
+		}
+		ImGui::EndPopup();
 	}
 		
 	m_pGUI->EndWindow();

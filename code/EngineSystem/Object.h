@@ -28,6 +28,8 @@ class Object : public EngineMetaFile
 private:
 	// コンポーネントのリスト
 	std::list<Component*> m_Components;
+
+    std::list<Component*> m_DeleteComponents;
 	// オブジェクトの名前とタグ
 	std::string m_Name;
 	GameObjectTag m_Tag = NoObject;
@@ -69,6 +71,9 @@ public:
 	void Draw();
 
 	void DrawGUI();
+
+    void RightClickMenu() override;
+
 	/// @brief 終了処理
 	void Finalize();
 
