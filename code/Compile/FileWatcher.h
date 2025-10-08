@@ -1,12 +1,9 @@
-#pragma once
+ï»¿#pragma once
 
-// RuntimeCompiledC++‚ğQl‚É‚µ‚½ƒRƒ“ƒpƒCƒ‹ƒVƒXƒeƒ€
+// RuntimeCompiledC++ã‚’å‚è€ƒã«ã—ãŸã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ 
 // https://github.com/RuntimeCompiledCPlusPlus/RuntimeCompiledCPlusPlus.git
 
 /**
-    Main header for the FileWatcher class. Declares all implementation
-    classes to reduce compilation overhead.
-
     @author James Wynn
     @date 4/15/2009
 
@@ -37,6 +34,7 @@
 #include <map>
 
 #include "CompileFileSystem.h"
+#include "FileWatcher_Alt.h"
 
 
 namespace FW
@@ -77,6 +75,8 @@ namespace FW
     private:
         WatchMap m_Watches;
         WatchID m_LastWatchID;
+
+        FileWatcher_Alt* m_pAltWatcher;
     };
 
 

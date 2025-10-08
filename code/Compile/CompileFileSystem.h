@@ -1,4 +1,4 @@
-// RuntimeCompiledC++‚ğQl‚É‚µ‚½ƒRƒ“ƒpƒCƒ‹ƒVƒXƒeƒ€
+ï»¿// RuntimeCompiledC++ã‚’å‚è€ƒã«ã—ãŸã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ 
 // https://github.com/RuntimeCompiledCPlusPlus/RuntimeCompiledCPlusPlus.git
 
 /**
@@ -111,7 +111,7 @@ namespace CompileFileSystem
 		bool        HasParentPath()     const;
 		std::string Extension()         const;
 
-		// ƒtƒ@ƒCƒ‹–¼‚ğæ“¾
+		// ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
 		// part after final seperator
 		// ./dirone/hello.txt > hello.txt ;
 		// ./dirone/hello > hello ;
@@ -120,16 +120,16 @@ namespace CompileFileSystem
 		Path        ParentPath()        const;
 		Path        DelimitersToOSDefault() const;
 
-		// /../ ‚ğŠÜ‚ŞƒpƒX‚©‚çA’¼‘O‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğæ‚èœ‚¢‚Ä³‹K‰»‚µ‚½ƒpƒX‚ğ•Ô‚·
+		// /../ ã‚’å«ã‚€ãƒ‘ã‚¹ã‹ã‚‰ã€ç›´å‰ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å–ã‚Šé™¤ã„ã¦æ­£è¦åŒ–ã—ãŸãƒ‘ã‚¹ã‚’è¿”ã™
 		Path        GetCleanPath()      const;
-		void        ToOSCanonicalCase(); // Windows‚Å‚Ílower case
+		void        ToOSCanonicalCase(); // Windowsã§ã¯lower case
 
-		// Windows ‚Å UTF-8 ‚â’·‚¢ƒtƒ@ƒCƒ‹–¼‚Ì fopen —p
+		// Windows ã§ UTF-8 ã‚„é•·ã„ãƒ•ã‚¡ã‚¤ãƒ«åã® fopen ç”¨
 		Path        GetOSShortForm()    const;
 
 		bool Rename(Path newName_);
 
-		// Šg’£q‚ğ’u‚«Š·‚¦‚éBext ‚Í . ‚ğŠÜ‚Ş
+		// æ‹¡å¼µå­ã‚’ç½®ãæ›ãˆã‚‹ã€‚ext ã¯ . ã‚’å«ã‚€
 		void ReplaceExtension(const std::string& ext);
 
 #ifdef _WIN32
@@ -143,6 +143,7 @@ namespace CompileFileSystem
 	};
 
 #ifdef _WIN32
+    // Windows ã§ UTF-8 ã‚’æ‰±ã†ãŸã‚ã®å¤‰æ›é–¢æ•°
 	inline std::string _Win32Utf16ToUtf8(const std::wstring& wstr)
 	{
 		std::string convertedString;
@@ -156,6 +157,7 @@ namespace CompileFileSystem
 		return convertedString;
 	}
 
+    // Windows ã§ UTF-8 ã‚’æ‰±ã†ãŸã‚ã®å¤‰æ›é–¢æ•°
 	inline std::wstring _Win32Utf8ToUtf16(const std::string& str)
 	{
 		std::wstring convertedString;
@@ -240,8 +242,8 @@ namespace CompileFileSystem
 
 	}
 
-	/// @brief w’è‚³‚ê‚½•¶š—ñ“à‚Ì‚·‚×‚Ä‚Ì‰p‘å•¶š‚ğ¬•¶š‚É•ÏŠ·‚µ‚Ü‚·iƒCƒ“ƒvƒŒ[ƒX‚ÅÀsjB
-	/// @param inout_str ¬•¶š‚É•ÏŠ·‚³‚ê‚é‘ÎÛ‚Ì•¶š—ñB•ÏŠ·Œ‹‰Ê‚Í‚±‚Ìˆø”‚É’¼Ú”½‰f‚³‚ê‚Ü‚·B
+	/// @brief æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—å†…ã®ã™ã¹ã¦ã®è‹±å¤§æ–‡å­—ã‚’å°æ–‡å­—ã«å¤‰æ›ã—ã¾ã™ï¼ˆã‚¤ãƒ³ãƒ—ãƒ¬ãƒ¼ã‚¹ã§å®Ÿè¡Œï¼‰ã€‚
+	/// @param inout_str å°æ–‡å­—ã«å¤‰æ›ã•ã‚Œã‚‹å¯¾è±¡ã®æ–‡å­—åˆ—ã€‚å¤‰æ›çµæœã¯ã“ã®å¼•æ•°ã«ç›´æ¥åæ˜ ã•ã‚Œã¾ã™ã€‚
 	inline void ToLowerInPlace(std::string& inout_str)
 	{
 		for (size_t i = 0; i < inout_str.size(); ++i)
@@ -253,8 +255,8 @@ namespace CompileFileSystem
 		}
 	}
 
-	/// @brief Œ»İ‚Ì‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Œ»İ‚Ì‚ğ•\‚· filetime_t Œ^‚Ì’lB
+	/// @brief ç¾åœ¨ã®æ™‚åˆ»ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ç¾åœ¨ã®æ™‚åˆ»ã‚’è¡¨ã™ filetime_t å‹ã®å€¤ã€‚
 	inline filetime_t GetCurrentTime()
 	{
 		filetime_t timer;
@@ -266,9 +268,9 @@ namespace CompileFileSystem
 		return timer;
 	}
 
-	/// @brief w’è‚³‚ê‚½ filetime_t ’l‚©‚ç UTC ŠÔ‚Ì tm \‘¢‘Ì‚ğæ“¾‚µ‚Ü‚·B
-	/// @param time •ÏŠ·‚·‚é filetime_t Œ^‚Ì’lB
-	/// @return w’è‚µ‚½‚ğ•\‚· tm \‘¢‘ÌB
+	/// @brief æŒ‡å®šã•ã‚ŒãŸ filetime_t å€¤ã‹ã‚‰ UTC æ™‚é–“ã® tm æ§‹é€ ä½“ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @param time å¤‰æ›ã™ã‚‹ filetime_t å‹ã®æ™‚åˆ»å€¤ã€‚
+	/// @return æŒ‡å®šã—ãŸæ™‚åˆ»ã‚’è¡¨ã™ tm æ§‹é€ ä½“ã€‚
 	inline tm GetTimeStruct(filetime_t time)
 	{
 		tm ret;
@@ -280,9 +282,9 @@ namespace CompileFileSystem
 		return ret;
 	}
 
-	/// @brief w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚©‚çƒ[ƒJƒ‹‚Ì tm \‘¢‘Ì‚ğæ“¾‚µ‚Ü‚·B
-	/// @param time •ÏŠ·‚·‚éƒtƒ@ƒCƒ‹ifiletime_t Œ^jB
-	/// @return ƒ[ƒJƒ‹‚ğ•\‚· tm \‘¢‘ÌB
+	/// @brief æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«æ™‚åˆ»ã‹ã‚‰ãƒ­ãƒ¼ã‚«ãƒ«æ™‚åˆ»ã® tm æ§‹é€ ä½“ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @param time å¤‰æ›ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æ™‚åˆ»ï¼ˆfiletime_t å‹ï¼‰ã€‚
+	/// @return ãƒ­ãƒ¼ã‚«ãƒ«æ™‚åˆ»ã‚’è¡¨ã™ tm æ§‹é€ ä½“ã€‚
 	inline tm GetLocalTimeStruct(filetime_t time)
 	{
 		tm ret;
@@ -314,8 +316,8 @@ namespace CompileFileSystem
 		return *this;
 	}
 
-	/// @brief ƒpƒX‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ğ”»’è‚µ‚Ü‚·B
-	/// @return ƒpƒX‚ª‘¶İ‚·‚éê‡‚Í trueA‘¶İ‚µ‚È‚¢ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+	/// @return ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ trueã€å­˜åœ¨ã—ãªã„å ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::Exists() const
 	{
 		int error = -1;
@@ -342,8 +344,8 @@ namespace CompileFileSystem
 		return false;
 	}
 
-	/// @brief ƒpƒX‚ªƒfƒBƒŒƒNƒgƒŠ‚©‚Ç‚¤‚©‚ğ”»’è‚µ‚Ü‚·B
-	/// @return ƒpƒX‚ªƒfƒBƒŒƒNƒgƒŠ‚Ìê‡‚Í trueA‚»‚¤‚Å‚È‚¢ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹ãŒãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã©ã†ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+	/// @return ãƒ‘ã‚¹ãŒãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å ´åˆã¯ trueã€ãã†ã§ãªã„å ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::IsDirectory() const
 	{
 		int error = -1;
@@ -363,8 +365,8 @@ namespace CompileFileSystem
 		return isDir;
 	}
 
-	/// @brief ƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ‚µ‚È‚¢ê‡‚ÉAƒpƒX‚Åw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚ğieƒfƒBƒŒƒNƒgƒŠ‚àŠÜ‚ß‚Äjì¬‚µ‚Ü‚·B
-	/// @return ƒfƒBƒŒƒNƒgƒŠ‚Ìì¬‚É¬Œ÷‚µ‚½ê‡‚Í trueA¸”s‚µ‚½ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨ã—ãªã„å ´åˆã«ã€ãƒ‘ã‚¹ã§æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ï¼ˆè¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚å«ã‚ã¦ï¼‰ä½œæˆã—ã¾ã™ã€‚
+	/// @return ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆã«æˆåŠŸã—ãŸå ´åˆã¯ trueã€å¤±æ•—ã—ãŸå ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::CreateDir() const
 	{
 		if (m_String.length() == 0)
@@ -397,8 +399,8 @@ namespace CompileFileSystem
 		return false;
 	}
 
-	/// @brief ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒpƒX‚ÌÅIXV‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒpƒX‚ÌÅIXViƒGƒ|ƒbƒN•bA¸”s‚Í0jB
+	/// @brief ãƒ•ã‚¡ã‚¤ãƒ«ã¾ãŸã¯ãƒ‘ã‚¹ã®æœ€çµ‚æ›´æ–°æ™‚åˆ»ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ãƒ•ã‚¡ã‚¤ãƒ«ã¾ãŸã¯ãƒ‘ã‚¹ã®æœ€çµ‚æ›´æ–°æ™‚åˆ»ï¼ˆã‚¨ãƒãƒƒã‚¯ç§’ã€å¤±æ•—æ™‚ã¯0ï¼‰ã€‚
 	inline filetime_t Path::GetLastWriteTime() const
 	{
 		filetime_t lastWriteTime = 0;
@@ -418,8 +420,8 @@ namespace CompileFileSystem
 		return lastWriteTime;
 	}
 
-	/// @brief ƒtƒ@ƒCƒ‹‚ÌÅIXV‚ğİ’è‚µ‚Ü‚·B
-	/// @param time_ İ’è‚·‚éV‚µ‚¢ÅIXVifiletime_t Œ^jB
+	/// @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ€çµ‚æ›´æ–°æ™‚åˆ»ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// @param time_ è¨­å®šã™ã‚‹æ–°ã—ã„æœ€çµ‚æ›´æ–°æ™‚åˆ»ï¼ˆfiletime_t å‹ï¼‰ã€‚
 	inline void Path::SetLastWriteTime(filetime_t time_) const
 	{
 #ifdef _WIN32
@@ -430,8 +432,8 @@ namespace CompileFileSystem
 
 	}
 
-	/// @brief ƒpƒX‚Åw’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ‚ğíœ‚µ‚Ü‚·B
-	/// @return íœ‚É¬Œ÷‚µ‚½ê‡‚Í trueA¸”s‚µ‚½ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹ã§æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã¾ãŸã¯ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å‰Šé™¤ã—ã¾ã™ã€‚
+	/// @return å‰Šé™¤ã«æˆåŠŸã—ãŸå ´åˆã¯ trueã€å¤±æ•—ã—ãŸå ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::Remove() const
 	{
 #ifdef _WIN32
@@ -446,8 +448,8 @@ namespace CompileFileSystem
 	}
 
 	// RemoveDir -  The directory must be empty, and it must not be the current working directory or the root directory.
-	/// @brief ƒfƒBƒŒƒNƒgƒŠ‚ğíœ‚µ‚Ü‚·B
-	/// @return ƒfƒBƒŒƒNƒgƒŠ‚Ìíœ‚É¬Œ÷‚µ‚½ê‡‚Í trueA¸”s‚µ‚½ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å‰Šé™¤ã—ã¾ã™ã€‚
+	/// @return ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‰Šé™¤ã«æˆåŠŸã—ãŸå ´åˆã¯ trueã€å¤±æ•—ã—ãŸå ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::RemoveDir() const
 	{
 #ifdef _WIN32
@@ -461,9 +463,9 @@ namespace CompileFileSystem
 		return false;
 	}
 
-	/// @brief ƒpƒX–¼‚ğV‚µ‚¢–¼‘O‚É•ÏX‚µ‚Ü‚·B
-	/// @param newName_ V‚µ‚¢ƒpƒX–¼‚ğw’è‚·‚éPathƒIƒuƒWƒFƒNƒgB
-	/// @return ƒŠƒl[ƒ€‚É¬Œ÷‚µ‚½ê‡‚ÍtrueA¸”s‚µ‚½ê‡‚Ífalse‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹åã‚’æ–°ã—ã„åå‰ã«å¤‰æ›´ã—ã¾ã™ã€‚
+	/// @param newName_ æ–°ã—ã„ãƒ‘ã‚¹åã‚’æŒ‡å®šã™ã‚‹Pathã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
+	/// @return ãƒªãƒãƒ¼ãƒ ã«æˆåŠŸã—ãŸå ´åˆã¯trueã€å¤±æ•—ã—ãŸå ´åˆã¯falseã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::Rename(Path newName_)
 	{
 #ifdef _WIN32
@@ -480,8 +482,8 @@ namespace CompileFileSystem
 		return false;
 	}
 
-	/// @brief ƒtƒ@ƒCƒ‹‚ÌƒTƒCƒYiƒoƒCƒg’PˆÊj‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ƒtƒ@ƒCƒ‹‚ÌƒTƒCƒYiƒoƒCƒg’PˆÊjBƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡‚Í0‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚µã‚¤ã‚ºï¼ˆãƒã‚¤ãƒˆå˜ä½ï¼‰ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚µã‚¤ã‚ºï¼ˆãƒã‚¤ãƒˆå˜ä½ï¼‰ã€‚ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯0ã‚’è¿”ã—ã¾ã™ã€‚
 	inline uint64_t Path::GetFileSize() const
 	{
 		uint64_t fileSize = 0;
@@ -498,8 +500,8 @@ namespace CompileFileSystem
 		return fileSize;
 	}
 
-	/// @brief ƒpƒX•¶š—ñ‚ÉŠg’£q‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ”»’è‚µ‚Ü‚·B
-	/// @return Šg’£q‚ª‘¶İ‚·‚éê‡‚Í trueA‘¶İ‚µ‚È‚¢ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹æ–‡å­—åˆ—ã«æ‹¡å¼µå­ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+	/// @return æ‹¡å¼µå­ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ trueã€å­˜åœ¨ã—ãªã„å ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::HasExtension() const
 	{
 		size_t posDot = m_String.find_last_of('.');
@@ -520,8 +522,8 @@ namespace CompileFileSystem
 		return false;
 	}
 
-	/// @brief ƒpƒX‚ªeƒfƒBƒŒƒNƒgƒŠ‚ğ‚Â‚©‚Ç‚¤‚©‚ğ”»’è‚µ‚Ü‚·B
-	/// @return eƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ‚·‚éê‡‚Í trueA‘¶İ‚µ‚È‚¢ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹ãŒè¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æŒã¤ã‹ã©ã†ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+	/// @return è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ trueã€å­˜åœ¨ã—ãªã„å ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
 	inline bool Path::HasParentPath() const
 	{
 		size_t posSeperator = m_String.find_last_of(FILESYSTEMUTILS_SEPERATORS);
@@ -541,8 +543,8 @@ namespace CompileFileSystem
 		return false;
 	}
 
-	/// @brief ƒpƒX•¶š—ñ‚©‚çŠg’£q‚ğæ“¾‚µ‚Ü‚·B
-	/// @return Šg’£q‚ğŠÜ‚Ş•¶š—ñi—á: ".txt"jBŠg’£q‚ª‘¶İ‚µ‚È‚¢ê‡‚Í‹ó•¶š—ñ‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹æ–‡å­—åˆ—ã‹ã‚‰æ‹¡å¼µå­ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return æ‹¡å¼µå­ã‚’å«ã‚€æ–‡å­—åˆ—ï¼ˆä¾‹: ".txt"ï¼‰ã€‚æ‹¡å¼µå­ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ç©ºæ–‡å­—åˆ—ã‚’è¿”ã—ã¾ã™ã€‚
 	inline std::string Path::Extension() const
 	{
 		std::string ext;
@@ -557,8 +559,8 @@ namespace CompileFileSystem
 		return ext;
 	}
 
-	/// @brief ƒpƒX‚©‚çƒtƒ@ƒCƒ‹–¼•”•ª‚ğ’Šo‚µ‚Ä•Ô‚µ‚Ü‚·B
-	/// @return ƒpƒX‚Ìƒtƒ@ƒCƒ‹–¼•”•ª‚ğ•\‚·V‚µ‚¢ Path ƒIƒuƒWƒFƒNƒgB
+	/// @brief ãƒ‘ã‚¹ã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã‚’æŠ½å‡ºã—ã¦è¿”ã—ã¾ã™ã€‚
+	/// @return ãƒ‘ã‚¹ã®ãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã‚’è¡¨ã™æ–°ã—ã„ Path ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
 	inline Path Path::FileName() const
 	{
 		Path fileName;
@@ -575,8 +577,8 @@ namespace CompileFileSystem
 		return fileName;
 	}
 
-	/// @brief ƒpƒX•¶š—ñ‚Ì––”ö‚É‚ ‚é‹æØ‚è•¶š‚ğíœ‚µ‚Ü‚·B
-	/// @param path ––”ö‚Ì‹æØ‚è•¶š‚ğíœ‚·‚é Path ƒIƒuƒWƒFƒNƒg‚Ö‚ÌQÆB
+	/// @brief ãƒ‘ã‚¹æ–‡å­—åˆ—ã®æœ«å°¾ã«ã‚ã‚‹åŒºåˆ‡ã‚Šæ–‡å­—ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
+	/// @param path æœ«å°¾ã®åŒºåˆ‡ã‚Šæ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹ Path ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®å‚ç…§ã€‚
 	inline void RemoveTrailingSeperators(Path& path)
 	{
 		while (path.m_String.find_last_of(FILESYSTEMUTILS_SEPERATORS) == path.m_String.length() - 1)
@@ -589,8 +591,8 @@ namespace CompileFileSystem
 		}
 	}
 
-	/// @brief ƒpƒX‚ÌeƒfƒBƒŒƒNƒgƒŠ‚ğæ“¾‚µ‚Ü‚·B
-	/// @return ‚±‚ÌƒpƒX‚ÌeƒfƒBƒŒƒNƒgƒŠ‚ğ•\‚· Path ƒIƒuƒWƒFƒNƒgBeƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ‚µ‚È‚¢ê‡‚Í‹ó‚ÌƒpƒX‚ğ•Ô‚µ‚Ü‚·B
+	/// @brief ãƒ‘ã‚¹ã®è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// @return ã“ã®ãƒ‘ã‚¹ã®è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¡¨ã™ Path ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ç©ºã®ãƒ‘ã‚¹ã‚’è¿”ã—ã¾ã™ã€‚
 	inline Path Path::ParentPath() const
 	{
 		Path parentPath = m_String;
@@ -610,20 +612,20 @@ namespace CompileFileSystem
 			}
 			parentPath = parentPath.m_String.substr(0, pos);
 
-			// ‚·‚×‚Ä‚Ì‹æØ‚è•¶š‚ğíœ
+			// ã™ã¹ã¦ã®åŒºåˆ‡ã‚Šæ–‡å­—ã‚’å‰Šé™¤
 			RemoveTrailingSeperators(parentPath);
 		}
 		else
 		{
-			// ‹æØ‚è•¶š‚ª‚È‚¢‚Æ‚«‚ÍeƒfƒBƒŒƒNƒgƒŠ‚ª‹ó
+			// åŒºåˆ‡ã‚Šæ–‡å­—ãŒãªã„ã¨ãã¯è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒç©º
 			parentPath = "";
 		}
 
 		return parentPath;
 	}
 
-	/// @brief ƒpƒX‹æØ‚è•¶š‚ğOS‚ÌƒfƒtƒHƒ‹ƒg‹æØ‚è•¶š‚É•ÏŠ·‚µ‚½V‚µ‚¢PathƒIƒuƒWƒFƒNƒg‚ğ•Ô‚µ‚Ü‚·B
-	/// @return ‹æØ‚è•¶š‚ªOS‚ÌƒfƒtƒHƒ‹ƒg‚É’u‚«Š·‚¦‚ç‚ê‚½V‚µ‚¢PathƒIƒuƒWƒFƒNƒgB
+	/// @brief ãƒ‘ã‚¹åŒºåˆ‡ã‚Šæ–‡å­—ã‚’OSã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆåŒºåˆ‡ã‚Šæ–‡å­—ã«å¤‰æ›ã—ãŸæ–°ã—ã„Pathã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã—ã¾ã™ã€‚
+	/// @return åŒºåˆ‡ã‚Šæ–‡å­—ãŒOSã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã«ç½®ãæ›ãˆã‚‰ã‚ŒãŸæ–°ã—ã„Pathã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
 	inline Path Path::DelimitersToOSDefault() const
 	{
 		Path path = m_String;
@@ -637,8 +639,8 @@ namespace CompileFileSystem
 		return path;
 	}
 
-	/// @brief ƒpƒX‚ÌŠg’£q‚ğw’è‚³‚ê‚½Šg’£q‚Å’u‚«Š·‚¦‚Ü‚·B
-	/// @param ext V‚µ‚¢Šg’£qiƒhƒbƒg‚ğŠÜ‚Şê‡‚àŠÜ‚Ü‚È‚¢ê‡‚à‚ ‚è‚Ü‚·jB
+	/// @brief ãƒ‘ã‚¹ã®æ‹¡å¼µå­ã‚’æŒ‡å®šã•ã‚ŒãŸæ‹¡å¼µå­ã§ç½®ãæ›ãˆã¾ã™ã€‚
+	/// @param ext æ–°ã—ã„æ‹¡å¼µå­ï¼ˆãƒ‰ãƒƒãƒˆã‚’å«ã‚€å ´åˆã‚‚å«ã¾ãªã„å ´åˆã‚‚ã‚ã‚Šã¾ã™ï¼‰ã€‚
 	inline void Path::ReplaceExtension(const std::string& ext)
 	{
 		if (HasExtension())
@@ -652,10 +654,10 @@ namespace CompileFileSystem
 		m_String += ext;
 	}
 
-	/// @brief 2‚Â‚ÌPathƒIƒuƒWƒFƒNƒg‚ğŒ‹‡‚µAV‚µ‚¢ƒpƒX‚ğì¬‚·‚é‰‰Zq/‚ÌƒI[ƒo[ƒ[ƒh‚Å‚·B
-	/// @param lhs Œ‹‡‚·‚é¶‘¤‚ÌPathƒIƒuƒWƒFƒNƒgB
-	/// @param rhs Œ‹‡‚·‚é‰E‘¤‚ÌPathƒIƒuƒWƒFƒNƒgB
-	/// @return Œ‹‡‚³‚ê‚½V‚µ‚¢PathƒIƒuƒWƒFƒNƒgB
+	/// @brief 2ã¤ã®Pathã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’çµåˆã—ã€æ–°ã—ã„ãƒ‘ã‚¹ã‚’ä½œæˆã™ã‚‹æ¼”ç®—å­/ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã§ã™ã€‚
+	/// @param lhs çµåˆã™ã‚‹å·¦å´ã®Pathã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
+	/// @param rhs çµåˆã™ã‚‹å³å´ã®Pathã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
+	/// @return çµåˆã•ã‚ŒãŸæ–°ã—ã„Pathã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
 	inline Path operator/(const Path& lhs, const Path& rhs)
 	{
 		if (0 == lhs.m_String.length())
@@ -672,7 +674,7 @@ namespace CompileFileSystem
 			strlhs.erase(strlhs.length() - 1, 1);
 		}
 
-		//note:rhs_ ‚Ìæ“ª‚É‚ ‚é‹æØ‚è•¶šiƒZƒpƒŒ[ƒ^j‚Í–{—ˆæ‚èœ‚­‚×‚«‚¾‚ªAŒ»“_‚Å‚Í–¢‘Î‰
+		//note:rhs_ ã®å…ˆé ­ã«ã‚ã‚‹åŒºåˆ‡ã‚Šæ–‡å­—ï¼ˆã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ï¼‰ã¯æœ¬æ¥å–ã‚Šé™¤ãã¹ãã ãŒã€ç¾æ™‚ç‚¹ã§ã¯æœªå¯¾å¿œ
 		Path join = strlhs + Path::seperator + rhs.m_String;
 		return join;
 	}
@@ -697,8 +699,8 @@ namespace CompileFileSystem
 			size_t pos = path.m_String.find("..");
 			if (pos != std::string::npos && pos + 3 < path.m_String.length() && pos > 0)
 			{
-				Path a = path.m_String.substr(0, pos - 1);                      // ‹æØ‚è•¶šiƒfƒŠƒ~ƒ^j‚Í•s—v‚È‚Ì‚Å pos-1 ‚Æ‚µ‚Ä‚¢‚é
-				Path b = path.m_String.substr(pos + 3, path.m_String.length()); // ‹æØ‚è•¶šiƒfƒŠƒ~ƒ^j‚Í•s—v‚È‚Ì‚Å pos+3 ‚Æ‚µ‚Ä‚¢‚é
+				Path a = path.m_String.substr(0, pos - 1);                      // åŒºåˆ‡ã‚Šæ–‡å­—ï¼ˆãƒ‡ãƒªãƒŸã‚¿ï¼‰ã¯ä¸è¦ãªã®ã§ pos-1 ã¨ã—ã¦ã„ã‚‹
+				Path b = path.m_String.substr(pos + 3, path.m_String.length()); // åŒºåˆ‡ã‚Šæ–‡å­—ï¼ˆãƒ‡ãƒªãƒŸã‚¿ï¼‰ã¯ä¸è¦ãªã®ã§ pos+3 ã¨ã—ã¦ã„ã‚‹
 				a = a.ParentPath();
 				path = a / b;
 				isFound = true;
@@ -743,7 +745,7 @@ namespace CompileFileSystem
 #ifdef _WIN32
         HANDLE m_hFind;
         WIN32_FIND_DATAW m_FFD;
-        /// @brief ƒfƒBƒŒƒNƒgƒŠ“à‚Ìƒtƒ@ƒCƒ‹ŒŸõ‚ğ‰Šú‰»‚µ‚Ü‚·B
+        /// @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®ãƒ•ã‚¡ã‚¤ãƒ«æ¤œç´¢ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
         void ImpCtor()
         {
             Path test = m_Dir / "*";
@@ -753,8 +755,8 @@ namespace CompileFileSystem
             m_hFind = FindFirstFileW(temp.c_str(), &m_FFD);
             m_IsValid = INVALID_HANDLE_VALUE != m_hFind;
         }
-        /// @brief ƒfƒBƒŒƒNƒgƒŠŒŸõ‚ÅŸ‚Ìƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠƒGƒ“ƒgƒŠ‚Éi‚İ‚Ü‚·B
-        /// @return Ÿ‚Ì—LŒø‚ÈƒGƒ“ƒgƒŠ‚ªŒ©‚Â‚©‚Á‚½ê‡‚Í trueAŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
+        /// @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ¤œç´¢ã§æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¾ãŸã¯ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¨ãƒ³ãƒˆãƒªã«é€²ã¿ã¾ã™ã€‚
+        /// @return æ¬¡ã®æœ‰åŠ¹ãªã‚¨ãƒ³ãƒˆãƒªãŒè¦‹ã¤ã‹ã£ãŸå ´åˆã¯ trueã€è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
         bool ImpNext()
         {
             if (m_IsValid)
@@ -772,7 +774,7 @@ namespace CompileFileSystem
             }
             return m_IsValid;
         }
-        /// @brief m_hFind ƒnƒ“ƒhƒ‹‚ğ•Â‚¶‚é‚½‚ß‚ÌƒfƒXƒgƒ‰ƒNƒ^•â•ŠÖ”‚Å‚·B
+        /// @brief m_hFind ãƒãƒ³ãƒ‰ãƒ«ã‚’é–‰ã˜ã‚‹ãŸã‚ã®ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿è£œåŠ©é–¢æ•°ã§ã™ã€‚
         void ImpDtor()
         {
             FindClose(m_hFind);

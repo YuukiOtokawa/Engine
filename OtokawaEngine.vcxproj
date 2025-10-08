@@ -192,6 +192,8 @@
     <ResourceCompile Include="resource\FilePathDialog.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\Compile\Compiler.cpp" />
+    <ClCompile Include="code\Compile\CompilerLogger.cpp" />
     <ClCompile Include="code\Compile\FileChangeChecker.cpp" />
     <ClCompile Include="code\Compile\FileWatcher.cpp" />
     <ClCompile Include="code\components\Animation.cpp" />
@@ -261,6 +263,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\Compile\CompileFileSystem.h" />
+    <ClInclude Include="code\Compile\CompileOption.h" />
+    <ClInclude Include="code\Compile\Compiler.h" />
+    <ClInclude Include="code\Compile\CompilerLogger.h" />
     <ClInclude Include="code\Compile\FileChangeChecker.h" />
     <ClInclude Include="code\Compile\FileWatcher.h" />
     <ClInclude Include="code\Compile\FileWatcher_Alt.h" />
