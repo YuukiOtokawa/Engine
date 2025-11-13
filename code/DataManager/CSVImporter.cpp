@@ -262,7 +262,7 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 
 		if (metaFile->GetClassID() == CID_Object) {
 			Object* obj = static_cast<Object*>(metaFile);
-			obj->ImportFile(data[i]); // 最初の行はObjectのデータ
+			//obj->ImportFile(data[i]); // 最初の行はObjectのデータ
 			output.push_back(obj);
 		}
 		i++;
@@ -272,7 +272,7 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 		if (metaFile->GetClassID() != CID_Object && metaFile->GetClassID() != CID_Material) {
 			
 			Component* component = static_cast<Component*>(metaFile);
-			component->ImportFile(data[i]); // 他のクラスは最初の行を使用
+			//component->ImportFile(data[i]); // 他のクラスは最初の行を使用
 			Editor::GetInstance()->CreateComponent(component);
 		}
 		i++;
@@ -281,7 +281,7 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 	for (auto& metaFile : metaFiles) {
 		if (metaFile->GetClassID() == CID_Material) {
 			Material* material = static_cast<Material*>(metaFile);
-			material->ImportFile(data[i]); // 他のクラスは最初の行を使用
+			//material->ImportFile(data[i]); // 他のクラスは最初の行を使用
 		}
 		i++;
 	}

@@ -8,6 +8,9 @@
 
 #include "CollisionManager.h"
 
+#include <yaml-cpp/yaml.h>
+
+
 #define COMPONENT_NAME(ComponentType) \
 	return #ComponentType;
 
@@ -31,10 +34,6 @@ void Object::Initialize() {}
 
 
 void Object::Update() {
-	for (auto& component : m_DeleteComponents) {
-		DeleteComponent(component);
-	}
-
 	for (auto& component : m_Components) {
 		component->OnUpdate();
 	}
@@ -44,6 +43,11 @@ void Object::Update() {
 			child->Update();
 		}
 	}
+	for (auto& component : m_DeleteComponents) {
+		DeleteComponent(component);
+	}
+	m_DeleteComponents.clear();
+
 }
 void Object::OnCollision()
 {
@@ -193,46 +197,70 @@ void Object::DeleteComponent(Component* component)
 	component = nullptr;
 }
 
-void Object::ExportFile() {
-	CSVExporter::ExportString(m_Name);
-	CSVExporter::ExportInt(static_cast<int>(m_Tag));
-	CSVExporter::ExportInt(static_cast<int>(m_Layer));
-	for (Component* component : m_Components) {
-		CSVExporter::ExportInt(component->GetFileID());
-	}
-	CSVExporter::ExportString("&");
-	CSVExporter::ExportInt(m_pParent != nullptr ? m_pParent->GetFileID() : -1); // Export parent ID, -1 if no parent
-	if (m_Children.empty()) {
-		CSVExporter::ExportInt(-1); // No children
-	} else {
-		for (Object* child : m_Children) {
-			CSVExporter::ExportInt(child->GetFileID());
+void Object::ExportFile(YAML::Emitter& out) {
+	out << YAML::Key << "name" << YAML::Value << m_Name;
+	out << YAML::Key << "tag" << YAML::Value << static_cast<int>(m_Tag);
+	out << YAML::Key << "layer" << YAML::Value << static_cast<int>(m_Layer);
+
+	// コンポーネントのFileIDリスト（空でない場合のみ出力）
+	if (!m_Components.empty()) {
+		out << YAML::Key << "components" << YAML::Value << YAML::BeginSeq;
+		for (Component* component : m_Components) {
+			out << component->GetFileID();
 		}
+		out << YAML::EndSeq;
 	}
-	CSVExporter::ExportString("&");
+
+	// 親オブジェクトのFileID（親が存在する場合のみ出力）
+	if (m_pParent != nullptr) {
+		out << YAML::Key << "parentID" << YAML::Value << m_pParent->GetFileID();
+	}
+
+	// 子オブジェクトのFileIDリスト（空でない場合のみ出力）
+	if (!m_Children.empty()) {
+		out << YAML::Key << "children" << YAML::Value << YAML::BeginSeq;
+		for (Object* child : m_Children) {
+			out << child->GetFileID();
+		}
+		out << YAML::EndSeq;
+	}
 }
 
 void Object::AddExportList()
 {
-	CSVExporter::AddExportList(this);
+	SceneExporter::AddExportList(this);
 	for (Component* component : m_Components) {
 		component->AddExportList();
 	}
 }
 
-void Object::ImportFile(std::vector<std::string>& tokens)
+void Object::ImportFile(YAML::Node& node)
 {
-	m_Name = tokens[2];
-	m_Tag = static_cast<GameObjectTag>(std::stoi(tokens[3]));
-	m_Layer = static_cast<GameObjectLayer>(std::stoi(tokens[4]));
-	int i = 5;
-	while (tokens[i] != "&") {
-		int fileID = std::stoi(tokens[i]);
-		Component* component = Editor::GetInstance()->GetComponentByFileID(fileID);
-		if (component) {
-			AddComponentClass(component);
+	if (node["name"]) {
+		m_Name = node["name"].as<std::string>();
+	}
+	if (node["tag"]) {
+		m_Tag = static_cast<GameObjectTag>(node["tag"].as<int>());
+	}
+	if (node["layer"]) {
+		m_Layer = static_cast<GameObjectLayer>(node["layer"].as<int>());
+	}
+	if (node["components"]) {
+		for (const auto& componentFileID : node["components"]) {
+			int fileID = componentFileID.as<int>();
+			Component* component = Editor::GetInstance()->GetComponentByFileID(fileID);
+			if (component) {
+				AddComponentClass(component);
+			}
 		}
-		i++;
+	}
+	if (node["parentID"]) {
+		int parentID = node["parentID"].as<int>();
+		if (parentID != -1) {
+			Object* parent = Editor::GetInstance()->GetObjectByFileID(parentID);
+			if (parent) {
+				parent->AddChild(this);
+			}
+		}
 	}
 }
-

@@ -24,31 +24,32 @@
     <ProjectGuid>{aa52cbf2-f356-4343-8dd4-cdbbf358eb1c}</ProjectGuid>
     <RootNamespace>OtokawaEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <VcpkgTriplet Condition="'$(Platform)'=='x64'">x64-windows-static</VcpkgTriplet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -70,6 +71,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)</OutDir>
+    <IntDir>$(SolutionDir)build\intermediates\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)</OutDir>
+    <IntDir>$(SolutionDir)build\intermediates\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -113,21 +122,23 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;OTOKAWA_ENGINE_EXPORTS;%(PreprocessorDefinitions);YAML_CPP_DLL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>code\CompileSystem;resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex_Debug.lib;DirectXTex_Release.lib;d3d11.lib;Winmm.lib;ole32.lib
-;uuid.lib;advapi32.lib;ws2_32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>code\CompileSystem;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex.lib;d3d11.lib;Winmm.lib;ole32.lib;uuid.lib;advapi32.lib;ws2_32.lib;RuntimeCompiler_VS2010.lib;RuntimeObjectSystem.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>code\DirectXTex-main\DirectXTex\Bin\Desktop_2022\x64\Debug;code\yaml-cpp;code\CompileSystem;%(AdditionalLibraryDirectories);build\x64\Debug</AdditionalLibraryDirectories>
+      <ImportLibrary>$(SolutionDir)build\x64\Debug\$(TargetName).lib</ImportLibrary>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -135,29 +146,35 @@
       <DisableOptimizations>false</DisableOptimizations>
       <EnableDebuggingInformation>false</EnableDebuggingInformation>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;OTOKAWA_ENGINE_EXPORTS;%(PreprocessorDefinitions);YAML_CPP_DLL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>code\CompileSystem;resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>code\yaml-cpp;code\ImGuiUser;code\CompileSystem;resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex_Debug.lib;DirectXTex_Release.lib;d3d11.lib;Winmm.lib;ole32.lib
-;uuid.lib;advapi32.lib;ws2_32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>code\CompileSystem;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex.lib;d3d11.lib;Winmm.lib;ole32.lib;uuid.lib;advapi32.lib;ws2_32.lib;RuntimeCompiler_VS2010.lib;RuntimeObjectSystem.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>code\DirectXTex-main\DirectXTex\Bin\Desktop_2022\x64\Release;code\yaml-cpp;code\CompileSystem;%(AdditionalLibraryDirectories);build\x64\Debug</AdditionalLibraryDirectories>
+      <ImportLibrary>$(SolutionDir)build\x64\Debug\$(TargetName).lib</ImportLibrary>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <FxCompile>
       <DisableOptimizations>false</DisableOptimizations>
@@ -169,6 +186,10 @@
       <ShaderModel>5.0</ShaderModel>
       <ObjectFileOutput>$(SolutionDir)\cso\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Image Include="resource\bitmap1.bmp" />
@@ -192,10 +213,6 @@
     <ResourceCompile Include="resource\FilePathDialog.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\Compile\Compiler.cpp" />
-    <ClCompile Include="code\Compile\CompilerLogger.cpp" />
-    <ClCompile Include="code\Compile\FileChangeChecker.cpp" />
-    <ClCompile Include="code\Compile\FileWatcher.cpp" />
     <ClCompile Include="code\components\Animation.cpp" />
     <ClCompile Include="code\components\Audio.cpp" />
     <ClCompile Include="code\components\Billboard.cpp" />
@@ -219,7 +236,9 @@
     <ClCompile Include="code\components\Sky.cpp" />
     <ClCompile Include="code\components\SpriteMesh.cpp" />
     <ClCompile Include="code\DataManager\CSVExporter.cpp" />
+    <ClCompile Include="code\DataManager\SceneExporter.cpp" />
     <ClCompile Include="code\DataManager\CSVImporter.cpp" />
+    <ClCompile Include="code\DataManager\SceneImporter.cpp" />
     <ClCompile Include="code\DataManager\FBXImporter.cpp" />
     <ClCompile Include="code\DataManager\OBJLoader.cpp" />
     <ClCompile Include="code\EngineSystem\AudioManager.cpp" />
@@ -245,16 +264,23 @@
     <ClCompile Include="code\EngineSystem\SystemLog.cpp" />
     <ClCompile Include="code\EngineSystem\SystemMonitor.cpp" />
     <ClCompile Include="code\EngineSystem\TimeSystem.cpp" />
+    <ClCompile Include="code\ImGuiUser\NodeEditor.cpp" />
+    <ClCompile Include="code\imgui\crude_json.cpp" />
     <ClCompile Include="code\imgui\imgui.cpp" />
     <ClCompile Include="code\imgui\ImGuizmo.cpp" />
+    <ClCompile Include="code\imgui\imgui_canvas.cpp" />
     <ClCompile Include="code\imgui\imgui_draw.cpp" />
     <ClCompile Include="code\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="code\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="code\imgui\imgui_node_editor.cpp" />
+    <ClCompile Include="code\imgui\imgui_node_editor_api.cpp" />
     <ClCompile Include="code\imgui\imgui_tables.cpp" />
     <ClCompile Include="code\imgui\imgui_widgets.cpp" />
     <ClCompile Include="code\input\Gamepad.cpp" />
     <ClCompile Include="code\input\Keyboard.cpp" />
     <ClCompile Include="code\input\Mouse.cpp" />
+    <ClCompile Include="code\RCCppMainLoop.cpp" />
+    <ClCompile Include="code\StdioLogSystem.cpp" />
     <ClCompile Include="scripts\GameManager.cpp" />
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
@@ -262,13 +288,9 @@
     <ClCompile Include="WaveMeshField.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\Compile\CompileFileSystem.h" />
-    <ClInclude Include="code\Compile\CompileOption.h" />
-    <ClInclude Include="code\Compile\Compiler.h" />
-    <ClInclude Include="code\Compile\CompilerLogger.h" />
-    <ClInclude Include="code\Compile\FileChangeChecker.h" />
-    <ClInclude Include="code\Compile\FileWatcher.h" />
-    <ClInclude Include="code\Compile\FileWatcher_Alt.h" />
+    <ClInclude Include="code\Compile\RuntimeInclude.h" />
+    <ClInclude Include="code\Compile\RuntimeObject.h" />
+    <ClInclude Include="code\Compile\RuntimeTracking.h" />
     <ClInclude Include="code\components\Animation.h" />
     <ClInclude Include="code\components\Audio.h" />
     <ClInclude Include="code\components\Billboard.h" />
@@ -295,7 +317,9 @@
     <ClInclude Include="code\components\Sky.h" />
     <ClInclude Include="code\components\SpriteMesh.h" />
     <ClInclude Include="code\DataManager\CSVExporter.h" />
+    <ClInclude Include="code\DataManager\SceneExporter.h" />
     <ClInclude Include="code\DataManager\CSVImporter.h" />
+    <ClInclude Include="code\DataManager\SceneImporter.h" />
     <ClInclude Include="code\DataManager\FBXImporter.h" />
     <ClInclude Include="code\DataManager\OBJLoader.h" />
     <ClInclude Include="code\DataManager\VertexIndex.h" />
@@ -306,6 +330,7 @@
     <ClInclude Include="code\EngineSystem\Editor.h" />
     <ClInclude Include="code\EngineSystem\EditorView.h" />
     <ClInclude Include="code\EngineSystem\EditorWindow.h" />
+    <ClInclude Include="code\EngineSystem\EngineAPI.h" />
     <ClInclude Include="code\EngineSystem\EngineConsole.h" />
     <ClInclude Include="code\EngineSystem\EngineMetaFile.h" />
     <ClInclude Include="code\EngineSystem\FrameWork.h" />
@@ -321,6 +346,7 @@
     <ClInclude Include="code\EngineSystem\PostProcessTexture.h" />
     <ClInclude Include="code\EngineSystem\Properties.h" />
     <ClInclude Include="code\EngineSystem\RenderCore.h" />
+    <ClInclude Include="code\EngineSystem\RuntimeCompilerManager.h" />
     <ClInclude Include="code\EngineSystem\Script.h" />
     <ClInclude Include="code\EngineSystem\ScriptComponent.h" />
     <ClInclude Include="code\EngineSystem\ScriptFactory.h" />
@@ -334,19 +360,24 @@
     <ClInclude Include="code\imgui\imconfig.h" />
     <ClInclude Include="code\imgui\imgui.h" />
     <ClInclude Include="code\imgui\ImGuizmo.h" />
+    <ClInclude Include="code\imgui\imgui_canvas.h" />
     <ClInclude Include="code\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="code\imgui\imgui_impl_win32.h" />
     <ClInclude Include="code\imgui\imgui_internal.h" />
+    <ClInclude Include="code\imgui\imgui_node_editor.h" />
     <ClInclude Include="code\imgui\imstb_rectpack.h" />
     <ClInclude Include="code\imgui\imstb_textedit.h" />
     <ClInclude Include="code\imgui\imstb_truetype.h" />
     <ClInclude Include="code\input\Gamepad.h" />
     <ClInclude Include="code\input\Keyboard.h" />
     <ClInclude Include="code\input\Mouse.h" />
+    <ClInclude Include="code\RCCppMainLoop.h" />
+    <ClInclude Include="code\StdioLogSystem.h" />
+    <ClInclude Include="code\SystemTable.h" />
     <ClInclude Include="resource\resource.h" />
+    <ClInclude Include="ScriptFactory.h" />
     <ClInclude Include="scripts\Game.h" />
     <ClInclude Include="scripts\GameManager.h" />
-    <ClInclude Include="scripts\Pack.h" />
     <ClInclude Include="scripts\Player.h" />
     <ClInclude Include="scripts\PlayerControl.h" />
     <ClInclude Include="scripts\Result.h" />
@@ -359,6 +390,8 @@
     <FxCompile Include="code\shader\blinnPhongPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableDebuggingInformation>
     </FxCompile>
     <FxCompile Include="code\shader\blinnPhongVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -371,14 +404,28 @@
     <FxCompile Include="code\shader\bumpVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="code\shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">3.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="code\shader\cookPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\EnvMapPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\EnvMapVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="code\shader\GaussianPS_H.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -440,6 +487,30 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
+    <FxCompile Include="code\shader\ProjectionShadow1PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\ProjectionShadow1VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\ProjectionShadowPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\ProjectionShadowVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="code\shader\RGBShiftPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -451,6 +522,12 @@
     <FxCompile Include="code\shader\spotLightingVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\stealthPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\stealthVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="code\shader\toon1PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -508,6 +585,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="code\DirectXTex-main\DirectXTex\DirectXTex_Desktop_2022.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
+    <ProjectReference Include="code\yaml-cpp-master\build\yaml-cpp.vcxproj">
+      <Project>{795bd29c-e02c-3240-b2ab-03d897c026d4}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

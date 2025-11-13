@@ -117,3 +117,4 @@ void Audio::Resume()
 		m_pSourceVoice->Start();
 	}
 }
+

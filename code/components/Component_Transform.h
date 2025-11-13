@@ -32,6 +32,8 @@ private:
 	// スケール（X, Y, Z）
 	Vector4O m_Scale = Vector4O(1.0f, 1.0f, 1.0f);
 
+    XMMATRIX m_TransformMatrix = XMMatrixIdentity();
+
 public:
     DECLARE_COMPONENT(Transform)
     Transform() {
@@ -46,13 +48,18 @@ public:
 	/// @brief コンポーネントに対応したタグを所有者のオブジェクトに設定します。
 	void InitializeTag() override;
 
-    void ExportComponent() override {
-        CSVExporter::ExportVector4O(m_Position);
-        CSVExporter::ExportVector4O(m_Rotation);
-        CSVExporter::ExportVector4O(m_Scale);
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "position" << YAML::Value << YAML::Flow << YAML::BeginSeq
+            << m_Position.x << m_Position.y << m_Position.z << m_Position.w << YAML::EndSeq;
+
+        out << YAML::Key << "rotation" << YAML::Value << YAML::Flow << YAML::BeginSeq
+            << m_Rotation.x << m_Rotation.y << m_Rotation.z << m_Rotation.w << YAML::EndSeq;
+
+        out << YAML::Key << "scale" << YAML::Value << YAML::Flow << YAML::BeginSeq
+            << m_Scale.x << m_Scale.y << m_Scale.z << m_Scale.w << YAML::EndSeq;
     }
 
-    void ImportFile(std::vector<std::string>& tokens) override;
+    void ImportFile(YAML::Node& node) override;
 
 
 	/// @brief 位置を設定します。
@@ -74,5 +81,36 @@ public:
 	/// @brief スケール値を取得します。
 	/// @return オブジェクトのスケールを表す Vector4O 型の値。
 	Vector4O GetScale() { return m_Scale; }
+
+    void SetTransformMatrix(XMMATRIX matrix) { m_TransformMatrix = matrix; }
+    Vector3O GetForward() {
+        XMVECTOR forward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+        forward = XMVector3TransformNormal(forward, m_TransformMatrix);
+        XMFLOAT3 f;
+        XMStoreFloat3(&f, forward);
+        Vector3O forwardVec(f);
+        forwardVec.Normalize();
+        return forwardVec;
+    }
+
+    Vector3O GetUp() {
+        XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+        up = XMVector3TransformNormal(up, m_TransformMatrix);
+        XMFLOAT3 u;
+        XMStoreFloat3(&u, up);
+        Vector3O upVec(u);
+        upVec.Normalize();
+        return upVec;
+    }
+
+    Vector3O GetRight() {
+        XMVECTOR right = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+        right = XMVector3TransformNormal(right, m_TransformMatrix);
+        XMFLOAT3 r;
+        XMStoreFloat3(&r, right);
+        Vector3O rightVec(r);
+        rightVec.Normalize();
+        return rightVec;
+    }
 };
 

@@ -198,12 +198,18 @@ void SkinnedMeshRenderer::InitializeBuffers() {
 
 		TexMetadata metadata;
 		ScratchImage image;
-		LoadFromWICMemory(aitexture->pcData, aitexture->mWidth, WIC_FLAGS_NONE, &metadata, image);
+		LoadFromWICMemory(
+			reinterpret_cast<const uint8_t*>(aitexture->pcData),
+			static_cast<size_t>(aitexture->mWidth),
+			WIC_FLAGS_NONE,
+		 &metadata,
+		 image
+		);
 		CreateShaderResourceView(device, image.GetImages(), image.GetImageCount(), metadata, &texture);
 		assert(texture);
 
 		Texture* tex = new Texture;
-		tex->shader_resource_view = texture;
+		tex->shaderResourceView = texture;
 		tex->width = metadata.width;
 		tex->height = metadata.height;
 		tex->toExport = false;
@@ -247,7 +253,13 @@ void SkinnedMeshRenderer::GetTexture()
 		// テクスチャ読み込み
 		TexMetadata metadata;
 		ScratchImage image;
-		LoadFromWICMemory(aitexture->pcData, aitexture->mWidth, WIC_FLAGS_NONE, &metadata, image);
+		LoadFromWICMemory(
+			reinterpret_cast<const uint8_t*>(aitexture->pcData),
+			static_cast<size_t>(aitexture->mWidth),
+			WIC_FLAGS_NONE,
+		 &metadata,
+		 image
+		);
 		CreateShaderResourceView(renderer->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &texture);
 		assert(texture);
 		//m_pTextureFID->at(aitexture->mFilename.data) = texture;
@@ -587,33 +599,56 @@ void SkinnedMeshRenderer::SetNextAnimation(std::string animationKey)
 
 void SkinnedMeshRenderer::AddExportList()
 {
-	CSVExporter::AddExportList(this);
+	SceneExporter::AddExportList(this);
 	if (m_pMaterial)
 		m_pMaterial->AddExportList();
 }
 
-void SkinnedMeshRenderer::ExportComponent()
+void SkinnedMeshRenderer::ExportComponent(YAML::Emitter& out)
 {
-	CSVExporter::ExportString(m_MeshFilePath);
-	CSVExporter::ExportInt((int)m_pAnimation->size());
+	out << YAML::Key << "meshFilePath" << YAML::Value << m_MeshFilePath;
+	out << YAML::Key << "animationCount" << YAML::Value << (int)m_pAnimation->size();
+
+	out << YAML::Key << "animations" << YAML::Value << YAML::BeginSeq;
 	for (const auto& pair : *m_pAnimation) {
-		CSVExporter::ExportString(pair.first);
-		CSVExporter::ExportString(m_AnimationFilePathMap[pair.first]);
+		out << YAML::BeginMap;
+		out << YAML::Key << "name" << YAML::Value << pair.first;
+		out << YAML::Key << "filePath" << YAML::Value << m_AnimationFilePathMap[pair.first];
+		out << YAML::EndMap;
 	}
-	CSVExporter::ExportInt(m_pMaterial->GetFileID());
+	out << YAML::EndSeq;
+
+	out << YAML::Key << "materialFileID" << YAML::Value << m_pMaterial->GetFileID();
 }
 
-void SkinnedMeshRenderer::ImportFile(std::vector<std::string>& tokens)
+void SkinnedMeshRenderer::ImportFile(YAML::Node& node)
 {
-	m_MeshFilePath = tokens[4];
-	FBXImporter importer;
-	if (!m_MeshFilePath.empty()) {
-		importer.LoadFBX(m_MeshFilePath.c_str());
-		SetMeshData(nullptr, importer.GetBone(), importer.GetAiScene());
-		InitializeBuffers();
+	if (node["tag"]) {
+		tag = static_cast<Tag>(node["tag"].as<int>());
 	}
+	if (node["meshFilePath"]) {
+		m_MeshFilePath = node["meshFilePath"].as<std::string>();
+		FBXImporter importer;
+		if (!m_MeshFilePath.empty()) {
+			importer.LoadFBX(m_MeshFilePath.c_str());
+			SetMeshData(nullptr, importer.GetBone(), importer.GetAiScene());
+			InitializeBuffers();
+		}
+	}
+	if (node["animations"]) {
+		for (const auto& anim : node["animations"]) {
+			std::string name = anim["name"].as<std::string>();
+			std::string filePath = anim["filePath"].as<std::string>();
+			m_AnimationFilePathMap[name] = filePath;
 
-
+			FBXImporter animImporter;
+			animImporter.LoadFBX(filePath.c_str());
+			(*m_pAnimation)[name] = animImporter.GetAiScene();
+		}
+	}
+	if (node["materialFileID"]) {
+		m_pMaterial = Editor::GetInstance()->GetMaterialByFileID(node["materialFileID"].as<int>());
+	}
 }
 
 void SkinnedMeshRenderer::InitializeTag()

@@ -14,7 +14,7 @@ public:
 	void Update() override;
 
     void DrawGUI() override;
-    void ExportComponent() override;
+    void ExportComponent(YAML::Emitter& out) override;
 
 	void SetUVRect(Vector4O uvRect) {
         m_uvRect = uvRect;

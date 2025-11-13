@@ -74,16 +74,21 @@ public:
 	/// @brief タグを初期化します。
 	void InitializeTag() override;
 
-    void ExportComponent() override {
-        CSVExporter::ExportFloat(m_IsActiveCamera);
-        CSVExporter::ExportVector4O(m_Target);
-        CSVExporter::ExportFloat(m_Fov);
-        CSVExporter::ExportFloat(m_Near);
-        CSVExporter::ExportFloat(m_Far);
-        CSVExporter::ExportVector4O(m_Up);
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "isActiveCamera" << YAML::Value << m_IsActiveCamera;
+
+        out << YAML::Key << "target" << YAML::Value << YAML::Flow << YAML::BeginSeq
+            << m_Target.x << m_Target.y << m_Target.z << m_Target.w << YAML::EndSeq;
+
+        out << YAML::Key << "fov" << YAML::Value << m_Fov;
+        out << YAML::Key << "near" << YAML::Value << m_Near;
+        out << YAML::Key << "far" << YAML::Value << m_Far;
+
+        out << YAML::Key << "up" << YAML::Value << YAML::Flow << YAML::BeginSeq
+            << m_Up.x << m_Up.y << m_Up.z << m_Up.w << YAML::EndSeq;
     }
 
-    void ImportFile(std::vector<std::string>& tokens) override;
+    void ImportFile(YAML::Node& node) override;
 
 	/// @brief ターゲットとなるVector4Oオブジェクトを設定します。
 	/// @param target 設定するVector4Oオブジェクト。

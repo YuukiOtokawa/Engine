@@ -25,12 +25,12 @@ void Animation::Update() {
 	m_FrameCount = 0;
 }
 
-void Animation::ExportComponent()
+void Animation::ExportComponent(YAML::Emitter& out)
 {
-	CSVExporter::ExportInt(m_SpriteCount);
-	CSVExporter::ExportInt(m_FramePerSecond);
-	CSVExporter::ExportInt(m_Loop);
-	CSVExporter::ExportInt(m_Playing);
+	out << YAML::Key << "spriteCount" << YAML::Value << m_SpriteCount;
+	out << YAML::Key << "framePerSecond" << YAML::Value << m_FramePerSecond;
+	out << YAML::Key << "loop" << YAML::Value << m_Loop;
+	out << YAML::Key << "playing" << YAML::Value << m_Playing;
 }
 
 void Animation::DrawGUI() {
@@ -52,3 +52,4 @@ void Animation::DrawGUI() {
 	ImGui::Unindent();
 
 }
+

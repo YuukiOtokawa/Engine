@@ -37,13 +37,17 @@ void Particle::DrawGUI()
 	ImGui::Unindent();
 }
 
-void Particle::ExportComponent()
+void Particle::ExportComponent(YAML::Emitter& out)
 {
-	CSVExporter::ExportVector4O(m_Velocity);
-	CSVExporter::ExportVector4O(m_Acceleration);
-	CSVExporter::ExportInt(m_SpawnSpan);
-	CSVExporter::ExportInt(m_LifeTime);
-	CSVExporter::ExportInt(m_Texture);
+	out << YAML::Key << "velocity" << YAML::Value << YAML::Flow << YAML::BeginSeq
+		<< m_Velocity.x << m_Velocity.y << m_Velocity.z << m_Velocity.w << YAML::EndSeq;
+
+	out << YAML::Key << "acceleration" << YAML::Value << YAML::Flow << YAML::BeginSeq
+		<< m_Acceleration.x << m_Acceleration.y << m_Acceleration.z << m_Acceleration.w << YAML::EndSeq;
+
+	out << YAML::Key << "spawnSpan" << YAML::Value << m_SpawnSpan;
+	out << YAML::Key << "lifeTime" << YAML::Value << m_LifeTime;
+	out << YAML::Key << "texture" << YAML::Value << m_Texture;
 }
 
 void Particle::InitializeTag() {

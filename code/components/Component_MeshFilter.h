@@ -70,8 +70,8 @@ public:
 	/// @brief コンポーネントに対応したタグを所有者のオブジェクトに設定します。
 	void InitializeTag() override;
 
-    void ImportFile(std::vector<std::string>& tokens) override;
-    void ExportComponent() override;
+    void ImportFile(YAML::Node& node) override;
+    void ExportComponent(YAML::Emitter& out) override;
     void AddExportList() override;
 
     void SetMesh(int fileID);

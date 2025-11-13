@@ -51,7 +51,7 @@ struct CompilerOptions
 
 class Compiler
 {
-    PlatformCompilerData* m_pData;
+    PlatformCompilerData* m_pData;  // プラットフォームコンパイラ実装データ
     bool m_isFastCompile;
 public:
     Compiler();
@@ -76,11 +76,12 @@ public:
 
     std::string GetObjectFileExtension() const;
 
-    /// @brief 指定されたファイル群をコンパイルし、ライブラリをリンクしてモジュールを生成します。
+    /// @brief 指定されたファイル群をコンパイルし、ライブラリとリンクしてモジュールを生成します。
+    /// @brief コンパイルのメイン関数
     /// @param filesToCompile コンパイル対象となるファイルのパスのリスト。
-    /// @param options コンパイラのオプション設定。
+    /// @param options コンパイラの設定やオプションを指定するオブジェクト。
     /// @param linkLibraryList リンクするライブラリのパスのリスト。
-    /// @param moduleName 生成されるモジュールのパス。
+    /// @param moduleName 生成されるモジュールの名前またはパス。
     void RunCompile(const std::vector<CompileFileSystem::Path>& filesToCompile,
                     const CompilerOptions& options,
                     const std::vector<CompileFileSystem::Path>& linkLibraryList,

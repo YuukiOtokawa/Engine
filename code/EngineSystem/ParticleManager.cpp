@@ -4,6 +4,8 @@
 #include "Billboard.h"
 #include "Component_MeshRenderer.h"
 
+#include "MainEngine.h"
+
 std::map<Particle*, std::list<ParticleData>> ParticleManager::m_Particles;
 ParticleManager* ParticleManager::m_pInstance = nullptr;
 

@@ -218,18 +218,42 @@ bool CollisionManager::CollideBoxBox(Object* obj1, Object* obj2)
     Vector4O pos1 = transform1->GetPosition();
     Vector4O pos2 = transform2->GetPosition();
 
-    Vector4O distance = pos1 - pos2;
-
-    // 衝突判定（簡単な距離ベース）
-    float collisionDistanceX = collider1->GetCollisionSize().x + collider2->GetCollisionSize().x;
-    float collisionDistanceY = collider1->GetCollisionSize().y + collider2->GetCollisionSize().y;
-    float collisionDistanceZ = collider1->GetCollisionSize().z + collider2->GetCollisionSize().z;
+    // 衝突判定（簡単な距離ベース AABB）
+    //float collisionDistanceX = collider1->GetCollisionSize().x + collider2->GetCollisionSize().x;
+    //float collisionDistanceY = collider1->GetCollisionSize().y + collider2->GetCollisionSize().y;
+    //float collisionDistanceZ = collider1->GetCollisionSize().z + collider2->GetCollisionSize().z;
     bool isColliding = false;
 
-    if (abs(distance.x) <= collisionDistanceX &&
-        abs(distance.y) <= collisionDistanceY &&
-        abs(distance.z) <= collisionDistanceZ) {
+    // AABB
+    //if (abs(distance.x) <= collisionDistanceX &&
+    //    abs(distance.y) <= collisionDistanceY &&
+    //    abs(distance.z) <= collisionDistanceZ) {
+    //    isColliding = true;
+    //}
+
+	Vector3O direction = (transform2->GetPosition() - transform1->GetPosition()).XYZ();
+
+	Vector3O axisX = transform1->GetRight();
+	float dotX = abs(direction.Dot(axisX, direction));
+
+	Vector3O axisY = transform1->GetUp();
+	float dotY = abs(direction.Dot(axisY, direction));
+
+	Vector3O axisZ = transform1->GetForward();
+	float dotZ = abs(direction.Dot(axisZ, direction));
+
+	Vector3O scale1 = transform1->GetScale().XYZ();
+	Vector3O scale2 = transform2->GetScale().XYZ();
+
+    if (dotX <= scale1.x &&
+        dotY <= scale1.y &&
+		dotZ <= scale1.z) {
         isColliding = true;
+    }
+    else if (dotX <= scale2.x &&
+             dotY <= scale2.y &&
+             dotZ <= scale2.z) {
+		isColliding = true;
     }
 
     if (isColliding)

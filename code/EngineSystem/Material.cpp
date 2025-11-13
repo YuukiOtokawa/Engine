@@ -140,22 +140,44 @@ void Material::DrawGUI() {
 	}
 }
 
-void Material::ImportFile(std::vector<std::string>& tokens)
+void Material::ImportFile(YAML::Node& node)
 {
-	m_Material.SpecularPower = (FLOAT)std::stoi(tokens[2]);
-	m_VertexShader = tokens[3];
-	m_PixelShader = tokens[4];
-	m_TextureFileID = std::stoi(tokens[5]);
-	m_BumpTextureFileID = std::stoi(tokens[6]);
+	if (node["specularPower"]) {
+		m_Material.SpecularPower = node["specularPower"].as<float>();
+	}
+	if (node["vertexShader"]) {
+		m_VertexShader = node["vertexShader"].as<std::string>();
+	}
+	if (node["pixelShader"]) {
+		m_PixelShader = node["pixelShader"].as<std::string>();
+	}
+	if (node["textureFileID"]) {
+		m_TextureFileID = node["textureFileID"].as<int>();
+	}
+	if (node["bumpTextureFileID"]) {
+		m_BumpTextureFileID = node["bumpTextureFileID"].as<int>();
+	}
 }
 
-void Material::ExportFile()
+void Material::ExportFile(YAML::Emitter& out)
 {
-	CSVExporter::ExportInt(m_Material.SpecularPower);
-	CSVExporter::ExportString(m_VertexShader);
-	CSVExporter::ExportString(m_PixelShader);
-	CSVExporter::ExportInt(m_TextureFileID);
-	CSVExporter::ExportInt(m_BumpTextureFileID);
+	out << YAML::Key << "specularPower" << YAML::Value << m_Material.SpecularPower;
+	out << YAML::Key << "vertexShader" << YAML::Value << m_VertexShader;
+	out << YAML::Key << "pixelShader" << YAML::Value << m_PixelShader;
+
+	int exist = SceneExporter::CheckTextureFileNameExist(MainEngine::GetInstance()->GetRenderCore()->GetTextureFileName(m_TextureFileID));
+	out << YAML::Key << "textureFileID" << YAML::Value ;
+	if (exist == -1)
+		out << m_TextureFileID;
+	else
+		out << exist;
+	
+	out << YAML::Key << "bumpTextureFileID" << YAML::Value;
+	exist = SceneExporter::CheckTextureFileNameExist(MainEngine::GetInstance()->GetRenderCore()->GetTextureFileName(m_BumpTextureFileID));
+	if (exist == -1)
+		out << m_BumpTextureFileID;
+	else
+		out << exist;
 }
 
 void Material::SetVertexShaderKey(std::string key)

@@ -23,7 +23,7 @@
 //==========================================================================
 
 constexpr auto SCREEN_WIDTH_DEFAULT = 1920;
-constexpr auto SCREEN_HEIGHT_DEFAULT = 1080;
+constexpr auto SCREEN_HEIGHT_DEFAULT = 1000;
 
 constexpr auto WINDOW_CAPTION = "Engine";
 constexpr auto WINDOW_CLASS_NAME = "OtokawaEngineClass";
@@ -125,6 +125,9 @@ struct LIGHT {
 	FLOAT PointLightRange;
 
 	Vector4O SpotLightAngle;
+
+    XMMATRIX View;
+    XMMATRIX Projection;
 };
 
 namespace GameObjectTagLayer {

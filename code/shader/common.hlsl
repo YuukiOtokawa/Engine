@@ -37,8 +37,7 @@ struct PS_IN
     float3 Normal : NORMAL0;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
-    float3 dummy : POSITION1;
-    
+    float3 LightPosition : POSITION1;
 };
 
 struct LIGHT
@@ -57,6 +56,9 @@ struct LIGHT
     float PointLightRange;
    
     float4 SpotLightAngle;
+    
+    matrix view;
+    matrix projection;
 };
 
 struct DIRECTIONAL_LIGHT

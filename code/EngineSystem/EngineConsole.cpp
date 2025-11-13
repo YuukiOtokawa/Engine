@@ -1,4 +1,4 @@
-#include "EngineConsole.h"
+ï»¿#include "EngineConsole.h"
 
 #include "TimeSystem.h"
 #include <chrono>
@@ -6,22 +6,45 @@
 #include "imgui.h"
 
 std::vector<LogEntry> EngineConsole::m_Logs;
+char EngineConsole::m_Buff[CONSOLE_LOG_BUFFER_MAX];
 
-void EngineConsole::Log(const std::string& message, LogLevel level)
+void EngineConsole::LogInternal(const char* message, va_list args, LogLevel level)
 {
-	// Œ»İ‚Ì‚ğæ“¾
-	auto now = Time::currentTime;
-	std::time_t now_c = static_cast<std::time_t>(now / 1000); // ƒ~ƒŠ•b‚ğ•b‚É•ÏŠ·
-	
+	int result = vsnprintf(m_Buff, CONSOLE_LOG_BUFFER_MAX - 1, message, args);
+	// Make sure there's a limit to the amount of rubbish we can output
+	m_Buff[CONSOLE_LOG_BUFFER_MAX - 1] = '\0';
+
+	// ç¾åœ¨ã®æ™‚åˆ»ã‚’å–å¾—ï¼ˆWindowsã‚·ã‚¹ãƒ†ãƒ æ™‚åˆ»ï¼‰
+	auto now = std::chrono::system_clock::now();
+	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+
 	std::tm now_tm;
 	localtime_s(&now_tm, &now_c);
-	// ‚ğƒtƒH[ƒ}ƒbƒg
+	// æ™‚åˆ»ã‚’ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 	char timeBuffer[20];
 	std::strftime(timeBuffer, sizeof(timeBuffer), "%H:%M:%S", &now_tm);
-	// ƒƒOƒGƒ“ƒgƒŠ‚ğì¬‚µ‚Ä•Û‘¶
-	m_Logs.push_back({ message, timeBuffer, level });
-}
+	// ãƒ­ã‚°ã‚¨ãƒ³ãƒˆãƒªã‚’ä½œæˆã—ã¦ä¿å­˜
+	m_Logs.push_back({ m_Buff, timeBuffer, level });
 
+}
+void EngineConsole::Log(const char* message, ...)
+{
+	va_list args;
+	va_start(args, message);
+	LogInternal(message, args, LogLevel::Info);
+}
+void EngineConsole::LogWarning(const char* message, ...)
+{
+	va_list args;
+	va_start(args, message);
+	LogInternal(message, args, LogLevel::Warning);
+}
+void EngineConsole::LogError(const char* message, ...)
+{
+	va_list args;
+	va_start(args, message);
+	LogInternal(message, args, LogLevel::Error);
+}
 void EngineConsole::Clear()
 {
 	m_Logs.clear();
@@ -29,19 +52,19 @@ void EngineConsole::Clear()
 
 void EngineConsole::Draw()
 {
-	// Draw()‚Ìæ“ª•t‹ß‚Éstatic•Ï”‚ğ’Ç‰Á
+	// Draw()ã®å…ˆé ­ä»˜è¿‘ã«staticå¤‰æ•°ã‚’è¿½åŠ 
 	static bool autoScroll = true;
 
-	// ‚±‚±‚ÉImGui‚ğg‚Á‚½•`‰æƒR[ƒh‚ğ’Ç‰Á
+	// ã“ã“ã«ImGuiã‚’ä½¿ã£ãŸæç”»ã‚³ãƒ¼ãƒ‰ã‚’è¿½åŠ 
 	if (ImGui::Button("Clear")) {
 		Clear();
-		autoScroll = true; // ƒNƒŠƒA‚Í©“®ƒXƒNƒ[ƒ‹‚ğÄŠJ
+		autoScroll = true; // ã‚¯ãƒªã‚¢æ™‚ã¯è‡ªå‹•ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’å†é–‹
 	}
 	ImGui::Separator();
 
-	// ƒ†[ƒU[‚ªè“®‚ÅƒXƒNƒ[ƒ‹‚µ‚½‚©”»’è
+	// ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒæ‰‹å‹•ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãŸã‹åˆ¤å®š
 	if (autoScroll) {
-		// ƒXƒNƒ[ƒ‹ƒo[‚ªˆê”Ô‰ºˆÈŠO‚È‚ç©“®ƒXƒNƒ[ƒ‹‚ğ‚â‚ß‚é
+		// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ãŒä¸€ç•ªä¸‹ä»¥å¤–ãªã‚‰è‡ªå‹•ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’ã‚„ã‚ã‚‹
 		if (ImGui::GetScrollY() < ImGui::GetScrollMaxY()) {
 			if (ImGui::IsWindowHovered() && (ImGui::GetIO().MouseWheel != 0 || ImGui::IsMouseDown(ImGuiMouseButton_Left))) {
 				autoScroll = false;
@@ -67,7 +90,7 @@ void EngineConsole::Draw()
 		ImGui::PopStyleColor();
 	}
 
-	// ©“®ƒXƒNƒ[ƒ‹‚ª—LŒø‚È‚çˆê”Ô‰º‚Ö
+	// è‡ªå‹•ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãŒæœ‰åŠ¹ãªã‚‰ä¸€ç•ªä¸‹ã¸
 	if (autoScroll && !m_Logs.empty()) {
 		ImGui::SetScrollHereY(1.0f);
 	}

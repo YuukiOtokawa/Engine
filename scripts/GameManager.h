@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "Script.h"
+#include "ScriptFactory.h"
+
 class GameManager :
     public Script
 {
@@ -15,12 +17,8 @@ public:
     }
     void Start() override;
     void Update() override;
-    void Import(std::vector<std::string> tokens) override {
-        m_TitleSceneName = tokens[5];
-        m_GameSceneName = tokens[6];
-        m_ResultSceneName = tokens[7];
-    }
-    void Export() override;
+    void Import(YAML::Node& node) override;
+    void Export(YAML::Emitter& node) override;
 
     DECLARE_SCRIPT(GameManager)
 };

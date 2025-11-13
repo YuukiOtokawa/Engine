@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\yuuki\Desktop\OtokawaEngine\code\yaml-cpp_build\CMakeFiles\41c6dd5d345cf8f4c05f5ae086ca7b1e\Experimental.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\yuuki\Desktop\OtokawaEngine\code\yaml-cpp-master\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\yuuki\Desktop\OtokawaEngine\code\yaml-cpp_build\CMakeFiles\Experimental" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{4F5B7097-49E9-3382-A3F0-D85BAB6617D6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

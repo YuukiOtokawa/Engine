@@ -29,5 +29,13 @@ public:
     virtual void Render() = 0;
 
     void Draw() override;
+
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "isVisible" << YAML::Value << m_bIsVisible;
+        out << YAML::Key << "castShadows" << YAML::Value << m_bCastShadows;
+        if (m_pMaterial) {
+            out << YAML::Key << "materialFileID" << YAML::Value << m_pMaterial->GetFileID();
+        }
+    }
 };
 

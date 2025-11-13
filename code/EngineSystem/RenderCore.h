@@ -35,10 +35,15 @@ class Texture : public EngineMetaFile {
 public:
     Texture() : EngineMetaFile() {}
     std::wstring filename;
-    ID3D11ShaderResourceView* shader_resource_view;
+    ID3D11ShaderResourceView* shaderResourceView;
+    ID3D11ShaderResourceView* mipMap;
     int width = 0;
     int height = 0;
     bool toExport = true;
+
+    std::string GetFileName() {
+        return std::string(filename.begin(), filename.end());
+    }
 };
 
 class RenderCore
@@ -107,6 +112,13 @@ private:
     ID3D11RenderTargetView* m_pPostProcessRTV[3] = {};
     ID3D11ShaderResourceView* m_pPostProcessSRV[3] = {};
     Texture* m_PostProcessTexture[3] = {};
+
+    ID3D11RenderTargetView* m_pSceneViewRTV = {};
+    ID3D11ShaderResourceView* m_pSceneViewSRV = {};
+    Texture* m_pSceneViewTexture = {};
+    ID3D11RenderTargetView* m_pGameViewRTV = {};
+    ID3D11ShaderResourceView* m_pGameViewSRV = {};
+    Texture* m_pGameViewTexture = {};
 
 	/// @brief レンダーターゲットビューを作成します。
 	void CreateRenderTargetView();
@@ -200,6 +212,15 @@ public:
 	/// @param index 取得するテクスチャのインデックス。
 	/// @return 指定したインデックスに対応するID3D11ShaderResourceViewポインタ。該当するテクスチャが存在しない場合はnullptrを返すことがあります。
 	ID3D11ShaderResourceView** GetTexture(int fileID);
+    std::string GetTextureFileName(int fileID) {
+        for (auto texture : m_Textures) {
+            if (texture->GetFileID() == fileID) {
+                return std::string(texture->filename.begin(), texture->filename.end());
+            }
+        }
+        return "";
+    }
+
 	/// @brief 指定されたインデックスのテクスチャの幅を取得します。
 	/// @param index 幅を取得するテクスチャのインデックス。
 	/// @return テクスチャの幅（ピクセル単位）。
@@ -297,6 +318,17 @@ public:
 
     void SetWeight(float* weight);
     void CreatePostProcessBuffer();
+    void CreateSceneGameViewBuffer();
+
+    void BeginSceneView();
+    void BeginGameView();
+
+    Texture* GetSceneViewTexture() {
+        return m_pSceneViewTexture;
+    }
+    Texture* GetGameViewTexture() {
+        return m_pGameViewTexture;
+    }
 
 };
 

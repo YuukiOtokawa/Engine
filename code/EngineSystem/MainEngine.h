@@ -15,8 +15,24 @@
 #include "RenderCore.h"
 #include "Editor.h"
 
+#include "ObjectInterfacePerModule.h"
+
+#include "EngineAPI.h"
+
+#include "yaml.h"
+
+#ifdef _DEBUG
+#pragma comment(lib, "yaml-cppd.lib")
+#else
+#pragma comment(lib, "yaml-cpp.lib")
+#endif // DEBUG
+
+
 std::string OpenImportFileDialog();
 std::string OpenExportFileDialog();
+
+
+extern OTOKAWA_API SystemTable* g_pSystemTable;
 
 //==========================================================================
 // クラス定義
@@ -24,8 +40,12 @@ std::string OpenExportFileDialog();
 
 class Time;
 class EngineConsole;
+class SystemMonitor;
 
-class MainEngine
+struct IObjectFactorySystem;
+
+
+class OTOKAWA_API MainEngine
 {
 private:
 	// エンジンメニューの定義
@@ -57,6 +77,10 @@ private:
     Time* m_pTimeSystem = nullptr;
 
     EngineConsole* m_pEngineConsole = nullptr;
+    
+    SystemMonitor* m_pSystemMonitor = nullptr;
+
+    IObjectFactorySystem* m_pObjectFactorySystem;
 
 	// インスタンスハンドル
 	HINSTANCE m_hInstance = NULL;
@@ -75,8 +99,13 @@ private:
 	//クラスインスタンスポインタ
 	static MainEngine* m_pInstance;
 
+    bool RCCppInitialize();
+    void RCCppUpdate();
+    void RCCppFinalize();
+
 public:
-	/// @brief MainEngine クラスのシングルトンインスタンスを取得します。
+
+    /// @brief MainEngine クラスのシングルトンインスタンスを取得します。
 	/// @return MainEngine クラスの唯一のインスタンスへのポインタ。
 	static MainEngine* GetInstance() {
 		if (m_pInstance == nullptr) {

@@ -80,7 +80,7 @@ public:
         // ライトの更新処理が必要な場合はここに記述
     }
 
-    void ExportComponent() override;
+    void ExportComponent(YAML::Emitter& out) override;
 
     void SetType(LightType newType) {
         m_Type = newType;

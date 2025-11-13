@@ -93,6 +93,7 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 	TextureLoad(L"asset/texture/Default_White.png");
 	CreatePostProcessBuffer();
+	CreateSceneGameViewBuffer();
 }
 
  RenderCore::~RenderCore()
@@ -343,11 +344,93 @@ void RenderCore::CreatePostProcessBuffer()
 		texture[i] = new Texture();
 		texture[i]->width = m_ClientSize.x;
 		texture[i]->height = m_ClientSize.y;
-		texture[i]->shader_resource_view = m_pPostProcessSRV[i];
+		texture[i]->shaderResourceView = m_pPostProcessSRV[i];
 		texture[i]->toExport = false;
-		AddTexture(texture[i]);
+		//AddTexture(texture[i]);
 		m_PostProcessTexture[i] = texture[i];
 	}
+}
+
+void RenderCore::CreateSceneGameViewBuffer()
+{
+	// SceneView用のテクスチャを作成
+	ID3D11Texture2D* pSceneTexture = nullptr;
+	D3D11_TEXTURE2D_DESC td = {};
+
+	td.Width = (UINT)m_ClientSize.x;
+	td.Height = (UINT)m_ClientSize.y;
+	td.MipLevels = 1;
+	td.ArraySize = 1;
+	td.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	td.SampleDesc.Count = 1;
+	td.SampleDesc.Quality = 0;
+	td.Usage = D3D11_USAGE_DEFAULT;
+	td.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	td.CPUAccessFlags = 0;
+	td.MiscFlags = 0;
+
+	HRESULT hr = m_pDevice->CreateTexture2D(&td, NULL, &pSceneTexture);
+
+	// GameView用のテクスチャを作成
+	ID3D11Texture2D* pGameTexture = nullptr;
+	hr = m_pDevice->CreateTexture2D(&td, NULL, &pGameTexture);
+
+	// SceneView用のRenderTargetViewとShaderResourceViewを作成
+	D3D11_RENDER_TARGET_VIEW_DESC rtvd = {};
+	rtvd.Format = td.Format;
+	rtvd.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	hr = m_pDevice->CreateRenderTargetView(pSceneTexture, &rtvd, &m_pSceneViewRTV);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd = {};
+	srvd.Format = td.Format;
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MipLevels = 1;
+	hr = m_pDevice->CreateShaderResourceView(pSceneTexture, &srvd, &m_pSceneViewSRV);
+
+	// GameView用のRenderTargetViewとShaderResourceViewを作成
+	hr = m_pDevice->CreateRenderTargetView(pGameTexture, &rtvd, &m_pGameViewRTV);
+	hr = m_pDevice->CreateShaderResourceView(pGameTexture, &srvd, &m_pGameViewSRV);
+
+	// SceneView用のTextureオブジェクトを作成
+	Texture* sceneTexture = new Texture();
+	sceneTexture->width = m_ClientSize.x;
+	sceneTexture->height = m_ClientSize.y;
+	sceneTexture->shaderResourceView = m_pSceneViewSRV;
+	sceneTexture->toExport = false;
+	m_pSceneViewTexture = sceneTexture;
+
+	// GameView用のTextureオブジェクトを作成
+	Texture* gameTexture = new Texture();
+	gameTexture->width = m_ClientSize.x;
+	gameTexture->height = m_ClientSize.y;
+	gameTexture->shaderResourceView = m_pGameViewSRV;
+	gameTexture->toExport = false;
+	m_pGameViewTexture = gameTexture;
+
+	// テクスチャリソースを解放（ViewがテクスチャをReference countしているため）
+	pSceneTexture->Release();
+	pGameTexture->Release();
+}
+void RenderCore::BeginSceneView()
+{
+	m_pDeviceContext->OMSetRenderTargets(1, &m_pSceneViewRTV, m_pDepthStencilView);
+	float clear_color[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
+
+
+	m_pDeviceContext->ClearRenderTargetView(m_pSceneViewRTV, clear_color);
+
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
+}
+
+void RenderCore::BeginGameView()
+{
+	m_pDeviceContext->OMSetRenderTargets(1, &m_pGameViewRTV, m_pDepthStencilView);
+	float clear_color[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
+
+
+	m_pDeviceContext->ClearRenderTargetView(m_pGameViewRTV, clear_color);
+
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
 }
 
 std::vector<Texture*> RenderCore::GetTextureInfo()
@@ -529,17 +612,21 @@ int RenderCore::TextureLoad(const std::wstring& filename, int fileID)
 	// テクスチャ読み込み
 	TexMetadata metadata;
 	ScratchImage image;
+	ScratchImage mipChain;
 	LoadFromWICFile(filename.c_str(), WIC_FLAGS_NONE, &metadata, image);
 
+	GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), TEX_FILTER_DEFAULT, 0, mipChain);
+
 	Texture* texture = new Texture();
-	CreateShaderResourceView(m_pDevice, image.GetImages(), image.GetImageCount(), metadata, &texture->shader_resource_view);
+	CreateShaderResourceView(m_pDevice, image.GetImages(), image.GetImageCount(), metadata, &texture->shaderResourceView);
+	CreateShaderResourceView(m_pDevice, mipChain.GetImages(), mipChain.GetImageCount(), metadata, &texture->mipMap);
 	texture->width = (int)metadata.width;
 	texture->height = (int)metadata.height;
 	texture->filename = filename;
 	
 	std::string str;
 
-	if (!texture->shader_resource_view) {
+	if (!texture->shaderResourceView) {
 		MessageBoxW(NULL, L"ファイルが読み込めなかった", filename.c_str(), MB_ICONEXCLAMATION | MB_OK);
 		return 0;
 	}
@@ -554,7 +641,7 @@ int RenderCore::TextureLoad(const std::wstring& filename, int fileID)
 
 int RenderCore::AddTexture(Texture* texture)
 {
-	if (!texture->shader_resource_view && texture->toExport) {
+	if (!texture->shaderResourceView && texture->toExport) {
 		return 0;
 	}
 
@@ -567,7 +654,7 @@ int RenderCore::AddTexture(Texture* texture)
 void RenderCore::ResetTexture()
 {
 	for (auto it : m_Textures) {
-		SAFE_RELEASE(it->shader_resource_view);
+		SAFE_RELEASE(it->shaderResourceView);
 		delete it;
 	}
 	m_Textures.clear();
@@ -581,7 +668,7 @@ ID3D11ShaderResourceView** RenderCore::GetTexture(int index)
 {
 	for (auto it : m_Textures) {
 		if (it->GetFileID() == index) {
-			return &it->shader_resource_view;
+			return &it->shaderResourceView;
 		}
 	}
 	return nullptr;

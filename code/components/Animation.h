@@ -17,7 +17,7 @@ public:
 
 	void Update() override;
 
-    void ExportComponent() override;
+    void ExportComponent(YAML::Emitter& out) override;
 
 	void SetFramePerSecond(int fps) { m_FramePerSecond = fps; }
 	void SetLoop(bool loop) { m_Loop = loop; }

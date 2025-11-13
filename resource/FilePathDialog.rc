@@ -129,20 +129,14 @@ IDR_MENU1 MENU
 BEGIN
     POPUP "File"
     BEGIN
-        MENUITEM "Add Object",                  ID_FILE_ADDOBJECT
         MENUITEM "Save",                        ID_FILE_SAVE
         MENUITEM "Load",                        ID_FILE_LOAD
         MENUITEM "Exit",                        ID_FILE_EXIT
     END
     POPUP "Window"
     BEGIN
-        MENUITEM "New Window",                  ID_WINDOW_NEWWINDOW
+        MENUITEM "Node Window",                 ID_WINDOW_NEWWINDOW
     END
-END
-
-IDR_MENU2 MENU
-BEGIN
-    MENUITEM SEPARATOR
 END
 
 
@@ -163,32 +157,6 @@ END
 //
 
 IDR_TOOLBAR1            BITMAP                  "toolbar1.bmp"
-
-IDB_BITMAP1             BITMAP                  "bitmap1.bmp"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Cursor
-//
-
-IDC_POINTER             CURSOR                  "POINTER.cur"
-
-IDC_POINTER_COPY        CURSOR                  "POINTER_COPY.cur"
-
-IDC_NODROP              CURSOR                  "NODROP.cur"
-
-IDC_CURSOR1             CURSOR                  "cursor1.cur"
-
-IDC_CURSOR2             CURSOR                  "cursor2.cur"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// RT_RIBBON_XML
-//
-
-IDR_RIBBON1             RT_RIBBON_XML           "ribbon1.mfcribbon-ms"
 
 #endif    // 日本語 (日本) resources
 /////////////////////////////////////////////////////////////////////////////

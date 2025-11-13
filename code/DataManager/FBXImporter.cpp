@@ -127,12 +127,18 @@ void FBXImporter::LoadTexture(std::string filename)
 		// テクスチャ読み込み
 		TexMetadata metadata;
 		ScratchImage image;
-		LoadFromWICMemory(aitexture->pcData, aitexture->mWidth, WIC_FLAGS_NONE, &metadata, image);
+		LoadFromWICMemory(
+			reinterpret_cast<const uint8_t*>(aitexture->pcData),
+			static_cast<size_t>(aitexture->mWidth),
+			WIC_FLAGS_NONE,
+			&metadata,
+			image
+		);
 		CreateShaderResourceView(MainEngine::GetInstance()->GetRenderCore()->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &srv);
 		assert(srv);
 
 		Texture* texture = new Texture();
-		texture->shader_resource_view = srv;
+		texture->shaderResourceView = srv;
 		texture->filename = std::wstring(aitexture->mFilename.C_Str(), aitexture->mFilename.C_Str() + strlen(aitexture->mFilename.C_Str()));
 		texture->height = metadata.height;
 		texture->width = metadata.width;

@@ -265,6 +265,7 @@ namespace FW
             // 新しいファイル名を見つけて追加し、古いファイル名を削除
             case CHANGE_FILE_NAME:
 
+            {
                 // ファイルが削除されたかどうかを確認
                 // ファイルが削除された場合、contents のサイズは directoryContents[id] のサイズより小さくなる
                 bool isFileDeleted = contents.size() < directoryContents[id].size();
@@ -337,6 +338,7 @@ namespace FW
                 }
 
                 break;
+            }
 
             // ファイルサイズの変更
             // 変更前のサイズと変更後のサイズを比較し、異なる場合

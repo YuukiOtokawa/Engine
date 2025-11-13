@@ -32,7 +32,9 @@
 #include <Windows.h>
 
 #include "CSVExporter.h"
+#include "SceneExporter.h"
 #include "CSVImporter.h"
+#include "SceneImporter.h"
 #include "resource.h"
 #include <Richedit.h>
 
@@ -40,10 +42,23 @@
 
 #include "TimeSystem.h"
 #include "EngineConsole.h"
+#include "SystemMonitor.h"
+
+#include "RuntimeObjectSystem.h"
+#include "IObjectFactorySystem.h"
+#include "StdioLogSystem.h"
+#include "SystemTable.h"
+
+#include "ScriptFactory.h"
+
 
 constexpr auto WINDOW_CREATE_FAILED = -1;
 
 MainEngine* MainEngine::m_pInstance = nullptr;
+
+
+static StdioLogSystem g_Logger;
+OTOKAWA_API SystemTable* g_pSystemTable = new SystemTable();
 
 //==========================================================================
 // メンバ関数
@@ -72,6 +87,102 @@ int APIENTRY WinMain(
 }
 
 
+bool MainEngine::RCCppInitialize()
+{
+	g_pSystemTable->pRuntimeObjectSystem = new RuntimeObjectSystem;
+
+	if (!g_pSystemTable->pRuntimeObjectSystem->Initialise(&g_Logger, g_pSystemTable)) {
+		delete g_pSystemTable->pRuntimeObjectSystem;
+		g_pSystemTable->pRuntimeObjectSystem = NULL;
+		ErrorMessage("RuntimeObjectSystemの初期化に失敗しました。", "エラー");
+		return false;
+	}
+
+	m_pObjectFactorySystem = g_pSystemTable->pRuntimeObjectSystem->GetObjectFactorySystem();
+
+	FileSystemUtils::Path basePath = g_pSystemTable->pRuntimeObjectSystem->FindFile(__FILE__).ParentPath();
+	FileSystemUtils::Path imguiIncludeDir = basePath.ParentPath() / "imgui";
+	FileSystemUtils::Path scriptIncludeDir = basePath.ParentPath().ParentPath() / "scripts";
+	FileSystemUtils::Path dataManagerDir = basePath.ParentPath() / "DataManager";
+	FileSystemUtils::Path componentDir = basePath.ParentPath() / "components";
+	FileSystemUtils::Path directXTex = basePath.ParentPath().ParentPath() / "DirectXTex";
+	FileSystemUtils::Path externalDir = basePath.ParentPath().ParentPath() / "external";
+	FileSystemUtils::Path code = basePath.ParentPath();
+	FileSystemUtils::Path engineSystem = basePath.ParentPath() / "EngineSystem";
+	FileSystemUtils::Path input = basePath.ParentPath() / "input";
+	FileSystemUtils::Path yaml = basePath.ParentPath() / "yaml-cpp-master" / "include" / "yaml-cpp";
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(basePath.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(externalDir.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(imguiIncludeDir.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(scriptIncludeDir.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(dataManagerDir.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(directXTex.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(componentDir.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(code.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(engineSystem.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(input.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(yaml.c_str());
+	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(yaml.ParentPath().c_str());
+
+	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("build/x64/Debug");
+	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("code/yaml-cpp-master/build/Debug");
+	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("code/yaml-cpp-master/build/Release");
+#ifdef _DEBUG
+	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("code/DirectXTex-main/DirectXTex/Bin/Desktop_2022/x64/Debug");
+#else
+	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("code/DirectXTex-main/DirectXTex/Bin/Desktop_2022/x64/Release");
+#endif // _DEBUG
+
+
+	
+#ifdef _DEBUG
+	// 動的ランタイムライブラリを明示的に除外し、必要なライブラリのみリンク
+	g_pSystemTable->pRuntimeObjectSystem->SetAdditionalLinkOptions(
+		" OtokawaEngine.lib"
+		" yaml-cppd.lib"
+		" DirectXTex.lib"
+	);
+#else
+	g_pSystemTable->pRuntimeObjectSystem->SetAdditionalLinkOptions(
+		" OtokawaEngine.lib"
+		" yaml-cpp.lib"
+		" DirectXTex.lib"
+	);
+#endif
+
+	// 保留されたスクリプト登録を実行
+	ScriptFactory::RegisterAllPendingScripts();
+
+	// ScriptFactoryをホットリロードのリスナーとして登録
+	g_pSystemTable->pRuntimeObjectSystem->GetObjectFactorySystem()->AddListener(&ScriptFactory::GetInstance());
+
+	return true;
+}
+
+void MainEngine::RCCppUpdate()
+{
+	//check status of any compile
+	if (g_pSystemTable->pRuntimeObjectSystem->GetIsCompiledComplete())
+	{
+		// save state
+		// load module when compile complete
+		g_pSystemTable->pRuntimeObjectSystem->LoadCompiledModule();
+
+		// load state
+	}
+
+	if (!g_pSystemTable->pRuntimeObjectSystem->GetIsCompiling())
+	{
+		float deltaTime = 1.0f / ImGui::GetIO().Framerate;
+		g_pSystemTable->pRuntimeObjectSystem->GetFileChangeNotifier()->Update(deltaTime);
+	}
+}
+
+void MainEngine::RCCppFinalize()
+{
+	delete g_pSystemTable->pRuntimeObjectSystem;
+}
+
 int MainEngine::SystemLoop()
 {
 	while (WM_QUIT != m_Message.message) {
@@ -82,15 +193,14 @@ int MainEngine::SystemLoop()
 			DispatchMessage(&m_Message);
 		}
 		else {
+			RCCppUpdate();
 			m_pTimeSystem->Update();
-			//if ((m_dwCurrentTime - m_dwFPSLastTime) >= 1000) // 1秒ごとに実行
-			//{
-
-			//	m_FramePerSecond = m_dwFrameCount;
-			//	m_dwFPSLastTime = m_dwCurrentTime; // FPSを測定した時刻を保存
-			//	m_dwFrameCount = 0; // カウントをクリア
-			//}
-			if ((Time::currentTime - Time::lastTime) >= (1000 / 60)) // 1/60秒ごとに実行
+			if ((Time::currentTime - Time::lastSystemTime) >= std::chrono::duration<double>(1.0)) // 1秒ごとに実行
+			{
+				SystemMonitor::Update();
+				m_pTimeSystem->SystemTimeUpdate();
+			}
+			if ((Time::currentTime - Time::lastFrameTime) >= Time::targetFrameDuration) // 1/60秒ごとに実行
 			{
 				m_pTimeSystem->FrameUpdate();
 
@@ -210,6 +320,11 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	// コンソールウィンドウの初期化
 	m_pEngineConsole = new EngineConsole;
 
+	m_pSystemMonitor = new SystemMonitor;
+	SystemMonitor::Initialize();
+
+	RCCppInitialize();
+
 	// ログコンソールの初期化
 	AllocConsole();
 	freopen_s(&m_pFile, "CONOUT$", "w", stdout);
@@ -255,6 +370,8 @@ void MainEngine::Finalize()
 		m_pFile = nullptr;
 	}
 
+	RCCppFinalize();
+
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 }
@@ -285,7 +402,7 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			new Object();
 			break;
 		case ID_FILE_SAVE: // 保存
-			CSVExporter::Export(m_pEditor->GetObjects());
+			SceneExporter::Export(m_pEditor->GetObjects());
 			break;
 		case ID_FILE_LOAD: // 読み込み
 		{
@@ -300,6 +417,10 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				DestroyWindow(hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
 			}
 			return 0; // DefWindowProc関数にメッセージを流さず終了することによって何もなかったことにする
+		case ID_WINDOW_NEWWINDOW:
+		{
+			GUI::GetInstance()->SetNodeEditorVisible();
+		}
 		default:
 			break;
 		}
@@ -442,13 +563,13 @@ std::string OpenExportFileDialog()
 		pFileSaveDialog->Release();
 		return "";
 	}
-	pFileSaveDialog->SetFileName(L"scene.csv");
-	pFileSaveDialog->SetDefaultExtension(L"csv");
+	pFileSaveDialog->SetFileName(L"scene.yml");
+	pFileSaveDialog->SetDefaultExtension(L"yml");
 
 	// COM_FILTERSPEC構造体の配列を定義
 	const COMDLG_FILTERSPEC rgSpec[] =
 	{
-		{ L"CSVファイル (*.csv)", L"*.csv" },
+		{ L"YAMLファイル (*.yml)", L"*.yml" },
 		{ L"テキストファイル (*.txt)", L"*.txt" },
 		{ L"すべてのファイル (*.*)", L"*.*" },
 	};

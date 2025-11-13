@@ -60,9 +60,9 @@ public:
 		ImGui::Unindent();
 	}
 
-    void ExportComponent() override {
-        CSVExporter::ExportFloat(lengthFrag);
-        CSVExporter::ExportFloat(speed);
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "lengthFrag" << YAML::Value << lengthFrag;
+        out << YAML::Key << "speed" << YAML::Value << speed;
     }
 
 	void SetPlayer(Object* playerObject) {

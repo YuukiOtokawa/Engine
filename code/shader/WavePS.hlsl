@@ -26,7 +26,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     
     if (textureEnable)
     {
-        outDiffuse = g_EnvTexture.Sample(g_SamplerState, In.TexCoord);
+        outDiffuse = g_EnvTexture.Sample(g_SamplerState, envTexCoord);
         outDiffuse *= In.Diffuse;
     }
     else

@@ -5,10 +5,16 @@
 #include <variant> // void* に代わる型安全な代替手段として std::variant を使用することも検討できます。
 
 #include "Properties.h"
-#include "ScriptFactory.h"
+
+#include "ObjectInterfacePerModule.h"
 
 struct ISimpleSerializer;
 class Object;
+
+// 前方宣言
+namespace YAML {
+    class Node;
+}
 
 enum class PropertyType {
     INT,
@@ -28,7 +34,9 @@ struct Property {
     void* Data;
 };
 
-class Script
+class ScriptI :public IObject { };
+
+class Script : public TInterface<IID_ENDInterfaceID, ScriptI>
 {
     
 
@@ -50,8 +58,8 @@ public:
 
     virtual void Update() {}
 
-    virtual void Import(std::vector<std::string> tokens) {}
-    virtual void Export() {}
+    virtual void Import(YAML::Node& node) {}
+    virtual void Export(YAML::Emitter& out) {}
 
     virtual const char* GetScriptName() const = 0;
 

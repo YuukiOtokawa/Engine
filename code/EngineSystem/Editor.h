@@ -34,11 +34,13 @@
 
 #include "CollisionManager.h"
 
+#include "EngineAPI.h"
+
 //==========================================================================
 // クラス定義
 //==========================================================================
 
-class Editor
+class OTOKAWA_API Editor
 {
 private:
 	// オブジェクトのリスト
@@ -72,9 +74,15 @@ private:
 	Object* m_pSelectedObject = nullptr;
 	Object* m_pActiveCamera = nullptr;
 
+    Object* m_pEditorCamera = nullptr;
+
     std::string m_NextSceneName = "";
 
     bool m_isSceneViewHovered = false;
+    bool m_isGameViewHovered = false;
+
+	// ImGuizmo操作モード (0=移動, 1=回転, 2=スケール)
+	int m_GizmoOperation = 0;
 
 public:
 	/// @brief エディタークラスのシングルトンインスタンスを取得します。
@@ -97,7 +105,7 @@ public:
 	/// @brief オブジェクトの描画処理を実行します。
 	void Draw();
 
-    void DrawGame(Object* camera, Object* renderTexture);
+    void DrawGame(Object* camera, Object* renderTexture = nullptr);
 	/// @brief オブジェクトやリソースの後処理を行います。
 	void Finalize();
 
@@ -123,6 +131,8 @@ public:
 
     std::list<Object*>& GetObjects() { return m_Objects; }
     void SetObjects(const std::list<Object*>& objects) { m_Objects = objects; }
+
+    Object* GetObjectByFileID(int fileID);
 
     void ResetScene();
 

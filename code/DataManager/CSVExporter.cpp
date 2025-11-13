@@ -6,6 +6,8 @@
 
 #include "MainEngine.h"
 
+#include <yaml-cpp/yaml.h>
+
 std::ofstream CSVExporter::m_File;
 std::list<EngineMetaFile*> CSVExporter::m_ExportList;
 std::list<VertexIndex*> CSVExporter::m_VertexIndicesExportList;
@@ -29,7 +31,8 @@ void CSVExporter::Export(std::list<Object*> objects)
 	for (const auto& metaFile : m_ExportList) {
 		m_File << metaFile->GetClassID() << ","; // Export ClassID
 		m_File << metaFile->GetFileID() << ","; // Export FileID
-		metaFile->ExportFile(); // Call the export function for the specific object
+		YAML::Emitter dummyNode; // CSVExporter is deprecated, using dummy YAML::Node
+		metaFile->ExportFile(dummyNode); // Call the export function for the specific object
 		m_File << "\n"; // New line after each object
 	}
 	// Close the file

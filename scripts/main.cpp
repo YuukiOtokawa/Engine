@@ -52,6 +52,18 @@ void SetSceneGame()
 
 		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, -7.5f));
 		camera->GetComponent<EditorCamera>()->SetTarget(Vector4O(0.0f, 0.0f, 0.0f));
+
+	}
+
+	//ゲームカメラ作成
+	{
+		auto camera = new Object();
+		camera->SetName("GameCamera");
+		camera->AddComponent<Transform>();
+		camera->AddComponent<Camera>();
+
+		camera->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, 5.0f, -7.5f));
+		camera->GetComponent<Camera>()->SetTarget(Vector4O(0.0f, 0.0f, 0.0f));
 		Editor::GetInstance()->SetActiveCamera(camera);
 
 	}

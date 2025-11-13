@@ -35,9 +35,10 @@ public:
 
     void Update() override;
     void Render() override; // ここにメインの描画ロジックを記述します
+    void RenderShadow();
     void DrawGUI() override;
-    void ImportFile(std::vector<std::string>& tokens) override;
-    void ExportComponent() override;
+    void ImportFile(YAML::Node& node) override;
+    void ExportComponent(YAML::Emitter& out) override;
     void AddExportList() override;
     void InitializeTag() override;
 

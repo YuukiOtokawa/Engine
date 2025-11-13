@@ -61,8 +61,8 @@ public:
     void SetNextAnimation(std::string animationKey);
 
     void AddExportList() override;
-    void ExportComponent() override;
-    void ImportFile(std::vector<std::string>& tokens) override;
+    void ExportComponent(YAML::Emitter& out) override;
+    void ImportFile(YAML::Node& node) override;
 
     void InitializeTag() override;
 };

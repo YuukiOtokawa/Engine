@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "EngineAPI.h"
+
 //==========================================================================
 // 繝倥ャ繝繝ｼ繧､繝ｳ繧ｯ繝ｫ繝ｼ繝�
 //==========================================================================
@@ -18,7 +20,7 @@
 #include "Mouse.h"
 #include "Gamepad.h"
 
-class InputSystem :
+class OTOKAWA_API InputSystem :
     public Component
 {
 private:
@@ -44,6 +46,10 @@ public:
 		owner->SetTag(GameObjectTagLayer::InputSystemTag);
         owner->SetLayer(GameObjectLayer::InputSystemLayer);
 		owner->SetDrawable(false);
+	}
+
+	void ExportComponent(YAML::Emitter& out) override {
+		// InputSystemは静的メンバのみなので、エクスポートするデータなし
 	}
 };
 

@@ -67,3 +67,26 @@ void Collider::OnCollisionExit(Object* target)
 {
 	m_CollisionObjects.remove(target);
 }
+
+Vector3O Collider::GetForward()
+{
+	auto transform = owner->GetComponent<Transform>();
+	if (transform) {
+		return transform->GetForward();
+	}
+	else {
+		return Vector3O::Forward();
+	}
+}
+
+Vector3O Collider::GetRight()
+{
+	auto transform = owner->GetComponent<Transform>();
+	if (transform) {
+		return transform->GetRight();
+	}
+	else {
+		return Vector3O::Right();
+	}
+}
+

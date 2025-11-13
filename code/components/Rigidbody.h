@@ -29,19 +29,21 @@ public:
 
     void DrawGUI() override;
 
-    void ExportComponent() override {
-        CSVExporter::ExportFloat(m_IsKinematic);
-        CSVExporter::ExportFloat(m_MovableX);
-        CSVExporter::ExportFloat(m_MovableY);
-        CSVExporter::ExportFloat(m_MovableZ);
-        CSVExporter::ExportFloat(m_RotableX);
-        CSVExporter::ExportFloat(m_RotableY);
-        CSVExporter::ExportFloat(m_RotableZ);
-        CSVExporter::ExportFloat(m_Mass);
-        CSVExporter::ExportFloat(m_Drag);
-        CSVExporter::ExportFloat(m_Gravity);
-        CSVExporter::ExportFloat(m_Bounce);
-        CSVExporter::ExportVector4O(m_Velocity);
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "isKinematic" << YAML::Value << m_IsKinematic;
+        out << YAML::Key << "movableX" << YAML::Value << m_MovableX;
+        out << YAML::Key << "movableY" << YAML::Value << m_MovableY;
+        out << YAML::Key << "movableZ" << YAML::Value << m_MovableZ;
+        out << YAML::Key << "rotableX" << YAML::Value << m_RotableX;
+        out << YAML::Key << "rotableY" << YAML::Value << m_RotableY;
+        out << YAML::Key << "rotableZ" << YAML::Value << m_RotableZ;
+        out << YAML::Key << "mass" << YAML::Value << m_Mass;
+        out << YAML::Key << "drag" << YAML::Value << m_Drag;
+        out << YAML::Key << "gravity" << YAML::Value << m_Gravity;
+        out << YAML::Key << "bounce" << YAML::Value << m_Bounce;
+
+        out << YAML::Key << "velocity" << YAML::Value << YAML::Flow << YAML::BeginSeq
+            << m_Velocity.x << m_Velocity.y << m_Velocity.z << m_Velocity.w << YAML::EndSeq;
     }
 
     void OnCollisionEnter(Object* target) override;

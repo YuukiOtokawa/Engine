@@ -36,7 +36,7 @@ public:
 
     void DrawGUI() override;
 
-    void ExportComponent() override;
+    void ExportComponent(YAML::Emitter& out) override;
 
     void SetSize(Vector4O size) {
         m_Size = size;

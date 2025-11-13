@@ -11,7 +11,7 @@ PostProcessTexture::PostProcessTexture()
 {
 	for (int i = 0; i < 3; i++) {
 		m_pPostProcessTexture[i] = new Texture;
-		m_pPostProcessTexture[i]->shader_resource_view = nullptr;
+		m_pPostProcessTexture[i]->shaderResourceView = nullptr;
 		m_pPostProcessTexture[i]->width = m_Resolusion.x;
 		m_pPostProcessTexture[i]->height = m_Resolusion.y;
 		m_pPostProcessTexture[i]->toExport = false;
@@ -130,8 +130,8 @@ void PostProcessTexture::SetShaderResourceView(Texture* texture, int n)
 
 void PostProcessTexture::DrawGUI()
 {
-	ImGui::Image((ImTextureID)m_pPostProcessTexture[0]->shader_resource_view, ImVec2(300, 300));
-	ImGui::Image((ImTextureID)m_pPostProcessTexture[1]->shader_resource_view, ImVec2(300, 300));
-	ImGui::Image((ImTextureID)m_pPostProcessTexture[2]->shader_resource_view, ImVec2(300, 300));
+	ImGui::Image((ImTextureID)m_pPostProcessTexture[0]->shaderResourceView, ImVec2(300, 300));
+	ImGui::Image((ImTextureID)m_pPostProcessTexture[1]->shaderResourceView, ImVec2(300, 300));
+	ImGui::Image((ImTextureID)m_pPostProcessTexture[2]->shaderResourceView, ImVec2(300, 300));
 
 }

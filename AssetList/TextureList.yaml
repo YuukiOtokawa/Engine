@@ -1,0 +1,7 @@
+textures:
+  - fileID: 9
+    filePath: asset/texture/sura.jpg
+  - fileID: 10
+    filePath: asset/texture/Normal.bmp
+  - fileID: 43
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\grass 1.jpg

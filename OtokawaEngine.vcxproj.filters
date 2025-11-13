@@ -58,6 +58,9 @@
     <Filter Include="ヘッダー ファイル\Script">
       <UniqueIdentifier>{5d5f28b0-e165-4ef7-98d7-28ceed54ed48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\RuntimeCompile">
+      <UniqueIdentifier>{969ca9cf-012a-4b21-b3e4-9201e5d29886}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\bitmap1.bmp">
@@ -147,7 +150,13 @@
     <ClCompile Include="code\DataManager\CSVExporter.cpp">
       <Filter>ソース ファイル\DataManager</Filter>
     </ClCompile>
+    <ClCompile Include="code\DataManager\SceneExporter.cpp">
+      <Filter>ソース ファイル\DataManager</Filter>
+    </ClCompile>
     <ClCompile Include="code\DataManager\CSVImporter.cpp">
+      <Filter>ソース ファイル\DataManager</Filter>
+    </ClCompile>
+    <ClCompile Include="code\DataManager\SceneImporter.cpp">
       <Filter>ソース ファイル\DataManager</Filter>
     </ClCompile>
     <ClCompile Include="code\components\EditorCamera.cpp">
@@ -291,16 +300,25 @@
     <ClCompile Include="code\EngineSystem\EngineConsole.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="code\Compile\FileChangeChecker.cpp">
+    <ClCompile Include="code\RCCppMainLoop.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="code\Compile\FileWatcher.cpp">
+    <ClCompile Include="code\StdioLogSystem.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="code\Compile\Compiler.cpp">
+    <ClCompile Include="code\imgui\imgui_canvas.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="code\Compile\CompilerLogger.cpp">
+    <ClCompile Include="code\imgui\imgui_node_editor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="code\imgui\imgui_node_editor_api.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="code\ImGuiUser\NodeEditor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="code\imgui\crude_json.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -446,7 +464,13 @@
     <ClInclude Include="code\DataManager\CSVExporter.h">
       <Filter>ヘッダー ファイル\DataManager</Filter>
     </ClInclude>
+    <ClInclude Include="code\DataManager\SceneExporter.h">
+      <Filter>ヘッダー ファイル\DataManager</Filter>
+    </ClInclude>
     <ClInclude Include="code\DataManager\CSVImporter.h">
+      <Filter>ヘッダー ファイル\DataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="code\DataManager\SceneImporter.h">
       <Filter>ヘッダー ファイル\DataManager</Filter>
     </ClInclude>
     <ClInclude Include="code\DataManager\FBXImporter.h">
@@ -521,65 +545,74 @@
     <ClInclude Include="scripts\GameManager.h">
       <Filter>ヘッダー ファイル\Script</Filter>
     </ClInclude>
-    <ClInclude Include="scripts\Pack.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\components\PlayerCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scripts\PlayerControl.h">
       <Filter>ヘッダー ファイル\Script</Filter>
-    </ClInclude>
-    <ClInclude Include="scripts\Score.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\EngineSystem\TimeSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\EngineSystem\SystemMonitor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\components\MeshFieldCollider.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\components\Rigidbody.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\components\Sky.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\EngineSystem\SystemLog.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveMeshField.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\EngineSystem\EngineConsole.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="resource\resource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="code\Compile\CompileFileSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="code\EngineSystem\EngineAPI.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
-    <ClInclude Include="code\Compile\FileChangeChecker.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="code\EngineSystem\EngineConsole.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
-    <ClInclude Include="code\Compile\FileWatcher.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="ScriptFactory.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
-    <ClInclude Include="code\Compile\FileWatcher_Alt.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="code\EngineSystem\SystemLog.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
-    <ClInclude Include="code\Compile\Compiler.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="code\EngineSystem\SystemMonitor.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
-    <ClInclude Include="code\Compile\CompileOption.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="code\EngineSystem\TimeSystem.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
-    <ClInclude Include="code\Compile\CompilerLogger.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="code\SystemTable.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="code\components\PlayerCamera.h">
+      <Filter>ヘッダー ファイル\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="code\components\MeshFieldCollider.h">
+      <Filter>ヘッダー ファイル\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="scripts\Score.h">
+      <Filter>ヘッダー ファイル\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="code\components\Sky.h">
+      <Filter>ヘッダー ファイル\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="code\StdioLogSystem.h">
+      <Filter>ヘッダー ファイル\RuntimeCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Compile\RuntimeTracking.h">
+      <Filter>ヘッダー ファイル\RuntimeCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Compile\RuntimeObject.h">
+      <Filter>ヘッダー ファイル\RuntimeCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Compile\RuntimeInclude.h">
+      <Filter>ヘッダー ファイル\RuntimeCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="code\EngineSystem\RuntimeCompilerManager.h">
+      <Filter>ヘッダー ファイル\RuntimeCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="code\RCCppMainLoop.h">
+      <Filter>ヘッダー ファイル\RuntimeCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveMeshField.h">
+      <Filter>ヘッダー ファイル\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="code\components\Rigidbody.h">
+      <Filter>ヘッダー ファイル\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="code\imgui\imgui_canvas.h">
+      <Filter>ヘッダー ファイル\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="code\imgui\imgui_node_editor.h">
+      <Filter>ヘッダー ファイル\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -692,6 +725,28 @@
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\WavePS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\stealthPS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\stealthVS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\EnvMapPS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\EnvMapVS.hlsl" />
+    <FxCompile Include="code\shader\ProjectionShadowPS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\ProjectionShadowVS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\ProjectionShadow1VS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\ProjectionShadow1PS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
   </ItemGroup>

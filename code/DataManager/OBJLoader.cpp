@@ -71,6 +71,30 @@ void OBJLoader::Load(const char* FileName, Object* object)
 	object->GetComponent<MeshRenderer>()->SetMaterial(material);
 }
 
+int OBJLoader::Load(const char* FileName)
+{
+	//コンポーネントが不足しているエラー表示
+
+	MODEL_OBJ obj;
+
+	if (m_ModelPool.count(FileName) > 0)
+	{
+		m_Model = m_ModelPool[FileName];
+
+	}
+	else {
+		m_Model = new MODEL;
+		obj = LoadModel(FileName, m_Model);
+
+		m_ModelPool[FileName] = m_Model;
+
+	}
+
+	Editor::GetInstance()->AddVertexIndex(m_Model->pVertexIndex);
+
+	return m_Model->pVertexIndex->GetFileID();
+}
+
 MODEL_OBJ OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 {
 	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
@@ -112,7 +136,7 @@ MODEL_OBJ OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 			Texture* texture = new Texture;
 			texture->height = (int)metadata.height;
 			texture->width = (int)metadata.width;
-			texture->shader_resource_view = srv;
+			texture->shaderResourceView = srv;
 			texture->filename = wc;
 			texture->toExport = false;
 
@@ -125,6 +149,10 @@ MODEL_OBJ OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 			else
 				Model->MaterialArray[i].SetTextureEnable(false);
 
+			//Model->MaterialArray[i].m_TextureFileIDs.clear();
+
+			//Model->MaterialArray[i].SetVertexShaderKey("unlit");
+			//Model->MaterialArray[i].SetPixelShaderKey("unlit");
 		}
 	}
 
@@ -421,7 +449,6 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 
 	//メモリ確保
 	materialArray = new MODEL_MATERIAL[materialNum];
-
 
 	//要素読込
 	int mc = -1;

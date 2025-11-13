@@ -41,7 +41,7 @@ public:
 	void DrawGUI() override {
 		// GUI描画処理
 	}
-	void ExportComponent() override {
+	void ExportComponent(YAML::Emitter& out) override {
 		// コンポーネントのエクスポート処理
 	}
 

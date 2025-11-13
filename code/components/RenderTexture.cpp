@@ -37,7 +37,7 @@ RenderTexture::RenderTexture() : Component() {
 		renderCore->GetDevice()->CreateRenderTargetView(m_pRenderTargetTexture, NULL, &m_pRenderTargetView);
 
 		m_pTexture = new Texture;
-		m_pTexture->shader_resource_view = pSRV;
+		m_pTexture->shaderResourceView = pSRV;
 		m_pTexture->width = m_Resolusion.x;
 		m_pTexture->height = m_Resolusion.y;
 		m_pTexture->toExport = false;
@@ -156,7 +156,7 @@ void RenderTexture::Update()
 		renderCore->GetDevice()->CreateShaderResourceView(m_pRenderTargetTexture, &srvd, &pSRV);
 		renderCore->GetDevice()->CreateRenderTargetView(m_pRenderTargetTexture, NULL, &m_pRenderTargetView);
 
-		m_pTexture->shader_resource_view = pSRV;
+		m_pTexture->shaderResourceView = pSRV;
 		m_pTexture->width = m_Resolusion.x;
 		m_pTexture->height = m_Resolusion.y;
 	}

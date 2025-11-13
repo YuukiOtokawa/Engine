@@ -7,6 +7,7 @@
 #include "ComponentFactory.h"
 #include "ScriptFactory.h"
 #include "ScriptComponent.h"
+#include "SceneImporter.h"
 
 void AddComponentPopup(Object* object)
 {
@@ -74,7 +75,7 @@ void GetMesh(MeshFilter* meshFilter)
 	std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char c) { return std::tolower(c); });
 
 	if (extension == ".csv") {
-		int fileID = CSVImporter::ImportMesh(filePath);
+		int fileID = SceneImporter::ImportMesh(filePath);
 		if (fileID == -1) return;
 		meshFilter->SetMesh(fileID);
 	}

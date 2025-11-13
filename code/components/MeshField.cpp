@@ -239,15 +239,25 @@ void MeshField::InitializeTag()
 
 }
 
-void MeshField::ImportFile(std::vector<std::string>& tokens)
+void MeshField::ImportFile(YAML::Node& node)
 {
-	//int vertexIndexFID = std::stoi(tokens[6]);
-	//m_VertexIndex.ImportFile(DataManager::GetInstance()->GetMetaFileTokens(vertexIndexFID));
-	//m_MeshSize[0] = std::stoi(tokens[1]);
-	//m_MeshSize[1] = std::stoi(tokens[2]);
-	//m_CellSize = CSVImporter::ImportVector2O(tokens, 3);
-	//CreateMesh();
-	//CreateBuffer();
+	if (node["tag"]) {
+		tag = static_cast<Tag>(node["tag"].as<int>());
+	}
+	if (node["vertexIndexFileID"]) {
+		int fileID = node["vertexIndexFileID"].as<int>();
+		// VertexIndexの読み込みが必要な場合、ここで実装
+	}
+	if (node["meshSizeX"]) {
+		m_MeshSize[0] = node["meshSizeX"].as<int>();
+	}
+	if (node["meshSizeY"]) {
+		m_MeshSize[1] = node["meshSizeY"].as<int>();
+	}
+	if (node["cellSize"]) {
+		auto cellSize = node["cellSize"];
+		m_CellSize = Vector2O(cellSize[0].as<float>(), cellSize[1].as<float>());
+	}
 }
 
 float MeshField::GetHeight(int x, int z)
@@ -258,3 +268,4 @@ float MeshField::GetHeight(int x, int z)
 	}
 	return m_VertexIndex.GetVertexInfo()[x * (int)m_MeshSize[1] + z].position.y;
 }
+

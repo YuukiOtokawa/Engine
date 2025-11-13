@@ -11,5 +11,9 @@ public:
     DECLARE_COMPONENT(Sky)
 
     void Update() override;
+
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "size" << YAML::Value << m_Size;
+    }
 };
 

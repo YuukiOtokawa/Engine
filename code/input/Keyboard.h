@@ -8,6 +8,8 @@
 #pragma once
 #include "FrameWork.h"
 
+#include "EngineAPI.h"
+
 //==========================================================================
 // キーボード
 //==========================================================================
@@ -381,7 +383,7 @@ typedef struct Keyboard_State_tag {
 } Keyboard_State;
 
 
-class Keyboard {
+class OTOKAWA_API Keyboard {
 private:
 	/// @brief 各種ステート
 	Keyboard_State m_UpState;

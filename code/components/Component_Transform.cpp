@@ -8,6 +8,7 @@
 #include "Component_Transform.h"
 
 #include "CSVImporter.h"
+#include "SceneImporter.h"
 
 REGISTER_COMPONENT(Transform)
 
@@ -31,9 +32,22 @@ void Transform::InitializeTag() {
 	owner->SetTag(GameObjectTagLayer::SystemTag);
 }
 
-void Transform::ImportFile(std::vector<std::string>& tokens)
+void Transform::ImportFile(YAML::Node& node)
 {
-	SetPosition(CSVImporter::ImportVector4O(tokens[4], tokens[5], tokens[6], tokens[7]));
-	SetRotation(CSVImporter::ImportVector4O(tokens[8], tokens[9], tokens[10], tokens[11]));
-	SetScale(CSVImporter::ImportVector4O(tokens[12], tokens[13], tokens[14], tokens[15]));
+	if (node["tag"]) {
+		tag = static_cast<Tag>(node["tag"].as<int>());
+	}
+	if (node["position"]) {
+		auto pos = node["position"];
+		SetPosition(Vector4O(pos[0].as<float>(), pos[1].as<float>(), pos[2].as<float>(), pos[3].as<float>()));
+	}
+	if (node["rotation"]) {
+		auto rot = node["rotation"];
+		SetRotation(Vector4O(rot[0].as<float>(), rot[1].as<float>(), rot[2].as<float>(), rot[3].as<float>()));
+	}
+	if (node["scale"]) {
+		auto scale = node["scale"];
+		SetScale(Vector4O(scale[0].as<float>(), scale[1].as<float>(), scale[2].as<float>(), scale[3].as<float>()));
+	}
 }
+

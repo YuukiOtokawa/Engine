@@ -66,11 +66,17 @@ void MeshFilter::InitializeTag() {
 	owner->SetIndexCount(m_iIndexCount);
 }
 
-void MeshFilter::ImportFile(std::vector<std::string>& tokens)
+void MeshFilter::ImportFile(YAML::Node& node)
 {
-	m_pVertexIndex = Editor::GetInstance()->GetVertexIndexByFileID(std::stoi(tokens[4]));
-
-	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
+	if (node["tag"]) {
+		tag = static_cast<Tag>(node["tag"].as<int>());
+	}
+	if (node["vertexIndexFileID"]) {
+		m_pVertexIndex = Editor::GetInstance()->GetVertexIndexByFileID(node["vertexIndexFileID"].as<int>());
+		if (m_pVertexIndex) {
+			SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
+		}
+	}
 }
 
 void MeshFilter::SetMesh(int fileID) {
@@ -78,15 +84,15 @@ void MeshFilter::SetMesh(int fileID) {
 	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
 }
 
-void MeshFilter::ExportComponent()
+void MeshFilter::ExportComponent(YAML::Emitter& out)
 {
-	CSVExporter::ExportInt(m_pVertexIndex->GetFileID());
+	out << YAML::Key << "vertexIndexFileID" << YAML::Value << m_pVertexIndex->GetFileID();
 }
 
 void MeshFilter::AddExportList()
 {
-	CSVExporter::AddExportList(this);
-	CSVExporter::AddVertexIndexExportList(m_pVertexIndex);
+	SceneExporter::AddExportList(this);
+	SceneExporter::AddVertexIndexExportList(m_pVertexIndex);
 }
 
 void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigned int> indices)
@@ -136,3 +142,4 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		owner->SetIndexCount(m_iIndexCount);
 	}
 }
+

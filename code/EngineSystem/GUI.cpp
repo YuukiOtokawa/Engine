@@ -20,6 +20,8 @@
 
 #include "ImGuizmo.h"
 
+#include "../code/ImGuiUser/NodeEditor.h"
+
 //==========================================================================
 // 名前空間定義
 //==========================================================================
@@ -27,6 +29,8 @@
 ImFont* GUI::m_pFontDefault = nullptr;
 ImFont* GUI::m_pFontObjectName = nullptr;
 ImFont* GUI::m_pCurrentFont = nullptr;
+
+GUI* GUI::m_pInstance = nullptr;
 
 //==========================================================================
 // メンバ関数
@@ -44,6 +48,13 @@ void GUI::Initialize() {
 
 	io.Fonts->Build();
 
+	m_pNodeEditor = new NodeEditor();
+	m_pNodeEditor->Initialize();
+}
+
+void GUI::Finalize()
+{
+	m_pNodeEditor->Finalize();
 }
 
 void GUI::StartImGui()
@@ -52,7 +63,7 @@ void GUI::StartImGui()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	//ImGuizmo::BeginFrame();
+	ImGuizmo::BeginFrame();
 
 	ImGui::PushFont(m_pFontDefault);
 	m_pCurrentFont = m_pFontDefault;
@@ -91,15 +102,20 @@ void GUI::StartImGui()
 		ImGui::DockBuilderDockWindow("Inspector", dockInspectorID);
 		ImGui::DockBuilderDockWindow("Hierarchy", dockHierarchyID);
 		ImGui::DockBuilderDockWindow("Scene View", dockSceneViewID);
+		ImGui::DockBuilderDockWindow("Game View", dockSceneViewID);
 		ImGui::DockBuilderDockWindow("System Monitor", dockSystemMonitorID);
 		ImGui::DockBuilderDockWindow("Console", dockConsoleID);
 
 		ImGui::DockBuilderFinish(m_DockSpaceID);
 	}
 
+
 	ImGui::End();
 
 	auto camera = Editor::GetInstance()->GetActiveCamera()->GetComponent<Camera>();
+
+	m_pNodeEditor->Render();
+
 
 	//ImGuizmo::Manipulate((float*)&camera->GetView(), (float*)&camera->GetProjection(), ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, (float*)&Editor::GetInstance()->GetActiveCamera()->GetComponent<Transform>()->GetWorldMatrix(), nullptr, nullptr);
 }
@@ -127,6 +143,14 @@ void GUI::StartSceneView()
 	}
 
 	Begin("Scene View", ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+}
+
+void GUI::StartGameView()
+{
+	if (m_IsFirstFrameGameView)
+		m_IsFirstFrameGameView = false;
+
+	Begin("Game View", ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 }
 
 void GUI::StartSystemMonitor()
@@ -179,6 +203,10 @@ void GUI::SetFontObjectName()
 	ImGui::PopFont();
 	ImGui::PushFont(m_pFontObjectName);
 	m_pCurrentFont = m_pFontObjectName;
+}
+
+void GUI::SetNodeEditorVisible() {
+	m_pNodeEditor->SetVisible();
 }
 
 void GUI::CreateRenderTarget() {

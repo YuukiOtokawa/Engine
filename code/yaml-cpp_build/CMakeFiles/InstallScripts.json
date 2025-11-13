@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp_build/cmake_install.cmake",
+		"C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp_build/test/cmake_install.cmake",
+		"C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp_build/test/prefix/cmake_install.cmake",
+		"C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp_build/test/prefix/googlemock/cmake_install.cmake",
+		"C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp_build/test/prefix/googletest/cmake_install.cmake",
+		"C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp_build/util/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

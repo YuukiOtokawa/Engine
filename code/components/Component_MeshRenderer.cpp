@@ -75,6 +75,8 @@ void MeshRenderer::Render() {
 
 	}
 
+	transform->SetTransformMatrix(translation);
+
     // 行列をレンダラーに設定する
     MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
     MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
@@ -104,26 +106,35 @@ void MeshRenderer::Render() {
 	    MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(meshFilter->m_iIndexCount, 0, 0);
 }
 
+void MeshRenderer::RenderShadow()
+{
+}
+
 void MeshRenderer::DrawGUI() {
 	ImGui::Indent();
 	m_pMaterial->DrawGUI();
 	ImGui::Unindent();
 }
 
-void MeshRenderer::ImportFile(std::vector<std::string>& tokens)
+void MeshRenderer::ImportFile(YAML::Node& node)
 {
-	m_pMaterial = Editor::GetInstance()->GetMaterialByFileID(std::stoi(tokens[4]));
+	if (node["tag"]) {
+		tag = static_cast<Tag>(node["tag"].as<int>());
+	}
+	if (node["materialFileID"]) {
+		m_pMaterial = Editor::GetInstance()->GetMaterialByFileID(node["materialFileID"].as<int>());
+	}
 }
 
-void MeshRenderer::ExportComponent()
+void MeshRenderer::ExportComponent(YAML::Emitter& out)
 {
-	CSVExporter::ExportInt(m_pMaterial->GetFileID());
+	out << YAML::Key << "materialFileID" << YAML::Value << m_pMaterial->GetFileID();
 }
 
 void MeshRenderer::AddExportList()
 {
-	CSVExporter::AddExportList(this);
-	CSVExporter::AddExportList(m_pMaterial);
+	SceneExporter::AddExportList(this);
+	SceneExporter::AddExportList(m_pMaterial);
 }
 
 void MeshRenderer::InitializeTag() {

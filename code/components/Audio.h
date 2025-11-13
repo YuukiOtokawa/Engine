@@ -27,7 +27,7 @@ public:
 
     void Update() override {}
 
-    void ExportComponent() override {}
+    void ExportComponent(YAML::Emitter& out) override {}
 
     void LoadAudio(const char* filename);
     void Release();

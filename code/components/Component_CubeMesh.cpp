@@ -246,4 +246,3 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 
 	SetVertexInfo(m_pVertexIndex->GetVertexInfo(), m_pVertexIndex->GetIndexInfo());
 }
-

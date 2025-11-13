@@ -102,26 +102,41 @@ void Light::DrawGUI()
 	ImGui::Unindent();
 }
 
-void Light::ExportComponent()
+void Light::ExportComponent(YAML::Emitter& out)
 {
-	CSVExporter::ExportInt(static_cast<int>(m_Type));
+	out << YAML::Key << "type" << YAML::Value << static_cast<int>(m_Type);
 	switch (m_Type)
 	{
 	case LIGHTTYPE_DIRECTIONAL:
-		CSVExporter::ExportVector4O(m_Direction);
-		CSVExporter::ExportVector4O(m_Diffuse);
+	{
+		out << YAML::Key << "direction" << YAML::Value << YAML::Flow << YAML::BeginSeq
+			<< m_Direction.x << m_Direction.y << m_Direction.z << m_Direction.w << YAML::EndSeq;
+
+		out << YAML::Key << "diffuse" << YAML::Value << YAML::Flow << YAML::BeginSeq
+			<< m_Diffuse.x << m_Diffuse.y << m_Diffuse.z << m_Diffuse.w << YAML::EndSeq;
 		break;
+	}
 	case LIGHTTYPE_POINT:
-		CSVExporter::ExportFloat(m_Range);
-		CSVExporter::ExportVector4O(m_Diffuse);
+	{
+		out << YAML::Key << "range" << YAML::Value << m_Range;
+
+		out << YAML::Key << "diffuse" << YAML::Value << YAML::Flow << YAML::BeginSeq
+			<< m_Diffuse.x << m_Diffuse.y << m_Diffuse.z << m_Diffuse.w << YAML::EndSeq;
 		break;
+	}
 	case LIGHTTYPE_SPOT:
-		CSVExporter::ExportFloat(m_Range);
-		CSVExporter::ExportFloat(m_InnerAngle);
-		CSVExporter::ExportFloat(m_OuterAngle);
-		CSVExporter::ExportVector4O(m_Diffuse);
-		CSVExporter::ExportVector4O(m_Direction);
+	{
+		out << YAML::Key << "range" << YAML::Value << m_Range;
+		out << YAML::Key << "innerAngle" << YAML::Value << m_InnerAngle;
+		out << YAML::Key << "outerAngle" << YAML::Value << m_OuterAngle;
+
+		out << YAML::Key << "diffuse" << YAML::Value << YAML::Flow << YAML::BeginSeq
+			<< m_Diffuse.x << m_Diffuse.y << m_Diffuse.z << m_Diffuse.w << YAML::EndSeq;
+
+		out << YAML::Key << "direction" << YAML::Value << YAML::Flow << YAML::BeginSeq
+			<< m_Direction.x << m_Direction.y << m_Direction.z << m_Direction.w << YAML::EndSeq;
 		break;
+	}
 	default:
 		break;
 	}

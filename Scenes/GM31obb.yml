@@ -1,0 +1,33 @@
+objects:
+  ? classID: 1
+    fileID: 4
+  : classID: 1
+    fileID: 5
+  ? classID: 1
+    fileID: 6
+  : classID: 1
+    fileID: 7
+  ? classID: 1
+    fileID: 8
+  : classID: 1
+    fileID: 11
+  ? classID: 1
+    fileID: 12
+  : classID: 1
+    fileID: 13
+  ? classID: 1
+    fileID: 15
+  : classID: 1
+    fileID: 16
+  ? classID: 1
+    fileID: 31
+  : classID: 1
+    fileID: 32
+  ? classID: 1
+    fileID: 33
+  : classID: 1
+    fileID: 34
+  ? classID: 1
+    fileID: 38
+  : classID: 1
+    fileID: 45

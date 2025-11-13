@@ -111,9 +111,10 @@ void SpriteMesh::DrawGUI()
 	ImGui::Unindent();
 }
 
-void SpriteMesh::ExportComponent()
+void SpriteMesh::ExportComponent(YAML::Emitter& out)
 {
-	CSVExporter::ExportVector4O(m_uvRect);
+	out << YAML::Key << "uvRect" << YAML::Value << YAML::Flow << YAML::BeginSeq
+		<< m_uvRect.x << m_uvRect.y << m_uvRect.z << m_uvRect.w << YAML::EndSeq;
 }
 
 bool SpriteMesh::SetSpriteByIndex(int index)

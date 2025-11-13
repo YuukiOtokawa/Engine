@@ -18,6 +18,7 @@
 #include "EngineMetaFile.h"
 
 #include "ComponentFactory.h"
+#include "SceneExporter.h"
 
 using namespace ComponentTag;
 
@@ -86,18 +87,17 @@ public:
         }
     }
 
-    void ExportFile() override {
-        CSVExporter::ExportString("&");// コンポーネントの識別子をエクスポート
-        CSVExporter::ExportInt(static_cast<int>(GetTag()));
-        ExportComponent();
+    void ExportFile(YAML::Emitter& out) override {
+        out << YAML::Key << "tag" << YAML::Value << static_cast<int>(GetTag());
+        ExportComponent(out);
     }
 
-    virtual void ExportComponent() {
+    virtual void ExportComponent(YAML::Emitter& out) {
         // デフォルトの実装は何もしない
     }
 
     void AddExportList() override {
-        CSVExporter::AddExportList(this);
+        SceneExporter::AddExportList(this);
     }
 
     ComponentTag::Tag GetTag() const {

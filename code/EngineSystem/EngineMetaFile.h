@@ -1,10 +1,16 @@
 ﻿#pragma once
-#include "CSVExporter.h"
+#include "SceneExporter.h"
 
 #include "GUI.h"
 
 #include <string>
 #include <vector>
+
+#include "IObject.h"
+
+#include "ObjectInterfacePerModule.h"
+
+#include "yaml.h"
 
 enum ClassID {
     CID_None = 0, // 0は予約済み
@@ -48,15 +54,15 @@ public:
         m_FileID = fileID;
     }
 
-    void Import(std::vector<std::string>& tokens) {
-        ImportFile(tokens);
+    void Import(YAML::Node& node) {
+        ImportFile(node);
     }
 
-    virtual void ImportFile(std::vector<std::string>& tokens) {
+    virtual void ImportFile(YAML::Node& node) {
         // デフォルトの実装は何もしない
     }
 
-    virtual void ExportFile() {
+    virtual void ExportFile(YAML::Emitter& out) {
         // デフォルトの実装は何もしない
     }
 

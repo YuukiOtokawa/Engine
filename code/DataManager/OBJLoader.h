@@ -77,5 +77,6 @@ public:
 
 
 	void Load(const char* FileName, Object* object);
+	int Load(const char* FileName);
 };
 

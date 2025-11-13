@@ -1,0 +1,13 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-4.2/Modules/CheckCSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindPython.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindPython/Support.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindThreads.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/Internal/CheckSourceCompiles.cmake
+C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp-master/test/googletest-1.13.0/googletest/CMakeLists.txt
+C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp-master/test/googletest-1.13.0/googletest/cmake/internal_utils.cmake
+C:/Users/yuuki/Desktop/OtokawaEngine/code/yaml-cpp_build/CMakeFiles/cmake.verify_globs

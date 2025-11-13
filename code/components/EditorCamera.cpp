@@ -138,12 +138,31 @@ void EditorCamera::Update()
 }
 
 
-void EditorCamera::ImportFile(std::vector<std::string>& tokens) {
-	if (std::stoi(tokens[4]) == 1)
-		Editor::GetInstance()->SetActiveCamera(owner);
-	SetTarget(Vector4O(std::stof(tokens[5]), std::stof(tokens[6]), std::stof(tokens[7]), std::stof(tokens[8])));
-	SetFov(std::stof(tokens[9]));
-	m_Near = std::stof(tokens[10]);
-	m_Far = std::stof(tokens[11]);
-	m_Up = Vector4O(std::stof(tokens[12]), std::stof(tokens[13]), std::stof(tokens[14]), std::stof(tokens[15]));
+void EditorCamera::ImportFile(YAML::Node& node) {
+	if (node["tag"]) {
+		tag = static_cast<Tag>(node["tag"].as<int>());
+	}
+	if (node["isActiveCamera"]) {
+		m_IsActiveCamera = node["isActiveCamera"].as<bool>();
+		if (m_IsActiveCamera)
+			Editor::GetInstance()->SetActiveCamera(owner);
+	}
+	if (node["target"]) {
+		auto target = node["target"];
+		SetTarget(Vector4O(target[0].as<float>(), target[1].as<float>(), target[2].as<float>(), target[3].as<float>()));
+	}
+	if (node["fov"]) {
+		SetFov(node["fov"].as<float>());
+	}
+	if (node["near"]) {
+		m_Near = node["near"].as<float>();
+	}
+	if (node["far"]) {
+		m_Far = node["far"].as<float>();
+	}
+	if (node["up"]) {
+		auto up = node["up"];
+		m_Up = Vector4O(up[0].as<float>(), up[1].as<float>(), up[2].as<float>(), up[3].as<float>());
+	}
 }
+

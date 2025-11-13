@@ -1,7 +1,9 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 #include <vector>
+
+#include "EngineAPI.h"
 
 enum class LogLevel {
     Info,
@@ -15,13 +17,20 @@ struct LogEntry {
     LogLevel level;
 };
 
-class EngineConsole
+const size_t CONSOLE_LOG_BUFFER_MAX = 4096;
+
+class OTOKAWA_API EngineConsole
 {
 private:
     static std::vector<LogEntry> m_Logs;
 
+    static char m_Buff[CONSOLE_LOG_BUFFER_MAX];
+
+    static void LogInternal(const char* message, va_list args, LogLevel level);
 public:
-    static void Log(const std::string& message, LogLevel level = LogLevel::Info);
+    static void Log(const char* message, ...);
+    static void LogWarning(const char* message, ...);
+    static void LogError(const char* message, ...);
     static void Clear();
     static void Draw();
 };

@@ -3,13 +3,15 @@
 #include <list>
 #include <fstream>
 
+#include "EngineAPI.h"
+
 class EngineMetaFile;
 class Object;
 struct Vector2O;
 struct Vector3O;
 struct Vector4O;
 class VertexIndex;
-class CSVExporter
+class OTOKAWA_API CSVExporter
 {
 private:
     static std::ofstream m_File;

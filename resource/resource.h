@@ -5,15 +5,7 @@
 #define IDD_DIALOG1                     101
 #define IDR_MENU1                       103
 #define IDR_TOOLBAR1                    104
-#define IDC_POINTER                     104
-#define IDC_POINTER_COPY                105
-#define IDB_BITMAP1                     106
-#define IDC_NODROP                      106
-#define IDC_CURSOR1                     107
-#define IDC_CURSOR2                     108
-#define IDR_RIBBON1                     110
 #define IDD_DIALOG2                     111
-#define IDR_MENU2                       113
 #define IDC_RICHEDIT21                  1002
 #define IDC_LIST1                       1008
 #define ID_FILE_SAVE                    40001

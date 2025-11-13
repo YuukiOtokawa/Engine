@@ -38,6 +38,7 @@
 #include "Animation.h"
 
 #include "imgui.h"
+#include "ImGuizmo.h"
 
 #include "Pack.h"
 
@@ -47,6 +48,7 @@
 #include "SystemLog.h"
 #include "TimeSystem.h"
 #include "EngineConsole.h"
+#include "SystemMonitor.h"
 
 #include <numeric>
 
@@ -87,7 +89,7 @@ Editor::~Editor()
 }
 
 void Editor::Initialize() {
-	m_pGUI = new GUI();
+	m_pGUI = GUI::GetInstance();
 	m_pParticleManager = ParticleManager::GetInstance();
 	m_pAudioManager = AudioManager::GetInstance();
 	m_pCollisionManager = CollisionManager::GetInstance();
@@ -160,12 +162,19 @@ void Editor::Initialize() {
 
 		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/WaveVS.cso", "Wave");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/WavePS.cso", "Wave");
+
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/EnvMapVS.cso", "Enviroment");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/EnvMapPS.cso", "Enviroment");
+		
 	}
 
 	Main();
 	m_pGUI->Initialize();
 
-	m_pPostProcessSprite = new Object();
+	m_pEditorCamera = GetObject("EditorCamera");
+
+
+	m_pPostProcessSprite = new Object(false);
 	m_pPostProcessSprite->SetName("PostProcess");
 
 	auto transform = m_pPostProcessSprite->AddComponent<Transform>(false);
@@ -221,14 +230,6 @@ void Editor::Draw() {
 	renderCore->ResetRenderTarget();
 	renderCore->ResetViewPort();
 
-
-	//レンダリングバッファクリア
-	renderCore->BeginPE(0);
-//==========================================================================
-// オブジェクト描画処理
-//==========================================================================
-
-
 	//使用するカメラを設定
 	Object* activeCamera = nullptr;
 	for (auto& object : m_Objects) {
@@ -238,9 +239,26 @@ void Editor::Draw() {
 		}
 	}
 
+	// GameView用の描画（activeCameraを使用）
+	if (activeCamera) {
+		renderCore->BeginGameView();
+		DrawGame(activeCamera);
+		renderCore->ResetRenderTarget();
+		renderCore->ResetViewPort();
+		renderCore->BufferClear();
+
+	}
+
+
+	//SceneView用の描画（m_pEditorCameraを使用）
+	renderCore->BeginSceneView();
+	//==========================================================================
+// オブジェクト描画処理
+//==========================================================================
+
 	//使用するカメラの行列情報を登録
-	if (activeCamera)
-		activeCamera->Draw();
+	if (m_pEditorCamera)
+		m_pEditorCamera->Draw();
 
 	for (auto & object : m_Objects) {
 		if (object->GetTag() == GameObjectTagLayer::LightTag) {
@@ -249,10 +267,12 @@ void Editor::Draw() {
 	}
 	Light::DrawGeneralLight(); // 全体のライト情報を描画
 
+	auto editCam = m_pEditorCamera;
+
 	// オブジェクトをカメラに遠い順にソート
 	auto objects = m_Objects;
-	objects.sort([activeCamera](Object* a, Object* b) {
-		if (!activeCamera) return false; // activeCameraがnullptrの場合、ソートしない
+	objects.sort([editCam](Object* a, Object* b) {
+		if (!editCam) return false; // activeCameraがnullptrの場合、ソートしない
 		if (a->GetTag() == GameObjectTagLayer::CameraTag || b->GetTag() == GameObjectTagLayer::CameraTag)
 			return false; // カメラオブジェクトはソートしない
 		if (a->GetTag() == GameObjectTagLayer::LightTag || b->GetTag() == GameObjectTagLayer::LightTag)
@@ -261,8 +281,8 @@ void Editor::Draw() {
 			return false; // Transformコンポーネントがない場合はソートしない
 		auto aPos = a->GetComponent<Transform>()->GetPosition();
 		auto bPos = b->GetComponent<Transform>()->GetPosition();
-		auto aLength = (aPos - activeCamera->GetComponent<Transform>()->GetPosition()).Length();
-		auto bLength = (bPos - activeCamera->GetComponent<Transform>()->GetPosition()).Length();
+		auto aLength = (aPos - editCam->GetComponent<Transform>()->GetPosition()).Length();
+		auto bLength = (bPos - editCam->GetComponent<Transform>()->GetPosition()).Length();
 		return aLength > bLength; // 遠い順にソート
 	});
 
@@ -291,6 +311,8 @@ void Editor::Draw() {
 		}
 	}
 
+
+
 //==========================================================================
 // GUI描画処理
 //==========================================================================
@@ -299,75 +321,246 @@ void Editor::Draw() {
 	renderCore->BufferClear();
 	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
 
-
-	//MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
-
-
-	//m_pPostProcessSprite->GetComponent<PostProcessTexture>()->SetShaderResourceView(renderCore->GetPostProcessTexture(0), 0);
-	//m_pPostProcessSprite->GetComponent<PostProcessRenderer>()->DrawPostProcess(0);
-
-	//m_pPostProcessSprite->GetComponent<PostProcessTexture>()->SetShaderResourceView(renderCore->GetPostProcessTexture(1), 1);
-	//m_pPostProcessSprite->GetComponent<PostProcessRenderer>()->DrawPostProcess(1);
-
-
-	//MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
-
-
 	//ImGuiの初期化
 	m_pGUI->StartImGui();
+
+	m_pGUI->StartGameView();
+
+	{ // GameView
+		// GameViewのテクスチャを取得して表示
+		auto tex = renderCore->GetGameViewTexture();
+
+		// テクスチャサイズ取得（例: tex->width, tex->height で取得できる場合）
+		ImVec2 texSize = ImVec2((float)tex->width, (float)tex->height);
+		ImVec2 avail = ImGui::GetWindowSize();
+
+		// 拡大・縮小倍率を計算
+		float scaleX = texSize.x / avail.x;
+		float scaleY = texSize.y / avail.y;
+		float scale = 1.0f;
+
+		if (scaleX < 1.0f) {
+			if (scaleY >= 1.0f) {
+				scale = 1.0f / scaleX;
+			}
+			else if (scaleY < 1.0f) {
+				scale = std::max(1.0f / scaleX, 1.0f / scaleY);
+			}
+
+		}
+		else if (scaleY < 1.0f) {
+			if (scaleX >= 1.0f) {
+				scale = 1.0f / scaleY;
+			}
+		}
+		else {
+			scale = 1.0f / std::min(scaleX, scaleY);
+		}
+
+		ImVec2 drawSize = ImVec2(texSize.x * scale, texSize.y * scale);
+
+		// テクスチャを中央に配置するためのオフセット計算
+		ImVec2 offset = ImVec2(
+			(avail.x - drawSize.x) * 0.5f,
+			(avail.y - drawSize.y) * 0.5f
+		);
+
+		// カーソル位置を中央に移動
+		ImGui::SetCursorPos(offset);
+
+		ImGui::Image((ImTextureID)tex->shaderResourceView, drawSize, ImVec2(0, 0), ImVec2(1, 1));
+		m_isGameViewHovered = ImGui::IsItemHovered();
+	}
+
+	m_pGUI->EndWindow();
 
 	//シーンビューウィンドウの描画開始
 	m_pGUI->StartSceneView();
 
-	auto tex = renderCore->GetPostProcessTexture(0);
+	{ // SceneView
+		auto tex = renderCore->GetSceneViewTexture();
 
-	// テクスチャサイズ取得（例: tex->width, tex->height で取得できる場合）
-	ImVec2 texSize = ImVec2((float)tex->width, (float)tex->height);
-	ImVec2 avail = ImGui::GetWindowSize();
+		// テクスチャサイズ取得（例: tex->width, tex->height で取得できる場合）
+		ImVec2 texSize = ImVec2((float)tex->width, (float)tex->height);
+		ImVec2 avail = ImGui::GetWindowSize();
 
-	// 拡大・縮小倍率を計算
-	float scaleX = texSize.x / avail.x;
-	float scaleY = texSize.y / avail.y;
-	float scale = 1.0f;
+		// 拡大・縮小倍率を計算
+		float scaleX = texSize.x / avail.x;
+		float scaleY = texSize.y / avail.y;
+		float scale = 1.0f;
 
-	if (scaleX < 1.0f) {
-		if (scaleY >= 1.0f) {
-			scale = 1.0f / scaleX;
+		if (scaleX < 1.0f) {
+			if (scaleY >= 1.0f) {
+				scale = 1.0f / scaleX;
+			}
+			else if (scaleY < 1.0f) {
+				scale = std::max(1.0f / scaleX, 1.0f / scaleY);
+			}
+
 		}
 		else if (scaleY < 1.0f) {
-			scale = std::max(1.0f / scaleX, 1.0f / scaleY);
+			if (scaleX >= 1.0f) {
+				scale = 1.0f / scaleY;
+			}
 		}
-		
-	}
-	else if (scaleY < 1.0f) {
-		if (scaleX >= 1.0f) {
-			scale = 1.0f / scaleY;
+		else {
+			scale = 1.0f / std::min(scaleX, scaleY);
+		}
+
+		ImVec2 drawSize = ImVec2(texSize.x * scale, texSize.y * scale);
+
+		// テクスチャを中央に配置するためのオフセット計算
+		ImVec2 offset = ImVec2(
+			(avail.x - drawSize.x) * 0.5f,
+			(avail.y - drawSize.y) * 0.5f
+		);
+
+		// カーソル位置を中央に移動
+		ImGui::SetCursorPos(offset);
+
+		ImGui::Image((ImTextureID)tex->shaderResourceView, drawSize, ImVec2(0, 0), ImVec2(1, 1));
+		m_isSceneViewHovered = ImGui::IsItemHovered();
+
+		// ImGuizmo: Scene Viewにギズモとグリッドを表示
+		auto camera = m_pEditorCamera->GetComponent<Camera>();
+
+		if (camera) {
+			// ImGuizmoの設定
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			// ウィンドウの位置とサイズを取得
+			ImVec2 windowPos = ImGui::GetWindowPos();
+			ImVec2 windowSize = ImGui::GetWindowSize();
+			ImGuizmo::SetRect(windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+
+			// カメラのビュー行列とプロジェクション行列を取得
+			XMMATRIX viewMatrix = camera->GetView();
+			XMMATRIX projectionMatrix = camera->GetProjection();
+
+			// グリッド表示（XYZ軸の線を表示）
+			//XMMATRIX identityMatrix = XMMatrixIdentity();
+			//ImGuizmo::DrawGrid(
+			//	(float*)&viewMatrix,
+			//	(float*)&projectionMatrix,
+			//	(float*)&identityMatrix,
+			//	100.0f  // グリッドサイズ
+			//);
+
+			// ViewManipulate（右上にXYZ軸のビューキューブを表示）
+			float viewManipulateSize = 128.0f;
+			ImVec2 viewManipulatePos = ImVec2(
+				windowPos.x + windowSize.x - viewManipulateSize - 10.0f,
+				windowPos.y + 10.0f
+			);
+
+			// ViewManipulateのために行列を反転（カメラの向きを正しく表示するため）
+			XMMATRIX viewMatrixInverse = XMMatrixInverse(nullptr, viewMatrix);
+			ImGuizmo::ViewManipulate(
+				(float*)&viewMatrixInverse,
+				8.0f,  // カメラからの距離
+				viewManipulatePos,
+				ImVec2(viewManipulateSize, viewManipulateSize),
+				0x10101010  // 背景色
+			);
+
+			// 選択中のオブジェクトにギズモを表示
+			if (m_pSelectedObject) {
+				auto transform = m_pSelectedObject->GetComponent<Transform>();
+
+				if (transform) {
+					// キーボード入力で操作モードを切り替え (Scene Viewがホバーされている場合のみ)
+					if (m_isSceneViewHovered && !ImGuizmo::IsUsing() && !ImGui::IsKeyDown(ImGuiKey_MouseRight)) {
+						if (ImGui::IsKeyPressed(ImGuiKey_W)) {
+							m_GizmoOperation = 0; // 移動モード
+						}
+						else if (ImGui::IsKeyPressed(ImGuiKey_E)) {
+							m_GizmoOperation = 1; // 回転モード
+						}
+						else if (ImGui::IsKeyPressed(ImGuiKey_R)) {
+							m_GizmoOperation = 2; // スケールモード
+						}
+					}
+
+					// Transformからワールド行列を作成
+					XMMATRIX translationMatrix = XMMatrixTranslation(
+						transform->GetPosition().x,
+						transform->GetPosition().y,
+						transform->GetPosition().z
+					);
+					XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(
+						XMConvertToRadians(transform->GetRotation().x),
+						XMConvertToRadians(transform->GetRotation().y),
+						XMConvertToRadians(transform->GetRotation().z)
+					);
+					XMMATRIX scaleMatrix = XMMatrixScaling(
+						transform->GetScale().x,
+						transform->GetScale().y,
+						transform->GetScale().z
+					);
+					XMMATRIX worldMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
+					// 操作モードの選択
+					ImGuizmo::OPERATION operation;
+					switch (m_GizmoOperation) {
+					case 0:
+						operation = ImGuizmo::OPERATION::TRANSLATE;
+						break;
+					case 1:
+						operation = ImGuizmo::OPERATION::ROTATE;
+						break;
+					case 2:
+						operation = ImGuizmo::OPERATION::SCALE;
+						break;
+					default:
+						operation = ImGuizmo::OPERATION::TRANSLATE;
+						break;
+					}
+
+					// ImGuizmoでギズモを操作
+					// 回転時はLOCALモードを使用してジンバルロックを軽減
+					ImGuizmo::MODE mode = (operation == ImGuizmo::OPERATION::ROTATE)
+						? ImGuizmo::MODE::LOCAL
+						: ImGuizmo::MODE::WORLD;
+
+					ImGuizmo::Manipulate(
+						(float*)&viewMatrix,
+						(float*)&projectionMatrix,
+						operation,
+						mode,
+						(float*)&worldMatrix,
+						nullptr,
+						nullptr
+					);
+
+					// ギズモで変更された行列から位置、回転、スケールを抽出
+					if (ImGuizmo::IsUsing()) {
+						float position[3], rotation[3], scale[3];
+						ImGuizmo::DecomposeMatrixToComponents(
+							(float*)&worldMatrix,
+							position,
+							rotation,
+							scale
+						);
+
+						// Transformに反映
+						transform->SetPosition(Vector4O(position[0], position[1], position[2]));
+						transform->SetRotation(Vector4O(rotation[0], rotation[1], rotation[2]));
+						transform->SetScale(Vector4O(scale[0], scale[1], scale[2]));
+					}
+				}
+			}
 		}
 	}
-	else {
-		scale = 1.0f / std::min(scaleX, scaleY);
-	}
-
-	ImVec2 drawSize = ImVec2(texSize.x * scale, texSize.y * scale);
-
-	// テクスチャを中央に配置するためのオフセット計算
-	ImVec2 offset = ImVec2(
-		(avail.x - drawSize.x) * 0.5f,
-		(avail.y - drawSize.y) * 0.5f
-	);
-
-	// カーソル位置を中央に移動
-	ImGui::SetCursorPos(offset);
-
-	ImGui::Image((ImTextureID)tex->shader_resource_view, drawSize, ImVec2(0, 0), ImVec2(1, 1));
-	m_isSceneViewHovered = ImGui::IsItemHovered();
 
 	m_pGUI->EndWindow();
+
 
 	//システムモニターウィンドウの描画開始
 	m_pGUI->StartSystemMonitor();
 
 	Time::DrawFPSGraph();
+	SystemMonitor::Draw();
 
 	m_pGUI->EndWindow();
 
@@ -385,6 +578,9 @@ void Editor::Draw() {
 	//選択されたオブジェクトの情報を表示
 	if (m_pSelectedObject)
 		m_pSelectedObject->DrawGUI();
+
+	ImGui::Image(renderCore->GetGameViewTexture()->shaderResourceView, ImVec2(300, 300));
+	ImGui::Image(renderCore->GetSceneViewTexture()->shaderResourceView, ImVec2(300, 300));
 
 	m_pGUI->EndWindow();
 
@@ -457,8 +653,6 @@ void Editor::Draw() {
 	SystemLog::Log(0, cursorPos);
 	cursorPos = std::to_string(InputSystem::GetMouse()->GetPosition().x) + ", " + std::to_string(InputSystem::GetMouse()->GetPosition().y);
 	SystemLog::Log(1, cursorPos);
-
-
 }
 
 void Editor::DrawGame(Object* camera, Object* renderTexture)
@@ -511,7 +705,7 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	// 2D描画
 	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
 	for (auto& object : objects) {
-		if (object == renderTexture) continue;
+		if (renderTexture && object == renderTexture) continue;
 		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
 			object->Draw();
 		}
@@ -521,7 +715,7 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 }
 
 void Editor::Finalize() {
-
+	m_pGUI->Finalize();
 }
 
 void Editor::CreateComponent(Component* component) {
@@ -588,6 +782,18 @@ Object* Editor::GetObject(const std::string& name)
 	return nullptr;
 }
 
+Object* Editor::GetObjectByFileID(int fileID)
+{
+	for (auto object : m_Objects)
+	{
+		if (object->GetFileID() == fileID)
+		{
+			return object;
+		}
+	}
+	return nullptr;
+}
+
 void Editor::ResetScene()
 {
 	m_Objects.clear();
@@ -643,12 +849,13 @@ VertexIndex* Editor::GetVertexIndexByFileID(int fileID)
 }
 
 #include "CSVImporter.h"
+#include "SceneImporter.h"
 
 void Editor::ChangeScene(std::string sceneName)
 {
 	std::list<Object*> objects;
 	Editor::GetInstance()->ResetScene();
-	objects = CSVImporter::Import("Scenes\\" + sceneName);
+	objects = SceneImporter::Import("Scenes\\" + sceneName);
 	if (objects.empty()) {
 		MessageBoxA(NULL, "読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
 	}
@@ -661,7 +868,7 @@ void Editor::OpenScene(std::string sceneFilePath)
 {
 	std::list<Object*> objects;
 	Editor::GetInstance()->ResetScene();
-	objects = CSVImporter::Import(sceneFilePath);
+	objects = SceneImporter::Import(sceneFilePath);
 	if (objects.empty()) {
 		MessageBoxA(NULL, "読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
 	}

@@ -46,3 +46,4 @@ float MeshFieldCollider::GetHeight(Vector3O position)
 	float height = (1 - sx) * (1 - sz) * h00 + sx * (1 - sz) * h10 + (1 - sx) * sz * h01 + sx * sz * h11;
 	return height;
 }
+

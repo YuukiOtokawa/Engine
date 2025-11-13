@@ -77,7 +77,37 @@ void Rigidbody::DrawGUI()
 
 void Rigidbody::OnCollisionEnter(Object* target)
 {
+	auto targetTf = target->GetComponent<Transform>();
+	auto ownerTf = owner->GetComponent<Transform>();
 
+	Vector3O direction = (ownerTf->GetPosition() - targetTf->GetPosition()).XYZ();
+
+	Vector3O axisX = targetTf->GetRight();
+	float dotX = abs(direction.Dot(axisX, direction));
+
+	Vector3O axisY = targetTf->GetUp();
+	float dotY = abs(direction.Dot(axisY, direction));
+
+	Vector3O axisZ = targetTf->GetForward();
+	float dotZ = abs(direction.Dot(axisZ, direction));
+
+	float dx = targetTf->GetScale().x - fabs(dotX);
+	float dy = targetTf->GetScale().y - fabs(dotY);
+	float dz = targetTf->GetScale().z - fabs(dotZ);
+
+	// 一番浅い軸に沿って跳ね返る
+	if (dx <= dy && dx <= dz) {
+		// X軸に沿って跳ね返る
+		m_Velocity.x = -m_Velocity.x * m_Bounce;
+	}
+	else if (dy <= dx && dy <= dz) {
+		// Y軸に沿って跳ね返る
+		m_Velocity.y = -m_Velocity.y * m_Bounce;
+	}
+	else {
+		// Z軸に沿って跳ね返る
+		m_Velocity.z = -m_Velocity.z * m_Bounce;
+	}
 }
 
 void Rigidbody::OnCollisionStay(Object* target)

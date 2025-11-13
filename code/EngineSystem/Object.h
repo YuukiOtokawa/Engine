@@ -110,13 +110,13 @@ public:
 
     void DeleteComponent(Component* component);
 
-	/// @brief コンポーネントのデータをCSV形式でエクスポートします。
-    void ExportFile() override;
+	/// @brief コンポーネントのデータをYAML形式でエクスポートします。
+    void ExportFile(YAML::Emitter& out) override;
 
 
     void AddExportList() override;
 
-    void ImportFile(std::vector<std::string>& tokens) override;
+    void ImportFile(YAML::Node& node) override;
 
 	/// @brief 名前を設定します。
 	/// @param name 設定する名前。
@@ -209,6 +209,5 @@ public:
     bool IsChild() const {
         return m_IsChild;
     }
-
 };
 

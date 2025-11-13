@@ -247,7 +247,7 @@ namespace FW
 			watch->m_pFileWatcher = this;
 			watch->m_pFileWatchListener = watcher;
 			watch->m_DirName = new char[directory.m_String.length() + 1];
-			strcpy(watch->m_DirName, directory.c_str());
+			strcpy_s(watch->m_DirName, sizeof(watch->m_DirName), directory.c_str());
 		}
 
 		// 監視対象ディレクトリをマップに追加

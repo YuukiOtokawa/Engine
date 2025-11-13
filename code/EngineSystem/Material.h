@@ -34,6 +34,7 @@ private:
     // マテリアルとテクスチャ番号
     MATERIAL m_Material;
     int m_TextureFileID = 0;
+    //std::vector<int> m_TextureFileIDs;
     int m_BumpTextureFileID = 0;
     int m_ToonTextureFileID = 0;
     int m_EnvTextureFileID = 0;
@@ -57,8 +58,8 @@ public:
 
     void DrawGUI();
 
-    void ImportFile(std::vector<std::string>& tokens) override;
-    void ExportFile() override;
+    void ImportFile(YAML::Node& node) override;
+    void ExportFile(YAML::Emitter& out) override;
 
     /// @brief 頂点シェーダーのキーを設定します。
     /// @param key 設定する頂点シェーダーのキー。

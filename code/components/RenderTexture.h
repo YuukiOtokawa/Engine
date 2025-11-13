@@ -34,8 +34,9 @@ public:
     void DrawGUI() override;
     void InitializeTag() override;
 
-    void ExportComponent() override {
-        CSVExporter::ExportVector2O(m_Resolusion);
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "resolution" << YAML::Value << YAML::Flow << YAML::BeginSeq
+            << m_Resolusion.x << m_Resolusion.y << YAML::EndSeq;
     }
 };
 
