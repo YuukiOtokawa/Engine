@@ -17,6 +17,23 @@ SamplerState g_SamplerState : register(s0); //テクスチャサンプラー0番
 
 void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 {
+    float2 tex = In.Position.xy;
+    tex.x /= In.Position.w;
+    tex.y /= In.Position.w;
+    
+    // 法線をビュー方向に変換
+    float vNorm = mul(In.Normal, View);
+    vNorm = normalize(vNorm);
+    tex.x = (tex.x * 0.5f) + 0.5f + (vNorm * Parameter.x);
+    tex.y = (-tex.y * 0.5f) + 0.5f + (vNorm * Parameter.y);
+
+    tex.x = (tex.x * 0.5f) + 0.5f + Parameter.x;
+    tex.y = (tex.y * 0.5f) + 0.5f + Parameter.x;
+
+    tex = saturate(tex);
+    In.TexCoord = tex;
+
+
 
 	//このピクセルに使われるテクスチャの色を取得
     outDiffuse = g_Texture2.Sample(g_SamplerState, In.TexCoord);

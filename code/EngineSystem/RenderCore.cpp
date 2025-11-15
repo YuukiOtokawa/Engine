@@ -94,6 +94,8 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	TextureLoad(L"asset/texture/Default_White.png");
 	CreatePostProcessBuffer();
 	CreateSceneGameViewBuffer();
+
+	CreateVertexShader("cso/vertexShader.cso", "vertex");
 }
 
  RenderCore::~RenderCore()
@@ -301,6 +303,12 @@ void RenderCore::CreateSamplerState()
 	m_pDeviceContext->PSSetSamplers(1, 1, &m_pSamplerState);
 }
 
+void RenderCore::CreateDepthBuffer()
+{
+	ID3D11Texture2D* pTex = nullptr;
+	D3D11_TEXTURE2D_DESC td = {};
+}
+
 void RenderCore::CreatePostProcessBuffer()
 {
 	ID3D11Texture2D* pTexture = nullptr;
@@ -431,6 +439,17 @@ void RenderCore::BeginGameView()
 	m_pDeviceContext->ClearRenderTargetView(m_pGameViewRTV, clear_color);
 
 	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
+}
+
+void RenderCore::BeginDepth()
+{
+	m_pDeviceContext->OMSetRenderTargets(0, nullptr, m_pShadowDepthStencilView);
+	m_pDeviceContext->ClearDepthStencilView(m_pShadowDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+ID3D11ShaderResourceView* RenderCore::GetDepthStencil()
+{
+	return m_pShadowDepthStencilSRV;
 }
 
 std::vector<Texture*> RenderCore::GetTextureInfo()

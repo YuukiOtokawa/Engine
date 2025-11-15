@@ -749,5 +749,8 @@
     <FxCompile Include="code\shader\ProjectionShadow1PS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="code\shader\DepthShadowPS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

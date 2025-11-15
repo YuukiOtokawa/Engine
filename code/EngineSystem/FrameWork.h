@@ -16,7 +16,7 @@
 #include "VectorO.h"
 //#include "MatrixO.h"
 
-#undef GetObject
+#undef GetObject;
 
 //==========================================================================
 // 定数
