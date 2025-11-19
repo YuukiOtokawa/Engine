@@ -193,6 +193,6 @@ void Material::SetPixelShaderKey(std::string key)
 void Material::SetShader()
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderCore();
-	renderer->SetVertexShader(m_VertexShader);
+	renderer->SetVertexShader("vertex");
 	renderer->SetPixelShader(m_PixelShader);
 }

@@ -94,6 +94,8 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	TextureLoad(L"asset/texture/Default_White.png");
 	CreatePostProcessBuffer();
 	CreateSceneGameViewBuffer();
+
+	CreateVertexShader("cso/vertexShader.cso", "vertex");
 }
 
  RenderCore::~RenderCore()

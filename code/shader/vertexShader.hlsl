@@ -3,14 +3,13 @@
 void main(in VS_IN In, out PS_IN Out)
 {
     matrix World; //ワールド行列を作成
-    World = mul(Scale, mul(Angle, Translation));
+    World = mul(mul(Scale, Angle), Translation);
 	//頂点変換行列を作る World * View * Projection
     matrix wvp;
-    wvp = mul(World, View);
-    wvp = mul(wvp, Projection);
+    wvp = mul(mul(World, View), Projection);
 
 	//ポリゴンの頂点を変換行列で変換して出力
-    Out.Position = mul(In.Position, wvp); //Position * wvp
+    Out.Position = mul(float4(In.Position, 1.0f), wvp); //Position * wvp
 	
 //==========================================================================
 // 法線の回転処理
@@ -30,7 +29,7 @@ void main(in VS_IN In, out PS_IN Out)
     light = saturate(light); //0.0f~1.0fの範囲に収める
     
     Out.TexCoord = In.TexCoord; //テクスチャ座標
-    Out.Diffuse.rgb = light; //輝度をDiffuseのRGB成分に格納
+    Out.Diffuse.rgb = In.Diffuse * diffuse; //輝度をDiffuseのRGB成分に格納
     Out.Diffuse.a = In.Diffuse.a; //頂点色のアルファ成分をそのまま使用
     
     Out.WorldPosition = mul(In.Position, World);
