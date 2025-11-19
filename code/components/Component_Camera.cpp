@@ -113,3 +113,70 @@ void Camera::ImportFile(YAML::Node& node) {
 	}
 }
 
+bool Camera::IsInView(Vector3O position)
+{
+	XMMATRIX vp = m_View * m_Projection;
+
+	XMMATRIX invVP = XMMatrixInverse(nullptr, vp);	//逆行列
+
+	XMFLOAT3 vpos[4] = {
+		XMFLOAT3(-1.0f,1.0f,1.0f),
+		XMFLOAT3(1.0f,1.0f,1.0f),
+		XMFLOAT3(-1.0f,-1.0f,1.0f),
+		XMFLOAT3(1.0f,-1.0f,1.0f)
+	};
+
+	XMVECTOR vposv[4] = {
+		XMLoadFloat3(&vpos[0]),
+		XMLoadFloat3(&vpos[1]),
+		XMLoadFloat3(&vpos[2]),
+		XMLoadFloat3(&vpos[3])
+	};
+
+	XMVECTOR wposv[4] = {
+		XMVector3TransformCoord(vposv[0], invVP),
+		XMVector3TransformCoord(vposv[1], invVP),
+		XMVector3TransformCoord(vposv[2], invVP),
+		XMVector3TransformCoord(vposv[3], invVP)
+	};
+
+	XMFLOAT3 wpos[4];
+	XMStoreFloat3(&wpos[0], wposv[0]);
+	XMStoreFloat3(&wpos[1], wposv[1]);
+	XMStoreFloat3(&wpos[2], wposv[2]);
+	XMStoreFloat3(&wpos[3], wposv[3]);
+	
+	Vector3O camPos = owner->GetComponent<Transform>()->GetPosition().XYZ();
+	Vector3O v = position - camPos;
+
+	Vector3O wp[4] = {
+		Vector3O(wpos[0]),
+		Vector3O(wpos[1]),
+		Vector3O(wpos[2]),
+		Vector3O(wpos[3])
+	};
+
+	// 左側
+	{
+		Vector3O v1 = wp[0] - camPos;
+		Vector3O v2 = wp[2] - camPos;
+
+		Vector3O normal = v1.Cross(v2);
+
+		float d = Vector3O::Dot(normal, v);
+
+		if (d < 0.0f) return false;
+	}
+
+	// 右側
+	{
+		Vector3O v1 = wp[3] - camPos;
+		Vector3O v2 = wp[1] - camPos;
+		Vector3O normal = v1.Cross(v2);
+		float d = Vector3O::Dot(normal, v);
+		if (d < 0.0f) return false;
+	}
+
+	return true;
+}
+

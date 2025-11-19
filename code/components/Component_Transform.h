@@ -112,5 +112,15 @@ public:
         rightVec.Normalize();
         return rightVec;
     }
+
+    float GetDistance(Vector3O position) {
+        auto direction = m_Position.XYZ() - position;
+        return direction.Length();
+    }
+
+    float GetZ(Vector3O position, Vector3O forward) {
+        auto direction = m_Position.XYZ() - position;
+        return Vector3O::Dot(direction, forward);
+    }
 };
 

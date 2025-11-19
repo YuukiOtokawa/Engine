@@ -41,7 +41,7 @@ void SetSceneGame()
 		auto input = new Object();
 		input->SetName("InputSystem");
 		input->AddComponent<InputSystem>();
-
+		input->SetLayer(GameObjectLayer::InputSystemLayer);
 	}
 	//エディターカメラ作成
 	{

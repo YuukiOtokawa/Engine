@@ -38,6 +38,8 @@ void MeshRenderer::Render() {
 		return;
 	}
 
+
+
 	// 2. Transformコンポーネントを取得
 	auto transform = owner->GetComponent<Transform>();
 	if (!transform) return;

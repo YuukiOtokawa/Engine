@@ -374,15 +374,6 @@
     <ClInclude Include="code\EngineSystem\ScriptFactory.h">
       <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
-    <ClInclude Include="code\EngineSystem\Vector2O.h">
-      <Filter>ヘッダー ファイル\EngineSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="code\EngineSystem\Vector3O.h">
-      <Filter>ヘッダー ファイル\EngineSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="code\EngineSystem\Vector4O.h">
-      <Filter>ヘッダー ファイル\EngineSystem</Filter>
-    </ClInclude>
     <ClInclude Include="code\EngineSystem\VectorO.h">
       <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>

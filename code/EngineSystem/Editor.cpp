@@ -210,19 +210,24 @@ void Editor::Draw() {
 	renderCore->ResetRenderTarget();
 	renderCore->ResetViewPort();
 
+	//==========================================================================
+	// GameView描画処理
+	//==========================================================================
+
 	//使用するカメラを設定
-	Object* activeCamera = nullptr;
+	auto currentCam = m_pEditorCamera;
+
 	for (auto& object : m_Objects) {
 		auto cameraComp = object->GetComponent<Camera>();
 		if (cameraComp && cameraComp->IsActiveCamera()) {
-			activeCamera = object;
+			currentCam = object;
 		}
 	}
 
 	// GameView用の描画（activeCameraを使用）
-	if (activeCamera) {
+	if (currentCam) {
 		renderCore->BeginGameView();
-		DrawGame(activeCamera);
+		DrawGame(currentCam);
 		renderCore->ResetRenderTarget();
 		renderCore->ResetViewPort();
 		renderCore->BufferClear();
@@ -230,15 +235,16 @@ void Editor::Draw() {
 	}
 
 
-	//SceneView用の描画（m_pEditorCameraを使用）
-	renderCore->BeginSceneView();
 	//==========================================================================
-// オブジェクト描画処理
-//==========================================================================
+	// SceneView描画処理
+	//==========================================================================
+	
+	renderCore->BeginSceneView();
 
 	//使用するカメラの行列情報を登録
-	if (m_pEditorCamera)
-		m_pEditorCamera->Draw();
+	currentCam = m_pEditorCamera;
+	if (currentCam)
+		currentCam->Draw();
 
 	for (auto & object : m_Objects) {
 		if (object->GetTag() == GameObjectTagLayer::LightTag) {
@@ -247,35 +253,56 @@ void Editor::Draw() {
 	}
 	Light::DrawGeneralLight(); // 全体のライト情報を描画
 
-	auto editCam = m_pEditorCamera;
+
+	auto objects = m_Objects;
 
 	// オブジェクトをカメラに遠い順にソート
-	auto objects = m_Objects;
-	objects.sort([editCam](Object* a, Object* b) {
-		if (!editCam) return false; // activeCameraがnullptrの場合、ソートしない
-		if (a->GetTag() == GameObjectTagLayer::CameraTag || b->GetTag() == GameObjectTagLayer::CameraTag)
-			return false; // カメラオブジェクトはソートしない
-		if (a->GetTag() == GameObjectTagLayer::LightTag || b->GetTag() == GameObjectTagLayer::LightTag)
-			return false; // ライトオブジェクトはソートしない
-		if (!a->GetComponent<Transform>() || !b->GetComponent<Transform>())
-			return false; // Transformコンポーネントがない場合はソートしない
-		auto aPos = a->GetComponent<Transform>()->GetPosition();
-		auto bPos = b->GetComponent<Transform>()->GetPosition();
-		auto aLength = (aPos - editCam->GetComponent<Transform>()->GetPosition()).Length();
-		auto bLength = (bPos - editCam->GetComponent<Transform>()->GetPosition()).Length();
-		return aLength > bLength; // 遠い順にソート
-	});
+	//objects.sort([editCam](Object* a, Object* b) {
+	//	if (!editCam) return false; // activeCameraがnullptrの場合、ソートしない
+	//	if (a->GetTag() == GameObjectTagLayer::CameraTag || b->GetTag() == GameObjectTagLayer::CameraTag)
+	//		return false; // カメラオブジェクトはソートしない
+	//	if (a->GetTag() == GameObjectTagLayer::LightTag || b->GetTag() == GameObjectTagLayer::LightTag)
+	//		return false; // ライトオブジェクトはソートしない
+	//	if (!a->GetComponent<Transform>() || !b->GetComponent<Transform>())
+	//		return false; // Transformコンポーネントがない場合はソートしない
+	//	auto aPos = a->GetComponent<Transform>()->GetPosition();
+	//	auto bPos = b->GetComponent<Transform>()->GetPosition();
+	//	auto aLength = (aPos - editCam->GetComponent<Transform>()->GetPosition()).Length();
+	//	auto bLength = (bPos - editCam->GetComponent<Transform>()->GetPosition()).Length();
+	//	return aLength > bLength; // 遠い順にソート
+	//});
+
+	// Zソート
+	if (currentCam) {
+		auto camPos = currentCam->GetComponent<Transform>()->GetPosition().XYZ();
+		auto camForward = currentCam->GetComponent<Transform>()->GetForward();
+
+		objects.sort([&](Object* obj1, Object* obj2){
+			if (!currentCam) return false; // activeCameraがnullptrの場合、ソートしない
+			if (obj1->GetTag() == GameObjectTagLayer::CameraTag || obj2->GetTag() == GameObjectTagLayer::CameraTag)
+				return false; // カメラオブジェクトはソートしない
+			if (obj1->GetTag() == GameObjectTagLayer::LightTag || obj2->GetTag() == GameObjectTagLayer::LightTag)
+				return false; // ライトオブジェクトはソートしない
+			if (!obj1->GetComponent<Transform>() || !obj2->GetComponent<Transform>())
+				return false; // Transformコンポーネントがない場合はソートしない
+
+			return obj1->GetComponent<Transform>()->GetZ(camPos,camForward)
+			> obj2->GetComponent<Transform>()->GetZ(camPos,camForward);
+		});
+	}
 
 	//オブジェクトの描画
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::ObjectLayer) {
-			object->Draw();
+			if (currentCam->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw();
 		}
 	}
 	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
-			object->Draw();
+			if (currentCam->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw();
 		}
 	}
 	//パーティクルの描画
@@ -287,15 +314,16 @@ void Editor::Draw() {
 		if (object->GetLayer() == GameObjectLayer::SpriteLayer) {
 			if (object->GetTag() == GameObjectTag::SystemTag)
 				continue;
-			object->Draw();
+			if (currentCam->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw();
 		}
 	}
 
 
 
-//==========================================================================
-// GUI描画処理
-//==========================================================================
+	//==========================================================================
+	// GUI描画処理
+	//==========================================================================
 
 	//renderCore->BeginPE(1);
 	renderCore->BufferClear();
@@ -306,7 +334,8 @@ void Editor::Draw() {
 
 	m_pGUI->StartGameView();
 
-	{ // GameView
+	// GameView描画
+	{
 		// GameViewのテクスチャを取得して表示
 		auto tex = renderCore->GetGameViewTexture();
 
@@ -357,7 +386,8 @@ void Editor::Draw() {
 	//シーンビューウィンドウの描画開始
 	m_pGUI->StartSceneView();
 
-	{ // SceneView
+	// SceneView
+	{
 		auto tex = renderCore->GetSceneViewTexture();
 
 		// テクスチャサイズ取得（例: tex->width, tex->height で取得できる場合）
@@ -536,7 +566,7 @@ void Editor::Draw() {
 	m_pGUI->EndWindow();
 
 
-	//システムモニターウィンドウの描画開始
+	//システムモニターウィンドウ
 	m_pGUI->StartSystemMonitor();
 
 	Time::DrawFPSGraph();
@@ -544,7 +574,8 @@ void Editor::Draw() {
 
 	m_pGUI->EndWindow();
 
-	//コンソールウィンドウの描画開始
+
+	//コンソールウィンドウ
 	m_pGUI->StartConsole();
 
 	EngineConsole::Draw();
@@ -652,31 +683,37 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 
 	// オブジェクトをカメラに遠い順にソート
 	auto objects = m_Objects;
-	objects.sort([camera](Object* a, Object* b) {
-		if (!camera) return false; // activeCameraがnullptrの場合、ソートしない
-		if (a->GetTag() == GameObjectTagLayer::CameraTag || b->GetTag() == GameObjectTagLayer::CameraTag)
-			return false; // カメラオブジェクトはソートしない
-		if (a->GetTag() == GameObjectTagLayer::LightTag || b->GetTag() == GameObjectTagLayer::LightTag)
-			return false; // ライトオブジェクトはソートしない
-		if (!a->GetComponent<Transform>() || !b->GetComponent<Transform>())
-			return false; // Transformコンポーネントがない場合はソートしない
-		auto aPos = a->GetComponent<Transform>()->GetPosition();
-		auto bPos = b->GetComponent<Transform>()->GetPosition();
-		auto aLength = (aPos - camera->GetComponent<Transform>()->GetPosition()).Length();
-		auto bLength = (bPos - camera->GetComponent<Transform>()->GetPosition()).Length();
-		return aLength > bLength; // 遠い順にソート
-				 });
+	// Zソート
+	if (camera) {
+		auto camPos = camera->GetComponent<Transform>()->GetPosition().XYZ();
+		auto camForward = camera->GetComponent<Transform>()->GetForward();
+
+		objects.sort([&](Object* obj1, Object* obj2) {
+			if (!camera) return false; // activeCameraがnullptrの場合、ソートしない
+			if (obj1->GetTag() == GameObjectTagLayer::CameraTag || obj2->GetTag() == GameObjectTagLayer::CameraTag)
+				return false; // カメラオブジェクトはソートしない
+			if (obj1->GetTag() == GameObjectTagLayer::LightTag || obj2->GetTag() == GameObjectTagLayer::LightTag)
+				return false; // ライトオブジェクトはソートしない
+			if (!obj1->GetComponent<Transform>() || !obj2->GetComponent<Transform>())
+				return false; // Transformコンポーネントがない場合はソートしない
+
+			return obj1->GetComponent<Transform>()->GetZ(camPos, camForward)
+			> obj2->GetComponent<Transform>()->GetZ(camPos, camForward);
+					 });
+	}
 
 	//オブジェクトの描画
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::ObjectLayer) {
-			object->Draw();
+			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw();
 		}
 	}
 	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
-			object->Draw();
+			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw();
 		}
 	}
 	//パーティクルの描画
@@ -687,7 +724,8 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	for (auto& object : objects) {
 		if (renderTexture && object == renderTexture) continue;
 		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
-			object->Draw();
+			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw();
 		}
 	}
 	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();

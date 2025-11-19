@@ -106,5 +106,8 @@ public:
 		return m_IsActiveCamera;
 	}
 
+    // 視錘台カリング用
+    bool IsInView(Vector3O position);
+
 };
 

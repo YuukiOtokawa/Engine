@@ -353,9 +353,6 @@
     <ClInclude Include="code\EngineSystem\SystemLog.h" />
     <ClInclude Include="code\EngineSystem\SystemMonitor.h" />
     <ClInclude Include="code\EngineSystem\TimeSystem.h" />
-    <ClInclude Include="code\EngineSystem\Vector2O.h" />
-    <ClInclude Include="code\EngineSystem\Vector3O.h" />
-    <ClInclude Include="code\EngineSystem\Vector4O.h" />
     <ClInclude Include="code\EngineSystem\VectorO.h" />
     <ClInclude Include="code\imgui\imconfig.h" />
     <ClInclude Include="code\imgui\imgui.h" />
