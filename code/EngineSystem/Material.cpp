@@ -55,10 +55,10 @@ void Material::DrawGUI() {
 	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
 	static int current_shader_index = 0;
 
-	auto keys = MainEngine::GetInstance()->GetRenderCore()->GetPixelShaderKeys();
+	auto keys = MainEngine::GetInstance()->GetRenderCore()->GetVertexShaderKeys();
 	current_shader_index = (int)std::distance(
 		keys.begin(),
-		std::find(keys.begin(), keys.end(), m_PixelShader)
+		std::find(keys.begin(), keys.end(), m_VertexShader)
 	);
 
 	ImGui::Text("Material Properties");
@@ -193,6 +193,6 @@ void Material::SetPixelShaderKey(std::string key)
 void Material::SetShader()
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderCore();
-	renderer->SetVertexShader("vertex");
+	renderer->SetVertexShader(m_VertexShader);
 	renderer->SetPixelShader(m_PixelShader);
 }

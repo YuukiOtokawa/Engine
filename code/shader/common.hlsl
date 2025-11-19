@@ -40,6 +40,27 @@ struct PS_IN
     float3 LightPosition : POSITION1;
 };
 
+struct LIGHT
+{
+    bool Enable;
+    float SpecularPower;
+    float3 Direction;
+    float4 Diffuse;
+    float4 Ambient;
+    
+    float4 SkyColor;
+    float4 GroundColor;
+    float3 GroundNormal;
+    
+    float3 Position;
+    float PointLightRange;
+   
+    float4 SpotLightAngle;
+    
+    matrix view;
+    matrix projection;
+};
+
 struct DIRECTIONAL_LIGHT
 {
     bool enable;

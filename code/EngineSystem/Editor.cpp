@@ -97,53 +97,73 @@ void Editor::Initialize() {
 	// シェーダーの読み込み
 	{
 		//光源計算無し
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/unlitTextureVS.cso", "unlit");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/unlitTexturePS.cso", "unlit");
 
 		//頂点ライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/vertexDirectionalLightingVS.cso", "vertex");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/vertexDirectionalLightingPS.cso", "vertex");
 
 		//ピクセルライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/pixelLightingVS.cso", "pixel");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pixelLightingPS.cso", "pixel");
 
 		//BlinnPhongライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "BlinnPhong");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/blinnPhongPS.cso", "BlinnPhong");
 
 		//半球ライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/hemisphereLightingVS.cso", "hemisphere");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/hemisphereLightingPS.cso", "hemisphere");
 
 		//点光源ライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "pointLight");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pointLightingBlinnPhongPS.cso", "pointLight");
 
 		//スポットライトライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/spotLightingVS.cso", "spotLight");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/spotLightingPS.cso", "spotLight");
 
 		//リムライトライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "limLight");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/limLightingPS.cso", "limLight");
 
 		//法線マップ
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/bumpVS.cso", "normal");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/bumpPS.cso", "normal");
 
 		//Cook-Torranceライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "CookTorrance");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/cookPS.cso", "CookTorrance");
 
 		//Cook-Torranceライティング
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/PBRVS.cso", "PBR");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PBRPS.cso", "PBR");
 
 		//トゥーンシェーダー
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "toon1");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon1PS.cso", "toon1");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "toon2");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon2PS.cso", "toon2");
 
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "mosaic");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/mosaicPS.cso", "mosaic");
 
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "RGBShift");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/RGBShiftPS.cso", "RGBShift");
 
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "Posterise");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PosterisePS.cso", "Posterise");
 
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "GaussianVS_V");
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/blinnPhongVS.cso", "GaussianVS_H");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_V.cso", "GaussianPS_V");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_H.cso", "GaussianPS_H");
 
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/WaveVS.cso", "Wave");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/WavePS.cso", "Wave");
 
+		MainEngine::GetInstance()->GetRenderCore()->CreateVertexShader("cso/EnvMapVS.cso", "Enviroment");
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/EnvMapPS.cso", "Enviroment");
 		
 	}

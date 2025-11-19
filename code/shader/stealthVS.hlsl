@@ -18,4 +18,19 @@ void main(in VS_IN In, out PS_IN Out)
     Out.Normal = worldNormal; //回転後の法線出力 In.Normalでなく回転後の法線を出力
     Out.Diffuse = In.Diffuse; //頂点の物をそのまま出力
 
+    float2 tex = Out.Position.xy;
+    tex.x /= Out.Position.w;
+    tex.y /= Out.Position.w;
+    
+    // 法線をビュー方向に変換
+    float vNorm = mul(worldNormal, View);
+    vNorm = normalize(vNorm);
+    tex.x = (tex.x * 0.5f) + 0.5f + (vNorm * Parameter.x);
+    tex.y = (-tex.y * 0.5f) + 0.5f + (vNorm * Parameter.y);
+
+    tex.x = (tex.x * 0.5f) + 0.5f + Parameter.x;
+    tex.y = (tex.y * 0.5f) + 0.5f + Parameter.x;
+
+    tex = saturate(tex);
+    Out.TexCoord = tex;
 }

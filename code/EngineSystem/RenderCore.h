@@ -59,9 +59,6 @@ private:
 	ID3D11RenderTargetView* m_pRenderTargetView;
 	ID3D11DepthStencilView* m_pDepthStencilView;
 
-    ID3D11DepthStencilView* m_pShadowDepthStencilView = nullptr;
-    ID3D11ShaderResourceView* m_pShadowDepthStencilSRV = nullptr;
-
 	// ラスタライザステート
 	ID3D11RasterizerState* m_pRasterizerState = NULL;
     ID3D11RasterizerState* m_pRasterizerState2D = NULL;
@@ -144,8 +141,6 @@ private:
 	/// @brief サンプラーステートを作成します。
 	void CreateSamplerState();
 
-    void CreateDepthBuffer();
-
 
 public:
 	/// @brief 指定されたウィンドウハンドルでRendererオブジェクトを初期化します。
@@ -177,8 +172,7 @@ public:
 	IDXGISwapChain* GetSwapChain() { return m_pSwapChain; }
 	/// @brief レンダーターゲットビューをデバイスコンテキストに設定します。
 	void SetRenderTargetView() { m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView); }
-    ID3D11ShaderResourceView* GetDepthStencil();
-    /// @brief クライアント領域のサイズを取得します。
+	/// @brief クライアント領域のサイズを取得します。
 	/// @return クライアント領域のサイズを表す Vector4O 型の値。
 	Vector2O GetClientSize() {
         return m_ClientSize;
@@ -328,8 +322,6 @@ public:
 
     void BeginSceneView();
     void BeginGameView();
-
-    void BeginDepth();
 
     Texture* GetSceneViewTexture() {
         return m_pSceneViewTexture;
