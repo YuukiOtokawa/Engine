@@ -321,9 +321,6 @@
     <ClCompile Include="code\imgui\crude_json.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="DefaultScript.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\EngineSystem\AudioManager.h">
@@ -551,6 +548,9 @@
     <ClInclude Include="code\EngineSystem\EngineConsole.h">
       <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptFactory.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
+    </ClInclude>
     <ClInclude Include="code\EngineSystem\SystemLog.h">
       <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
@@ -604,9 +604,6 @@
     </ClInclude>
     <ClInclude Include="code\imgui\imgui_node_editor.h">
       <Filter>ヘッダー ファイル\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultScript.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -730,6 +727,7 @@
     <FxCompile Include="code\shader\EnvMapPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="code\shader\EnvMapVS.hlsl" />
     <FxCompile Include="code\shader\ProjectionShadowPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
