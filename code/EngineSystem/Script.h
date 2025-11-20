@@ -8,6 +8,10 @@
 
 #include "ObjectInterfacePerModule.h"
 
+#include "yaml.h"
+
+#include "ScriptFactory.h"
+
 struct ISimpleSerializer;
 class Object;
 

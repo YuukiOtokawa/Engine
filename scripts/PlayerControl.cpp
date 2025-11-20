@@ -1,7 +1,5 @@
 ﻿#include "PlayerControl.h"
 
-#include "ScriptFactory.h"
-
 #include "CSVExporter.h"
 
 #include "Editor.h"
@@ -10,7 +8,6 @@
 
 #include "EngineConsole.h"
 
-#include "yaml.h"
 
 REGISTER_SCRIPT(PlayerControl)
 

@@ -131,6 +131,7 @@ BEGIN
     BEGIN
         MENUITEM "Save",                        ID_FILE_SAVE
         MENUITEM "Load",                        ID_FILE_LOAD
+        MENUITEM "Create Script",               ID_FILE_CREATESCRIPT
         MENUITEM "Exit",                        ID_FILE_EXIT
     END
     POPUP "Window"
