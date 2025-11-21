@@ -168,9 +168,9 @@ void Compiler::RunCompile(	const std::vector<FileSystemUtils::Path>&	filesToComp
 	m_pImplData->m_CmdProcess.m_bIsComplete = false;
 	//optimization and c runtime
 #ifdef _DEBUG
-	std::string flags = "/nologo /Z7 /FC /utf-8 /MDd /LDd ";
+	std::string flags = "/nologo /Z7 /FC /utf-8 /MTd /LDd ";
 #else
-	std::string flags = "/nologo /Z7 /FC /utf-8 /MD /LD ";	//also need debug information in release
+	std::string flags = "/nologo /Z7 /FC /utf-8 /MT /LD ";	//also need debug information in release
 #endif
 
 	RCppOptimizationLevel optimizationLevel = GetActualOptimizationLevel( compilerOptions_.optimizationLevel );
