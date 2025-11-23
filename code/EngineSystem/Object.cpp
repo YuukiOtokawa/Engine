@@ -8,6 +8,8 @@
 
 #include "CollisionManager.h"
 
+#include "Prefab.h"
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -165,13 +167,15 @@ void Object::DrawGUI(){
 void Object::RightClickMenu()
 {
 	if (ImGui::BeginPopupContextItem(m_Name.c_str())) {
+		if (ImGui::Selectable("Create Prefab")) {
+			Prefab::ExportWithDialog(this);
+		}
+		ImGui::Separator();
 		if (ImGui::Selectable("Delete Object")) {
 			Destroy();
 		}
 		ImGui::EndPopup();
 	}
-
-
 }
 
 void Object::Finalize() {}

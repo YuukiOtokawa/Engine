@@ -239,6 +239,7 @@
     <ClCompile Include="code\DataManager\SceneExporter.cpp" />
     <ClCompile Include="code\DataManager\CSVImporter.cpp" />
     <ClCompile Include="code\DataManager\SceneImporter.cpp" />
+    <ClCompile Include="code\DataManager\Prefab.cpp" />
     <ClCompile Include="code\DataManager\FBXImporter.cpp" />
     <ClCompile Include="code\DataManager\OBJLoader.cpp" />
     <ClCompile Include="code\EngineSystem\AudioManager.cpp" />
@@ -334,6 +335,7 @@
     <ClInclude Include="code\DataManager\SceneExporter.h" />
     <ClInclude Include="code\DataManager\CSVImporter.h" />
     <ClInclude Include="code\DataManager\SceneImporter.h" />
+    <ClInclude Include="code\DataManager\Prefab.h" />
     <ClInclude Include="code\DataManager\FBXImporter.h" />
     <ClInclude Include="code\DataManager\OBJLoader.h" />
     <ClInclude Include="code\DataManager\VertexIndex.h" />

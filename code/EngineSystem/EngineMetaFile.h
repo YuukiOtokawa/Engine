@@ -33,6 +33,7 @@ enum ClassID {
     CID_Script,
     CID_Component_Collider,
     CID_Component_MeshField,
+    CID_Prefab,
 };
 
 class EngineMetaFile

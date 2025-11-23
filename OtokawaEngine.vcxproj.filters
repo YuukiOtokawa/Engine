@@ -159,6 +159,9 @@
     <ClCompile Include="code\DataManager\SceneImporter.cpp">
       <Filter>ソース ファイル\DataManager</Filter>
     </ClCompile>
+    <ClCompile Include="code\DataManager\Prefab.cpp">
+      <Filter>ソース ファイル\DataManager</Filter>
+    </ClCompile>
     <ClCompile Include="code\components\EditorCamera.cpp">
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
@@ -483,6 +486,9 @@
       <Filter>ヘッダー ファイル\DataManager</Filter>
     </ClInclude>
     <ClInclude Include="code\DataManager\SceneImporter.h">
+      <Filter>ヘッダー ファイル\DataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="code\DataManager\Prefab.h">
       <Filter>ヘッダー ファイル\DataManager</Filter>
     </ClInclude>
     <ClInclude Include="code\DataManager\FBXImporter.h">

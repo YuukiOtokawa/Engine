@@ -303,6 +303,8 @@ void Editor::Draw() {
 	//オブジェクトの描画
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::ObjectLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
 			if (currentCam->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
 				object->Draw();
 		}
@@ -310,6 +312,8 @@ void Editor::Draw() {
 	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
 			if (currentCam->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
 				object->Draw();
 		}
@@ -322,6 +326,8 @@ void Editor::Draw() {
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::SpriteLayer) {
 			if (object->GetTag() == GameObjectTag::SystemTag)
+				continue;
+			if (!object->GetComponent<Transform>())
 				continue;
 			if (currentCam->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
 				object->Draw();
@@ -724,6 +730,8 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	//オブジェクトの描画
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::ObjectLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
 			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
 				object->Draw();
 		}
@@ -731,6 +739,8 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
 			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
 				object->Draw();
 		}
@@ -743,6 +753,8 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	for (auto& object : objects) {
 		if (renderTexture && object == renderTexture) continue;
 		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
 			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
 				object->Draw();
 		}

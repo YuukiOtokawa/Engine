@@ -10,6 +10,7 @@
 #include "EngineConsole.h"
 #include "MainEngine.h"
 #include "imgui.h"
+#include "Prefab.h"
 
 #include <Windows.h>
 #include <shellapi.h>
@@ -88,10 +89,10 @@ void ProjectWindow::ScanDirectory(const std::string& path, FileEntry& entry)
                 directories.push_back(child);
             }
             else {
-                // ソースファイルのみ表示（.cpp, .h, .hpp, .c）
+                // ソースファイルとPrefabを表示（.cpp, .h, .hpp, .c, .prefab）
                 std::string ext = item.path().extension().string();
                 std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-                if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c") {
+                if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c" || ext == ".prefab") {
                     files.push_back(child);
                 }
             }
@@ -712,7 +713,15 @@ void ProjectWindow::DrawGridView()
                 m_currentPath = child.fullPath;
             }
             else {
-                OpenInExternalEditor(child.fullPath);
+                // Prefabファイルの場合はインスタンス化
+                std::string ext = fs::path(child.fullPath).extension().string();
+                std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+                if (ext == ".prefab") {
+                    Prefab::Import(child.fullPath);
+                }
+                else {
+                    OpenInExternalEditor(child.fullPath);
+                }
             }
         }
 
@@ -765,6 +774,9 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
         }
         else if (ext == ".cpp" || ext == ".c") {
             icon = m_pCppIcon;
+        }
+        else if (ext == ".prefab") {
+            icon = m_pPrefabIcon;
         }
     }
 
@@ -837,6 +849,15 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
             ImGui::Separator();
         }
         else {
+            // Prefabファイルの場合
+            std::string ext = fs::path(entry.fullPath).extension().string();
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+            if (ext == ".prefab") {
+                if (ImGui::MenuItem("Instantiate")) {
+                    Prefab::Import(entry.fullPath);
+                }
+                ImGui::Separator();
+            }
             if (ImGui::MenuItem("Open in Editor")) {
                 OpenInExternalEditor(entry.fullPath);
             }
