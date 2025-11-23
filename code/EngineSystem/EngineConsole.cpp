@@ -2,17 +2,49 @@
 
 #include "TimeSystem.h"
 #include <chrono>
+#include <Windows.h>
 
 #include "imgui.h"
 
 std::vector<LogEntry> EngineConsole::m_Logs;
 char EngineConsole::m_Buff[CONSOLE_LOG_BUFFER_MAX];
+char EngineConsole::m_Utf8Buff[CONSOLE_LOG_BUFFER_MAX];
+
+// ANSIからUTF-8へ変換
+std::string EngineConsole::ConvertToUtf8(const char* str)
+{
+	if (!str || !str[0]) return "";
+
+	// まずANSI(Shift-JIS等)からワイド文字へ
+	int wideLen = MultiByteToWideChar(CP_ACP, 0, str, -1, nullptr, 0);
+	if (wideLen <= 0) return str;
+
+	std::wstring wideStr(wideLen, L'\0');
+	MultiByteToWideChar(CP_ACP, 0, str, -1, &wideStr[0], wideLen);
+
+	// ワイド文字からUTF-8へ
+	int utf8Len = WideCharToMultiByte(CP_UTF8, 0, wideStr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	if (utf8Len <= 0) return str;
+
+	std::string utf8Str(utf8Len, '\0');
+	WideCharToMultiByte(CP_UTF8, 0, wideStr.c_str(), -1, &utf8Str[0], utf8Len, nullptr, nullptr);
+
+	// null終端を除去
+	if (!utf8Str.empty() && utf8Str.back() == '\0') {
+		utf8Str.pop_back();
+	}
+
+	return utf8Str;
+}
 
 void EngineConsole::LogInternal(const char* message, va_list args, LogLevel level)
 {
 	int result = vsnprintf(m_Buff, CONSOLE_LOG_BUFFER_MAX - 1, message, args);
 	// Make sure there's a limit to the amount of rubbish we can output
 	m_Buff[CONSOLE_LOG_BUFFER_MAX - 1] = '\0';
+
+	// ANSIからUTF-8へ変換
+	std::string utf8Message = ConvertToUtf8(m_Buff);
 
 	// 現在の時刻を取得（Windowsシステム時刻）
 	auto now = std::chrono::system_clock::now();
@@ -24,7 +56,7 @@ void EngineConsole::LogInternal(const char* message, va_list args, LogLevel leve
 	char timeBuffer[20];
 	std::strftime(timeBuffer, sizeof(timeBuffer), "%H:%M:%S", &now_tm);
 	// ログエントリを作成して保存
-	m_Logs.push_back({ m_Buff, timeBuffer, level });
+	m_Logs.push_back({ utf8Message, timeBuffer, level });
 
 }
 void EngineConsole::Log(const char* message, ...)

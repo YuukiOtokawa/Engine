@@ -36,6 +36,8 @@
 
 #include "EngineAPI.h"
 
+#include "ProjectWindow.h"
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -62,6 +64,8 @@ private:
     AudioManager* m_pAudioManager = nullptr;
 
     CollisionManager* m_pCollisionManager = nullptr;
+
+    ProjectWindow* m_pProjectWindow = nullptr;
 
 	/// @brief Editor クラスのシングルトンパターンデフォルトコンストラクタです。
 	Editor() = default;

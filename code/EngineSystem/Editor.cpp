@@ -73,6 +73,11 @@ Editor::~Editor()
 		delete m_pAudioManager;
 		m_pAudioManager = nullptr;
 	}
+	if (m_pProjectWindow) {
+		m_pProjectWindow->Finalize();
+		delete m_pProjectWindow;
+		m_pProjectWindow = nullptr;
+	}
 
 	// すべてのオブジェクトを削除
 	for (auto& object : m_Objects) {
@@ -150,6 +155,10 @@ void Editor::Initialize() {
 
 	Main();
 	m_pGUI->Initialize();
+
+	// プロジェクトウィンドウの初期化
+	m_pProjectWindow = new ProjectWindow();
+	m_pProjectWindow->Initialize("scripts");
 
 	m_pEditorCamera = GetObject("EditorCamera");
 
@@ -579,6 +588,16 @@ void Editor::Draw() {
 	m_pGUI->StartConsole();
 
 	EngineConsole::Draw();
+
+	m_pGUI->EndWindow();
+
+
+	//プロジェクトウィンドウ
+	m_pGUI->StartProjectWindow();
+
+	if (m_pProjectWindow) {
+		m_pProjectWindow->Draw();
+	}
 
 	m_pGUI->EndWindow();
 

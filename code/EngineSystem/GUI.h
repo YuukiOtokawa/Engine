@@ -34,6 +34,7 @@ private:
     bool m_IsFirstFrameSceneView = true;
     bool m_IsFirstFrameSystemMonitor = true;
     bool m_IsFirstFrameGameView = true;
+    bool m_IsFirstFrameProjectWindow = true;
 
     ImGuiID m_DockSpaceID = 0;
 
@@ -70,6 +71,7 @@ public:
     void StartGameView();
     void StartSystemMonitor();
     void StartConsole();
+    void StartProjectWindow();
 	void EndWindow();
 	void EndImGui();
 

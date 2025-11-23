@@ -256,6 +256,7 @@
     <ClCompile Include="code\EngineSystem\Material.cpp" />
     <ClCompile Include="code\EngineSystem\Object.cpp" />
     <ClCompile Include="code\EngineSystem\ParticleManager.cpp" />
+    <ClCompile Include="code\EngineSystem\ProjectWindow.cpp" />
     <ClCompile Include="code\EngineSystem\PostProcessRenderer.cpp" />
     <ClCompile Include="code\EngineSystem\PostProcessTexture.cpp" />
     <ClCompile Include="code\EngineSystem\RenderCore.cpp" />
@@ -355,6 +356,7 @@
     <ClInclude Include="code\EngineSystem\MatrixO.h" />
     <ClInclude Include="code\EngineSystem\Object.h" />
     <ClInclude Include="code\EngineSystem\ParticleManager.h" />
+    <ClInclude Include="code\EngineSystem\ProjectWindow.h" />
     <ClInclude Include="code\EngineSystem\PostProcessRenderer.h" />
     <ClInclude Include="code\EngineSystem\PostProcessTexture.h" />
     <ClInclude Include="code\EngineSystem\Properties.h" />
