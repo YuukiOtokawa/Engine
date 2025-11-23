@@ -267,6 +267,9 @@
     <ClCompile Include="code\EngineSystem\RenderCore.cpp">
       <Filter>ソース ファイル\EngineSystem</Filter>
     </ClCompile>
+    <ClCompile Include="code\EngineSystem\ScriptDirectoryWatcher.cpp">
+      <Filter>ソース ファイル\EngineSystem</Filter>
+    </ClCompile>
     <ClCompile Include="scripts\PlayerControl.cpp">
       <Filter>ソース ファイル\Script</Filter>
     </ClCompile>
@@ -348,6 +351,9 @@
       <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
     <ClInclude Include="code\EngineSystem\MainEngine.h">
+      <Filter>ヘッダー ファイル\EngineSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="code\EngineSystem\ScriptDirectoryWatcher.h">
       <Filter>ヘッダー ファイル\EngineSystem</Filter>
     </ClInclude>
     <ClInclude Include="code\EngineSystem\Material.h">

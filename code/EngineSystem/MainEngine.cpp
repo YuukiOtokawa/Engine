@@ -50,6 +50,7 @@
 #include "SystemTable.h"
 
 #include "ScriptFactory.h"
+#include "ScriptDirectoryWatcher.h"
 
 
 constexpr auto WINDOW_CREATE_FAILED = -1;
@@ -156,6 +157,10 @@ bool MainEngine::RCCppInitialize()
 	// ScriptFactoryをホットリロードのリスナーとして登録
 	g_pSystemTable->pRuntimeObjectSystem->GetObjectFactorySystem()->AddListener(&ScriptFactory::GetInstance());
 
+	// scriptsフォルダの監視を開始
+	m_pScriptWatcher = new ScriptDirectoryWatcher();
+	m_pScriptWatcher->Initialize(scriptIncludeDir.c_str(), g_pSystemTable->pRuntimeObjectSystem);
+
 	return true;
 }
 
@@ -175,11 +180,23 @@ void MainEngine::RCCppUpdate()
 	{
 		float deltaTime = 1.0f / ImGui::GetIO().Framerate;
 		g_pSystemTable->pRuntimeObjectSystem->GetFileChangeNotifier()->Update(deltaTime);
+
+		// scriptsフォルダの構造変化を処理
+		if (m_pScriptWatcher) {
+			m_pScriptWatcher->Update();
+		}
 	}
 }
 
 void MainEngine::RCCppFinalize()
 {
+	// scriptsフォルダ監視を終了
+	if (m_pScriptWatcher) {
+		m_pScriptWatcher->Finalize();
+		delete m_pScriptWatcher;
+		m_pScriptWatcher = nullptr;
+	}
+
 	delete g_pSystemTable->pRuntimeObjectSystem;
 }
 

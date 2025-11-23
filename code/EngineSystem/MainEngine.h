@@ -41,6 +41,7 @@ extern OTOKAWA_API SystemTable* g_pSystemTable;
 class Time;
 class EngineConsole;
 class SystemMonitor;
+class ScriptDirectoryWatcher;
 
 struct IObjectFactorySystem;
 
@@ -79,6 +80,8 @@ private:
     EngineConsole* m_pEngineConsole = nullptr;
     
     SystemMonitor* m_pSystemMonitor = nullptr;
+
+    ScriptDirectoryWatcher* m_pScriptWatcher = nullptr;
 
     IObjectFactorySystem* m_pObjectFactorySystem;
 

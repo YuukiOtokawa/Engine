@@ -261,6 +261,7 @@
     <ClCompile Include="code\EngineSystem\RenderCore.cpp" />
     <ClCompile Include="code\EngineSystem\Script.cpp" />
     <ClCompile Include="code\EngineSystem\ScriptComponent.cpp" />
+    <ClCompile Include="code\EngineSystem\ScriptDirectoryWatcher.cpp" />
     <ClCompile Include="code\EngineSystem\SystemLog.cpp" />
     <ClCompile Include="code\EngineSystem\SystemMonitor.cpp" />
     <ClCompile Include="code\EngineSystem\TimeSystem.cpp" />
@@ -349,6 +350,7 @@
     <ClInclude Include="code\EngineSystem\RuntimeCompilerManager.h" />
     <ClInclude Include="code\EngineSystem\Script.h" />
     <ClInclude Include="code\EngineSystem\ScriptComponent.h" />
+    <ClInclude Include="code\EngineSystem\ScriptDirectoryWatcher.h" />
     <ClInclude Include="code\EngineSystem\ScriptFactory.h" />
     <ClInclude Include="code\EngineSystem\SystemLog.h" />
     <ClInclude Include="code\EngineSystem\SystemMonitor.h" />
