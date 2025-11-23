@@ -285,6 +285,18 @@
     <ClCompile Include="scripts\GameManager.cpp" />
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
+    <ClCompile Include="scripts\RhythmGameScript\GameManager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="scripts\RhythmGameScript\Notes.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="scripts\RhythmGameScript\NotesManager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="scripts\Score.cpp" />
     <ClCompile Include="WaveMeshField.cpp" />
   </ItemGroup>
@@ -380,6 +392,18 @@
     <ClInclude Include="scripts\Player.h" />
     <ClInclude Include="scripts\PlayerControl.h" />
     <ClInclude Include="scripts\Result.h" />
+    <ClInclude Include="scripts\RhythmGameScript\GameManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="scripts\RhythmGameScript\Notes.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="scripts\RhythmGameScript\NotesManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="scripts\Score.h" />
     <ClInclude Include="scripts\Title.h" />
     <ClInclude Include="scripts\TornadoParticle.h" />
