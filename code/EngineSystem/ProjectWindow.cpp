@@ -69,32 +69,61 @@ void ProjectWindow::Refresh()
     m_rootEntry.children.clear();
 
     ScanDirectory(m_rootPath, m_rootEntry);
+    
+    // 現在のパスが有効でなくなった場合はルートに戻る
+    if (m_currentPath != m_rootPath) {
+        FileEntry* currentEntry = GetEntryByPath(m_currentPath);
+        if (!currentEntry) {
+            m_currentPath = m_rootPath;
+            EngineConsole::LogWarning("ProjectWindow: 現在のパスが無効なためルートに戻りました");
+        }
+    }
 }
 
 void ProjectWindow::ScanDirectory(const std::string& path, FileEntry& entry)
 {
     try {
+        // パスが存在しない場合はスキップ
+        if (!fs::exists(path)) {
+            return;
+        }
+
+        // ディレクトリでない場合はスキップ
+        if (!fs::is_directory(path)) {
+            return;
+        }
+
         std::vector<FileEntry> directories;
         std::vector<FileEntry> files;
 
-        for (const auto& item : fs::directory_iterator(path)) {
-            FileEntry child;
-            child.name = item.path().filename().string();
-            child.fullPath = item.path().string();
-            child.isDirectory = item.is_directory();
-            child.isExpanded = false;
+        // skip_permission_deniedオプションでアクセス拒否をスキップ
+        std::error_code ec;
+        for (const auto& item : fs::directory_iterator(path, fs::directory_options::skip_permission_denied, ec)) {
+            try {
+                FileEntry child;
+                child.name = item.path().filename().string();
+                child.fullPath = item.path().string();
+                child.isDirectory = item.is_directory(ec);
+                child.isExpanded = false;
 
-            if (child.isDirectory) {
-                ScanDirectory(child.fullPath, child);
-                directories.push_back(child);
-            }
-            else {
-                // ソースファイルとPrefabを表示（.cpp, .h, .hpp, .c, .prefab）
-                std::string ext = item.path().extension().string();
-                std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-                if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c" || ext == ".prefab") {
-                    files.push_back(child);
+                if (ec) continue; // エラーがあればスキップ
+
+                if (child.isDirectory) {
+                    ScanDirectory(child.fullPath, child);
+                    directories.push_back(child);
                 }
+                else {
+                    // ソースファイルとPrefabを表示（.cpp, .h, .hpp, .c, .prefab）
+                    std::string ext = item.path().extension().string();
+                    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+                    if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c" || ext == ".prefab") {
+                        files.push_back(child);
+                    }
+                }
+            }
+            catch (...) {
+                // 個別のファイルでエラーが発生しても続行
+                continue;
             }
         }
 
@@ -112,7 +141,10 @@ void ProjectWindow::ScanDirectory(const std::string& path, FileEntry& entry)
         entry.children.insert(entry.children.end(), files.begin(), files.end());
     }
     catch (const fs::filesystem_error& e) {
-        EngineConsole::LogError("ProjectWindow: ディレクトリスキャンエラー: %s", e.what());
+        EngineConsole::LogError("ProjectWindow: ディレクトリスキャンエラー: %s (path: %s)", e.what(), path.c_str());
+    }
+    catch (const std::exception& e) {
+        EngineConsole::LogError("ProjectWindow: エラー: %s (path: %s)", e.what(), path.c_str());
     }
 }
 

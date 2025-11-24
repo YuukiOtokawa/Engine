@@ -162,8 +162,6 @@ MODEL_OBJ OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 
 
 
-
-
 //モデル読込////////////////////////////////////////////
 void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 {
@@ -171,9 +169,6 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 	char dir[MAX_PATH];
 	strcpy(dir, FileName);
 	PathRemoveFileSpecA(dir);
-
-
-
 
 
 	Vector3O* positionArray;
@@ -205,7 +200,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 	//要素数カウント
 	while (true)
 	{
-		fscanf(file, "%s", str);
+		if (fscanf(file, "%255s", str) != 1)
+			break;
 
 		if (feof(file) != 0)
 			break;
@@ -232,7 +228,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 			do
 			{
-				fscanf(file, "%s", str);
+				if (fscanf(file, "%255s", str) != 1)
+					break;
 				vertexNum++;
 				in++;
 				c = fgetc(file);
@@ -279,7 +276,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 	while (true)
 	{
-		fscanf(file, "%s", str);
+		if (fscanf(file, "%255s", str) != 1)
+			break;
 
 		if (feof(file) != 0)
 			break;
@@ -287,7 +285,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		if (strcmp(str, "mtllib") == 0)
 		{
 			//マテリアルファイル
-			fscanf(file, "%s", str);
+			if (fscanf(file, "%255s", str) != 1)
+				continue;
 
 			char path[256];
 			strcpy(path, dir);
@@ -299,7 +298,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		else if (strcmp(str, "o") == 0)
 		{
 			//オブジェクト名
-			fscanf(file, "%s", str);
+			fscanf(file, "%255s", str);
 		}
 		else if (strcmp(str, "v") == 0)
 		{
@@ -329,7 +328,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 		else if (strcmp(str, "usemtl") == 0)
 		{
 			//マテリアル
-			fscanf(file, "%s", str);
+			if (fscanf(file, "%255s", str) != 1)
+				continue;
 
 			if (sc != 0)
 				ModelObj->SubsetArray[sc - 1].IndexNum = ic - ModelObj->SubsetArray[sc - 1].StartIndex;
@@ -359,7 +359,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 			do
 			{
-				fscanf(file, "%s", str);
+				if (fscanf(file, "%255s", str) != 1)
+					break;
 
 				s = strtok(str, "/");
 				ModelObj->VertexArray[vc].position = positionArray[atoi(s) - 1];
@@ -434,7 +435,8 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 	//要素数カウント
 	while (true)
 	{
-		fscanf(file, "%s", str);
+		if (fscanf(file, "%255s", str) != 1)
+			break;
 
 		if (feof(file) != 0)
 			break;
@@ -457,7 +459,8 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 
 	while (true)
 	{
-		fscanf(file, "%s", str);
+		if (fscanf(file, "%255s", str) != 1)
+			break;
 
 		if (feof(file) != 0)
 			break;
@@ -467,7 +470,9 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 		{
 			//マテリアル名
 			mc++;
-			fscanf(file, "%s", materialArray[mc].Name);
+			if (fscanf(file, "%255s", materialArray[mc].Name) != 1) {
+				strcpy(materialArray[mc].Name, "");
+			}
 			strcpy(materialArray[mc].TextureName, "");
 
 			materialArray[mc].Material.emissive.x = 0.0f;
@@ -512,7 +517,8 @@ void OBJLoader::LoadMaterial(const char* FileName, MODEL_MATERIAL** MaterialArra
 		else if (strcmp(str, "map_Kd") == 0)
 		{
 			//テクスチャ
-			fscanf(file, "%s", str);
+			if (fscanf(file, "%255s", str) != 1)
+				continue;
 
 			char path[256];
 			strcpy(path, dir);

@@ -8,6 +8,7 @@
 
 #include "Prefab.h"
 #include "Object.h"
+#include "Component.h"
 #include "Editor.h"
 #include "EngineConsole.h"
 #include "MainEngine.h"
@@ -25,6 +26,7 @@
 #include "Component_Transform.h"
 #include "Component_MeshFilter.h"
 #include "Component_MeshRenderer.h"
+#include "Renderer.h"
 #include "Component_Camera.h"
 #include "EditorCamera.h"
 #include "PlayerCamera.h"
@@ -38,6 +40,9 @@
 #include "SkinnedMeshRenderer.h"
 #include "Collider.h"
 #include "Material.h"
+#include "SceneImporter.h"
+#include "FBXImporter.h"
+#include "OBJLoader.h"
 
 bool Prefab::Export(Object* object, const std::string& filePath)
 {
@@ -51,6 +56,39 @@ bool Prefab::Export(Object* object, const std::string& filePath)
         std::list<EngineMetaFile*> exportList;
         CollectExportData(object, exportList);
 
+        // VertexIndexとTextureの情報を収集
+        std::map<int, std::string> vertexIndexPaths;  // FileID -> FilePath
+        std::map<int, std::string> texturePaths;      // FileID -> FilePath
+
+        for (const auto& metaFile : exportList) {
+            if (!metaFile) continue;
+
+            // MeshFilterからVertexIndex情報を収集
+            if (metaFile->GetClassID() == CID_Component_MeshFilter) {
+                MeshFilter* meshFilter = static_cast<MeshFilter*>(metaFile);
+                VertexIndex* vi = meshFilter->GetVertexIndex();
+                if (vi && vertexIndexPaths.find(vi->GetFileID()) == vertexIndexPaths.end()) {
+                    vertexIndexPaths[vi->GetFileID()] = vi->GetFilePath();
+                }
+            }
+
+            // MaterialからTexture情報を収集
+            if (metaFile->GetClassID() == CID_Material) {
+                Material* material = static_cast<Material*>(metaFile);
+                int textureID = material->GetTexture();
+                if (textureID > 0 && texturePaths.find(textureID) == texturePaths.end()) {
+                    // RenderCoreからテクスチャパスを取得
+                    auto textureList = MainEngine::GetInstance()->GetRenderCore()->GetTextureInfo();
+                    for (const auto& tex : textureList) {
+                        if (tex && tex->GetFileID() == textureID) {
+                            texturePaths[textureID] = tex->GetFileName();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         // YAMLエミッターを作成
         YAML::Emitter out;
         out << YAML::BeginMap;
@@ -58,6 +96,30 @@ bool Prefab::Export(Object* object, const std::string& filePath)
         // Prefab情報
         out << YAML::Key << "prefabName" << YAML::Value << object->GetName();
         out << YAML::Key << "version" << YAML::Value << 1;
+
+        // VertexIndex情報
+        if (!vertexIndexPaths.empty()) {
+            out << YAML::Key << "vertexIndices" << YAML::Value << YAML::BeginSeq;
+            for (const auto& [fileID, path] : vertexIndexPaths) {
+                out << YAML::BeginMap;
+                out << YAML::Key << "fileID" << YAML::Value << fileID;
+                out << YAML::Key << "filePath" << YAML::Value << path;
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+        }
+
+        // Texture情報
+        if (!texturePaths.empty()) {
+            out << YAML::Key << "textures" << YAML::Value << YAML::BeginSeq;
+            for (const auto& [fileID, path] : texturePaths) {
+                out << YAML::BeginMap;
+                out << YAML::Key << "fileID" << YAML::Value << fileID;
+                out << YAML::Key << "filePath" << YAML::Value << path;
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+        }
 
         // オブジェクトとコンポーネントのデータ
         out << YAML::Key << "objects" << YAML::Value << YAML::BeginSeq;
@@ -97,7 +159,9 @@ bool Prefab::Export(Object* object, const std::string& filePath)
 Object* Prefab::Import(const std::string& filePath)
 {
     try {
-        // ファイルを開く
+        //==========================================================================
+        // Prefabファイルの読み込み
+        //==========================================================================
         std::ifstream file(filePath);
         if (!file.is_open()) {
             EngineConsole::LogError("Prefab::Import: ファイルを開けませんでした: %s", filePath.c_str());
@@ -110,6 +174,77 @@ Object* Prefab::Import(const std::string& filePath)
         if (!prefabData["objects"]) {
             EngineConsole::LogError("Prefab::Import: 無効なPrefabファイルです");
             return nullptr;
+        }
+
+        //==========================================================================
+        // Prefab内の頂点情報を読み込み
+        //==========================================================================
+        // VertexIndexのFileIDマッピング（元のFileID -> 実際のFileID）
+        std::map<int, int> vertexIndexFileIDMap;
+
+        if (prefabData["vertexIndices"]) {
+            for (const auto& vertexInfo : prefabData["vertexIndices"]) {
+                int originalFileID = vertexInfo["fileID"].as<int>();
+                std::string path = vertexInfo["filePath"].as<std::string>();
+
+                // 既に読み込み済みならそのまま使用
+                VertexIndex* existingVI = Editor::GetInstance()->GetVertexIndexByFileID(originalFileID);
+                if (existingVI != nullptr) {
+                    vertexIndexFileIDMap[originalFileID] = originalFileID;
+                    continue;
+                }
+
+                std::filesystem::path pathObj(path);
+                std::string extension = pathObj.extension().string();
+                std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+
+                if (extension == ".csv") {
+                    SceneImporter::ImportMesh(path, originalFileID);
+                    // CSVの場合は指定したfileIDがそのまま使用される
+                    vertexIndexFileIDMap[originalFileID] = originalFileID;
+                }
+                else if (extension == ".fbx") {
+                    FBXImporter fbxImporter;
+                    fbxImporter.LoadFBX(path.c_str());
+                    fbxImporter.LoadVertexIndex(path);
+                    // 読み込んだVertexIndexを登録
+                    VertexIndex** viArray = fbxImporter.GetVertexIndex();
+                    if (viArray && viArray[0]) {
+                        viArray[0]->SetFileID(originalFileID);
+                        Editor::GetInstance()->AddVertexIndex(viArray[0]);
+                        vertexIndexFileIDMap[originalFileID] = originalFileID;
+                    }
+                }
+                else if (extension == ".obj") {
+                    OBJLoader objLoader;
+                    int actualFileID = objLoader.Load(path.c_str());
+                    // OBJLoaderは新しいFileIDを割り当てる可能性があるのでマッピング
+                    VertexIndex* loadedVI = Editor::GetInstance()->GetVertexIndexByFileID(actualFileID);
+                    if (loadedVI) {
+                        loadedVI->SetFileID(originalFileID);
+                        vertexIndexFileIDMap[originalFileID] = originalFileID;
+                    }
+                }
+            }
+        }
+
+        //==========================================================================
+        // Prefab内のテクスチャを読み込み
+        //==========================================================================
+        if (prefabData["textures"]) {
+            for (const auto& textureInfo : prefabData["textures"]) {
+                int fileID = textureInfo["fileID"].as<int>();
+                std::string texturePath = textureInfo["filePath"].as<std::string>();
+
+                int len = MultiByteToWideChar(CP_UTF8, 0, texturePath.c_str(), -1, nullptr, 0);
+                std::wstring wideStringFilePath;
+                if (len > 0) {
+                    wideStringFilePath.resize(len - 1);
+                    MultiByteToWideChar(CP_UTF8, 0, texturePath.c_str(), -1, &wideStringFilePath[0], len);
+                }
+
+                MainEngine::GetInstance()->GetRenderCore()->TextureLoad(wideStringFilePath, fileID);
+            }
         }
 
         // FileIDのマッピング（古いID -> 新しいMetaFile）
@@ -185,22 +320,7 @@ Object* Prefab::Import(const std::string& filePath)
             index++;
         }
 
-        // コンポーネントのインポート
-        index = 0;
-        for (const auto& objectNode : prefabData["objects"]) {
-            auto it = metaFiles.begin();
-            std::advance(it, index);
-            EngineMetaFile* metaFile = *it;
-
-            if (metaFile->GetClassID() != CID_Object && metaFile->GetClassID() != CID_Material) {
-                Component* component = static_cast<Component*>(metaFile);
-                YAML::Node mutableNode = objectNode;
-                component->ImportFile(mutableNode);
-            }
-            index++;
-        }
-
-        // マテリアルのインポート
+        // マテリアルのインポート（コンポーネントより先に行う）
         index = 0;
         for (const auto& objectNode : prefabData["objects"]) {
             auto it = metaFiles.begin();
@@ -211,6 +331,42 @@ Object* Prefab::Import(const std::string& filePath)
                 Material* material = static_cast<Material*>(metaFile);
                 YAML::Node mutableNode = objectNode;
                 material->ImportFile(mutableNode);
+            }
+            index++;
+        }
+
+        // コンポーネントのインポート
+        index = 0;
+        for (const auto& objectNode : prefabData["objects"]) {
+            auto it = metaFiles.begin();
+            std::advance(it, index);
+            EngineMetaFile* metaFile = *it;
+
+            if (metaFile->GetClassID() != CID_Object && metaFile->GetClassID() != CID_Material) {
+                Component* component = static_cast<Component*>(metaFile);
+                YAML::Node mutableNode = objectNode;
+
+                // MaterialのFileIDを新しいIDに更新
+                if (mutableNode["materialFileID"]) {
+                    int oldMaterialID = mutableNode["materialFileID"].as<int>();
+                    auto matIt = fileIDMap.find(oldMaterialID);
+                    if (matIt != fileIDMap.end()) {
+                        // 新しいMaterialのFileIDで上書き
+                        mutableNode["materialFileID"] = matIt->second->GetFileID();
+                    }
+                }
+
+                // VertexIndexのFileIDを確認・更新
+                if (mutableNode["vertexIndexFileID"]) {
+                    int oldVertexIndexID = mutableNode["vertexIndexFileID"].as<int>();
+                    auto viIt = vertexIndexFileIDMap.find(oldVertexIndexID);
+                    if (viIt != vertexIndexFileIDMap.end()) {
+                        // マッピングされたFileIDで上書き
+                        mutableNode["vertexIndexFileID"] = viIt->second;
+                    }
+                }
+
+                component->ImportFile(mutableNode);
             }
             index++;
         }
@@ -254,12 +410,31 @@ void Prefab::CollectExportData(Object* object, std::list<EngineMetaFile*>& expor
     if (!object) return;
 
     // オブジェクト自体をリストに追加
-    object->AddExportList();
-
-    // SceneExporterのリストから取得（既存の仕組みを利用）
-    // 注: AddExportListはSceneExporter::m_ExportListに追加するので
-    // ここでは直接オブジェクトを追加
     exportList.push_back(object);
+
+    // オブジェクトのコンポーネントをリストに追加
+    for (Component* component : object->GetComponents()) {
+        if (component) {
+            exportList.push_back(component);
+
+            // RendererコンポーネントからMaterialを収集
+            Renderer* renderer = dynamic_cast<Renderer*>(component);
+            if (renderer && renderer->GetMaterial()) {
+                Material* material = renderer->GetMaterial();
+                // 既にリストに含まれていないか確認
+                bool alreadyAdded = false;
+                for (const auto& item : exportList) {
+                    if (item == material) {
+                        alreadyAdded = true;
+                        break;
+                    }
+                }
+                if (!alreadyAdded) {
+                    exportList.push_back(material);
+                }
+            }
+        }
+    }
 
     // 子オブジェクトも再帰的に収集
     for (Object* child : object->GetChildren()) {

@@ -67,8 +67,8 @@ public:
 
     const aiScene* GetAiScene() { return m_Model->AiScene; }
 
-private:
     void LoadVertexIndex(std::string filename);
+private:
     void LoadTexture(std::string filename);
     void CreateBone(aiNode* node);
     void CreateMaterial();

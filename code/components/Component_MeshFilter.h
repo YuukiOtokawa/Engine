@@ -111,5 +111,7 @@ public:
         m_pVertexIndex = vertexIndex;
         SetVertexInfo(vertexIndex->GetVertexInfo(), vertexIndex->GetIndexInfo());
     }
+
+    VertexIndex* GetVertexIndex() const { return m_pVertexIndex; }
 };
 

@@ -209,5 +209,10 @@ public:
     bool IsChild() const {
         return m_IsChild;
     }
+
+    /// @brief コンポーネントリストを取得
+    const std::list<Component*>& GetComponents() const {
+        return m_Components;
+    }
 };
 

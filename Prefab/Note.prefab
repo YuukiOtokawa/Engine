@@ -1,0 +1,12 @@
+prefabName: Note
+version: 1
+objects:
+  - classID: 1
+    fileID: 36
+    name: Note
+    tag: 0
+    layer: 2
+    components:
+      - 37
+      - 38
+      - 39

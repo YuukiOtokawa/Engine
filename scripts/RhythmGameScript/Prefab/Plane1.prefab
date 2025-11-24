@@ -1,0 +1,39 @@
+prefabName: Plane1
+version: 1
+vertexIndices:
+  - fileID: 19
+    filePath: VertexIndexInfo\Plane.csv
+textures:
+  - fileID: 14
+    filePath: asset/texture/sura.jpg
+objects:
+  - classID: 1
+    fileID: 16
+    name: Plane1
+    tag: 0
+    layer: 2
+    components:
+      - 17
+      - 18
+      - 20
+  - classID: 3
+    fileID: 17
+    tag: 0
+    position: [0, -5, 0, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [20, 1, 20, 0]
+  - classID: 4
+    fileID: 18
+    tag: 0
+    vertexIndexFileID: 19
+  - classID: 5
+    fileID: 20
+    tag: 0
+    materialFileID: 21
+  - classID: 2
+    fileID: 21
+    specularPower: 0.5
+    vertexShader: unlit
+    pixelShader: unlit
+    textureFileID: 14
+    bumpTextureFileID: 15
