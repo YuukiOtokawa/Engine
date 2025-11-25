@@ -3,7 +3,7 @@ objects:
     fileID: 6
     name: InputSystem
     tag: 0
-    layer: 2
+    layer: 3
     components:
       - 7
   - classID: 8
@@ -22,7 +22,7 @@ objects:
     tag: 0
     position: [0, 5, -7.5, 0]
     rotation: [0, 0, 0, 0]
-    scale: [1, 1, 1, 0]
+    scale: [1, 1, 1, 1]
   - classID: 11
     fileID: 10
     tag: 0
@@ -45,7 +45,7 @@ objects:
     tag: 0
     position: [0, 5, -7.5, 0]
     rotation: [0, 0, 0, 0]
-    scale: [1, 1, 1, 0]
+    scale: [1, 1, 1, 1]
   - classID: 10
     fileID: 13
     tag: 0

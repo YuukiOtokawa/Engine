@@ -24,12 +24,12 @@ void MeshField::CreateMesh()
 
 		for (int x = 0; x < (int)m_MeshSize[0]; x++) {
 			for (int y = 0; y < (int)m_MeshSize[1]; y++) {
-				vertex[index].position = Vector3O(
+				vertex[index].position = Vector4O(
 					(x - m_MeshSize[0] / 2) * m_CellSize.x,
 					0.0f,
 					(m_MeshSize[1] / 2 - y) * m_CellSize.y
 				);
-				vertex[index].normal = Vector3O::Up();
+				vertex[index].normal = Vector4O::Up();
 				vertex[index].texcoord = Vector2O(
 					x,y
 				);
@@ -202,6 +202,70 @@ void MeshField::Render()
 	// ポリゴン描画
 	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(m_NumIndices, 0, 0);
 
+}
+
+void MeshField::RenderShadow()
+{
+	if (!m_pMaterial || !m_bIsVisible) return;
+	if (!m_pVertexBuffer || !m_pIndexBuffer) return;
+
+	// プリミティブトポロジ設定
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	// 行列計算
+	auto transform = owner->GetComponent<Transform>();
+
+	if (!transform) return;
+
+	XMMATRIX scale, angle, translation;
+	{
+		if (owner->IsChild()) {
+			/// 子オブジェクトのtransformは親オブジェクトからの相対位置であるため、親オブジェクトのTransformを考慮
+			auto parentTransform = owner->GetParent()->GetComponent<Transform>();
+
+			auto parentScale = parentTransform->GetScale();
+			auto parentRotation = parentTransform->GetRotation().ToRadian();
+			auto parentPosition = parentTransform->GetPosition();
+
+			auto objectScale = transform->GetScale();
+			auto objectRotation = transform->GetRotation().ToRadian();
+			auto objectPosition = transform->GetPosition();
+
+			scale = XMMatrixScaling(objectScale.x * parentScale.x, objectScale.y * parentScale.y, objectScale.z * parentScale.z);
+			angle = XMMatrixRotationRollPitchYaw(objectRotation.x + parentRotation.x, objectRotation.y + parentRotation.y, objectRotation.z + parentRotation.z);
+			translation = XMMatrixTranslation(
+				objectPosition.x + parentPosition.x,
+				objectPosition.y + parentPosition.y,
+				objectPosition.z + parentPosition.z
+			);
+		}
+		else {
+			auto objectScale = transform->GetScale();
+			auto objectRotation = transform->GetRotation().ToRadian();
+			auto objectPosition = transform->GetPosition();
+
+			scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
+			angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+			translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
+		}
+	}
+
+	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
+	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
+	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+
+	//m_pMaterial->SetShader();
+	m_pMaterial->DrawMaterial();
+
+	UINT stride = sizeof(VERTEX);
+	UINT offset = 0;
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+
+	// インデックスバッファ設定
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	// ポリゴン描画
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(m_NumIndices, 0, 0);
 }
 
 void MeshField::DrawGUI()

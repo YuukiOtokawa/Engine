@@ -171,8 +171,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 	PathRemoveFileSpecA(dir);
 
 
-	Vector3O* positionArray;
-	Vector3O* normalArray;
+	Vector4O* positionArray;
+	Vector4O* normalArray;
 	Vector2O* texcoordArray;
 
 	unsigned int	positionNum = 0;
@@ -245,8 +245,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 	//メモリ確保
-	positionArray = new Vector3O[positionNum];
-	normalArray = new Vector3O[normalNum];
+	positionArray = new Vector4O[positionNum];
+	normalArray = new Vector4O[normalNum];
 	texcoordArray = new Vector2O[texcoordNum];
 
 
@@ -263,8 +263,8 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 
 
 	//要素読込
-	Vector3O* position = positionArray;
-	Vector3O* normal = normalArray;
+	Vector4O* position = positionArray;
+	Vector4O* normal = normalArray;
 	Vector2O* texcoord = texcoordArray;
 
 	unsigned int vc = 0;
@@ -306,6 +306,7 @@ void OBJLoader::LoadObj(const char* FileName, MODEL_OBJ* ModelObj)
 			fscanf(file, "%f", &position->x);
 			fscanf(file, "%f", &position->y);
 			fscanf(file, "%f", &position->z);
+			position->w = 1.0f;
 			position++;
 		}
 		else if (strcmp(str, "vn") == 0)

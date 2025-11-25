@@ -13,6 +13,12 @@ protected:
     bool m_bIsVisible = true;
     bool m_bCastShadows = true;
 
+    ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
+    ID3D11ShaderResourceView* m_pShaderResourceView = nullptr;
+    int m_ShadowTextureID = -1;
+
+    static std::string m_PixelShaderKey;
+    static ID3D11InputLayout* m_pInputLayout;
 public:
     // 適切なクリーンアップのための仮想デストラクタ
     virtual ~Renderer() = default;
@@ -27,8 +33,9 @@ public:
 
     // 子クラスが実装しなければならない純粋仮想関数
     virtual void Render() = 0;
+    virtual void RenderShadow() = 0;
 
-    void Draw() override;
+    void Draw(bool castShadow) override;
 
     void ExportComponent(YAML::Emitter& out) override {
         out << YAML::Key << "isVisible" << YAML::Value << m_bIsVisible;

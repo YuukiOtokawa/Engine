@@ -14,7 +14,7 @@ void main(in VS_IN In, out PS_IN Out)
 
     // 3. 座標変換を実行する
     // In.Position (行ベクトル) に wvp (行優先行列) を乗算する
-    Out.Position = mul(float4(In.Position, 1.0f), wvp);
+    Out.Position = mul(In.Position, wvp);
 
 }
 

@@ -14,7 +14,7 @@ void main(in VS_IN In, out PS_IN Out)
 
     // 3. 座標変換を実行する
     // In.Position (行ベクトル) に wvp (行優先行列) を乗算する
-    Out.Position = mul(float4(In.Position, 1.0f), wvp);
+    Out.Position = mul(In.Position, wvp);
     
     
 
@@ -25,7 +25,7 @@ void main(in VS_IN In, out PS_IN Out)
     Out.Diffuse = In.Diffuse * diffuse; // マテリアルの拡散反射色を掛け合わせる
 	
     float4 worldNormal, normal;
-    normal = float4(In.Normal, 0.0f);
+    normal = In.Normal;
     worldNormal = normalize(mul(normal, world));
     
     Out.Normal = worldNormal.xyz;

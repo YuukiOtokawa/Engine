@@ -43,10 +43,10 @@ void FBXImporter::LoadVertexIndex(std::string filename)
 			VERTEX vertex;
 			for (unsigned int v = 0; v < mesh->mNumVertices; v++) {
 
-				vertex.position = Vector3O(mesh->mVertices[v].x, -mesh->mVertices[v].z, mesh->mVertices[v].y);
+				vertex.position = Vector4O(mesh->mVertices[v].x, -mesh->mVertices[v].z, mesh->mVertices[v].y);
 				vertex.texcoord = Vector2O(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
 				vertex.color = Vector4O(1.0f);
-				vertex.normal = Vector3O(mesh->mNormals[v].x, -mesh->mNormals[v].z, mesh->mNormals[v].y);
+				vertex.normal = Vector4O(mesh->mNormals[v].x, -mesh->mNormals[v].z, mesh->mNormals[v].y);
 
 				vertices.push_back(vertex);
 			}

@@ -94,6 +94,7 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	TextureLoad(L"asset/texture/Default_White.png");
 	CreatePostProcessBuffer();
 	CreateSceneGameViewBuffer();
+	CreateDepthBuffer(sd);
 
 	CreateVertexShader("cso/vertexShader.cso", "vertex");
 }
@@ -136,6 +137,15 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 		SAFE_RELEASE(m_pPostProcessRTV[i]);
 		SAFE_RELEASE(m_pPostProcessSRV[i]);
 	}
+
+	SAFE_RELEASE(m_pSceneViewRTV);
+	SAFE_RELEASE(m_pSceneViewSRV);
+
+	SAFE_RELEASE(m_pGameViewRTV);
+	SAFE_RELEASE(m_pGameViewSRV);
+
+	SAFE_RELEASE(m_pShadowDepthStencilView);
+	SAFE_RELEASE(m_pShadowDepthStencilSRV);
 }
 
 void RenderCore::BufferClear()
@@ -144,7 +154,7 @@ void RenderCore::BufferClear()
 
 	float clear_color[4] = { 0.5f, 0.0f, 0.0f, 1.0f };
 	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, clear_color);
-	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void RenderCore::BufferPresent()
@@ -155,13 +165,13 @@ void RenderCore::BufferPresent()
 void RenderCore::BeginPE(int n)
 {
 	m_pDeviceContext->OMSetRenderTargets(1, &m_pPostProcessRTV[n], m_pDepthStencilView);
-	float clear_color[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
+	float clear_color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	if (n != 0) clear_color[1] = 0.5f;
 
 	m_pDeviceContext->ClearRenderTargetView(m_pPostProcessRTV[n], clear_color);
 
-	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void RenderCore::ResizeClient(int width, int height)
@@ -421,7 +431,7 @@ void RenderCore::BeginSceneView()
 
 	m_pDeviceContext->ClearRenderTargetView(m_pSceneViewRTV, clear_color);
 
-	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void RenderCore::BeginGameView()
@@ -432,7 +442,63 @@ void RenderCore::BeginGameView()
 
 	m_pDeviceContext->ClearRenderTargetView(m_pGameViewRTV, clear_color);
 
-	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void RenderCore::CreateDepthBuffer(DXGI_SWAP_CHAIN_DESC sd)
+{
+	ID3D11Texture2D* ppTex = NULL;
+
+	D3D11_TEXTURE2D_DESC td = {};
+
+	td.Width = sd.BufferDesc.Width;
+	td.Height = sd.BufferDesc.Height;
+	td.MipLevels = 1;
+	td.ArraySize = 1;
+	td.Format = DXGI_FORMAT_R32_TYPELESS;
+	td.SampleDesc = sd.SampleDesc;
+	td.Usage = D3D11_USAGE_DEFAULT;
+	td.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+	td.CPUAccessFlags = 0;
+	td.MiscFlags = 0;
+
+	m_pDevice->CreateTexture2D(&td, NULL, &ppTex);
+	
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd = {};
+	dsvd.Format = DXGI_FORMAT_D32_FLOAT;
+	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+
+	m_pDevice->CreateDepthStencilView(ppTex, &dsvd, &m_pShadowDepthStencilView);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd = {};
+	srvd.Format = DXGI_FORMAT_R32_FLOAT;
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MipLevels = 1;
+
+	m_pDevice->CreateShaderResourceView(ppTex, &srvd, &m_pShadowDepthStencilSRV);
+
+	ppTex->Release();
+}
+
+void RenderCore::BeginDepth()
+{
+	// ビューポートを設定
+	D3D11_VIEWPORT vp = {};
+	vp.Width = (FLOAT)m_ClientSize.x;
+	vp.Height = (FLOAT)m_ClientSize.y;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	m_pDeviceContext->RSSetViewports(1, &vp);
+
+	m_pDeviceContext->OMSetRenderTargets(0, NULL, m_pShadowDepthStencilView);
+	m_pDeviceContext->ClearDepthStencilView(m_pShadowDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+ID3D11ShaderResourceView* RenderCore::GetDepthStencil()
+{
+	return m_pShadowDepthStencilSRV;
 }
 
 std::vector<Texture*> RenderCore::GetTextureInfo()
@@ -525,10 +591,10 @@ ID3D11InputLayout* RenderCore::CreateInputLayout(unsigned char* pByteCode, long 
 	// 入力レイアウト生成
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 6, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 10, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 4, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 8, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	UINT numElements = ARRAYSIZE(layout);
 

@@ -75,7 +75,7 @@ void Object::OnCollision()
 		}
 	}
 }
-void Object::Draw() {
+void Object::Draw(bool castShadow) {
 	for (auto& component : m_Components) {
 		component->Draw();
 	}
@@ -83,7 +83,7 @@ void Object::Draw() {
 	if (HasChild())
 	{
 		for (auto& child : m_Children) {
-			child->Draw();
+			child->Draw(castShadow);
 		}
 	}
 }

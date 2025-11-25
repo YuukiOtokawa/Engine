@@ -652,13 +652,7 @@
     <FxCompile Include="code\shader\PBRPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\PBRVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="code\shader\pixelLightingPS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="code\shader\pixelLightingVS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\pixelShader.hlsl">
@@ -676,37 +670,19 @@
     <FxCompile Include="code\shader\spotLightingPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\spotLightingVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="code\shader\toon1PS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="code\shader\toon1VS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\toon2PS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\toon2VS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="code\shader\unlitColorPS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="code\shader\unlitColorVS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\unlitTexturePS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\unlitTextureVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="code\shader\vertexDirectionalLightingPS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="code\shader\vertexDirectionalLightingVS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\vertexShader.hlsl">
@@ -715,13 +691,7 @@
     <FxCompile Include="code\shader\blinnPhongPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\blinnPhongVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="code\shader\bumpPS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="code\shader\bumpVS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\common.hlsl">
@@ -739,16 +709,7 @@
     <FxCompile Include="code\shader\grayscalePS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\grayscaleVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="code\shader\hemisphereLightingPS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="code\shader\hemisphereLightingVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="code\shader\WaveVS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\WavePS.hlsl">
@@ -757,13 +718,9 @@
     <FxCompile Include="code\shader\stealthPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\stealthVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="code\shader\EnvMapPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\EnvMapVS.hlsl" />
     <FxCompile Include="code\shader\ProjectionShadowPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
@@ -774,6 +731,9 @@
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\ProjectionShadow1PS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\DepthShadowPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
   </ItemGroup>

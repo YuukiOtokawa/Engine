@@ -110,6 +110,7 @@ public:
 	void Draw();
 
     void DrawGame(Object* camera, Object* renderTexture = nullptr);
+    void DrawShadow(Object* camera, Object* renderTexture = nullptr);
 	/// @brief オブジェクトやリソースの後処理を行います。
 	void Finalize();
 

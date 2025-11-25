@@ -31,6 +31,10 @@ void Material::DrawMaterial()
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 
+	// SamplerStateを再設定（他のコンポーネントによって変更されている可能性があるため）
+	auto samplerState = renderer->GetSamplerState();
+	renderer->GetDeviceContext()->PSSetSamplers(0, 1, &samplerState);
+
 	ID3D11ShaderResourceView** srv;
 	srv = renderer->GetTexture(m_TextureFileID);
 	if (srv != nullptr)
@@ -194,4 +198,6 @@ void Material::SetShader()
 	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 	renderer->SetVertexShader("vertex");
 	renderer->SetPixelShader(m_PixelShader);
+	// InputLayoutを設定（他のコンポーネントによって変更されている可能性があるため）
+	renderer->GetDeviceContext()->IASetInputLayout(renderer->GetInputLayout());
 }

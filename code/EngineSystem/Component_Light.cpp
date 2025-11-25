@@ -18,27 +18,45 @@ void Light::InitializeTag()
 	owner->SetDrawable(false);
 }
 
-void Light::Draw()
+void Light::Draw(bool castShadow)
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderCore();
-
+	
+	auto pos = owner->GetComponent<Transform>()->GetPosition();
 	switch (m_Type)
 	{
 	case LIGHTTYPE_DIRECTIONAL:
+	{
+		if (m_Direction.Length() == 0.0f) break;
+		// DirectionalLightの場合、ライトの向きを使ってView行列を作成
+		XMVECTOR lightPos = XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
+		XMVECTOR lightDir = XMVectorSet(m_Direction.x, m_Direction.y, m_Direction.z, 0.0f);
+		XMVECTOR lightTarget = XMVectorAdd(lightPos, lightDir); // ライト位置 + 向き = 注視点
+		XMVECTOR upVec = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+		
+
 		m_DirectionalLight = {
 			m_isEnable,
 			{},
 			m_Diffuse,
-			m_Direction
+			m_Direction,
+			XMMatrixLookAtLH(lightPos, lightTarget, upVec),
+			// DirectionalLightは平行光源なので正射影を使用
+			// サイズを大きくしてシーン全体をカバー
+			XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), renderer->GetClientSize().x/renderer->GetClientSize().y, 1.0f, 1000.0f)
 		};
-		break;
+	}
+	break;
 	case LIGHTTYPE_POINT:
 		m_PointLight = {
 			m_isEnable,
 			{},
 			m_Range,
 			m_Diffuse,
-			owner->GetComponent<Transform>()->GetPosition()
+			owner->GetComponent<Transform>()->GetPosition(),
+			XMMatrixLookAtLH(XMVectorSet(pos.x,pos.y,pos.z,0.0f),XMVectorSet(0.0f,pos.y - 1.0f,0.0f,0.0f),XMVectorSet(0.0f,0.1f,0.0f,0.0f)),
+			XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), (float)renderer->GetClientSize().x / renderer->GetClientSize().y, 1.0f, 1000.0f)
 		};
 		break;
 	case LIGHTTYPE_SPOT:
@@ -49,7 +67,9 @@ void Light::Draw()
 			m_OuterAngle,
 			m_Diffuse,
 			owner->GetComponent<Transform>()->GetPosition(),
-			m_Direction
+			m_Direction,
+			XMMatrixLookAtLH(XMVectorSet(pos.x,pos.y,pos.z,0.0f),XMVectorSet(0.0f,pos.y - 1.0f,0.0f,0.0f),XMVectorSet(0.0f,0.1f,0.0f,0.0f)),
+			XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), (float)renderer->GetClientSize().x / renderer->GetClientSize().y, 1.0f, 1000.0f)
 		};
 		break;
 	default:
@@ -57,7 +77,7 @@ void Light::Draw()
 	}
 }
 
-void Light::DrawGeneralLight()
+void Light::DrawGeneralLight(bool castShadow)
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 	LIGHT_BUFFER lightBuffer = {};
@@ -65,7 +85,20 @@ void Light::DrawGeneralLight()
 	lightBuffer.directionalLight = m_DirectionalLight;
 	lightBuffer.pointLight = m_PointLight;
 	lightBuffer.spotLight = m_SpotLight;
+
+	if (castShadow) {
+		renderer->SetViewMatrix(lightBuffer.directionalLight.view);
+		renderer->SetProjectionMatrix(lightBuffer.directionalLight.projection);
+	}
+	lightBuffer.directionalLight.view = XMMatrixTranspose(lightBuffer.directionalLight.view);
+	lightBuffer.directionalLight.projection = XMMatrixTranspose(lightBuffer.directionalLight.projection);
+	lightBuffer.pointLight.view = XMMatrixTranspose(lightBuffer.pointLight.view);
+	lightBuffer.pointLight.projection = XMMatrixTranspose(lightBuffer.pointLight.projection);
+	lightBuffer.spotLight.view = XMMatrixTranspose(lightBuffer.spotLight.view);
+	lightBuffer.spotLight.projection = XMMatrixTranspose(lightBuffer.spotLight.projection);
+
 	renderer->SetLightBuffer(lightBuffer);
+
 	m_DirectionalLight = {};
 	m_PointLight = {};
 	m_SpotLight = {};

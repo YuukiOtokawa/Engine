@@ -56,6 +56,7 @@ public:
 
     void Update() override;
     void Render() override; // ここにメインの描画ロジックを
+    void RenderShadow() override;
     void DrawGUI() override;
 
     void SetNextAnimation(std::string animationKey);

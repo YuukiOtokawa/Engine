@@ -30,7 +30,7 @@ public:
     void OnDestroy() override;
 
     void Update() override;
-    void Draw() override {}
+    void Draw(bool castShadow = false) override {}
     void DrawGUI() override;
     void InitializeTag() override {}
 

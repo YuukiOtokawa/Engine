@@ -80,8 +80,8 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
 
 
 struct VERTEX {
-    Vector3O position = { 0.0f,0.0f,0.0f };
-	Vector3O normal = { 0.0f,0.0f,0.0f };
+    Vector4O position = { 0.0f,0.0f,0.0f,1.0f };
+	Vector4O normal = { 0.0f,0.0f,0.0f,0.0f };
 	Vector4O color = { 0.0f,0.0f,0.0f,0.0f };
 	Vector2O texcoord = { 0.0f,0.0f };
 };

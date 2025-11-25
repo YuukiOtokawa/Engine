@@ -26,11 +26,11 @@ class Transform :
 {
 private:
 	// 座標
-	Vector4O m_Position = Vector4O(0.0f,0.0f,0.0f);
+	Vector4O m_Position = Vector4O(0.0f, 0.0f, 0.0f, 1.0f);
 	// 回転（ピッチ、ヨー、ロール）
-	Vector4O m_Rotation = Vector4O(0.0f, 0.0f, 0.0f);
+	Vector4O m_Rotation = Vector4O(0.0f, 0.0f, 0.0f, 0.0f);
 	// スケール（X, Y, Z）
-	Vector4O m_Scale = Vector4O(1.0f, 1.0f, 1.0f);
+	Vector4O m_Scale = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
 
     XMMATRIX m_TransformMatrix = XMMatrixIdentity();
 
@@ -42,7 +42,7 @@ public:
 	/// @brief オブジェクトの状態を更新します。
 	void Update() override;
 	/// @brief 描画処理を実行します。
-	void Draw() override;
+	void Draw(bool castShadow = false) override;
 	void DrawGUI() override;
 
 	/// @brief コンポーネントに対応したタグを所有者のオブジェクトに設定します。

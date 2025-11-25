@@ -135,8 +135,8 @@ std::list<Object*> CSVImporter::Import(std::string filePath)
 
 			for (auto& tokens : vertexData) {
 				VERTEX vertex;
-				vertex.position = Vector3O(std::stof(tokens[0]), std::stof(tokens[1]), std::stof(tokens[2]));
-				vertex.normal = Vector3O(std::stof(tokens[3]), std::stof(tokens[4]), std::stof(tokens[5]));
+				vertex.position = Vector4O(std::stof(tokens[0]), std::stof(tokens[1]), std::stof(tokens[2]));
+				vertex.normal = Vector4O(std::stof(tokens[3]), std::stof(tokens[4]), std::stof(tokens[5]));
 				vertex.color = Vector4O(std::stof(tokens[6]), std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9]));
 				vertex.texcoord = Vector2O(std::stof(tokens[10]), std::stof(tokens[11]));
 				vertices.push_back(vertex);
@@ -351,8 +351,8 @@ int CSVImporter::ImportMesh(std::string filePath)
 
 	for (auto& tokens : vertexData) {
 		VERTEX vertex;
-		vertex.position = Vector3O(std::stof(tokens[0]), std::stof(tokens[1]), std::stof(tokens[2]));
-		vertex.normal = Vector3O(std::stof(tokens[3]), std::stof(tokens[4]), std::stof(tokens[5]));
+		vertex.position = Vector4O(std::stof(tokens[0]), std::stof(tokens[1]), std::stof(tokens[2]));
+		vertex.normal = Vector4O(std::stof(tokens[3]), std::stof(tokens[4]), std::stof(tokens[5]));
 		vertex.color = Vector4O(std::stof(tokens[6]), std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9]));
 		vertex.texcoord = Vector2O(std::stof(tokens[10]), std::stof(tokens[11]));
 		vertices.push_back(vertex);

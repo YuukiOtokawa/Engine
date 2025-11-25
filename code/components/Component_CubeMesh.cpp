@@ -12,29 +12,29 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 	//上
 
 	vertex[0] = {
-		Vector3O(-1.0f, 1.0f, 1.0f),
-		Vector3O(0.0f,1.0f,0.0f),
+		Vector4O(-1.0f, 1.0f, 1.0f),
+		Vector4O(0.0f,1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 0.0f),
 	};
 
 	vertex[1] = {
-		Vector3O(1.0f, 1.0f, 1.0f),
-		Vector3O(0.0f,1.0f,0.0f),
+		Vector4O(1.0f, 1.0f, 1.0f),
+		Vector4O(0.0f,1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 0.0f),
 	};
 
 	vertex[2] = {
-		Vector3O(-1.0f, 1.0f, -1.0f),
-		Vector3O(0.0f,1.0f,0.0f),
+		Vector4O(-1.0f, 1.0f, -1.0f),
+		Vector4O(0.0f,1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 1.0f),
 	};
 
 	vertex[3] = {
-		Vector3O(1.0f, 1.0f, -1.0f),
-		Vector3O(0.0f,1.0f,0.0f),
+		Vector4O(1.0f, 1.0f, -1.0f),
+		Vector4O(0.0f,1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 1.0f),
 	};
@@ -42,31 +42,31 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 	//手前
 
 	vertex[4] = {
-		Vector3O(-1.0f, 1.0f, -1.0f),
-		Vector3O(0.0f,0.0f,-1.0f),
+		Vector4O(-1.0f, 1.0f, -1.0f),
+		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 0.0f),
 	};
 
 	vertex[5] = {
-		Vector3O(1.0f, 1.0f, -1.0f),
-		Vector3O(0.0f,0.0f,-1.0f),
+		Vector4O(1.0f, 1.0f, -1.0f),
+		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 0.0f),
 	};
 
 
 	vertex[6] = {
-		Vector3O(-1.0f, -1.0f, -1.0f),
-		Vector3O(0.0f,0.0f,-1.0f),
+		Vector4O(-1.0f, -1.0f, -1.0f),
+		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 1.0f),
 	};
 
 
 	vertex[7] = { 
-		Vector3O(1.0f, -1.0f, -1.0f),
-		Vector3O(0.0f,0.0f,-1.0f),
+		Vector4O(1.0f, -1.0f, -1.0f),
+		Vector4O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 1.0f),
 	};
@@ -74,29 +74,29 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 	//右
 
 	vertex[8] = {
-		Vector3O(1.0f, 1.0f, -1.0f),
-		Vector3O(1.0f,0.0f,0.0f),
+		Vector4O(1.0f, 1.0f, -1.0f),
+		Vector4O(1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 0.0f),
 	};
 
 	vertex[9] = {
-		Vector3O(1.0f, 1.0f, 1.0f),
-		Vector3O(1.0f,0.0f,0.0f),
+		Vector4O(1.0f, 1.0f, 1.0f),
+		Vector4O(1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 0.0f),
 	};
 
 	vertex[10] = {
-		Vector3O(1.0f, -1.0f, -1.0f),
-		Vector3O(1.0f,0.0f,0.0f),
+		Vector4O(1.0f, -1.0f, -1.0f),
+		Vector4O(1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 1.0f),
 	};
 
 	vertex[11] = {
-		Vector3O(1.0f, -1.0f, 1.0f),
-		Vector3O(1.0f,0.0f,0.0f),
+		Vector4O(1.0f, -1.0f, 1.0f),
+		Vector4O(1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 1.0f),
 	};
@@ -104,29 +104,29 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 	//奥
 
 	vertex[12] = {
-		Vector3O(1.0f, 1.0f, 1.0f),
-		Vector3O(0.0f,0.0f,1.0f),
+		Vector4O(1.0f, 1.0f, 1.0f),
+		Vector4O(0.0f,0.0f,1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 0.0f),
 	};
 
 	vertex[13] = {
-		Vector3O(-1.0f, 1.0f, 1.0f),
-		Vector3O(0.0f,0.0f,1.0f),
+		Vector4O(-1.0f, 1.0f, 1.0f),
+		Vector4O(0.0f,0.0f,1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 0.0f),
 	};
 
 	vertex[14] = {
-		Vector3O(1.0f, -1.0f, 1.0f),
-		Vector3O(0.0f,0.0f,1.0f),
+		Vector4O(1.0f, -1.0f, 1.0f),
+		Vector4O(0.0f,0.0f,1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 1.0f),
 	};
 
 	vertex[15] = {
-		Vector3O(-1.0f, -1.0f, 1.0f),
-		Vector3O(0.0f,0.0f,1.0f),
+		Vector4O(-1.0f, -1.0f, 1.0f),
+		Vector4O(0.0f,0.0f,1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 1.0f),
 	};
@@ -134,29 +134,29 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 	//左
 
 	vertex[16] = {
-		Vector3O(-1.0f, 1.0f, 1.0f),
-		Vector3O(-1.0f,0.0f,0.0f),
+		Vector4O(-1.0f, 1.0f, 1.0f),
+		Vector4O(-1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 0.0f),
 	};
 
 	vertex[17] = {
-		Vector3O(-1.0f, 1.0f, -1.0f),
-		Vector3O(-1.0f,0.0f,0.0f),
+		Vector4O(-1.0f, 1.0f, -1.0f),
+		Vector4O(-1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 0.0f),
 	};
 
 	vertex[18] = {
-		Vector3O(-1.0f, -1.0f, 1.0f),
-		Vector3O(-1.0f,0.0f,0.0f),
+		Vector4O(-1.0f, -1.0f, 1.0f),
+		Vector4O(-1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 1.0f),
 	};
 
 	vertex[19] = {
-		Vector3O(-1.0f, -1.0f, -1.0f),
-		Vector3O(-1.0f,0.0f,0.0f),
+		Vector4O(-1.0f, -1.0f, -1.0f),
+		Vector4O(-1.0f,0.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 1.0f),
 	};
@@ -164,29 +164,29 @@ CubeMesh::CubeMesh() : MeshFilter(NUM_CUBE_VERTEX, NUM_CUBE_INDEX)
 	//下
 
 	vertex[20] = {
-		Vector3O(-1.0f, -1.0f, -1.0f),
-		Vector3O(0.0f,-1.0f,0.0f),
+		Vector4O(-1.0f, -1.0f, -1.0f),
+		Vector4O(0.0f,-1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 0.0f),
 	};
 
 	vertex[21] = {
-		Vector3O(1.0f, -1.0f, -1.0f),
-		Vector3O(0.0f,-1.0f,0.0f),
+		Vector4O(1.0f, -1.0f, -1.0f),
+		Vector4O(0.0f,-1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 0.0f),
 	};
 
 	vertex[22] = {
-		Vector3O(-1.0f, -1.0f, 1.0f),
-		Vector3O(0.0f,-1.0f,0.0f),
+		Vector4O(-1.0f, -1.0f, 1.0f),
+		Vector4O(0.0f,-1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 1.0f),
 	};
 
 	vertex[23] = {
-		Vector3O(1.0f, -1.0f, 1.0f),
-		Vector3O(0.0f,-1.0f,0.0f),
+		Vector4O(1.0f, -1.0f, 1.0f),
+		Vector4O(0.0f,-1.0f,0.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 1.0f),
 	};

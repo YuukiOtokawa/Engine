@@ -256,11 +256,11 @@ int SceneImporter::ImportMesh(std::string filePath, int fileID)
 			VERTEX vertex;
 			if (vertexNode["position"]) {
 				auto pos = vertexNode["position"];
-				vertex.position = Vector3O(pos[0].as<float>(), pos[1].as<float>(), pos[2].as<float>());
+				vertex.position = Vector4O(pos[0].as<float>(), pos[1].as<float>(), pos[2].as<float>());
 			}
 			if (vertexNode["normal"]) {
 				auto norm = vertexNode["normal"];
-				vertex.normal = Vector3O(norm[0].as<float>(), norm[1].as<float>(), norm[2].as<float>());
+				vertex.normal = Vector4O(norm[0].as<float>(), norm[1].as<float>(), norm[2].as<float>());
 			}
 			if (vertexNode["color"]) {
 				auto col = vertexNode["color"];

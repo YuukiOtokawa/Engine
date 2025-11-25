@@ -7,9 +7,10 @@ void main(in VS_IN In, out PS_IN Out)
 	//頂点変換行列を作る World * View * Projection
     matrix wvp;
     wvp = mul(mul(World, View), Projection);
+    
 
 	//ポリゴンの頂点を変換行列で変換して出力
-    Out.Position = mul(float4(In.Position, 1.0f), wvp); //Position * wvp
+    Out.Position = mul(In.Position, wvp); //Position * wvp
 	
 //==========================================================================
 // 法線の回転処理
@@ -33,4 +34,8 @@ void main(in VS_IN In, out PS_IN Out)
     Out.Diffuse.a = In.Diffuse.a; //頂点色のアルファ成分をそのまま使用
     
     Out.WorldPosition = mul(In.Position, World);
+    
+    matrix lightwvp;
+    lightwvp = mul(mul(World, Light.DirectionalLight.view), Light.DirectionalLight.projection);
+    Out.LightPosition = mul(In.Position, lightwvp);
 }

@@ -74,7 +74,7 @@ public:
 	virtual void Update() = 0;
 
 	/// @brief 図形やオブジェクトを描画するための仮想関数です。
-	virtual void Draw() {}
+	virtual void Draw(bool castShadow = false) {}
 
 	/// @brief GUI を描画するための仮想関数です。
 	virtual void DrawGUI() {}

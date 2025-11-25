@@ -68,7 +68,7 @@ public:
 
     void OnCollision();
 	/// @brief 描画処理を実行します。
-	void Draw();
+	void Draw(bool castShadow = false);
 
 	void DrawGUI();
 

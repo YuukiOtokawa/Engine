@@ -151,6 +151,7 @@ void Editor::Initialize() {
 
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/EnvMapPS.cso", "Enviroment");
 		
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DepthShadowPS.cso", "DepthShadow");
 	}
 
 	Main();
@@ -233,6 +234,14 @@ void Editor::Draw() {
 		}
 	}
 
+	if (currentCam) {
+		renderCore->BeginDepth();
+		DrawShadow(currentCam);
+		renderCore->ResetRenderTarget();
+		renderCore->ResetViewPort();
+		renderCore->BufferClear();
+
+	}
 	// GameView用の描画（activeCameraを使用）
 	if (currentCam) {
 		renderCore->BeginGameView();
@@ -615,8 +624,7 @@ void Editor::Draw() {
 	if (m_pSelectedObject)
 		m_pSelectedObject->DrawGUI();
 
-	ImGui::Image(renderCore->GetGameViewTexture()->shaderResourceView, ImVec2(300, 300));
-	ImGui::Image(renderCore->GetSceneViewTexture()->shaderResourceView, ImVec2(300, 300));
+	ImGui::Image(renderCore->GetDepthStencil(), ImVec2(300, 300));
 
 	m_pGUI->EndWindow();
 
@@ -761,6 +769,77 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	}
 	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
 
+}
+
+void Editor::DrawShadow(Object* camera, Object* renderTexture)
+{
+//==========================================================================
+// オブジェクト描画処理
+//==========================================================================
+
+	camera->Draw();
+
+	for (auto& object : m_Objects) {
+		if (object->GetTag() == GameObjectTagLayer::LightTag) {
+			object->Draw(); // ライトオブジェクトの描画
+		}
+	}
+	Light::DrawGeneralLight(true); // 全体のライト情報を描画
+
+	// オブジェクトをカメラに遠い順にソート
+	auto objects = m_Objects;
+	// Zソート
+	if (camera) {
+		auto camPos = camera->GetComponent<Transform>()->GetPosition().XYZ();
+		auto camForward = camera->GetComponent<Transform>()->GetForward();
+
+		objects.sort([&](Object* obj1, Object* obj2) {
+			if (!camera) return false; // activeCameraがnullptrの場合、ソートしない
+			if (obj1->GetTag() == GameObjectTagLayer::CameraTag || obj2->GetTag() == GameObjectTagLayer::CameraTag)
+				return false; // カメラオブジェクトはソートしない
+			if (obj1->GetTag() == GameObjectTagLayer::LightTag || obj2->GetTag() == GameObjectTagLayer::LightTag)
+				return false; // ライトオブジェクトはソートしない
+			if (!obj1->GetComponent<Transform>() || !obj2->GetComponent<Transform>())
+				return false; // Transformコンポーネントがない場合はソートしない
+
+			return obj1->GetComponent<Transform>()->GetZ(camPos, camForward)
+			> obj2->GetComponent<Transform>()->GetZ(camPos, camForward);
+					 });
+	}
+
+	//オブジェクトの描画
+	for (auto& object : objects) {
+		if (object->GetLayer() == GameObjectLayer::ObjectLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
+			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw(true);
+		}
+	}
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	for (auto& object : objects) {
+		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
+			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw(true);
+		}
+	}
+	//パーティクルの描画
+	m_pParticleManager->DrawParticles();
+
+	// 2D描画
+	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+	for (auto& object : objects) {
+		if (renderTexture && object == renderTexture) continue;
+		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
+			if (!object->GetComponent<Transform>())
+				continue;
+			if (camera->GetComponent<Camera>()->IsInView(object->GetComponent<Transform>()->GetPosition().XYZ()))
+				object->Draw(true);
+		}
+	}
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
 }
 
 void Editor::Finalize() {

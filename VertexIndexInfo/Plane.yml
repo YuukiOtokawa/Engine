@@ -1,0 +1,67 @@
+vertices:
+  - position:
+      - -1
+      - 0
+      - 1
+    normal:
+      - 0
+      - 1
+      - 0
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 0
+      - 0
+  - position:
+      - 1
+      - 0
+      - 1
+    normal:
+      - 0
+      - 1
+      - 0
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 1
+      - 0
+  - position:
+      - -1
+      - 0
+      - -1
+    normal:
+      - 0
+      - 1
+      - 0
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 0
+      - 1
+  - position:
+      - 1
+      - 0
+      - -1
+    normal:
+      - 0
+      - 1
+      - 0
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 1
+      - 1
+indices: [0, 1, 2, 3]
+primitiveTopology: 5

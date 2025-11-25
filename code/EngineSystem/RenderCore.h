@@ -204,6 +204,9 @@ public:
 	/// @brief 入力レイアウトオブジェクトを取得します。
 	/// @return 格納されている ID3D11InputLayout ポインタ。
 	ID3D11InputLayout* GetInputLayout() { return m_pInputLayout; }
+	/// @brief サンプラーステートオブジェクトを取得します。
+	/// @return 格納されている ID3D11SamplerState ポインタ。
+	ID3D11SamplerState* GetSamplerState() { return m_pSamplerState; }
 	/// @brief 定数バッファを作成します。
 	void CreateConstantBuffer();
 
@@ -329,7 +332,12 @@ public:
     void BeginSceneView();
     void BeginGameView();
 
+    void CreateDepthBuffer(DXGI_SWAP_CHAIN_DESC sd);
+
     void BeginDepth();
+    ID3D11ShaderResourceView* GetDepthStencilSRV() {
+        return m_pShadowDepthStencilSRV;
+    }
 
     Texture* GetSceneViewTexture() {
         return m_pSceneViewTexture;

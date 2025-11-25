@@ -5,3 +5,5 @@ textures:
     filePath: asset/texture/Normal.bmp
   - fileID: 43
     filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\grass 1.jpg
+  - fileID: 48
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Default_White.png

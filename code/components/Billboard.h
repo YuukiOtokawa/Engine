@@ -7,7 +7,7 @@ public:
     Billboard() : SpriteMesh() {
         m_ClassID = CID_Billboard;
     }
-    void Draw() override;
+    void Draw(bool castShadow = false) override;
 
     virtual void SetOwner(Object* obj) override {
         SpriteMesh::SetOwner(obj);

@@ -87,8 +87,8 @@ void SkinnedMeshRenderer::InitializeBuffers() {
 
 			for (unsigned int v = 0; v < mesh->mNumVertices; v++)
 			{
-				vertex[v].position = Vector3O(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);
-				vertex[v].normal = Vector3O(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z);
+				vertex[v].position = Vector4O(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);
+				vertex[v].normal = Vector4O(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z);
 				vertex[v].texcoord = Vector2O(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
 				vertex[v].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 			}
@@ -415,8 +415,8 @@ void SkinnedMeshRenderer::Update() {
 			deformVertex->normal = mesh->mNormals[v];
 			deformVertex->normal *= outMatrix;
 
-			vertex[v].position = Vector3O(deformVertex->position.x, deformVertex->position.y, deformVertex->position.z);
-			vertex[v].normal = Vector3O(deformVertex->normal.x, deformVertex->normal.y, deformVertex->normal.z);
+			vertex[v].position = Vector4O(deformVertex->position.x, deformVertex->position.y, deformVertex->position.z);
+			vertex[v].normal = Vector4O(deformVertex->normal.x, deformVertex->normal.y, deformVertex->normal.z);
 			vertex[v].texcoord = Vector2O(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
 			vertex[v].color = Vector4O::One();
 		}
@@ -497,6 +497,93 @@ void SkinnedMeshRenderer::Render() {
 		m_pMaterial->SetTexture(m_pTextureFID->at(texture.data));
 
 		m_pMaterial->SetShader();
+		m_pMaterial->DrawMaterial();
+
+
+		// 頂点バッファ設定
+		UINT stride = sizeof(VERTEX);
+		UINT offset = 0;
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer[m], &stride, &offset);
+
+		// インデックスバッファ設定
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer[m], DXGI_FORMAT_R32_UINT, 0);
+
+		// ポリゴン描画
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(mesh->mNumFaces * 3, 0, 0);
+	}
+}
+
+void SkinnedMeshRenderer::RenderShadow()
+{
+	if (!m_pVertexBuffer || !m_pIndexBuffer || !m_pMaterial) return;
+
+
+	// プリミティブトポロジ設定
+	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(
+		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// マテリアル設定
+	MATERIAL material;
+	ZeroMemory(&material, sizeof(material));
+	material.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.textureEnable = true;
+
+	auto transform = owner->GetComponent<Transform>();
+	if (!transform) return;
+	XMMATRIX scale, angle, translation;
+	{
+		if (owner->IsChild()) {
+			/// 子オブジェクトのtransformは親オブジェクトからの相対位置であるため、親オブジェクトのTransformを考慮
+			auto parentTransform = owner->GetParent()->GetComponent<Transform>();
+
+			auto parentScale = parentTransform->GetScale();
+			auto parentRotation = parentTransform->GetRotation().ToRadian();
+			auto parentPosition = parentTransform->GetPosition();
+
+			auto objectScale = transform->GetScale();
+			auto objectRotation = transform->GetRotation().ToRadian();
+			auto objectPosition = transform->GetPosition();
+
+			scale = XMMatrixScaling(objectScale.x * parentScale.x, objectScale.y * parentScale.y, objectScale.z * parentScale.z);
+			angle = XMMatrixRotationRollPitchYaw(objectRotation.x + parentRotation.x, objectRotation.y + parentRotation.y, objectRotation.z + parentRotation.z);
+			translation = XMMatrixTranslation(
+				objectPosition.x + parentPosition.x,
+				objectPosition.y + parentPosition.y,
+				objectPosition.z + parentPosition.z
+			);
+		}
+		else {
+			auto objectScale = transform->GetScale() * 0.01f;
+			auto objectRotation = transform->GetRotation().ToRadian();
+			auto objectPosition = transform->GetPosition();
+
+			scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
+			angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+			translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
+		}
+
+	}
+
+	// 行列をレンダラーに設定する
+	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
+	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
+	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+
+
+	for (unsigned int m = 0; m < m_pAiScene->mNumMeshes; m++)
+	{
+		aiMesh* mesh = m_pAiScene->mMeshes[m];
+
+		// マテリアル設定
+		aiString texture;
+
+		aiMaterial* aimaterial = m_pAiScene->mMaterials[mesh->mMaterialIndex];
+		aimaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texture);
+
+		m_pMaterial->SetTexture(m_pTextureFID->at(texture.data));
+
+		//m_pMaterial->SetShader();
 		m_pMaterial->DrawMaterial();
 
 

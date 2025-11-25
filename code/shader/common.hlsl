@@ -23,8 +23,8 @@ cbuffer ProjectionBuffer : register(b4)
 
 struct VS_IN
 {
-    float3 Position : POSITION0;
-    float3 Normal : NORMAL0;
+    float4 Position : POSITION0;
+    float4 Normal : NORMAL0;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
     
@@ -33,11 +33,11 @@ struct VS_IN
 struct PS_IN
 {
     float4 Position : SV_POSITION;
-    float3 WorldPosition : POSITION0;
+    float4 WorldPosition : POSITION0;
     float3 Normal : NORMAL0;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
-    float3 LightPosition : POSITION1;
+    float4 LightPosition : POSITION1;
 };
 
 struct DIRECTIONAL_LIGHT
@@ -46,6 +46,8 @@ struct DIRECTIONAL_LIGHT
     bool3 dummy;
     float4 diffuse;
     float4 direction;
+    matrix view;
+    matrix projection;
 };
 
 struct POINT_LIGHT
@@ -55,6 +57,8 @@ struct POINT_LIGHT
     float range;
     float4 diffuse;
     float4 position;
+    matrix view;
+    matrix projection;
 };
 
 struct SPOT_LIGHT
@@ -66,6 +70,8 @@ struct SPOT_LIGHT
     float4 diffuse;
     float4 position;
     float4 direction;
+    matrix view;
+    matrix projection;
 };
 
 struct LIGHT_BUFFER

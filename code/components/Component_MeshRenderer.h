@@ -35,7 +35,7 @@ public:
 
     void Update() override;
     void Render() override; // ここにメインの描画ロジックを記述します
-    void RenderShadow();
+    void RenderShadow() override;
     void DrawGUI() override;
     void ImportFile(YAML::Node& node) override;
     void ExportComponent(YAML::Emitter& out) override;

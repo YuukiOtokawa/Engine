@@ -18,6 +18,8 @@ struct DIRECTIONAL_LIGHT
     BOOL Dummy[3] = {}; // パディング用のダミー変数
     Vector4O diffuse;   // 拡散光の色
     Vector4O direction; // 光の方向
+    XMMATRIX view;
+    XMMATRIX projection;
 };
 
 struct POINT_LIGHT
@@ -27,6 +29,8 @@ struct POINT_LIGHT
     FLOAT range;        // 光の範囲
     Vector4O diffuse;   // 拡散光の色
     Vector4O position;  // 光源の位置
+    XMMATRIX view;
+    XMMATRIX projection;
 };
 
 struct SPOT_LIGHT
@@ -38,7 +42,8 @@ struct SPOT_LIGHT
     Vector4O diffuse;   // 拡散光の色
     Vector4O position;  // 光源の位置
     Vector4O direction; // 光の方向
-
+    XMMATRIX view;
+    XMMATRIX projection;
 };
 
 struct LIGHT_BUFFER {
@@ -72,8 +77,8 @@ public:
     Light() = default;
 
     void InitializeTag() override;
-    void Draw() override;
-    static void DrawGeneralLight();
+    void Draw(bool castShadow = false) override;
+    static void DrawGeneralLight(bool castShadow = false);
     void DrawGUI() override;
 
     void Update() override {

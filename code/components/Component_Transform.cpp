@@ -16,7 +16,7 @@ void Transform::Update() {
 
 }
 
-void Transform::Draw() {
+void Transform::Draw(bool castShadow) {
 
 }
 
