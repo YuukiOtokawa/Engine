@@ -20,6 +20,7 @@
 
 #include <d3dcompiler.h>
 #include <io.h>
+#include "imgui.h"
 
 //==========================================================================
 // メンバ関数
@@ -166,7 +167,116 @@ void RenderCore::BeginPE(int n)
 
 void RenderCore::ResizeClient(int width, int height)
 {
-	//m_ClientSize = Vector2O( width, height );
+	// サイズが0の場合は何もしない（最小化時など）
+	if (width == 0 || height == 0) {
+		return;
+	}
+
+	// 同じサイズの場合は何もしない
+	if (m_ClientSize.x == width && m_ClientSize.y == height) {
+		return;
+	}
+
+	// 新しいサイズを保存
+	m_ClientSize = Vector2O((float)width, (float)height);
+
+	// レンダーターゲットとデプスステンシルを解放
+	ReleaseRenderTargets();
+
+	// スワップチェーンのバッファをリサイズ
+	HRESULT hr = m_pSwapChain->ResizeBuffers(
+		1,
+		width,
+		height,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		0
+	);
+
+	if (FAILED(hr)) {
+		MessageBoxA(NULL, "Failed to resize swap chain buffers", "Error", MB_ICONERROR);
+		return;
+	}
+
+	// レンダーターゲットとデプスステンシルを再作成
+	RecreateRenderTargets();
+
+	// ImGuiのディスプレイサイズを更新
+	ImGuiIO& io = ImGui::GetIO();
+	io.DisplaySize = ImVec2((float)width, (float)height);
+}
+
+void RenderCore::ReleaseRenderTargets()
+{
+	// レンダーターゲットビューを解放
+	if (m_pRenderTargetView) {
+		m_pRenderTargetView->Release();
+		m_pRenderTargetView = nullptr;
+	}
+
+	// デプスステンシルビューを解放
+	if (m_pDepthStencilView) {
+		m_pDepthStencilView->Release();
+		m_pDepthStencilView = nullptr;
+	}
+
+	// デプスステンシルテクスチャを解放
+	if (m_pDepthStencilTexture) {
+		m_pDepthStencilTexture->Release();
+		m_pDepthStencilTexture = nullptr;
+	}
+
+	// ポストプロセスバッファを解放
+	for (int i = 0; i < 3; i++) {
+		if (m_pPostProcessRTV[i]) {
+			m_pPostProcessRTV[i]->Release();
+			m_pPostProcessRTV[i] = nullptr;
+		}
+		if (m_pPostProcessSRV[i]) {
+			m_pPostProcessSRV[i]->Release();
+			m_pPostProcessSRV[i] = nullptr;
+		}
+	}
+
+	// シーンビューバッファを解放
+	if (m_pSceneViewRTV) {
+		m_pSceneViewRTV->Release();
+		m_pSceneViewRTV = nullptr;
+	}
+	if (m_pSceneViewSRV) {
+		m_pSceneViewSRV->Release();
+		m_pSceneViewSRV = nullptr;
+	}
+
+	// ゲームビューバッファを解放
+	if (m_pGameViewRTV) {
+		m_pGameViewRTV->Release();
+		m_pGameViewRTV = nullptr;
+	}
+	if (m_pGameViewSRV) {
+		m_pGameViewSRV->Release();
+		m_pGameViewSRV = nullptr;
+	}
+}
+
+void RenderCore::RecreateRenderTargets()
+{
+	// レンダーターゲットビューを再作成
+	CreateRenderTargetView();
+
+	// デプスステンシルを再作成
+	CreateDepthStencil();
+
+	// ビューポートを更新
+	CreateViewPort();
+
+	// ポストプロセスバッファを再作成
+	CreatePostProcessBuffer();
+
+	// シーン/ゲームビューバッファを再作成
+	CreateSceneGameViewBuffer();
+
+	// レンダーターゲットを設定
+	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 }
 
 void RenderCore::CreateRenderTargetView()

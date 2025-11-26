@@ -180,9 +180,6 @@
     <ClCompile Include="code\DataManager\FBXImporter.cpp">
       <Filter>ソース ファイル\DataManager</Filter>
     </ClCompile>
-    <ClCompile Include="scripts\GameManager.cpp">
-      <Filter>ソース ファイル\Script</Filter>
-    </ClCompile>
     <ClCompile Include="code\input\Gamepad.cpp">
       <Filter>ソース ファイル\Input</Filter>
     </ClCompile>
@@ -337,6 +334,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scripts\RhythmGameScript\GameManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="code\EngineSystem\VCProjectManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -641,6 +641,9 @@
     <ClInclude Include="scripts\RhythmGameScript\GameManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="code\EngineSystem\VCProjectManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="code\shader\limLightingPS.hlsl">
@@ -763,7 +766,6 @@
     <FxCompile Include="code\shader\EnvMapPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="code\shader\EnvMapVS.hlsl" />
     <FxCompile Include="code\shader\ProjectionShadowPS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
@@ -774,6 +776,9 @@
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="code\shader\ProjectionShadow1PS.hlsl">
+      <Filter>シェーダー ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="code\shader\Instancing.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
   </ItemGroup>

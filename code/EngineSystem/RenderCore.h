@@ -166,6 +166,15 @@ public:
 	/// @param height 新しいクライアント領域の高さ（ピクセル単位）。
 	void ResizeClient(int width, int height);
 
+private:
+	/// @brief レンダーターゲットとデプスステンシルを解放
+	void ReleaseRenderTargets();
+
+	/// @brief レンダーターゲットとデプスステンシルを再作成
+	void RecreateRenderTargets();
+
+public:
+
 	/// @brief デバイスオブジェクトを取得します。
 	/// @return ID3D11Device オブジェクトへのポインタ。
 	ID3D11Device* GetDevice() { return m_pDevice; }

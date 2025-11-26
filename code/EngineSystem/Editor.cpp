@@ -158,7 +158,7 @@ void Editor::Initialize() {
 
 	// プロジェクトウィンドウの初期化
 	m_pProjectWindow = new ProjectWindow();
-	m_pProjectWindow->Initialize("scripts");
+	m_pProjectWindow->Initialize("scripts", "OtokawaEngine.vcxproj");
 
 	m_pEditorCamera = GetObject("EditorCamera");
 

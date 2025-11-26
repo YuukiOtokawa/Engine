@@ -35,7 +35,7 @@ ProjectWindow::~ProjectWindow()
     Finalize();
 }
 
-void ProjectWindow::Initialize(const std::string& rootPath)
+void ProjectWindow::Initialize(const std::string& rootPath, const std::string& vcxprojPath)
 {
     m_rootPath = rootPath;
 
@@ -43,6 +43,13 @@ void ProjectWindow::Initialize(const std::string& rootPath)
     if (!fs::exists(m_rootPath)) {
         fs::create_directories(m_rootPath);
         EngineConsole::Log("ProjectWindow: scriptsフォルダを作成しました");
+    }
+
+    // vcxprojパスが指定されている場合、VCProjectManagerを初期化
+    if (!vcxprojPath.empty()) {
+        if (!m_vcProjectManager.Initialize(vcxprojPath)) {
+            EngineConsole::LogWarning("ProjectWindow: VCProjectManagerの初期化に失敗しました");
+        }
     }
 
     // アイコンテクスチャを読み込む
@@ -450,6 +457,25 @@ void ProjectWindow::CreateNewScript(const std::string& directory)
     }
 
     EngineConsole::Log("ProjectWindow: 新しいスクリプトを作成しました: %s", scriptName.c_str());
+
+    // Visual Studioプロジェクトに追加
+    if (!m_vcProjectManager.GetProjectPath().empty()) {
+        // ファイルをプロジェクトに追加
+        if (m_vcProjectManager.AddSourceFiles(cppPath, headerPath)) {
+            EngineConsole::Log("ProjectWindow: Visual Studioプロジェクトにファイルを追加しました");
+        } else {
+            EngineConsole::LogWarning("ProjectWindow: Visual Studioプロジェクトへのファイル追加に失敗しました");
+        }
+
+        // ディレクトリをインクルードパスに追加（scriptsディレクトリ以外のサブディレクトリの場合）
+        if (directory != m_rootPath) {
+            if (m_vcProjectManager.AddIncludeDirectory(directory)) {
+                EngineConsole::Log("ProjectWindow: Visual Studioプロジェクトにインクルードディレクトリを追加しました");
+            } else {
+                EngineConsole::LogWarning("ProjectWindow: インクルードディレクトリの追加に失敗しました");
+            }
+        }
+    }
 }
 
 void ProjectWindow::CreateNewFolder(const std::string& directory)

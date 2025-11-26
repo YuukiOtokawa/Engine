@@ -10,6 +10,7 @@
 #pragma once
 
 #include "EngineAPI.h"
+#include "VCProjectManager.h"
 #include <string>
 #include <vector>
 #include <filesystem>
@@ -34,7 +35,8 @@ public:
 
     /// @brief 初期化
     /// @param rootPath scriptsフォルダのパス
-    void Initialize(const std::string& rootPath);
+    /// @param vcxprojPath vcxprojファイルのパス（オプション）
+    void Initialize(const std::string& rootPath, const std::string& vcxprojPath = "");
 
     /// @brief 終了処理
     void Finalize();
@@ -134,4 +136,7 @@ private:
     /// @brief 指定パスのFileEntryを取得
     FileEntry* GetEntryByPath(const std::string& path);
     FileEntry* GetEntryByPathRecursive(FileEntry& entry, const std::string& path);
+
+    // Visual Studioプロジェクト管理
+    VCProjectManager m_vcProjectManager;
 };

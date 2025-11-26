@@ -12,47 +12,24 @@
 
 #include "yaml.h"
 
+#include "GameManager.h"
+
 REGISTER_SCRIPT(PlayerControl)
 
 void PlayerControl::Start()
 {
+    gameManager = Editor::GetInstance()->GetObject("GameManager")->GetComponent<GameManager>();
 }
 
 void PlayerControl::Update()
 {
 	auto keyboard = Editor::GetInstance()->GetObject("InputSystem")->GetComponent<InputSystem>()->GetKeyboard();
 
-	Vector3O direction = Vector3O::Zero();
 
-	if (keyboard->GetKeyRepeat(KK_W)) {
-		gameobject->GetComponent<Transform>()->SetPosition(
-			gameobject->GetComponent<Transform>()->GetPosition() +
-			Vector4O(0.0f, 0.0f, 1.0f) * m_Speed
-		);
-	}
-	if (keyboard->GetKeyRepeat(KK_S)) {
-		gameobject->GetComponent<Transform>()->SetPosition(
-			gameobject->GetComponent<Transform>()->GetPosition() +
-			Vector4O(0.0f, 0.0f, -1.0f) * m_Speed
-		);
-	}
-	if (keyboard->GetKeyRepeat(KK_A)) {
-		gameobject->GetComponent<Transform>()->SetPosition(
-			gameobject->GetComponent<Transform>()->GetPosition() +
-			Vector4O(1.0f, 0.0f, 0.0f) * m_Speed
-		);
-	}
-	if (keyboard->GetKeyRepeat(KK_D)) {
-		gameobject->GetComponent<Transform>()->SetPosition(
-			gameobject->GetComponent<Transform>()->GetPosition() +
-			Vector4O(-1.0f, 0.0f, 0.0f) * m_Speed
-		);
+	if (keyboard->GetKeyDown(KK_SPACE)) {
+		Hit();
 	}
 
-
-	if (keyboard->GetKeyDown(KK_ENTER)) {
-		EngineConsole::Log("Enter Key Pressed!!!");
-	}
 }
 
 void PlayerControl::Import(YAML::Node& node) {
@@ -67,6 +44,16 @@ void PlayerControl::Import(YAML::Node& node) {
 void PlayerControl::Export(YAML::Emitter& node) {
     node << YAML::Key << "speed" << YAML::Value << m_Speed;
     node << YAML::Key << "jumpForce" << YAML::Value << m_JumpForce;
+}
+
+void PlayerControl::Hit()
+{
+    auto currentTime = Time::elapsedTime;
+    
+    Notes* targetNote = nullptr;
+    double minDiff = 10000.0;
+
+    for (auto& note : gameManager)
 }
 
 REGISTERCLASS(PlayerControl);

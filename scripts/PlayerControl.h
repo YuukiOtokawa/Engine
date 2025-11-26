@@ -1,10 +1,12 @@
 ﻿#pragma once
 #include "Script.h"
 
+class GameManager;
 
 class PlayerControl :
     public Script
 {
+    GameManager* gameManager = nullptr;
     float m_Speed = 1.0f;
     float m_JumpForce = 1.0f;
 public:
@@ -18,5 +20,7 @@ public:
     void Import(YAML::Node& node) override;
     void Export(YAML::Emitter& node) override;
     const char* GetScriptName() const override;
+
+    void Hit();
 };
 

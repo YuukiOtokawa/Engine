@@ -38,5 +38,9 @@ public:
     void ResetTime() {
         startTime = Time::ElapsedTime();
     }
+
+    std::vector<Notes>& GetNotes() {
+        return notes;
+    }
 };
 

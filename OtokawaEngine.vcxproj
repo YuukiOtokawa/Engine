@@ -127,7 +127,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;scripts\RhythmGameScript;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -261,6 +261,7 @@
     <ClCompile Include="code\EngineSystem\PostProcessRenderer.cpp" />
     <ClCompile Include="code\EngineSystem\PostProcessTexture.cpp" />
     <ClCompile Include="code\EngineSystem\RenderCore.cpp" />
+    <ClCompile Include="code\EngineSystem\VCProjectManager.cpp" />
     <ClCompile Include="code\EngineSystem\Script.cpp" />
     <ClCompile Include="code\EngineSystem\ScriptComponent.cpp" />
     <ClCompile Include="code\EngineSystem\ScriptDirectoryWatcher.cpp" />
@@ -284,7 +285,6 @@
     <ClCompile Include="code\input\Mouse.cpp" />
     <ClCompile Include="code\RCCppMainLoop.cpp" />
     <ClCompile Include="code\StdioLogSystem.cpp" />
-    <ClCompile Include="scripts\GameManager.cpp" />
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
     <ClCompile Include="scripts\RhythmGameScript\GameManager.cpp">
@@ -363,6 +363,7 @@
     <ClInclude Include="code\EngineSystem\PostProcessTexture.h" />
     <ClInclude Include="code\EngineSystem\Properties.h" />
     <ClInclude Include="code\EngineSystem\RenderCore.h" />
+    <ClInclude Include="code\EngineSystem\VCProjectManager.h" />
     <ClInclude Include="code\EngineSystem\RuntimeCompilerManager.h" />
     <ClInclude Include="code\EngineSystem\Script.h" />
     <ClInclude Include="code\EngineSystem\ScriptComponent.h" />
@@ -448,12 +449,6 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="code\shader\EnvMapVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
     <FxCompile Include="code\shader\GaussianPS_H.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -477,6 +472,12 @@
     <FxCompile Include="code\shader\hemisphereLightingVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="code\shader\Instancing.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="code\shader\limLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
