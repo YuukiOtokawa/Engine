@@ -92,6 +92,8 @@ private:
 
     ID3D11Buffer* m_pWeightBuffer = NULL;
 
+    ID3D11Buffer* m_pPositionBuffer = NULL;
+
 	// 描画領域サイズ
 	Vector2O m_ClientSize{ SCREEN_WIDTH_DEFAULT,SCREEN_HEIGHT_DEFAULT };
 

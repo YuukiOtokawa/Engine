@@ -1,16 +1,23 @@
 #include "common.hlsl"
 
+StructuredBuffer<float3> Position : register(t2);
+
 void main(in VS_IN In, out PS_IN Out)
 {
     matrix World; //ワールド行列を作成
     World = mul(mul(Scale, Angle), Translation);
 	//頂点変換行列を作る World * View * Projection
-    matrix wvp;
-    wvp = mul(mul(World, View), Projection);
+    //matrix wvp;
+    //wvp = mul(mul(World, View), Projection);
     
 
 	//ポリゴンの頂点を変換行列で変換して出力
-    Out.Position = mul(In.Position, wvp); //Position * wvp
+    Out.Position = mul(In.Position, World); //Position * wvp
+    
+    Out.Position += Position[In.InstanceID].xyz;
+    
+    Out.Position = mul(Out.Position, View);
+    Out.Position = mul(Out.Position, Projection);
 	
 //==========================================================================
 // 法線の回転処理

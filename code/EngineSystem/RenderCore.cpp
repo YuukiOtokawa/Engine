@@ -664,6 +664,25 @@ void RenderCore::CreateConstantBuffer()
 	hBufferDesc.ByteWidth = sizeof(float) * 8;
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pWeightBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(9, 1, &m_pWeightBuffer);  // Pixel Shaderに追加
+
+	{
+		Vector3O* position = new Vector3O[1000];
+		for (int i=0;i<1000;i++) {
+			position[i] = Vector3O(0.0f, 0.0f, 0.0f);
+		}
+
+		D3D11_BUFFER_DESC bd{};
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(Vector3O) * 1000;
+		bd.StructureByteStride = sizeof(Vector3O);
+		bd.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		bd.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd{};
+		sd.pSysMem = position;
+		m_pDevice->CreateBuffer(&bd, &sd, &m_pPositionBuffer);
+	}
 }
 
 int RenderCore::TextureLoad(const std::wstring& filename, int fileID)
