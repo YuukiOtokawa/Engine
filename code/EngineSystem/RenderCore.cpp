@@ -125,6 +125,11 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	SAFE_RELEASE(m_pParameterBuffer);
 	SAFE_RELEASE(m_pSamplerState);
 
+	SAFE_RELEASE(m_pWeightBuffer);
+
+	SAFE_RELEASE(m_pPositionBuffer);
+	SAFE_RELEASE(m_pPositionSRV);
+
 	for (auto& shader : m_VertexShaders) {
 		SAFE_RELEASE(shader.second);
 	}
@@ -666,9 +671,9 @@ void RenderCore::CreateConstantBuffer()
 	m_pDeviceContext->PSSetConstantBuffers(9, 1, &m_pWeightBuffer);  // Pixel Shaderに追加
 
 	{
-		Vector3O* position = new Vector3O[1000];
-		for (int i=0;i<1000;i++) {
-			position[i] = Vector3O(0.0f, 0.0f, 0.0f);
+		Vector3O* position = new Vector3O[100000];
+		for (int i=1;i<100000;i++) {
+			position[i] = Vector3O((float)rand() / RAND_MAX * 100.0f - 50.0f, 0.0f, (float)rand() / RAND_MAX * 100.0f - 50.0f);
 		}
 
 		D3D11_BUFFER_DESC bd{};
@@ -682,6 +687,16 @@ void RenderCore::CreateConstantBuffer()
 		D3D11_SUBRESOURCE_DATA sd{};
 		sd.pSysMem = position;
 		m_pDevice->CreateBuffer(&bd, &sd, &m_pPositionBuffer);
+
+		delete[] position;
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvd{};
+		srvd.Format = DXGI_FORMAT_UNKNOWN;
+		srvd.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+		srvd.Buffer.FirstElement = 0;
+		srvd.Buffer.NumElements = 1000;
+
+		m_pDevice->CreateShaderResourceView(m_pPositionBuffer, &srvd, &m_pPositionSRV);
 	}
 }
 

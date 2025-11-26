@@ -32,6 +32,12 @@ void MeshFilter::Update() {
 
 }
 
+void MeshFilter::Draw(bool castShadow)
+{
+	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	renderCore->SetPositionSRV();
+}
+
 
 #include "Inspector.h"
 void MeshFilter::DrawGUI() {
@@ -48,6 +54,8 @@ void MeshFilter::DrawGUI() {
 
 	if (ImGui::Button("Set Mesh", ImVec2(150.0f, 30.0f)))
 		GetMesh(this);
+
+	ImGui::InputInt("Instance Count", &m_iInstanceCount);
 
 	ImGui::Unindent();
 }

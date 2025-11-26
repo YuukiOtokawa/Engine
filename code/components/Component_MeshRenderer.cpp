@@ -109,9 +109,9 @@ void MeshRenderer::Render() {
     // 6. 最終的な描画呼び出しを実行する
 	if (meshFilter->m_iVertexCount == 0) return;
 	if (meshFilter->m_iIndexCount == 0)
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Draw(meshFilter->m_iVertexCount, 0);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawInstanced(meshFilter->m_iVertexCount, meshFilter->m_iInstanceCount, 0, 0);
 	else
-	    MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(meshFilter->m_iIndexCount, 0, 0);
+		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexedInstanced(meshFilter->m_iIndexCount, meshFilter->m_iInstanceCount, 0, 0, 0);
 }
 
 void MeshRenderer::RenderShadow()

@@ -31,6 +31,8 @@ protected:
 	// インデックス数
 	int m_iIndexCount = 0;
 
+    int m_iInstanceCount = 1;
+
 	// 頂点バッファ
 	ID3D11Buffer* m_pVertexBuffer = nullptr;
 	// インデックスバッファ
@@ -60,6 +62,7 @@ public:
 
 	/// @brief オブジェクトの状態を更新します（オーバーライドされたメソッド）。
 	void Update() override;
+    void Draw(bool castShadow = false) override;
 	/// @brief 描画処理を実行します。
 	void DrawGUI() override;
 

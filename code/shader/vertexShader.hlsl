@@ -1,6 +1,6 @@
 #include "common.hlsl"
 
-StructuredBuffer<float3> Position : register(t2);
+StructuredBuffer<float3> Position : register(t4);
 
 void main(in VS_IN In, out PS_IN Out)
 {
@@ -14,7 +14,7 @@ void main(in VS_IN In, out PS_IN Out)
 	//ポリゴンの頂点を変換行列で変換して出力
     Out.Position = mul(In.Position, World); //Position * wvp
     
-    Out.Position += Position[In.InstanceID].xyz;
+    Out.Position.xyz += Position[In.InstanceID];
     
     Out.Position = mul(Out.Position, View);
     Out.Position = mul(Out.Position, Projection);

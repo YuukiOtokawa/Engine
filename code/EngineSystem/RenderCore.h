@@ -93,6 +93,7 @@ private:
     ID3D11Buffer* m_pWeightBuffer = NULL;
 
     ID3D11Buffer* m_pPositionBuffer = NULL;
+    ID3D11ShaderResourceView* m_pPositionSRV = nullptr;
 
 	// 描画領域サイズ
 	Vector2O m_ClientSize{ SCREEN_WIDTH_DEFAULT,SCREEN_HEIGHT_DEFAULT };
@@ -348,5 +349,8 @@ public:
         return m_pGameViewTexture;
     }
 
+    void SetPositionSRV() {
+        m_pDeviceContext->PSSetShaderResources(4, 1, &m_pPositionSRV);
+    }
 };
 
