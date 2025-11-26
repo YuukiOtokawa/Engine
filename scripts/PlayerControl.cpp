@@ -43,19 +43,22 @@ void PlayerControl::Export(YAML::Emitter& node) {
 
 void PlayerControl::Hit()
 {
-    auto currentTime = Time::elapsedTime;
+    auto currentTime = Time::ElapsedTime();
     
     Notes* targetNote = nullptr;
     double minDiff = 10000.0;
 
     for (auto& note : gameManager->GetNotes()) {
 		if (!note.IsActive()) continue;
-        double diff = std::abs(note.targetTime - currentTime.count() / 1000.0);
+        double diff = std::abs(note.GetTargetTime() - currentTime);
+
         if (diff < minDiff) {
             minDiff = diff;
             targetNote = &note;
         }
     }
+
+
 }
 
 REGISTERCLASS(PlayerControl);

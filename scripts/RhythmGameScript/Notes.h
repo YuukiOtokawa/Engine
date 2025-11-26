@@ -31,6 +31,8 @@ public:
         return isActive;
     }
 
-
+    double GetTargetTime() const {
+        return targetTime;
+    }
 };
 
