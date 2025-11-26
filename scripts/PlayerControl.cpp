@@ -2,17 +2,12 @@
 
 #include "ScriptFactory.h"
 
-#include "CSVExporter.h"
-
 #include "Editor.h"
 #include "Component_InputSystem.h"
-#include "Component_Transform.h"
 
-#include "EngineConsole.h"
 
-#include "yaml.h"
-
-#include "GameManager.h"
+#include "GameManager.h" 
+#include "TimeSystem.h"
 
 REGISTER_SCRIPT(PlayerControl)
 
@@ -53,7 +48,14 @@ void PlayerControl::Hit()
     Notes* targetNote = nullptr;
     double minDiff = 10000.0;
 
-    for (auto& note : gameManager)
+    for (auto& note : gameManager->GetNotes()) {
+		if (!note.IsActive()) continue;
+        double diff = std::abs(note.targetTime - currentTime.count() / 1000.0);
+        if (diff < minDiff) {
+            minDiff = diff;
+            targetNote = &note;
+        }
+    }
 }
 
 REGISTERCLASS(PlayerControl);

@@ -61,6 +61,12 @@
     <Filter Include="ヘッダー ファイル\RuntimeCompile">
       <UniqueIdentifier>{969ca9cf-012a-4b21-b3e4-9201e5d29886}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Script\RhythmScript">
+      <UniqueIdentifier>{14e7a4f0-a342-4e9c-9383-3a12bb837020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Script\Rhythm">
+      <UniqueIdentifier>{51249907-012b-4201-ac3f-8a42331a76cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\bitmap1.bmp">
@@ -273,9 +279,6 @@
     <ClCompile Include="code\EngineSystem\ProjectWindow.cpp">
       <Filter>ソース ファイル\EngineSystem</Filter>
     </ClCompile>
-    <ClCompile Include="scripts\PlayerControl.cpp">
-      <Filter>ソース ファイル\Script</Filter>
-    </ClCompile>
     <ClCompile Include="scripts\Score.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -327,17 +330,20 @@
     <ClCompile Include="code\imgui\crude_json.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scripts\RhythmGameScript\Notes.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scripts\RhythmGameScript\NotesManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scripts\RhythmGameScript\GameManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="code\EngineSystem\VCProjectManager.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scripts\RhythmGameScript\GameManager.cpp">
+      <Filter>ソース ファイル\Script\Rhythm</Filter>
+    </ClCompile>
+    <ClCompile Include="scripts\RhythmGameScript\Notes.cpp">
+      <Filter>ソース ファイル\Script\Rhythm</Filter>
+    </ClCompile>
+    <ClCompile Include="scripts\PlayerControl.cpp">
+      <Filter>ソース ファイル\Script\Rhythm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -560,12 +566,6 @@
     <ClInclude Include="scripts\Title.h">
       <Filter>ヘッダー ファイル\Script</Filter>
     </ClInclude>
-    <ClInclude Include="scripts\GameManager.h">
-      <Filter>ヘッダー ファイル\Script</Filter>
-    </ClInclude>
-    <ClInclude Include="scripts\PlayerControl.h">
-      <Filter>ヘッダー ファイル\Script</Filter>
-    </ClInclude>
     <ClInclude Include="resource\resource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -632,17 +632,20 @@
     <ClInclude Include="code\imgui\imgui_node_editor.h">
       <Filter>ヘッダー ファイル\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="scripts\RhythmGameScript\Notes.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scripts\RhythmGameScript\NotesManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scripts\RhythmGameScript\GameManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="code\EngineSystem\VCProjectManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scripts\PlayerControl.h">
+      <Filter>ヘッダー ファイル\Script\RhythmScript</Filter>
+    </ClInclude>
+    <ClInclude Include="scripts\RhythmGameScript\GameManager.h">
+      <Filter>ヘッダー ファイル\Script\RhythmScript</Filter>
+    </ClInclude>
+    <ClInclude Include="scripts\RhythmGameScript\Notes.h">
+      <Filter>ヘッダー ファイル\Script\RhythmScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

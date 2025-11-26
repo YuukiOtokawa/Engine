@@ -26,5 +26,11 @@ public:
         targetTime = time;
         isActive = active;
     }
+
+    bool IsActive() const {
+        return isActive;
+    }
+
+
 };
 

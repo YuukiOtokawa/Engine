@@ -4,6 +4,8 @@
 #include "TimeSystem.h"
 #include "Notes.h"
 
+
+
 class GameManager :
     public Script
 {
@@ -24,9 +26,7 @@ public:
     const char* GetScriptName() const override;
 
 
-    void SpawnNote(double targetTime) {
-
-    }
+    void SpawnNote(double targetTime);
 
 
     double GetAudioTime() const {

@@ -393,7 +393,6 @@
     <ClInclude Include="resource\resource.h" />
     <ClInclude Include="ScriptFactory.h" />
     <ClInclude Include="scripts\Game.h" />
-    <ClInclude Include="scripts\GameManager.h" />
     <ClInclude Include="scripts\Player.h" />
     <ClInclude Include="scripts\PlayerControl.h" />
     <ClInclude Include="scripts\Result.h" />
