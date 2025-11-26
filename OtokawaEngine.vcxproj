@@ -257,6 +257,7 @@
     <ClCompile Include="code\EngineSystem\Material.cpp" />
     <ClCompile Include="code\EngineSystem\Object.cpp" />
     <ClCompile Include="code\EngineSystem\ParticleManager.cpp" />
+    <ClCompile Include="code\EngineSystem\PrefabAsset.cpp" />
     <ClCompile Include="code\EngineSystem\ProjectWindow.cpp" />
     <ClCompile Include="code\EngineSystem\PostProcessRenderer.cpp" />
     <ClCompile Include="code\EngineSystem\PostProcessTexture.cpp" />
@@ -287,6 +288,7 @@
     <ClCompile Include="code\StdioLogSystem.cpp" />
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
+    <ClCompile Include="scripts\PrefabSpawner.cpp" />
     <ClCompile Include="scripts\RhythmGameScript\GameManager.cpp">
       <SubType>
       </SubType>
@@ -358,6 +360,7 @@
     <ClInclude Include="code\EngineSystem\MatrixO.h" />
     <ClInclude Include="code\EngineSystem\Object.h" />
     <ClInclude Include="code\EngineSystem\ParticleManager.h" />
+    <ClInclude Include="code\EngineSystem\PrefabAsset.h" />
     <ClInclude Include="code\EngineSystem\ProjectWindow.h" />
     <ClInclude Include="code\EngineSystem\PostProcessRenderer.h" />
     <ClInclude Include="code\EngineSystem\PostProcessTexture.h" />
@@ -395,6 +398,7 @@
     <ClInclude Include="scripts\Game.h" />
     <ClInclude Include="scripts\Player.h" />
     <ClInclude Include="scripts\PlayerControl.h" />
+    <ClInclude Include="scripts\PrefabSpawner.h" />
     <ClInclude Include="scripts\Result.h" />
     <ClInclude Include="scripts\RhythmGameScript\GameManager.h">
       <SubType>
@@ -471,12 +475,6 @@
     <FxCompile Include="code\shader\hemisphereLightingVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="code\shader\Instancing.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="code\shader\limLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

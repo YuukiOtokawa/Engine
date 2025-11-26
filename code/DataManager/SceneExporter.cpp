@@ -19,6 +19,14 @@ void SceneExporter::Export(std::list<Object*> objects)
         return; // cleanerが自動的にクリーンアップ
     }
 
+    ExportToFile(objects, filePath);
+}
+
+void SceneExporter::ExportToFile(std::list<Object*> objects, const std::string& filePath)
+{
+    m_ExportList.clear();
+    m_VertexIndicesExportList.clear();
+
     for (const auto& obj : objects) {
         obj->AddExportList();
     }
@@ -58,8 +66,8 @@ void SceneExporter::Export(std::list<Object*> objects)
     ExportVertexIndexList();
     ExportTextureInfoList();
 
-    // cleanerが自動的にクリーンアップを実行
-    
+    m_ExportList.clear();
+    m_VertexIndicesExportList.clear();
 }
 
 #include <unordered_set>

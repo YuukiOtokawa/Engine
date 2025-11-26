@@ -13,7 +13,7 @@
 class ScriptComponent :
     public Component
 {
-    std::unique_ptr<Script> m_ScriptInstance;
+    Script* m_ScriptInstance;
     std::string m_ScriptName;
 public:
     DECLARE_COMPONENT(ScriptComponent)
@@ -25,9 +25,16 @@ public:
 
     ~ScriptComponent() override {
         ScriptFactory::GetInstance().UnregisterComponent(this);
+        delete m_ScriptInstance;
     }
 
     void InitializeTag() override {
+    }
+
+    void Start() override {
+        if (m_ScriptInstance) {
+            m_ScriptInstance->Start();
+        }
     }
 
     void Update() override {
@@ -44,7 +51,7 @@ public:
         }
         if (node["scriptName"]) {
             m_ScriptName = node["scriptName"].as<std::string>();
-            m_ScriptInstance = std::unique_ptr<Script>(ScriptFactory::GetInstance().CreateScript(m_ScriptName));
+            m_ScriptInstance = ScriptFactory::GetInstance().CreateScript(m_ScriptName);
             if (m_ScriptInstance) {
                 m_ScriptInstance->gameobject = this->owner;
                 m_ScriptInstance->Import(node);
@@ -59,8 +66,8 @@ public:
         }
     }
 
-    void SetScript(std::unique_ptr<Script> script) {
-        m_ScriptInstance = std::move(script);
+    void SetScript(Script* script) {
+        m_ScriptInstance = script;
         if (m_ScriptInstance) {
             m_ScriptInstance->gameobject = this->owner;
             m_ScriptName = m_ScriptInstance->GetScriptName();
@@ -72,14 +79,14 @@ public:
         // Runtime Compiled C++システムが古いDLLのオブジェクトを管理するため、
         // 明示的にdeleteせずにrelease()で所有権を放棄
         if (m_ScriptInstance) {
-            m_ScriptInstance.release();
+            m_ScriptInstance = nullptr;
         }
 
         if (!m_ScriptName.empty()) {
-            auto newScript = std::unique_ptr<Script>(ScriptFactory::GetInstance().CreateScript(m_ScriptName));
+            auto newScript = ScriptFactory::GetInstance().CreateScript(m_ScriptName);
             if (newScript) {
                 newScript->gameobject = this->owner;
-                m_ScriptInstance = std::move(newScript);
+                m_ScriptInstance = newScript;
             }
         }
     }

@@ -22,6 +22,11 @@ private:
 public:
     static void Export(std::list<Object*> objects);
 
+    /// @brief シーンを指定したファイルパスに直接エクスポート（ダイアログなし）
+    /// @param objects エクスポートするオブジェクトのリスト
+    /// @param filePath 保存先のファイルパス
+    static void ExportToFile(std::list<Object*> objects, const std::string& filePath);
+
     static void AddExportList(EngineMetaFile* metaFile) {
         m_ExportList.push_back(metaFile);
     }

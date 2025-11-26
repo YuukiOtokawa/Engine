@@ -8,6 +8,8 @@
         AddProperty(name, PropertyType::INT, &type); \
     } else if constexpr (std::is_same_v<decltype(type), float>) { \
         AddProperty(name, PropertyType::FLOAT, &type); \
+    } else if constexpr (std::is_same_v<decltype(type), double>) { \
+        AddProperty(name, PropertyType::DOUBLE, &type); \
     } else if constexpr (std::is_same_v<decltype(type), std::string>) { \
         AddProperty(name, PropertyType::STRING, &type); \
     } else if constexpr (std::is_same_v<decltype(type), bool>) { \

@@ -885,6 +885,21 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
         doubleClicked = true;
     }
 
+    // Prefabファイルのドラッグ&ドロップソース
+    if (!entry.isDirectory) {
+        std::string ext = fs::path(entry.fullPath).extension().string();
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+        if (ext == ".prefab") {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("PREFAB_FILE", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text("Prefab: %s", entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+    }
+
     // 右クリックメニュー
     if (ImGui::BeginPopupContextItem()) {
         if (entry.isDirectory) {

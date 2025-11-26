@@ -5,6 +5,7 @@
 #include <variant> // void* に代わる型安全な代替手段として std::variant を使用することも検討できます。
 
 #include "Properties.h"
+#include "PrefabAsset.h"
 
 #include "ObjectInterfacePerModule.h"
 
@@ -25,6 +26,8 @@ enum class PropertyType {
     VECTOR3,
     VECTOR4,
     METAFILE,
+    DOUBLE,
+    PREFAB,
     // 他の型も必要に応じて追加
 };
 
@@ -46,12 +49,12 @@ class Script : public TInterface<IID_ENDInterfaceID, ScriptI>
 
 
 protected:
-    Object* gameobject = nullptr;
     void AddProperty(const std::string& name, PropertyType type, void* data) {
         m_Properties.push_back({ name, type, data });
     }
 
 public:
+    Object* gameobject = nullptr;
     virtual ~Script() = default;
 
     virtual void Start() {}

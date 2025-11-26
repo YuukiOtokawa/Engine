@@ -69,7 +69,9 @@ private:
 
 public:
     DECLARE_COMPONENT(Light)
-    Light() = default;
+    Light() {
+        m_ClassID = CID_Component_Light;
+    }
 
     void InitializeTag() override;
     void Draw() override;

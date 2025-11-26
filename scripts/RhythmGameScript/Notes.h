@@ -5,13 +5,15 @@ class Notes :
 {
     int noteID = -1;
     double targetTime = 0.0; // ノートがヒットする予定の時間（秒）
+    double remainedTime = 0.0;
     bool isActive = true;    // ノートがアクティブかどうか
 
+    Vector3O direction = Vector3O::Zero();
 public:
     Notes() {
         REGISTER_PROPERTY(noteID, "noteID");
         REGISTER_PROPERTY(targetTime, "targetTime");
-        REGISTER_PROPERTY(isActive, "isActive");
+        REGISTER_PROPERTY(remainedTime, "remainedTime");
     }
 
     void Start() override;
@@ -33,6 +35,10 @@ public:
 
     double GetTargetTime() const {
         return targetTime;
+    }
+
+    double GetRemainedTime() const {
+        return remainedTime;
     }
 };
 

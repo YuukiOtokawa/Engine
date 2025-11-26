@@ -256,6 +256,8 @@ public:
     Vector4O(const XMINT3 vec3) : x((float)vec3.x), y((float)vec3.y), z((float)vec3.z), w(0.0f) {}
     Vector4O(const XMINT4 vec4) : x((float)vec4.x), y((float)vec4.y), z((float)vec4.z), w((float)vec4.w) {}
 
+    Vector4O(const Vector3O& vec3, const float w = 0.0f) : x(vec3.x), y(vec3.y), z(vec3.z), w(w) {}
+
     Vector4O(const float x, const float y = 0.0f, const float z = 0.0f, const float w = 0.0f) : x(x), y(y), z(z), w(w) {}
 
     XMFLOAT2* ToFloat2() const { return new XMFLOAT2(x, y); }

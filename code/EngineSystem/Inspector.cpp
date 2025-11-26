@@ -45,7 +45,7 @@ void AddComponentPopup(Object* object)
 				Script* newScript = ScriptFactory::GetInstance().CreateScript(scriptName);
 
 				if (newScript && scriptComp) {
-					scriptComp->SetScript(std::unique_ptr<Script>(newScript));
+					scriptComp->SetScript(newScript);
 				}
 
 				ImGui::CloseCurrentPopup();

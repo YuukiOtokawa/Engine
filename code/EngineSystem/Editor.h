@@ -67,6 +67,15 @@ private:
 
     ProjectWindow* m_pProjectWindow = nullptr;
 
+    // 再生モード関連
+    bool m_isPlaying = false;                    // 再生中かどうか
+    std::string m_playModeSceneBackup = "";      // 再生開始時のシーン保存先
+
+    // Prefab編集モード関連
+    bool m_isEditingPrefab = false;              // Prefab編集中かどうか
+    Object* m_pEditingPrefabObject = nullptr;    // 編集中のPrefabオブジェクト
+    std::string m_editingPrefabPath = "";        // 編集中のPrefabファイルパス
+
 	/// @brief Editor クラスのシングルトンパターンデフォルトコンストラクタです。
 	Editor() = default;
 	Editor(const Editor&) = delete;
@@ -153,6 +162,17 @@ public:
     void ChangeScene(std::string sceneName);
 
     void OpenScene(std::string sceneFilePath);
+
+    // 再生モード関連
+    /// @brief 再生モードを開始（シーンを保存して実行開始）
+    void Play();
+
+    /// @brief 再生モードを停止（シーンを復元）
+    void Stop();
+
+    /// @brief 再生中かどうかを取得
+    /// @return 再生中の場合true
+    bool IsPlaying() const { return m_isPlaying; }
 
     bool GetIsSceneViewHovered() const { return m_isSceneViewHovered; }
 };

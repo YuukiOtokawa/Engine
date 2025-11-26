@@ -27,6 +27,9 @@ private:
 	static ImFont* m_pFontObjectName;
 	static ImFont* m_pCurrentFont;
 
+    // ツールバーの高さ
+    static constexpr float TOOLBAR_HEIGHT = 50.0f;
+
     bool m_IsFirstFrame = true;
 
     bool m_IsFirstFrameHierarchy = true;
@@ -65,6 +68,7 @@ public:
     void Finalize();
 
 	void StartImGui();
+	void StartToolbar();  // ツールバー（再生/停止ボタン）
 	void StartHierarchy();
 	void StartInspector();
     void StartSceneView();

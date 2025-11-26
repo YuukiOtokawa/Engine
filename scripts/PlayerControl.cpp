@@ -11,6 +11,10 @@
 
 REGISTER_SCRIPT(PlayerControl)
 
+const double HIT_PERFECT = 0.050;
+const double HIT_GREAT = 0.100;
+const double HIT_GOOD = 0.200;
+
 void PlayerControl::Start()
 {
     gameManager = Editor::GetInstance()->GetObject("GameManager")->GetComponent<GameManager>();
@@ -49,16 +53,19 @@ void PlayerControl::Hit()
     double minDiff = 10000.0;
 
     for (auto& note : gameManager->GetNotes()) {
-		if (!note.IsActive()) continue;
-        double diff = std::abs(note.GetTargetTime() - currentTime);
+		if (!note->IsActive()) continue;
+        double diff = std::abs(note->GetRemainedTime());
 
         if (diff < minDiff) {
             minDiff = diff;
-            targetNote = &note;
+            targetNote = note;
         }
     }
 
-
+    // TODO [otokawa]: 判定取る
+    if (targetNote != nullptr && minDiff <= HIT_GOOD) {
+        targetNote->gameobject->Destroy();
+    }
 }
 
 REGISTERCLASS(PlayerControl);

@@ -74,8 +74,13 @@ void GUI::StartImGui()
 	m_pCurrentFont = m_pFontDefault;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(viewport->Pos);
-	ImGui::SetNextWindowSize(viewport->Size);
+
+	// ドッキングスペースはツールバーの下から開始
+	ImVec2 dockspacePos = ImVec2(viewport->Pos.x, viewport->Pos.y + TOOLBAR_HEIGHT);
+	ImVec2 dockspaceSize = ImVec2(viewport->Size.x, viewport->Size.y - TOOLBAR_HEIGHT);
+
+	ImGui::SetNextWindowPos(dockspacePos);
+	ImGui::SetNextWindowSize(dockspaceSize);
 
 	ImGui::Begin("DockSpace", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus);
 
@@ -124,6 +129,55 @@ void GUI::StartImGui()
 
 	//ImGuizmo::Manipulate((float*)&camera->GetView(), (float*)&camera->GetProjection(), ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, (float*)&Editor::GetInstance()->GetActiveCamera()->GetComponent<Transform>()->GetWorldMatrix(), nullptr, nullptr);
 }
+
+void GUI::StartToolbar()
+{
+	// ツールバーウィンドウ
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y));
+	ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, TOOLBAR_HEIGHT));
+	ImGui::SetNextWindowViewport(viewport->ID);
+
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+	                                 ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+	                                 ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoDocking;
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10, 10));
+	ImGui::Begin("##Toolbar", nullptr, window_flags);
+
+	Editor* editor = Editor::GetInstance();
+
+	// 再生ボタンと停止ボタンを中央に配置
+	float windowWidth = ImGui::GetWindowWidth();
+	float buttonWidth = 100.0f;
+	float spacing = 10.0f;
+	float totalWidth = buttonWidth * 2 + spacing;
+	ImGui::SetCursorPosX((windowWidth - totalWidth) * 0.5f);
+
+	if (editor->IsPlaying()) {
+		// 再生中は停止ボタンのみ表示
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.7f, 0.1f, 0.1f, 1.0f));
+		if (ImGui::Button("Stop", ImVec2(buttonWidth, 30))) {
+			editor->Stop();
+		}
+		ImGui::PopStyleColor(3);
+	} else {
+		// 停止中は再生ボタンのみ表示
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.9f, 0.3f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.1f, 1.0f));
+		if (ImGui::Button("Play", ImVec2(buttonWidth, 30))) {
+			editor->Play();
+		}
+		ImGui::PopStyleColor(3);
+	}
+
+	ImGui::End();
+	ImGui::PopStyleVar();
+}
+
 void GUI::StartHierarchy() {
 	if (m_IsFirstFrameHierarchy) {
 		m_IsFirstFrameHierarchy = false;

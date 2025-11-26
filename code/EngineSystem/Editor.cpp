@@ -52,6 +52,8 @@
 
 #include <numeric>
 
+#include "SceneImporter.h"
+#include "ScriptComponent.h"
 
 Editor* Editor::m_pInstance;
 
@@ -187,8 +189,12 @@ void Editor::Initialize() {
 }
 
 void Editor::Update() {
-	for (auto& object : m_Objects) 
-		object->Update();
+	// 再生モード中のみUpdate()を呼ぶ
+	if (m_isPlaying) {
+		for (auto& object : m_Objects)
+			object->Update();
+	}
+
 	for (auto& object : m_DeleteObjects) {
 		auto it = std::find(m_Objects.begin(), m_Objects.end(), object);
 		if (it != m_Objects.end()) {
@@ -199,11 +205,15 @@ void Editor::Update() {
 		}
 	}
 	m_DeleteObjects.clear();
-	m_pParticleManager->UpdateParticles();
 
-	m_pCollisionManager->CheckCollisions();
-	for (auto& object : m_Objects) {
-		object->OnCollision();
+	// 再生モード中のみパーティクルとコリジョンを更新
+	if (m_isPlaying) {
+		m_pParticleManager->UpdateParticles();
+
+		m_pCollisionManager->CheckCollisions();
+		for (auto& object : m_Objects) {
+			object->OnCollision();
+		}
 	}
 }
 
@@ -346,6 +356,9 @@ void Editor::Draw() {
 
 	//ImGuiの初期化
 	m_pGUI->StartImGui();
+
+	// ツールバー（再生/停止ボタン）
+	m_pGUI->StartToolbar();
 
 	m_pGUI->StartGameView();
 
@@ -765,6 +778,52 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 
 void Editor::Finalize() {
 	m_pGUI->Finalize();
+}
+
+void Editor::Play()
+{
+	if (m_isPlaying) {
+		EngineConsole::LogWarning("Editor::Play: 既に再生中です");
+		return;
+	}
+
+	// 再生開始前にシーンを一時ファイルに保存
+	m_playModeSceneBackup = "temp_playmode_backup.scene";
+
+	EngineConsole::Log("Editor::Play: シーンを保存中...");
+	SceneExporter::ExportToFile(m_Objects, m_playModeSceneBackup);
+	EngineConsole::Log("Editor::Play: シーンを保存しました");
+
+	m_isPlaying = true;
+
+	EngineConsole::Log("Editor::Play: 再生モードを開始しました");
+}
+
+void Editor::Stop()
+{
+	if (!m_isPlaying) {
+		EngineConsole::LogWarning("Editor::Stop: 再生中ではありません");
+		return;
+	}
+
+	EngineConsole::Log("Editor::Stop: シーンを復元中...");
+
+	// 現在のシーンをクリア
+	ResetScene();
+
+	// バックアップからシーンを復元
+	if (!m_playModeSceneBackup.empty() && std::filesystem::exists(m_playModeSceneBackup)) {
+		std::list<Object*> objects = SceneImporter::Import(m_playModeSceneBackup);
+		SetObjects(objects);
+		EngineConsole::Log("Editor::Stop: シーンを復元しました");
+
+		// 一時ファイルを削除
+		std::filesystem::remove(m_playModeSceneBackup);
+		m_playModeSceneBackup = "";
+	}
+
+	m_isPlaying = false;
+	EngineConsole::Log("Editor::Stop: 再生モードを停止しました");
 }
 
 void Editor::CreateComponent(Component* component) {
