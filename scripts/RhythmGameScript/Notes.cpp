@@ -24,7 +24,7 @@ void Notes::Update()
 	remainedTime -= Time::DeltaTime();
 
 	gameobject->GetComponent<Transform>()->SetPosition(
-		direction * 10.0f * (float)(1 - (remainedTime / targetTime))
+		direction * 10.0f * (float)(remainedTime / targetTime)
 	);
 }
 

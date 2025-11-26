@@ -170,7 +170,11 @@ void SceneExporter::ExportVertexIndexList()
 
     // リストに追加（既存にない場合のみ）
     
-
+    // ディレクトリが存在することを確認
+    std::filesystem::path dirPath = "AssetList";
+    if (!std::filesystem::exists(dirPath)) {
+        std::filesystem::create_directories(dirPath);
+    }
 
     // 上書きモードで書き込み（追記モードではない）
     std::ofstream fileVertexInfoList("AssetList\\VertexIndexList.yaml", std::ios::out);
@@ -187,99 +191,99 @@ void SceneExporter::ExportVertexIndexList()
     // 明示的なリセット
     vertexIndexList.reset();
 }
+
 void SceneExporter::ExportTextureInfoList()
 {
     try {
         std::unordered_set<std::string> existing_lines;
         
-        // スマートポインタでYAML Nodeのライフサイクルを管理
-        {
-            auto textureListRoot = std::make_unique<YAML::Node>();
-            auto textureListNode = std::make_unique<YAML::Node>();
+        YAML::Node textureListRoot;
+        YAML::Node textureListNode;
 
-            // 既存のデータを読み込んで、textureListNodeに追加
-            {
-                std::ifstream fileTextureData("AssetList\\TextureList.yaml");
-                if (fileTextureData.is_open()) {
-                    try {
-                        YAML::Node existingData = YAML::Load(fileTextureData);
-                        if (existingData && existingData["textures"]) {
-                            for (const auto& item : existingData["textures"]) {
-                                if (item && item["fileID"]) {
-                                    existing_lines.insert(item["filePath"].as<std::string>());
-                                    // 既存のデータをtextureListNodeに追加
-                                    textureListNode->push_back(item);
-                                }
+        // 既存のデータを読み込んで、textureListNodeに追加
+        {
+            std::ifstream fileTextureData("AssetList\\TextureList.yaml");
+            if (fileTextureData.is_open()) {
+                try {
+                    YAML::Node existingData = YAML::Load(fileTextureData);
+                    if (existingData && existingData["textures"]) {
+                        for (const auto& item : existingData["textures"]) {
+                            if (item && item["fileID"]) {
+                                existing_lines.insert(item["filePath"].as<std::string>());
+                                // 既存のデータをtextureListNodeに追加
+                                textureListNode.push_back(item);
                             }
                         }
                     }
-                    catch (const YAML::Exception& e) {
-                        // 既存ファイルの読み込み失敗は警告として処理
-                        OutputDebugStringA(("Warning: Failed to load existing texture list: " + std::string(e.what()) + "\n").c_str());
-                    }
-                    fileTextureData.close();
                 }
-            } // 既存データのYAML Nodeはここで適切に破棄される
+                catch (const YAML::Exception& e) {
+                    // 既存ファイルの読み込み失敗は警告として処理
+                    OutputDebugStringA(("Warning: Failed to load existing texture list: " + std::string(e.what()) + "\n").c_str());
+                }
+                fileTextureData.close();
+            }
+        }
 
-            // MainEngineのnullチェック追加
-            auto mainEngine = MainEngine::GetInstance();
-            if (!mainEngine) {
-                throw std::runtime_error("MainEngine instance is null");
+        // MainEngineのnullチェック追加
+        auto mainEngine = MainEngine::GetInstance();
+        if (!mainEngine) {
+            throw std::runtime_error("MainEngine instance is null");
+        }
+
+        auto renderCore = mainEngine->GetRenderCore();
+        if (!renderCore) {
+            throw std::runtime_error("RenderCore is null");
+        }
+
+        const auto& textureList = renderCore->GetTextureInfo();
+
+        for (const auto& texture : textureList)
+        {
+            if (!texture || texture->GetFileID() == 0) continue;
+
+            const WCHAR* filename = texture->filename.c_str();
+            if (!filename) continue;
+
+            int len = WideCharToMultiByte(CP_UTF8, 0, filename, -1, nullptr, 0, nullptr, nullptr);
+            std::string narrowStringFilePath;
+            if (len > 0) {
+                narrowStringFilePath.resize(len - 1); // null終端を除く
+                WideCharToMultiByte(CP_UTF8, 0, filename, -1, &narrowStringFilePath[0], len - 1, nullptr, nullptr);
             }
 
-            auto renderCore = mainEngine->GetRenderCore();
-            if (!renderCore) {
-                throw std::runtime_error("RenderCore is null");
+            const auto fileNameStr = texture->GetFileName();
+
+            // 既存にない場合のみ追加
+            if (existing_lines.find(fileNameStr) != existing_lines.end()) {
+                continue; // Skip if this FileID already exists
             }
 
-            const auto& textureList = renderCore->GetTextureInfo();
-
-            for (const auto& texture : textureList)
-            {
-                if (!texture || texture->GetFileID() == 0) continue;
-
-                const WCHAR* filename = texture->filename.c_str();
-                if (!filename) continue;
-
-                int len = WideCharToMultiByte(CP_UTF8, 0, filename, -1, nullptr, 0, nullptr, nullptr);
-                std::string narrowStringFilePath;
-                if (len > 0) {
-                    narrowStringFilePath.resize(len - 1); // null終端を除く
-                    WideCharToMultiByte(CP_UTF8, 0, filename, -1, &narrowStringFilePath[0], len - 1, nullptr, nullptr);
-                }
-
-                const auto fileNameStr = texture->GetFileName();
-
-                // 既存にない場合のみ追加
-                if (existing_lines.find(fileNameStr) != existing_lines.end()) {
-                    continue; // Skip if this FileID already exists
-                }
-
-                if (texture->toExport) {
-                    YAML::Node textureNode;
-                    textureNode["fileID"] = texture->GetFileID();
-                    textureNode["filePath"] = narrowStringFilePath;
-                    textureListNode->push_back(std::move(textureNode));
-                }
+            if (texture->toExport) {
+                YAML::Node textureNode;
+                textureNode["fileID"] = texture->GetFileID();
+                textureNode["filePath"] = narrowStringFilePath;
+                textureListNode.push_back(textureNode);
             }
+        }
 
-            (*textureListRoot)["textures"] = *textureListNode;
+        textureListRoot["textures"] = textureListNode;
 
-            std::ofstream fileTextureInfoList("AssetList\\TextureList.yaml");
-            if (fileTextureInfoList.is_open()) {
-                fileTextureInfoList << *textureListRoot;
-                if (!fileTextureInfoList.good()) {
-                    throw std::runtime_error("Failed to write texture info list");
-                }
-                fileTextureInfoList.close();
-            } else {
-                throw std::runtime_error("Failed to open AssetList\\TextureList.yaml for writing");
+        // ディレクトリが存在することを確認
+        std::filesystem::path dirPath = "AssetList";
+        if (!std::filesystem::exists(dirPath)) {
+            std::filesystem::create_directories(dirPath);
+        }
+
+        std::ofstream fileTextureInfoList("AssetList\\TextureList.yaml");
+        if (fileTextureInfoList.is_open()) {
+            fileTextureInfoList << textureListRoot;
+            if (!fileTextureInfoList.good()) {
+                throw std::runtime_error("Failed to write texture info list");
             }
-
-            // 明示的なリセット
-            textureListNode.reset();
-            textureListRoot.reset();
-        } // 全てのYAML Nodeがここで適切に破棄される
+            fileTextureInfoList.close();
+        } else {
+            throw std::runtime_error("Failed to open AssetList\\TextureList.yaml for writing");
+        }
     }
     catch (const YAML::Exception& e) {
         // YAML固有のエラーハンドリング
@@ -295,8 +299,7 @@ void SceneExporter::ExportTextureInfoList()
 
 int SceneExporter::CheckTextureFileNameExist(std::string fileName)
 {
-    std::unordered_set<std::string> existing_lines;
-    auto textureListNode = std::make_unique<YAML::Node>();
+    YAML::Node textureListNode;
 
     // 既存のデータを読み込んで、textureListNodeに追加
     {
@@ -326,7 +329,7 @@ int SceneExporter::CheckTextureFileNameExist(std::string fileName)
             
             fileTextureData.close();
         }
-    } // 既存データのYAML Nodeはここで適切に破棄される
+    }
 
     return -1;
 }

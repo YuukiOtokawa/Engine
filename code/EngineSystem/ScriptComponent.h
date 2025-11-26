@@ -90,6 +90,10 @@ public:
             }
         }
     }
+
+    Script* GetScriptInstance() {
+        return m_ScriptInstance;
+    }
 };
 
 // ScriptFactory::OnConstructorsAddedの実装

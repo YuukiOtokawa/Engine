@@ -337,7 +337,16 @@ void ProjectWindow::DrawFileEntry(FileEntry& entry)
 
     // ダブルクリックでファイルを開く
     if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && !entry.isDirectory) {
-        OpenInExternalEditor(entry.fullPath);
+        std::string ext = fs::path(entry.fullPath).extension().string();
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+        if (ext == ".prefab") {
+            // Prefabの場合は編集モードに入る
+            Editor::GetInstance()->LoadPrefabForEdit(entry.fullPath);
+        }
+        else {
+            // その他のファイルは外部エディタで開く
+            OpenInExternalEditor(entry.fullPath);
+        }
     }
 
     // 右クリックメニュー
@@ -369,6 +378,16 @@ void ProjectWindow::DrawFileEntry(FileEntry& entry)
         }
 
         if (!entry.isDirectory) {
+            // Prefabファイルの場合
+            std::string ext = fs::path(entry.fullPath).extension().string();
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+            if (ext == ".prefab") {
+                if (ImGui::MenuItem("Edit Prefab")) {
+                    Editor::GetInstance()->LoadPrefabForEdit(entry.fullPath);
+                }
+                ImGui::Separator();
+            }
+
             if (ImGui::MenuItem("Open in Editor")) {
                 OpenInExternalEditor(entry.fullPath);
             }
@@ -771,11 +790,11 @@ void ProjectWindow::DrawGridView()
                 m_currentPath = child.fullPath;
             }
             else {
-                // Prefabファイルの場合はインスタンス化
+                // Prefabファイルの場合は編集モードに入る
                 std::string ext = fs::path(child.fullPath).extension().string();
                 std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
                 if (ext == ".prefab") {
-                    Prefab::Import(child.fullPath);
+                    Editor::GetInstance()->LoadPrefabForEdit(child.fullPath);
                 }
                 else {
                     OpenInExternalEditor(child.fullPath);
@@ -926,6 +945,9 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
             std::string ext = fs::path(entry.fullPath).extension().string();
             std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
             if (ext == ".prefab") {
+                if (ImGui::MenuItem("Edit Prefab")) {
+                    Editor::GetInstance()->LoadPrefabForEdit(entry.fullPath);
+                }
                 if (ImGui::MenuItem("Instantiate")) {
                     Prefab::Import(entry.fullPath);
                 }

@@ -174,6 +174,27 @@ public:
     /// @return 再生中の場合true
     bool IsPlaying() const { return m_isPlaying; }
 
+    // Prefab編集モード関連
+    /// @brief Prefabファイルを編集用に読み込む
+    /// @param filePath Prefabファイルパス
+    /// @return 成功した場合true
+    bool LoadPrefabForEdit(const std::string& filePath);
+
+    /// @brief 編集中のPrefabを保存
+    /// @return 成功した場合true
+    bool SaveEditingPrefab();
+
+    /// @brief Prefab編集モードを終了
+    void CloseEditingPrefab();
+
+    /// @brief Prefab編集中かどうかを取得
+    /// @return Prefab編集中の場合true
+    bool IsEditingPrefab() const { return m_isEditingPrefab; }
+
+    /// @brief 編集中のPrefabオブジェクトを取得
+    /// @return 編集中のPrefabオブジェクト
+    Object* GetEditingPrefabObject() const { return m_pEditingPrefabObject; }
+
     bool GetIsSceneViewHovered() const { return m_isSceneViewHovered; }
 };
 

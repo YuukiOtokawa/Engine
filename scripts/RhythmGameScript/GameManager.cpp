@@ -27,26 +27,28 @@ void GameManager::Update()
 	}
 }
 
-void GameManager::Import(YAML::Node& node) {
-}
-
-void GameManager::Export(YAML::Emitter& node) {
-}
+//void GameManager::Import(YAML::Node& node) {
+//}
+//
+//void GameManager::Export(YAML::Emitter& node) {
+//}
 
 void GameManager::SpawnNote(double spawnAheadTime)
 {
 	auto currentTime = Time::ElapsedTime();
 	auto targetTime = currentTime + spawnAheadTime;
 
-	auto object = new Object();
+	//auto object = new Object();
 
 	// TODO [otokawa]:スクリプト追加処理簡単にしたいね
-	auto script = object->AddComponent<ScriptComponent>();
-	auto note = dynamic_cast<Notes*>(ScriptFactory::GetInstance().CreateScript("Notes"));
-	object->AddComponent<Transform>();
-	script->SetScript(note);
-	note->SetParameter(nextNoteID++, spawnAheadTime, true);
-	notes.push_back(note);
+	//auto script = object->AddComponent<ScriptComponent>();
+	//auto note = dynamic_cast<Notes*>(ScriptFactory::GetInstance().CreateScript("Notes"));
+	//object->AddComponent<Transform>();
+	//script->SetScript(note);
+	auto note = notePrefab.Instantiate();
+	auto instance = dynamic_cast<Notes*>(note->GetComponent<ScriptComponent>()->GetScriptInstance());
+	instance->SetParameter(nextNoteID++, spawnAheadTime, true);
+	notes.push_back(instance);
 }
 
 REGISTERCLASS(GameManager);

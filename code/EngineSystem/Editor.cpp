@@ -54,6 +54,7 @@
 
 #include "SceneImporter.h"
 #include "ScriptComponent.h"
+#include "Prefab.h"
 
 Editor* Editor::m_pInstance;
 
@@ -189,12 +190,22 @@ void Editor::Initialize() {
 }
 
 void Editor::Update() {
-	// 再生モード中のみUpdate()を呼ぶ
-	if (m_isPlaying) {
-		for (auto& object : m_Objects)
-			object->Update();
+	// エディタカメラは常に更新（エディタモードでもカメラ操作可能にする）
+	if (m_pEditorCamera) {
+		m_pEditorCamera->Update();
 	}
 
+	// プレイモード中のみゲームオブジェクトのUpdate()を呼ぶ
+	if (m_isPlaying) {
+		for (auto& object : m_Objects) {
+			// エディタカメラは既に更新済みなのでスキップ
+			if (object != m_pEditorCamera) {
+				object->Update();
+			}
+		}
+	}
+
+	// オブジェクト削除処理（モードに関係なく実行）
 	for (auto& object : m_DeleteObjects) {
 		auto it = std::find(m_Objects.begin(), m_Objects.end(), object);
 		if (it != m_Objects.end()) {
@@ -624,6 +635,33 @@ void Editor::Draw() {
 	//インスペクタウィンドウの描画開始
 	m_pGUI->StartInspector();
 
+	// Prefab編集モード中の表示
+	if (m_isEditingPrefab && m_pEditingPrefabObject) {
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
+		ImGui::Text("Prefab編集モード");
+		ImGui::PopStyleColor();
+
+		ImGui::Text("編集中: %s", m_editingPrefabPath.c_str());
+		ImGui::Separator();
+
+		// 保存ボタン
+		if (ImGui::Button("保存 (Ctrl+S)")) {
+			SaveEditingPrefab();
+		}
+		ImGui::SameLine();
+		// 閉じるボタン
+		if (ImGui::Button("閉じる")) {
+			CloseEditingPrefab();
+		}
+
+		ImGui::Separator();
+
+		// Ctrl+Sで保存
+		if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S)) {
+			SaveEditingPrefab();
+		}
+	}
+
 	//選択されたオブジェクトの情報を表示
 	if (m_pSelectedObject)
 		m_pSelectedObject->DrawGUI();
@@ -824,6 +862,72 @@ void Editor::Stop()
 
 	m_isPlaying = false;
 	EngineConsole::Log("Editor::Stop: 再生モードを停止しました");
+}
+
+bool Editor::LoadPrefabForEdit(const std::string& filePath)
+{
+	// 既にPrefab編集中の場合は閉じる
+	if (m_isEditingPrefab) {
+		CloseEditingPrefab();
+	}
+
+	// Prefabをインポート
+	Object* prefabObject = Prefab::Import(filePath);
+	if (!prefabObject) {
+		EngineConsole::LogError("Editor::LoadPrefabForEdit: Prefabの読み込みに失敗しました");
+		return false;
+	}
+
+	// Prefab編集モードを開始
+	m_isEditingPrefab = true;
+	m_pEditingPrefabObject = prefabObject;
+	m_editingPrefabPath = filePath;
+	m_pSelectedObject = prefabObject;
+
+	EngineConsole::Log("Editor::LoadPrefabForEdit: Prefab編集モードを開始しました: %s", filePath.c_str());
+	return true;
+}
+
+bool Editor::SaveEditingPrefab()
+{
+	if (!m_isEditingPrefab || !m_pEditingPrefabObject) {
+		EngineConsole::LogWarning("Editor::SaveEditingPrefab: Prefab編集中ではありません");
+		return false;
+	}
+
+	// Prefabを保存
+	bool result = Prefab::Export(m_pEditingPrefabObject, m_editingPrefabPath);
+	if (result) {
+		EngineConsole::Log("Editor::SaveEditingPrefab: Prefabを保存しました: %s", m_editingPrefabPath.c_str());
+	}
+	else {
+		EngineConsole::LogError("Editor::SaveEditingPrefab: Prefabの保存に失敗しました");
+	}
+
+	return result;
+}
+
+void Editor::CloseEditingPrefab()
+{
+	if (!m_isEditingPrefab) {
+		return;
+	}
+
+	// 編集中のPrefabオブジェクトを削除
+	if (m_pEditingPrefabObject) {
+		DeleteObject(m_pEditingPrefabObject);
+		m_pEditingPrefabObject = nullptr;
+	}
+
+	// 選択解除
+	if (m_pSelectedObject == m_pEditingPrefabObject) {
+		m_pSelectedObject = nullptr;
+	}
+
+	m_isEditingPrefab = false;
+	m_editingPrefabPath = "";
+
+	EngineConsole::Log("Editor::CloseEditingPrefab: Prefab編集モードを終了しました");
 }
 
 void Editor::CreateComponent(Component* component) {

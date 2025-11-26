@@ -61,8 +61,8 @@ public:
 
     virtual void Update() {}
 
-    virtual void Import(YAML::Node& node) {}
-    virtual void Export(YAML::Emitter& out) {}
+    virtual void Import(YAML::Node& node);
+    virtual void Export(YAML::Emitter& out);
 
     virtual const char* GetScriptName() const = 0;
 

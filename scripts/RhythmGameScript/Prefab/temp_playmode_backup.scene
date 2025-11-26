@@ -1,0 +1,112 @@
+objects:
+  - classID: 1
+    fileID: 11
+    name: InputSystem
+    tag: 0
+    layer: 3
+    components:
+      - 12
+  - classID: 8
+    fileID: 12
+    tag: 10
+  - classID: 1
+    fileID: 13
+    name: EditorCamera
+    tag: 2
+    layer: 1
+    components:
+      - 14
+      - 15
+  - classID: 3
+    fileID: 14
+    tag: 0
+    position: [0, 5, -7.5, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 11
+    fileID: 15
+    tag: 0
+    isActiveCamera: false
+    target: [0, 0, 0, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 16
+    name: GameCamera
+    tag: 0
+    layer: 2
+    components:
+      - 17
+      - 18
+  - classID: 3
+    fileID: 17
+    tag: 0
+    position: [0, 5, -7.5, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 10
+    fileID: 18
+    tag: 0
+    isActiveCamera: true
+    target: [0, 0, 0, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 21
+    name: Plane1
+    tag: 0
+    layer: 2
+    components:
+      - 22
+      - 23
+      - 25
+      - 44
+  - classID: 3
+    fileID: 22
+    tag: 0
+    position: [0, -5, 0, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [20, 1, 20, 0]
+  - classID: 4
+    fileID: 23
+    tag: 0
+    vertexIndexFileID: 24
+  - classID: 5
+    fileID: 25
+    tag: 0
+    materialFileID: 26
+  - classID: 2
+    fileID: 26
+    specularPower: 0.5
+    vertexShader: unlit
+    pixelShader: directional
+    textureFileID: 19
+    bumpTextureFileID: 20
+  - classID: 17
+    fileID: 44
+    tag: 9
+    scriptName: GameManager
+  - classID: 1
+    fileID: 27
+    name: DirectionalLight
+    tag: 0
+    layer: 2
+    components:
+      - 28
+      - 29
+  - classID: 3
+    fileID: 28
+    tag: 0
+    position: [0, 10, 0, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 9
+    fileID: 29
+    tag: 0
+    type: 0
+    direction: [-0.5, -1, -0.5, 0]
+    diffuse: [1, 1, 1, 1]

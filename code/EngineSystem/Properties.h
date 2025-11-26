@@ -22,4 +22,6 @@
         AddProperty(name, PropertyType::VECTOR4, &type); \
     } else if constexpr (std::is_same_v<decltype(type), EngineMetaFile>) { \
         AddProperty(name, PropertyType::METAFILE, &type); \
+    } else if constexpr (std::is_same_v<decltype(type), PrefabAsset>) { \
+        AddProperty(name, PropertyType::PREFAB, &type); \
     }

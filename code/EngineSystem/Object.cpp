@@ -160,6 +160,12 @@ void Object::DrawGUI(){
 		ImGui::PopID();
 	}
 
+	// エディタモードでもコンポーネント削除を即座に処理
+	for (auto& component : m_DeleteComponents) {
+		DeleteComponent(component);
+	}
+	m_DeleteComponents.clear();
+
 	AddComponentPopup(this);
 
 }

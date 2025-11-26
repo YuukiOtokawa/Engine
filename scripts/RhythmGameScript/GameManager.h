@@ -16,18 +16,19 @@ class GameManager :
 
     float spawnInterval = 0.0f;
 
-    PrefabAsset* notePrefab = nullptr;
+    PrefabAsset notePrefab = {};
 
 public:
     GameManager() {
         REGISTER_PROPERTY(spawnInterval, "spawnInterval");
+        REGISTER_PROPERTY(notePrefab, "notePrefab");
     }
 
     void Start() override;
     void Update() override;
 
-    void Import(YAML::Node& node) override;
-    void Export(YAML::Emitter& node) override;
+    //void Import(YAML::Node& node) override;
+    //void Export(YAML::Emitter& node) override;
     const char* GetScriptName() const override;
 
 
