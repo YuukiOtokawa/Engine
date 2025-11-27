@@ -17,12 +17,22 @@ void GameManager::Update()
 		spawnInterval = 0.5f; // 次のスポーンまでのインターバルをリセット
 	}
 
+	// removeListに入っているノーツを削除
+	for (auto& note : removeList) {
+		auto it = std::find(notes.begin(), notes.end(), note);
+		if (it != notes.end()) {
+			notes.erase(it);
+			note->gameobject->Destroy();
+		}
+	}
+
 	for (auto& note : notes) {
 		if (!note->IsActive()) continue;
 
 		if (note->GetRemainedTime() < -0.2) {
 			// TODO [otokawa]: Miss判定
-			note->gameobject->Destroy();
+			EngineConsole::Log("TimeOver!!!");
+			RemoveNotes(note);
 		}
 	}
 }

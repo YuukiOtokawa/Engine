@@ -12,6 +12,7 @@ class GameManager :
     double startTime;
 
     std::vector<Notes*> notes;
+    std::vector<Notes*> removeList;
     int nextNoteID = 0;
 
     float spawnInterval = 0.0f;
@@ -47,6 +48,10 @@ public:
 
     std::vector<Notes*>& GetNotes() {
         return notes;
+    }
+
+    void RemoveNotes(Notes* note) {
+        removeList.push_back(note);
     }
 };
 

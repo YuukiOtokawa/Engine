@@ -9,15 +9,18 @@
 #include "GameManager.h" 
 #include "TimeSystem.h"
 
+#include "EngineConsole.h"
+
 REGISTER_SCRIPT(PlayerControl)
 
 const double HIT_PERFECT = 0.050;
 const double HIT_GREAT = 0.100;
 const double HIT_GOOD = 0.200;
+const double HIT_MISS = 0.500;
 
 void PlayerControl::Start()
 {
-    gameManager = Editor::GetInstance()->GetObject("GameManager")->GetComponent<GameManager>();
+    gameManager = dynamic_cast<GameManager*>(Editor::GetInstance()->GetObject("GameManager")->GetComponent<ScriptComponent>()->GetScriptInstance());
 }
 
 void PlayerControl::Update()
@@ -63,8 +66,17 @@ void PlayerControl::Hit()
     }
 
     // TODO [otokawa]: 判定取る
-    if (targetNote != nullptr && minDiff <= HIT_GOOD) {
-        targetNote->gameobject->Destroy();
+    if (targetNote != nullptr && minDiff <= HIT_MISS) {
+
+        if (minDiff <= HIT_PERFECT)
+            EngineConsole::Log("PERFECT!");
+        else if (minDiff <= HIT_GREAT)
+            EngineConsole::Log("GREAT!");
+        else if (minDiff <= HIT_GOOD)
+            EngineConsole::Log("GOOD!");
+        else
+            EngineConsole::Log("MISS!!!");
+        gameManager->RemoveNotes(targetNote);
     }
 }
 

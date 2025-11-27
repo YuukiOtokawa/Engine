@@ -666,8 +666,6 @@ void Editor::Draw() {
 	if (m_pSelectedObject)
 		m_pSelectedObject->DrawGUI();
 
-	ImGui::Image(renderCore->GetGameViewTexture()->shaderResourceView, ImVec2(300, 300));
-	ImGui::Image(renderCore->GetSceneViewTexture()->shaderResourceView, ImVec2(300, 300));
 
 	m_pGUI->EndWindow();
 
