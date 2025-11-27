@@ -41,6 +41,11 @@
 #include "Collider.h"
 #include "Material.h"
 #include "SceneImporter.h"
+#include "RectTransform.h"
+#include "Canvas.h"
+#include "UIImageMesh.h"
+#include "UIImage.h"
+
 #include "FBXImporter.h"
 #include "OBJLoader.h"
 
@@ -473,10 +478,18 @@ EngineMetaFile* Prefab::CreateFromClassID(ClassID classID)
             return new Animation();
         case CID_Billboard:
             return new Billboard();
-        case CID_Particle:
+        case CID_Particle: 
             return new Particle();
         case CID_Script:
             return new ScriptComponent();
+        case CID_RectTransform:
+            return new RectTransform();
+        case CID_Canvas:
+            return new Canvas();
+        case CID_UIImageMesh:
+            return new UIImageMesh();
+        case CID_UIImage:
+            return new UIImage();
         default:
             return nullptr;
     }

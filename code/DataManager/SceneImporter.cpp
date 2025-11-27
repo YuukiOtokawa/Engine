@@ -29,6 +29,11 @@
 #include "RenderTexture.h"
 #include "SkinnedMeshRenderer.h"
 #include "Collider.h"
+#include "RectTransform.h"
+#include "Canvas.h"
+#include "UIImageMesh.h"
+#include "UIImage.h"
+
 #include "OBJLoader.h"
 
 #include <filesystem>
@@ -336,6 +341,14 @@ EngineMetaFile* SceneImporter::CreateObject(ClassID classID)
 			return new Particle();
 		case CID_Script:
 			return new ScriptComponent();
+		case CID_RectTransform:
+			return new RectTransform();
+		case CID_Canvas:
+			return new Canvas();
+		case CID_UIImageMesh:
+			return new UIImageMesh();
+		case CID_UIImage:
+			return new UIImage();
 		case CID_None:
 		default:
 			return nullptr;

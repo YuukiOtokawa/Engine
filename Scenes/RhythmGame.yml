@@ -68,6 +68,10 @@ objects:
     scriptName: GameManager
     spawnInterval: 0
     notePrefab: scripts\RhythmGameScript\Prefab\Note.prefab
+    perfectPrefab: scripts\RhythmGameScript\Prefab\Perfect.prefab
+    greatPrefab: scripts\RhythmGameScript\Prefab\Great.prefab
+    goodPrefab: scripts\RhythmGameScript\Prefab\Good.prefab
+    missPrefab: scripts\RhythmGameScript\Prefab\Miss.prefab
   - classID: 1
     fileID: 45
     name: Player

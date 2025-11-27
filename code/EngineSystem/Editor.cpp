@@ -88,7 +88,8 @@ Editor::~Editor()
 	}
 	m_Objects.clear();
 	for (auto& material : m_Materials) {
-		delete material;
+		if (material)
+			delete material;
 	}
 	m_Materials.clear();
 	if (m_pInstance) {
@@ -355,7 +356,14 @@ void Editor::Draw() {
 		}
 	}
 
-
+	// UI描画（最前面）
+	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	for (auto& object : objects) {
+		if (object->GetLayer() == GameObjectLayer::UILayer) {
+			object->Draw();
+		}
+	}
 
 	//==========================================================================
 	// GUI描画処理
@@ -808,6 +816,16 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 				object->Draw();
 		}
 	}
+
+	// UI描画（最前面）
+	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	for (auto& object : objects) {
+		if (object->GetLayer() == GameObjectLayer::UILayer) {
+			object->Draw();
+		}
+	}
+
 	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
 
 }

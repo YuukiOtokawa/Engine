@@ -216,6 +216,7 @@
     <ClCompile Include="code\components\Animation.cpp" />
     <ClCompile Include="code\components\Audio.cpp" />
     <ClCompile Include="code\components\Billboard.cpp" />
+    <ClCompile Include="code\components\Canvas.cpp" />
     <ClCompile Include="code\components\Collider.cpp" />
     <ClCompile Include="code\components\Component.cpp" />
     <ClCompile Include="code\components\Component_Camera.cpp" />
@@ -229,12 +230,15 @@
     <ClCompile Include="code\components\MeshFieldCollider.cpp" />
     <ClCompile Include="code\components\Particle.cpp" />
     <ClCompile Include="code\components\PlaneMesh.cpp" />
+    <ClCompile Include="code\components\RectTransform.cpp" />
     <ClCompile Include="code\components\Renderer.cpp" />
     <ClCompile Include="code\components\RenderTexture.cpp" />
     <ClCompile Include="code\components\Rigidbody.cpp" />
     <ClCompile Include="code\components\SkinnedMeshRenderer.cpp" />
     <ClCompile Include="code\components\Sky.cpp" />
     <ClCompile Include="code\components\SpriteMesh.cpp" />
+    <ClCompile Include="code\components\UIImage.cpp" />
+    <ClCompile Include="code\components\UIImageMesh.cpp" />
     <ClCompile Include="code\DataManager\CSVExporter.cpp" />
     <ClCompile Include="code\DataManager\SceneExporter.cpp" />
     <ClCompile Include="code\DataManager\CSVImporter.cpp" />
@@ -293,6 +297,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="scripts\RhythmGameScript\HitEffectControl.cpp" />
     <ClCompile Include="scripts\RhythmGameScript\Notes.cpp">
       <SubType>
       </SubType>
@@ -311,6 +316,7 @@
     <ClInclude Include="code\components\Animation.h" />
     <ClInclude Include="code\components\Audio.h" />
     <ClInclude Include="code\components\Billboard.h" />
+    <ClInclude Include="code\components\Canvas.h" />
     <ClInclude Include="code\components\Collider.h" />
     <ClInclude Include="code\components\Component.h" />
     <ClInclude Include="code\components\Component_Camera.h" />
@@ -327,12 +333,15 @@
     <ClInclude Include="code\components\Particle.h" />
     <ClInclude Include="code\components\PlaneMesh.h" />
     <ClInclude Include="code\components\PlayerCamera.h" />
+    <ClInclude Include="code\components\RectTransform.h" />
     <ClInclude Include="code\components\Renderer.h" />
     <ClInclude Include="code\components\RenderTexture.h" />
     <ClInclude Include="code\components\Rigidbody.h" />
     <ClInclude Include="code\components\SkinnedMeshRenderer.h" />
     <ClInclude Include="code\components\Sky.h" />
     <ClInclude Include="code\components\SpriteMesh.h" />
+    <ClInclude Include="code\components\UIImage.h" />
+    <ClInclude Include="code\components\UIImageMesh.h" />
     <ClInclude Include="code\DataManager\CSVExporter.h" />
     <ClInclude Include="code\DataManager\SceneExporter.h" />
     <ClInclude Include="code\DataManager\CSVImporter.h" />
@@ -404,6 +413,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="scripts\RhythmGameScript\HitEffectControl.h" />
     <ClInclude Include="scripts\RhythmGameScript\Notes.h">
       <SubType>
       </SubType>

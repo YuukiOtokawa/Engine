@@ -34,6 +34,10 @@ enum ClassID {
     CID_Component_Collider,
     CID_Component_MeshField,
     CID_Prefab,
+    CID_RectTransform,
+    CID_Canvas,
+    CID_UIImageMesh,
+    CID_UIImage,
 };
 
 class EngineMetaFile

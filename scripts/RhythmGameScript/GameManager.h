@@ -19,10 +19,22 @@ class GameManager :
 
     PrefabAsset notePrefab = {};
 
+    Object* activeEffect = nullptr;
+
+    PrefabAsset perfectPrefab = {};
+    PrefabAsset greatPrefab = {};
+    PrefabAsset goodPrefab = {};
+    PrefabAsset missPrefab = {};
+
 public:
     GameManager() {
         REGISTER_PROPERTY(spawnInterval, "spawnInterval");
         REGISTER_PROPERTY(notePrefab, "notePrefab");
+        REGISTER_PROPERTY(perfectPrefab, "perfectPrefab");
+        REGISTER_PROPERTY(greatPrefab, "greatPrefab");
+        REGISTER_PROPERTY(goodPrefab, "goodPrefab");
+        REGISTER_PROPERTY(missPrefab, "missPrefab");
+
     }
 
     void Start() override;
@@ -53,5 +65,11 @@ public:
     void RemoveNotes(Notes* note) {
         removeList.push_back(note);
     }
+
+    void Perfect();
+    void Great();
+    void Good();
+    void Miss();
+
 };
 

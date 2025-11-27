@@ -9,6 +9,7 @@
 #include "MainEngine.h"
 
 #include "Component_Transform.h"
+REGISTER_COMPONENT(SpriteMesh)
 
 SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 {
@@ -16,28 +17,28 @@ SpriteMesh::SpriteMesh() : MeshFilter(SPRITE_VERTICES,0)
 
 	//上
 
-	vertex[0] = {
+	vertex[2] = {
 		Vector3O(-1.0f, -1.0f, 0.0f),
 		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 0.0f),
 	};
 
-	vertex[1] = {
+	vertex[3] = {
 		Vector3O(1.0f, -1.0f, 0.0f),
 		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(1.0f, 0.0f),
 	};
 
-	vertex[2] = {
+	vertex[0] = {
 		Vector3O(-1.0f, 1.0f, 0.0f),
 		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
 		Vector2O(0.0f, 1.0f),
 	};
 
-	vertex[3] = {
+	vertex[1] = {
 		Vector3O(1.0f, 1.0f, 0.0f),
 		Vector3O(0.0f,0.0f,-1.0f),
 		Vector4O(1.0f, 1.0f, 1.0f, 1.0f),

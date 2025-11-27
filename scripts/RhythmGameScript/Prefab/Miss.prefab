@@ -1,0 +1,52 @@
+prefabName: Miss
+version: 1
+textures:
+  - fileID: 61
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Miss.png
+objects:
+  - classID: 1
+    fileID: 72
+    name: Miss
+    tag: 0
+    layer: 2
+    components:
+      - 73
+      - 74
+      - 76
+      - 79
+  - classID: 21
+    fileID: 73
+    tag: 0
+    position: [0, 0, 0, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+    anchoredPosition: [0, 200]
+    size: [500, 100]
+    pivot: [0.5, 0.5]
+    anchorMin: [0.5, 0.5]
+    anchorMax: [0.5, 0.5]
+  - classID: 23
+    fileID: 74
+    tag: 0
+  - classID: 24
+    fileID: 76
+    tag: 0
+    isVisible: true
+    castShadows: true
+    materialFileID: 78
+    color: [1, 1, 1, 1]
+    uvRect: [0, 0, 1, 1]
+    isVisible: true
+    castShadows: true
+    materialFileID: 78
+  - classID: 2
+    fileID: 78
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: unlit
+    textureFileID: 61
+    bumpTextureFileID: 0
+  - classID: 17
+    fileID: 79
+    tag: 9
+    scriptName: HitEffectControl

@@ -49,6 +49,7 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
     X(ParticleTag, "Particle") \
     X(LightTag, "Light") \
     X(PackTag, "Pack") \
+    X(UITag, "UI") \
 
 #define OBJECT_LAYER \
 	X(SystemLayer, "System") \
@@ -59,6 +60,7 @@ constexpr auto FRAME_RATE_DEFAULT = 60;
     X(BillBoardLayer, "BillBoard") \
     X(SpriteLayer, "Sprite") \
     X(RenderTextureLayer, "RenderTexture") \
+    X(UILayer, "UI") \
 
 #define COMPONENT_TAG \
 	X(NoComponent, "NoComponent") \

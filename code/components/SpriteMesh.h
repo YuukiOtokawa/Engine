@@ -9,7 +9,8 @@ private:
 	int m_spriteIndex = 0;
     int m_newIndex = -1;
 public:
-	SpriteMesh();
+    DECLARE_COMPONENT(SpriteMesh)
+    SpriteMesh();
 
 	void Update() override;
 

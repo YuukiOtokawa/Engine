@@ -28,6 +28,7 @@ enum class PropertyType {
     METAFILE,
     DOUBLE,
     PREFAB,
+    TEXTURE,
     // 他の型も必要に応じて追加
 };
 

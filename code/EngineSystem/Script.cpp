@@ -55,6 +55,7 @@ void Script::Export(YAML::Emitter& out) {
                 break;
             }
 
+           
             case PropertyType::METAFILE:
                 // METAFILE は未実装
                 out << YAML::Value << "";

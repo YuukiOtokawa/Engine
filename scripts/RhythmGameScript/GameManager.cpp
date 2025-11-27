@@ -61,4 +61,32 @@ void GameManager::SpawnNote(double spawnAheadTime)
 	notes.push_back(instance);
 }
 
+void GameManager::Perfect()
+{
+	if (activeEffect != nullptr)
+		activeEffect->Destroy();
+	activeEffect = perfectPrefab.Instantiate();
+}
+
+void GameManager::Great()
+{
+	if (activeEffect != nullptr)
+		activeEffect->Destroy();
+	activeEffect = greatPrefab.Instantiate();
+}
+
+void GameManager::Good()
+{
+	if (activeEffect != nullptr)
+		activeEffect->Destroy();
+	activeEffect = goodPrefab.Instantiate();
+}
+
+void GameManager::Miss()
+{
+	if (activeEffect != nullptr)
+		activeEffect->Destroy();
+	activeEffect = missPrefab.Instantiate();
+}
+
 REGISTERCLASS(GameManager);

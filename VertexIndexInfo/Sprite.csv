@@ -1,7 +1,67 @@
--1,-1,0,0,0,-1,1,1,1,1,0,0
-1,-1,0,0,0,-1,1,1,1,1,1,0
--1,1,0,0,0,-1,1,1,1,1,0,1
-1,1,0,0,0,-1,1,1,1,1,1,1
-&
-
-5
+vertices:
+  - position:
+      - -1
+      - 1
+      - 0
+    normal:
+      - 0
+      - 0
+      - -1
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 0
+      - 1
+  - position:
+      - 1
+      - 1
+      - 0
+    normal:
+      - 0
+      - 0
+      - -1
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 1
+      - 1
+  - position:
+      - -1
+      - -1
+      - 0
+    normal:
+      - 0
+      - 0
+      - -1
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 0
+      - 0
+  - position:
+      - 1
+      - -1
+      - 0
+    normal:
+      - 0
+      - 0
+      - -1
+    color:
+      - 1
+      - 1
+      - 1
+      - 1
+    texcoord:
+      - 1
+      - 0
+indices: []
+primitiveTopology: 5
