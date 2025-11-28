@@ -7,3 +7,5 @@ textures:
     filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\grass 1.jpg
   - fileID: 22
     filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Perfect.png
+  - fileID: 61
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Miss.png
