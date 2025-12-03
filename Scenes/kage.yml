@@ -1,0 +1,377 @@
+objects:
+  - classID: 1
+    fileID: 6
+    name: InputSystem
+    tag: 0
+    layer: 3
+    components:
+      - 7
+  - classID: 8
+    fileID: 7
+    tag: 10
+  - classID: 1
+    fileID: 8
+    name: EditorCamera
+    tag: 2
+    layer: 1
+    components:
+      - 9
+      - 10
+  - classID: 3
+    fileID: 9
+    tag: 0
+    position: [4.66292, 8.05871105, -28.8069935, 0]
+    rotation: [-0.888999164, 0.0659998581, 0, 0]
+    scale: [1, 1, 1, 1]
+  - classID: 11
+    fileID: 10
+    tag: 0
+    isActiveCamera: false
+    target: [4.70448208, 7.28226948, -28.1781769, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 11
+    name: GameCamera
+    tag: 2
+    layer: 1
+    components:
+      - 12
+      - 13
+  - classID: 3
+    fileID: 12
+    tag: 0
+    position: [0, 5, -7.5, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 1]
+  - classID: 10
+    fileID: 13
+    tag: 0
+    isActiveCamera: true
+    target: [0, 0, 0, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 16
+    name: Plane1
+    tag: 0
+    layer: 2
+    components:
+      - 17
+      - 18
+      - 20
+  - classID: 3
+    fileID: 17
+    tag: 0
+    position: [1.8072257, -38.1107025, 3.53508377, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [20, 1, 20, 0]
+  - classID: 4
+    fileID: 18
+    tag: 0
+    vertexIndexFileID: 19
+  - classID: 5
+    fileID: 20
+    tag: 0
+    materialFileID: 21
+  - classID: 2
+    fileID: 21
+    specularPower: 0.5
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 9
+    bumpTextureFileID: 10
+  - classID: 1
+    fileID: 36
+    name: Light
+    tag: 0
+    layer: 2
+    components:
+      - 37
+      - 38
+  - classID: 3
+    fileID: 37
+    tag: 0
+    position: [-1.17021894, -2.69807601, -0.311653852, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 0
+    fileID: 38
+    tag: 0
+    type: 0
+    direction: [0.100000001, -1, 0, 0]
+    diffuse: [1, 1, 1, 1]
+  - classID: 1
+    fileID: 39
+    name: Object
+    tag: 0
+    layer: 2
+    components:
+      - 40
+      - 41
+      - 42
+  - classID: 3
+    fileID: 40
+    tag: 0
+    position: [0, -30, 9.63964462, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [6.94884443, 1, 1, 0]
+  - classID: 4
+    fileID: 41
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 42
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 51
+    name: Sky
+    tag: 0
+    layer: 2
+    components:
+      - 52
+      - 53
+      - 54
+  - classID: 3
+    fileID: 52
+    tag: 0
+    position: [0, -122.234062, 0, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [355.894287, 355.894287, 355.894287, 0]
+  - classID: 4
+    fileID: 53
+    tag: 0
+    vertexIndexFileID: 57
+  - classID: 5
+    fileID: 54
+    tag: 0
+    materialFileID: 58
+  - classID: 2
+    fileID: 58
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: unlit
+    textureFileID: 61
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 62
+    name: Object1
+    tag: 0
+    layer: 2
+    components:
+      - 63
+      - 64
+      - 65
+  - classID: 3
+    fileID: 63
+    tag: 0
+    position: [5.67366934, -30, 4.72564888, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [1, 1, 5, 0]
+  - classID: 4
+    fileID: 64
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 65
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 69
+    name: Object2
+    tag: 0
+    layer: 2
+    components:
+      - 70
+      - 71
+      - 73
+  - classID: 3
+    fileID: 70
+    tag: 0
+    position: [-2.36058497, -30, 7.37873554, 0]
+    rotation: [0, 9.43535328, 0, 0]
+    scale: [1, 1, 7.00000048, 0]
+  - classID: 4
+    fileID: 71
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 73
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 83
+    name: Object3
+    tag: 0
+    layer: 2
+    components:
+      - 84
+      - 85
+      - 86
+  - classID: 3
+    fileID: 84
+    tag: 0
+    position: [2.78894186, -30.0000019, -7.07535076, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [4.75401163, 1, 1, 0]
+  - classID: 4
+    fileID: 85
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 86
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 90
+    name: Object4
+    tag: 0
+    layer: 2
+    components:
+      - 91
+      - 92
+      - 93
+  - classID: 3
+    fileID: 91
+    tag: 0
+    position: [2.76327085, -30.0000038, -11.5957355, 0]
+    rotation: [0, 22.7725658, 0, 0]
+    scale: [1, 1, 4.87933254, 0]
+  - classID: 4
+    fileID: 92
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 93
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 97
+    name: Object5
+    tag: 0
+    layer: 2
+    components:
+      - 98
+      - 99
+      - 100
+  - classID: 3
+    fileID: 98
+    tag: 0
+    position: [-2.46239758, -30.0000019, -6.47417545, 0]
+    rotation: [0, 16.2084026, 0, 0]
+    scale: [0.999999881, 1, 2.73976588, 0]
+  - classID: 4
+    fileID: 99
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 100
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 104
+    name: Object6
+    tag: 0
+    layer: 2
+    components:
+      - 106
+      - 107
+      - 108
+  - classID: 3
+    fileID: 106
+    tag: 0
+    position: [10.2722855, -30.0000019, -4.44045734, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [1.01878023, 1, 1, 0]
+  - classID: 4
+    fileID: 107
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 108
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
+  - classID: 1
+    fileID: 105
+    name: Object7
+    tag: 0
+    layer: 2
+    components:
+      - 112
+      - 113
+      - 114
+  - classID: 3
+    fileID: 112
+    tag: 0
+    position: [7.02243137, -29.9999962, -3.82759428, 0]
+    rotation: [0, -0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 4
+    fileID: 113
+    tag: 0
+    vertexIndexFileID: 45
+  - classID: 5
+    fileID: 114
+    tag: 0
+    materialFileID: 46
+  - classID: 2
+    fileID: 46
+    specularPower: 50
+    vertexShader: unlit
+    pixelShader: DepthShadow
+    textureFileID: 48
+    bumpTextureFileID: 48
