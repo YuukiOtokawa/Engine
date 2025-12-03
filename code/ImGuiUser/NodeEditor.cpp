@@ -1,6 +1,8 @@
 ﻿#include "NodeEditor.h"
 #include <algorithm>
 
+#include "Node.h"
+
 void NodeEditor::CreateLink()
 {
 	// 新しいリンクの作成をチェック

@@ -127,7 +127,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;scripts\RhythmGameScript;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>code\Node;code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;scripts\RhythmGameScript;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -288,6 +288,7 @@
     <ClCompile Include="code\input\Gamepad.cpp" />
     <ClCompile Include="code\input\Keyboard.cpp" />
     <ClCompile Include="code\input\Mouse.cpp" />
+    <ClCompile Include="code\Node\Node.cpp" />
     <ClCompile Include="code\RCCppMainLoop.cpp" />
     <ClCompile Include="code\StdioLogSystem.cpp" />
     <ClCompile Include="scripts\main.cpp" />
@@ -399,6 +400,7 @@
     <ClInclude Include="code\input\Gamepad.h" />
     <ClInclude Include="code\input\Keyboard.h" />
     <ClInclude Include="code\input\Mouse.h" />
+    <ClInclude Include="code\Node\Node.h" />
     <ClInclude Include="code\RCCppMainLoop.h" />
     <ClInclude Include="code\StdioLogSystem.h" />
     <ClInclude Include="code\SystemTable.h" />

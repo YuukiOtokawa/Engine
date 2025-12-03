@@ -8,12 +8,7 @@
 
 using namespace ax::NodeEditor;
 
-enum class NodeType
-{
-    Input,
-    Output,
-    InOut
-};
+enum class NodeType;
 
 enum class PinType {
     Boolean,
