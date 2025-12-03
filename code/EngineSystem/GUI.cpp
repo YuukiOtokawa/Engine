@@ -20,7 +20,6 @@
 
 #include "ImGuizmo.h"
 
-#include "../code/ImGuiUser/NodeEditor.h"
 
 //==========================================================================
 // 名前空間定義
@@ -31,6 +30,8 @@ ImFont* GUI::m_pFontObjectName = nullptr;
 ImFont* GUI::m_pCurrentFont = nullptr;
 
 GUI* GUI::m_pInstance = nullptr;
+
+int GUI::m_GUIWidgetIDCounter = 0;
 
 //==========================================================================
 // メンバ関数
@@ -53,13 +54,10 @@ void GUI::Initialize() {
 
 	io.Fonts->Build();
 
-	m_pNodeEditor = new NodeEditor();
-	m_pNodeEditor->Initialize();
 }
 
 void GUI::Finalize()
 {
-	m_pNodeEditor->Finalize();
 }
 
 void GUI::StartImGui()
@@ -124,7 +122,7 @@ void GUI::StartImGui()
 
 	auto camera = Editor::GetInstance()->GetActiveCamera()->GetComponent<Camera>();
 
-	m_pNodeEditor->Render();
+	//m_pNodeEditor->Render();
 
 
 	//ImGuizmo::Manipulate((float*)&camera->GetView(), (float*)&camera->GetProjection(), ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, (float*)&Editor::GetInstance()->GetActiveCamera()->GetComponent<Transform>()->GetWorldMatrix(), nullptr, nullptr);
@@ -273,7 +271,6 @@ void GUI::SetFontObjectName()
 }
 
 void GUI::SetNodeEditorVisible() {
-	m_pNodeEditor->SetVisible();
 }
 
 void GUI::CreateRenderTarget() {

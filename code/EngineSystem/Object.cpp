@@ -274,3 +274,8 @@ void Object::ImportFile(YAML::Node& node)
 		}
 	}
 }
+
+void Object::SetName(const std::string& name) {
+	m_Name = name;
+	Editor::GetInstance()->CheckObjectNameConflict(this);
+}

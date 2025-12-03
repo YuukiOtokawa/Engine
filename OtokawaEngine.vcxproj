@@ -273,7 +273,6 @@
     <ClCompile Include="code\EngineSystem\SystemLog.cpp" />
     <ClCompile Include="code\EngineSystem\SystemMonitor.cpp" />
     <ClCompile Include="code\EngineSystem\TimeSystem.cpp" />
-    <ClCompile Include="code\ImGuiUser\NodeEditor.cpp" />
     <ClCompile Include="code\imgui\crude_json.cpp" />
     <ClCompile Include="code\imgui\imgui.cpp" />
     <ClCompile Include="code\imgui\ImGuizmo.cpp" />
@@ -289,9 +288,10 @@
     <ClCompile Include="code\input\Keyboard.cpp" />
     <ClCompile Include="code\input\Mouse.cpp" />
     <ClCompile Include="code\Node\Node.cpp" />
+    <ClCompile Include="code\Node\NodeManager.cpp" />
+    <ClCompile Include="code\Node\NodePin.cpp" />
     <ClCompile Include="code\RCCppMainLoop.cpp" />
     <ClCompile Include="code\StdioLogSystem.cpp" />
-    <ClCompile Include="NodePin.cpp" />
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
     <ClCompile Include="scripts\PrefabSpawner.cpp" />
@@ -402,10 +402,11 @@
     <ClInclude Include="code\input\Keyboard.h" />
     <ClInclude Include="code\input\Mouse.h" />
     <ClInclude Include="code\Node\Node.h" />
+    <ClInclude Include="code\Node\NodeManager.h" />
+    <ClInclude Include="code\Node\NodePin.h" />
     <ClInclude Include="code\RCCppMainLoop.h" />
     <ClInclude Include="code\StdioLogSystem.h" />
     <ClInclude Include="code\SystemTable.h" />
-    <ClInclude Include="NodePin.h" />
     <ClInclude Include="resource\resource.h" />
     <ClInclude Include="ScriptFactory.h" />
     <ClInclude Include="scripts\Game.h" />

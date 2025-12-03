@@ -1,10 +1,10 @@
-﻿// ========================================================
+﻿// ==========================================================================
 //
 // エディター管理クラス[Editor.cpp]
 // 
 //									Date:20250520
 //									Author:Yuuki Otokawa
-// ========================================================
+// ==========================================================================
 
 //==========================================================================
 // ヘッダーインクルード
@@ -95,6 +95,11 @@ Editor::~Editor()
 	if (m_pInstance) {
 		m_pInstance = nullptr;
 	}
+    // NodeManagerの解放
+    if (m_pNodeManager) {
+        delete m_pNodeManager;
+        m_pNodeManager = nullptr;
+    }
 }
 
 void Editor::Initialize() {
@@ -159,6 +164,8 @@ void Editor::Initialize() {
 
 	Main();
 	m_pGUI->Initialize();
+    m_pNodeManager = new NodeManager(); // NodeManagerのインスタンスを生成
+    m_pNodeManager->Initialize(); // NodeManagerを初期化
 
 	// プロジェクトウィンドウの初期化
 	m_pProjectWindow = new ProjectWindow();
@@ -195,6 +202,11 @@ void Editor::Update() {
 	if (m_pEditorCamera) {
 		m_pEditorCamera->Update();
 	}
+	// InputSystemを更新
+	auto inputSystem = GetObject("InputSystem");
+	if (inputSystem) {
+		inputSystem->Update();
+	}
 
 	// プレイモード中のみゲームオブジェクトのUpdate()を呼ぶ
 	if (m_isPlaying) {
@@ -203,8 +215,15 @@ void Editor::Update() {
 			if (object != m_pEditorCamera) {
 				object->Update();
 			}
+			if (object->GetComponent<InputSystem>())
+				continue;
 		}
 	}
+
+    // NodeManagerのUpdateを呼び出す
+    if (m_pNodeManager) {
+        m_pNodeManager->Update();
+    }
 
 	// オブジェクト削除処理（モードに関係なく実行）
 	for (auto& object : m_DeleteObjects) {
@@ -375,6 +394,12 @@ void Editor::Draw() {
 
 	//ImGuiの初期化
 	m_pGUI->StartImGui();
+
+	// NodeManagerのDrawを呼び出す
+	if (m_pNodeManager) {
+		m_pNodeManager->Draw();
+	}
+
 
 	// ツールバー（再生/停止ボタン）
 	m_pGUI->StartToolbar();
@@ -832,6 +857,10 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 
 void Editor::Finalize() {
 	m_pGUI->Finalize();
+    // NodeManagerのFinalizeを呼び出す
+    if (m_pNodeManager) {
+        m_pNodeManager->Finalize();
+    }
 }
 
 void Editor::Play()
@@ -996,6 +1025,20 @@ void Editor::DeleteObject(Object* object)
 void Editor::CreateObject()
 {
 	Object* newObject = new Object();
+}
+
+void Editor::CheckObjectNameConflict(Object* object)
+{
+	int copyCount = 0;
+	for (auto& obj : m_Objects) {
+		if (obj->GetName() == object->GetName() + std::to_string(copyCount) ||
+			obj->GetName() == object->GetName()) {
+			// 同じ名前のオブジェクトが存在する場合は、名前を変更
+			copyCount++;
+		}
+	}
+	if (copyCount > 1)
+		object->ResolveNameConflict(object->GetName() + std::to_string(copyCount - 1));
 }
 
 Object* Editor::GetObject(const std::string& name)

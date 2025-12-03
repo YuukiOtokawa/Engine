@@ -38,6 +38,8 @@
 
 #include "ProjectWindow.h"
 
+#include "Node/NodeManager.h" // NodeManagerをインクルード
+
 //==========================================================================
 // クラス定義
 //==========================================================================
@@ -66,6 +68,8 @@ private:
     CollisionManager* m_pCollisionManager = nullptr;
 
     ProjectWindow* m_pProjectWindow = nullptr;
+
+    NodeManager* m_pNodeManager = nullptr; // NodeManagerのポインタを追加
 
     // 再生モード関連
     bool m_isPlaying = false;                    // 再生中かどうか
@@ -137,6 +141,8 @@ public:
 	void AddObject(Object* object);
 	void DeleteObject(Object* object);
     void CreateObject();
+
+    void CheckObjectNameConflict(Object* object);
 	/// @brief 指定された名前のオブジェクトを検索して返します。
 	/// @param name 検索するオブジェクトの名前。
 	/// @return 見つかった場合は対応するObjectポインタ、見つからない場合はnullptrを返します。
@@ -196,6 +202,8 @@ public:
     Object* GetEditingPrefabObject() const { return m_pEditingPrefabObject; }
 
     bool GetIsSceneViewHovered() const { return m_isSceneViewHovered; }
+
+    NodeManager* GetNodeManager() const { return m_pNodeManager; } // NodeManagerのゲッターを追加
 };
 
 void Main();

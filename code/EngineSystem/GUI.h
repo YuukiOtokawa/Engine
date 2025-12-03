@@ -43,6 +43,8 @@ private:
 
     NodeEditor* m_pNodeEditor;
 
+    static int m_GUIWidgetIDCounter;
+
 	/// @brief レンダーターゲットを作成します。
 	void CreateRenderTarget();
 	/// @brief レンダーターゲットをクリーンアップします。
@@ -89,6 +91,10 @@ public:
             m_pInstance = new GUI();
         }
         return m_pInstance;
+    }
+
+    static int GetNextWidgetID() {
+        return m_GUIWidgetIDCounter++;
     }
 };
 

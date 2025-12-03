@@ -120,9 +120,11 @@ public:
 
 	/// @brief 名前を設定します。
 	/// @param name 設定する名前。
-	void SetName(const std::string& name) {
-		m_Name = name;
-	}
+    void SetName(const std::string& name);
+
+    void ResolveNameConflict(const std::string& name) {
+        m_Name = name;
+    }
 
 	/// @brief オブジェクトの名前を取得します。
 	/// @return オブジェクトの名前を表す std::string 型の値。

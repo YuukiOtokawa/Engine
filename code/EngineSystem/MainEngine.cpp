@@ -11,6 +11,8 @@
 //==========================================================================
 
 #include "MainEngine.h"
+#include "Editor.h" // Editorをインクルード
+#include "Node/Node.h" // ObjectNodeの定義を含むNode.hをインクルード
 
 #include <sstream>
 
@@ -437,6 +439,8 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case ID_WINDOW_NEWWINDOW:
 		{
 			GUI::GetInstance()->SetNodeEditorVisible();
+            // テスト用のObjectNodeを追加
+            //Editor::GetInstance()->GetNodeManager()->AddNode(new ObjectNode());
 		}
 		default:
 			break;
