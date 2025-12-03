@@ -111,12 +111,14 @@ void NodeEditor::DrawNode(NodeInfo& node)
 		ImGui::PopID();
 	}
 
+	// 入力ピン
 	ImGui::EndGroup();
 
 	ImGui::SameLine();
 	ImGui::Dummy(ImVec2(50, 0));
 	ImGui::SameLine();
 
+	// 出力ピン
 	ImGui::BeginGroup();
 
 	for (auto pinId : node.pins[PinKind::Output]) {

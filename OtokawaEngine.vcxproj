@@ -291,6 +291,7 @@
     <ClCompile Include="code\Node\Node.cpp" />
     <ClCompile Include="code\RCCppMainLoop.cpp" />
     <ClCompile Include="code\StdioLogSystem.cpp" />
+    <ClCompile Include="NodePin.cpp" />
     <ClCompile Include="scripts\main.cpp" />
     <ClCompile Include="scripts\PlayerControl.cpp" />
     <ClCompile Include="scripts\PrefabSpawner.cpp" />
@@ -404,6 +405,7 @@
     <ClInclude Include="code\RCCppMainLoop.h" />
     <ClInclude Include="code\StdioLogSystem.h" />
     <ClInclude Include="code\SystemTable.h" />
+    <ClInclude Include="NodePin.h" />
     <ClInclude Include="resource\resource.h" />
     <ClInclude Include="ScriptFactory.h" />
     <ClInclude Include="scripts\Game.h" />
