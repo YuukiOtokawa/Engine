@@ -625,9 +625,6 @@
     <ProjectReference Include="code\DirectXTex-main\DirectXTex\DirectXTex_Desktop_2022.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
-    <ProjectReference Include="code\yaml-cpp-master\build\yaml-cpp.vcxproj">
-      <Project>{795bd29c-e02c-3240-b2ab-03d897c026d4}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

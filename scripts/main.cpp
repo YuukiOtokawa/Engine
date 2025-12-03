@@ -43,8 +43,6 @@ void SetSceneGame()
 		input->AddComponent<InputSystem>();
 		input->SetLayer(GameObjectLayer::InputSystemLayer);
 	}
-
-	// TODO [otokawa]:EditorCameraは通常のUpdateループに含むとエディターモードで動かせないから別扱いにする！
 	//エディターカメラ作成
 	{
 		auto camera = new Object();
