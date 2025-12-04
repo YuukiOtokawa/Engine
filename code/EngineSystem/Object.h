@@ -22,6 +22,8 @@
 
 using namespace GameObjectTagLayer;
 
+class ObjectNode;
+
 class Component; // Forward declaration of Component class
 class Object : public EngineMetaFile
 {
@@ -35,6 +37,7 @@ private:
 	GameObjectTag m_Tag = NoObject;
     GameObjectLayer m_Layer = GameObjectLayer::ObjectLayer; // Layer for the object
 
+    ObjectNode* m_ObjectNode = nullptr;
 	
 	bool m_IsActive = true; // Flag to indicate if the object is active
 	bool m_IsDrawable = true; // Flag to indicate if the object is drawable
@@ -215,6 +218,13 @@ public:
     /// @brief コンポーネントリストを取得
     const std::list<Component*>& GetComponents() const {
         return m_Components;
+    }
+
+    void SetObjectNode(ObjectNode* node) {
+        m_ObjectNode = node;
+    }
+    ObjectNode* GetObjectNode() const {
+        return m_ObjectNode;
     }
 };
 

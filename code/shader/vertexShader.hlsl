@@ -2,35 +2,35 @@
 
 void main(in VS_IN In, out PS_IN Out)
 {
-    matrix World; //ƒ[ƒ‹ƒhs—ñ‚ğì¬
+    matrix World; //ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½sï¿½ï¿½ï¿½ï¿½ì¬
     World = mul(mul(Scale, Angle), Translation);
-	//’¸“_•ÏŠ·s—ñ‚ğì‚é World * View * Projection
+	//ï¿½ï¿½ï¿½_ï¿½ÏŠï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ World * View * Projection
     matrix wvp;
     wvp = mul(mul(World, View), Projection);
 
-	//ƒ|ƒŠƒSƒ“‚Ì’¸“_‚ğ•ÏŠ·s—ñ‚Å•ÏŠ·‚µ‚Äo—Í
+	//ï¿½|ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½ï¿½ÏŠï¿½ï¿½sï¿½ï¿½Å•ÏŠï¿½ï¿½ï¿½ï¿½Äoï¿½ï¿½
     Out.Position = mul(float4(In.Position, 1.0f), wvp); //Position * wvp
 	
 //==========================================================================
-// –@ü‚Ì‰ñ“]ˆ—
+// ï¿½@ï¿½ï¿½ï¿½Ì‰ï¿½]ï¿½ï¿½ï¿½ï¿½
 //==========================================================================
 
-    float4 normal = float4(In.Normal.xyz, 0.0f); //w¬•ª‚ğ0‚É‚·‚é
-    float4 worldNormal = mul(normal, World); //–@ü‚ğƒ[ƒ‹ƒhÀ•W‚É•ÏŠ·
-    worldNormal = normalize(worldNormal); //–@üƒxƒNƒgƒ‹‚Í³‹K‰»‚·‚é
+    float4 normal = float4(In.Normal.xyz, 0.0f); //wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½É‚ï¿½ï¿½ï¿½
+    float4 worldNormal = mul(normal, World); //ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Wï¿½É•ÏŠï¿½
+    worldNormal = normalize(worldNormal); //ï¿½@ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Íï¿½ï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     
-    Out.Normal = worldNormal; //–@üƒf[ƒ^‚ğo—Í
+    Out.Normal = worldNormal; //ï¿½@ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½oï¿½ï¿½
     
 //==========================================================================
-// ŒõŒ¹ŒvZˆ—
+// ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 //==========================================================================
 
-    float light = -dot(worldNormal.xyz, Light.DirectionalLight.direction.xyz); //ŒõŒ¹‚Ì•ûŒüƒxƒNƒgƒ‹‚Æ–@üƒxƒNƒgƒ‹‚Ì“àÏ‚ğŒvZ
-    light = saturate(light); //0.0f~1.0f‚Ì”ÍˆÍ‚Éû‚ß‚é
+    float light = -dot(worldNormal.xyz, Light.DirectionalLight.direction.xyz); //ï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Æ–@ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì“ï¿½ï¿½Ï‚ï¿½ï¿½vï¿½Z
+    light = saturate(light); //0.0f~1.0fï¿½Ì”ÍˆÍ‚Éï¿½ï¿½ß‚ï¿½
     
-    Out.TexCoord = In.TexCoord; //ƒeƒNƒXƒ`ƒƒÀ•W
-    Out.Diffuse.rgb = In.Diffuse * diffuse; //‹P“x‚ğDiffuse‚ÌRGB¬•ª‚ÉŠi”[
-    Out.Diffuse.a = In.Diffuse.a; //’¸“_F‚ÌƒAƒ‹ƒtƒ@¬•ª‚ğ‚»‚Ì‚Ü‚Üg—p
+    Out.TexCoord = In.TexCoord; //ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½W
+    Out.Diffuse.rgb = In.Diffuse * diffuse; //ï¿½Pï¿½xï¿½ï¿½Diffuseï¿½ï¿½RGBï¿½ï¿½ï¿½ï¿½ï¿½ÉŠiï¿½[
+    Out.Diffuse.a = In.Diffuse.a; //ï¿½ï¿½ï¿½_ï¿½Fï¿½ÌƒAï¿½ï¿½ï¿½tï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Ü‚Ügï¿½p
     
-    Out.WorldPosition = mul(In.Position, World);
+    Out.WorldPosition = mul(float4(In.Position, 1.0f), World).xyz;
 }
