@@ -45,6 +45,7 @@ public:
 
     // ノード自体の描画（imgui-node-editor内での表示）
     virtual void DrawNodeUI();
+    virtual void DrawNodeName();
 
     void SetPositionXY(ImVec2 pos) {
         m_Position.x = pos.x;
@@ -65,41 +66,6 @@ protected:
     void AddInput(const char* name, PinType type);
 
     void AddOutput(const char* name, PinType type);
-};
-
-// =================================================
-// 実装例: 数値ノード (定数)
-// =================================================
-class FloatNode : public Node {
-    float m_Value = 0.0f;
-public:
-    FloatNode();
-
-    void Update() override {
-        // 何もしない（出力値は固定またはUIで変更）
-    }
-
-    void DrawNodeUI() override;
-
-    float GetValue() const { return m_Value; }
-};
-
-// =================================================
-// 実装例: オブジェクトノード (Game Builder Garage風)
-// =================================================
-
-class Object;
-class ObjectNode : public Node {
-    Object* m_pObject = nullptr;
-
-public:
-    ObjectNode();
-
-    ~ObjectNode() override;
-
-    void Update() override;
-
-    void DrawNodeUI() override;
 };
 
 

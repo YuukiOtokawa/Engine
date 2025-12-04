@@ -13,7 +13,7 @@ class NodePinLink;
 
 class NodeManager {
 private:
-    EditorContext* m_EditorContext = nullptr;
+    static EditorContext* m_EditorContext;
     std::vector<Node*> m_Nodes;
     std::vector<NodePinLink*> m_Links;
 
@@ -30,7 +30,7 @@ private:
     ImVec2 m_ContextMenuPos;
     NodeId m_ContextNodeID;
 
-    bool m_IsCameraAbove = true;
+    static bool m_IsCameraAbove;
 
     void BackgroundContextMenu();
     void NodeContextMenu();
@@ -38,6 +38,8 @@ private:
     void NodeEditorOptions();
     void ChangeNodeEditorViewMode();
     void ViewCameraDirectionGizmo();
+
+    void EditorViewResetButton();
 
     template<typename T>
     void CreateNode(const ImVec2& position);
@@ -72,6 +74,13 @@ public:
     static int CountWidgetID() {
         return m_NextLinkId++;
     }
+
+    static bool IsCameraAbove() {
+        return m_IsCameraAbove;
+    }
+
+    static void StartEditorContext();
+    static void EndEditorContext();
 };
 
 template<typename T>

@@ -5,10 +5,20 @@
 #include "Node.h"
 #include "NodePin.h"
 
+#include "ObjectNode.h"
+#include "NumberNode.h"
+#include "BooleanNode.h"
+#include "StringNode.h"
+#include "LogNode.h"
+#include "ComparisonNode.h"
+#include "IfNode.h"
+
 namespace ed = ax::NodeEditor;
 
 int NodeManager::m_NextLinkId = NODEMANAGER_ID_BASE;
 
+EditorContext* NodeManager::m_EditorContext = nullptr;
+bool NodeManager::m_IsCameraAbove = true;
 std::map<int, std::vector<NodePin*>> NodeManager::m_PinMap;
 
 void NodeManager::BackgroundContextMenu()
@@ -21,11 +31,35 @@ void NodeManager::BackgroundContextMenu()
 
     if (ImGui::BeginPopup("Background ContextMenu")) {
         if (ImGui::MenuItem("Add Float Node")) {
-            CreateNode<FloatNode>(m_ContextMenuPos);
+            CreateNode<NumberNode>(m_ContextMenuPos);
+        }
+        if (ImGui::MenuItem("Add Vector4 Node")) {
+            CreateNode<Vector4Node>(m_ContextMenuPos);
         }
         if (ImGui::MenuItem("Add Object Node")) {
             CreateNode<ObjectNode>(m_ContextMenuPos);
         }
+        if (ImGui::MenuItem("Add Boolean Node")) {
+			CreateNode<BooleanNode>(m_ContextMenuPos);
+        }
+        if (ImGui::MenuItem("Add String Node")) {
+			CreateNode<StringNode>(m_ContextMenuPos);
+        }
+        if (ImGui::MenuItem("Add Log Node")) {
+			CreateNode<LogNode>(m_ContextMenuPos);
+        }
+        if (ImGui::MenuItem("Add Less Than Node")) {
+            CreateNode<LessNode>(m_ContextMenuPos);
+        }
+		if (ImGui::MenuItem("Add Greater Than Node")) {
+            CreateNode<GreaterNode>(m_ContextMenuPos);
+        }
+		if (ImGui::MenuItem("Add Equal To Node")) {
+            CreateNode<EqualNode>(m_ContextMenuPos);
+        }
+        if (ImGui::MenuItem("Add If Node")) {
+            CreateNode<IfNode>(m_ContextMenuPos);
+		}
         // 他のノードタイプの追加メニューもここに追加可能
         ImGui::EndPopup();
     }
@@ -54,6 +88,7 @@ void NodeManager::NodeContextMenu()
 void NodeManager::NodeEditorOptions()
 {
     ViewCameraDirectionGizmo();
+    EditorViewResetButton();
 }
 
 void NodeManager::ChangeNodeEditorViewMode()
@@ -78,7 +113,7 @@ void NodeManager::ViewCameraDirectionGizmo()
 //==========================================================================
 
     float size = 80.0f;     // ギズモのサイズ
-    ImVec2 padding = ImVec2(10.0f,20.0f);
+    ImVec2 padding = ImVec2(10.0f,30.0f);
 
     auto windowPos = ImGui::GetWindowPos();
     auto windowSize = ImGui::GetWindowSize();
@@ -135,7 +170,68 @@ void NodeManager::ViewCameraDirectionGizmo()
         ChangeNodeEditorViewMode();
 }
 
-NodeManager::NodeManager() : m_EditorContext(nullptr) {
+void NodeManager::EditorViewResetButton()
+{
+
+
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
+
+//==========================================================================
+// ボタンのパラメータ設定
+//==========================================================================
+
+    float width = 80.0f;
+    float height = 30.0f;
+    ImVec2 padding = ImVec2(10.0f, 30.0f);
+    float gizmoSize = 80.0f;
+    float spacing = 10.0f;
+
+    auto windowPos = ImGui::GetWindowPos();
+    auto windowSize = ImGui::GetWindowSize();
+
+    // ギズモの下に配置
+    ImVec2 basePos = ImVec2(
+        windowPos.x + windowSize.x - width - padding.x,
+        windowPos.y + padding.y + gizmoSize + spacing
+    );
+
+    ImGui::SetCursorScreenPos(basePos);
+
+    bool clicked = ImGui::InvisibleButton("ResetViewButton", ImVec2(width, height));
+    bool isHovered = ImGui::IsItemHovered();
+
+    // 色設定
+    ImU32 bgColor = isHovered ? IM_COL32(70, 70, 80, 225) : IM_COL32(40, 40, 50, 200);
+    ImU32 textColor = IM_COL32(255, 255, 255, 255);
+
+//==========================================================================
+// ボタン描画
+//==========================================================================
+
+    // 背景
+    drawList->AddRectFilled(basePos, ImVec2(basePos.x + width, basePos.y + height), bgColor, 5.0f);
+    
+    // テキスト
+    const char* text = "Reset";
+    ImVec2 textSize = ImGui::CalcTextSize(text);
+    ImVec2 textPos = ImVec2(
+        basePos.x + (width - textSize.x) * 0.5f,
+        basePos.y + (height - textSize.y) * 0.5f
+    );
+    drawList->AddText(textPos, textColor, text);
+
+    // クリック時の処理
+    if (clicked) {
+        // ウィンドウの左上の位置をスクリーン座標からキャンバス座標に変換
+        ImVec2 targetPos = ScreenToCanvas(windowPos);
+        // 原点(0, 0)をウィンドウの左上に配置するため、反転した座標に移動
+        
+        NavigateToSelection();
+    }
+}
+
+NodeManager::NodeManager() {
+    m_EditorContext = nullptr;
 }
 
 NodeManager::~NodeManager() {
@@ -189,22 +285,59 @@ void NodeManager::Draw() {
     // ノードの描画
     for (Node* node : m_Nodes) {
         BeginNode(NodeId(node->GetID()));
-            node->DrawNodeUI(); // ノードのコンテンツを描画
-            // 各ピンの描画
-            for (auto& pin : node->GetInputs()) {
-                BeginPin(pin->GetID(), PinKind::Input);
-                ImGui::Text("<-"); // 仮の表示
-                EndPin();
+            node->DrawNodeName();
+
+            ImGui::BeginGroup();
+            // 入力ピン列
+            if (!node->GetInputs().empty()) {
+                ImGui::BeginGroup();
+                for (auto& pin : node->GetInputs()) {
+                    BeginPin(pin->GetID(), PinKind::Input);
+                    ImGui::Text("<-");
+                    EndPin();
+                    ImGui::SameLine();
+                    ImGui::Text("%s", pin->GetName().c_str());
+                }
+                ImGui::EndGroup();
                 ImGui::SameLine();
-                ImGui::Text("%s", pin->GetName().c_str());
             }
-            for (auto& pin : node->GetOutputs()) {
-                ImGui::Text("%s", pin->GetName().c_str());
+            
+            // ノードコンテンツ
+            ImGui::BeginGroup();
+            node->DrawNodeUI();
+            ImGui::EndGroup();
+            
+            // 出力ピン列
+            if (!node->GetOutputs().empty()) {
                 ImGui::SameLine();
-                BeginPin(pin->GetID(), PinKind::Output);
-                ImGui::Text("->"); // 仮の表示
-                EndPin();
+                ImGui::BeginGroup();
+                for (auto& pin : node->GetOutputs()) {
+                    // ピン名の幅を計算
+                    float textWidth = ImGui::CalcTextSize(pin->GetName().c_str()).x;
+                    float arrowWidth = ImGui::CalcTextSize("->").x;
+                    float groupWidth = textWidth + arrowWidth + ImGui::GetStyle().ItemSpacing.x;
+                    
+                    // グループの最大幅を取得するために、すべてのピンの幅を計算
+                    float maxWidth = 0.0f;
+                    for (auto& p : node->GetOutputs()) {
+                        float w = ImGui::CalcTextSize(p->GetName().c_str()).x + arrowWidth + ImGui::GetStyle().ItemSpacing.x;
+                        if (w > maxWidth) maxWidth = w;
+                    }
+                    
+                    // 右揃えのためにカーソル位置を調整
+                    float offset = maxWidth - groupWidth;
+                    ImGui::Dummy(ImVec2(offset, 0.0f));
+                    ImGui::SameLine(0.0f, 0.0f);
+                    
+                    ImGui::Text("%s", pin->GetName().c_str());
+                    ImGui::SameLine();
+                    BeginPin(pin->GetID(), PinKind::Output);
+                    ImGui::Text("->");
+                    EndPin();
+                }
+                ImGui::EndGroup();
             }
+            ImGui::EndGroup();
         EndNode();
     }
 
@@ -242,6 +375,7 @@ void NodeManager::Draw() {
         }
     }
     EndDelete();
+
 
 //==========================================================================
 // コンテキストメニュー処理
@@ -341,6 +475,16 @@ INPUT_FINDED:
 float NodeManager::GetPinValue(int pinId) {
     // リンクを辿って出力ピンの値を取得するロジック
     return 0.0f; 
+}
+
+void NodeManager::StartEditorContext()
+{
+    SetCurrentEditor(m_EditorContext);
+}
+
+void NodeManager::EndEditorContext()
+{
+    SetCurrentEditor(nullptr);
 }
 
 void NodeManager::Finalize() {

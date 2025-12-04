@@ -46,12 +46,12 @@ void Keyboard::Update() {
 	LPBYTE po = (LPBYTE)&m_LastState;
 
 	for (int i = 0; i < sizeof(Keyboard_State); i++) {
-		pt[i] = pn[i] ^ po[i] & pn[i];//押した瞬間のみpt[i]=1 それ以外は0
+		pt[i] = (pn[i] ^ po[i]) & pn[i];//押した瞬間のみpt[i]=1 それ以外は0
 	}
 
 	LPBYTE pu = (LPBYTE)&m_UpState;
 
-	for (int n = 0; n < sizeof(WORD); n++) {
+	for (int n = 0; n < sizeof(Keyboard_State); n++) {
 		pu[n] = (pn[n] ^ po[n]) & po[n];
 	}
 
@@ -64,7 +64,7 @@ void Keyboard::Update() {
 		GetStdHandle(STD_OUTPUT_HANDLE),
 		coord
 	);
-	printf("%d", GetKeyRepeat(KK_UP));
+	printf("%d", GetKeyRepeat(KK_SPACE));
 }
 
 bool Keyboard::GetKeyUp(Keyboard_Keys key) {

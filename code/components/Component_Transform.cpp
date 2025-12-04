@@ -10,6 +10,8 @@
 #include "CSVImporter.h"
 #include "SceneImporter.h"
 
+#include "ObjectNode.h"
+
 REGISTER_COMPONENT(Transform)
 
 void Transform::Update() {
@@ -22,7 +24,9 @@ void Transform::Draw() {
 
 void Transform::DrawGUI() {
 	ImGui::Indent();
-	ImGui::InputFloat3("Position", &m_Position.x, "%.2f");
+	if (ImGui::InputFloat3("Position", &m_Position.x, "%.2f") && owner->GetObjectNode() != nullptr) {
+		owner->GetObjectNode()->SetPosition(m_Position);
+	}
 	ImGui::InputFloat3("Rotation", &m_Rotation.x, "%.2f");
 	ImGui::InputFloat3("Scale", &m_Scale.x, "%.2f");
 	ImGui::Unindent();

@@ -14,6 +14,7 @@ enum class PinType {
 	Float,
 	Vector3,
 	Object,
+    String,
 };
 
 class Node;

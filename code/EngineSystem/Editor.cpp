@@ -212,11 +212,11 @@ void Editor::Update() {
 	if (m_isPlaying) {
 		for (auto& object : m_Objects) {
 			// エディタカメラは既に更新済みなのでスキップ
+			if (object->GetComponent<InputSystem>())
+				continue;
 			if (object != m_pEditorCamera) {
 				object->Update();
 			}
-			if (object->GetComponent<InputSystem>())
-				continue;
 		}
 	}
 
@@ -265,7 +265,7 @@ void Editor::Draw() {
 	//==========================================================================
 
 	//使用するカメラを設定
-	auto currentCam = m_pEditorCamera;
+	auto currentCam = m_pActiveCamera;
 
 	for (auto& object : m_Objects) {
 		auto cameraComp = object->GetComponent<Camera>();
