@@ -69,13 +69,25 @@ void PlayerControl::Hit()
     if (targetNote != nullptr && minDiff <= HIT_MISS) {
 
         if (minDiff <= HIT_PERFECT)
+        {
             EngineConsole::Log("PERFECT!");
+            gameManager->Perfect();
+        }
         else if (minDiff <= HIT_GREAT)
+        {
             EngineConsole::Log("GREAT!");
+            gameManager->Great();
+        }
         else if (minDiff <= HIT_GOOD)
+        {
             EngineConsole::Log("GOOD!");
+            gameManager->Good();
+        }
         else
+        {
             EngineConsole::Log("MISS!!!");
+            gameManager->Miss();
+        }
         gameManager->RemoveNotes(targetNote);
     }
 }

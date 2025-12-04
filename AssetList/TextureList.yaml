@@ -9,3 +9,5 @@ textures:
     filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Perfect.png
   - fileID: 61
     filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Miss.png
+  - fileID: 28
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Default_White.png

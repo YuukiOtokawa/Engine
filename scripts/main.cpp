@@ -111,6 +111,8 @@ void SetSceneGame()
 		transform->SetPosition(Vector4O(0.0f, 10.0f, 0.0f));
 		light->SetType(LIGHTTYPE_DIRECTIONAL);
 		light->SetDirection(Vector4O(-0.5f, -1.0f, -0.5f));
+
+		dirctionalLight->SetTag(GameObjectTagLayer::LightTag);
 	}
 }
 
