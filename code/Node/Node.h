@@ -15,13 +15,20 @@ enum class PinType;
 // ノードの基底クラス
 class Node {
 protected:
-    int m_ID;
     std::string m_Name;
     ImVec2 m_Size;
     std::vector<NodePin*> m_Inputs;
     std::vector<NodePin*> m_Outputs;
 
+    // 3D空間ノード用プロパティ
+    // m_Positionをワールド座標系xz、m_SpatialDepthをy軸として扱う想定
+    ImVec2 m_Position;              // X,Z平面上の位置 X座標とZ座標
+    float m_SpatialDepth = 0.0f;    // Y軸深度 3D空間上の高さ Y座標
+
 public:
+    bool m_IsSpatialNode = false;   // 3D空間に位置する = m_SpatialDepthを使用
+    int m_ID;
+
     Node(const char* name);
     virtual ~Node() {}
 
@@ -38,6 +45,21 @@ public:
 
     // ノード自体の描画（imgui-node-editor内での表示）
     virtual void DrawNodeUI();
+
+    void SetPositionXY(ImVec2 pos) {
+        m_Position.x = pos.x;
+        m_SpatialDepth = pos.y;
+    }
+    void SetPositionXZ(ImVec2 pos) {
+        m_Position = pos;
+    }
+
+    ImVec2 GetPositionXY() const {
+        return ImVec2(m_Position.x, m_SpatialDepth);
+    }
+    ImVec2 GetPositionXZ() const {
+        return m_Position;
+    }
 
 protected:
     void AddInput(const char* name, PinType type);
@@ -76,4 +98,15 @@ public:
     ~ObjectNode() override;
 
     void Update() override;
+
+    void DrawNodeUI() override;
 };
+
+
+//==========================================================================
+// ヘルパー関数
+//==========================================================================
+
+
+// std::string を ImGui::InputText で使えるようにする関数
+bool InputTextString(const char* label, std::string* str, ImGuiInputTextFlags flags = 0);

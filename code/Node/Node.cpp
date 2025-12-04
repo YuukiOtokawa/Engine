@@ -2,6 +2,8 @@
 #include "NodePin.h"
 #include "NodeManager.h"
 
+#define NOMINMAX
+
 Node::Node(const char* name) : m_ID(NodeManager::CountWidgetID()), m_Name(name), m_Size(0, 0) {}
 
 NodePin* Node::GetPin(int id) {
@@ -19,13 +21,17 @@ void Node::DrawNodeUI() {
 }
 
 void Node::AddInput(const char* name, PinType type) {
-    m_Inputs.emplace_back(new NodePin(NodeManager::CountWidgetID(), name, type, PinKind::Input));
+    auto newPin = new NodePin(NodeManager::CountWidgetID(), name, type, PinKind::Input);
+    m_Inputs.emplace_back(newPin);
     m_Inputs.back()->SetNode(this);
+    NodeManager::AddPin(m_ID, newPin);
 }
 
 void Node::AddOutput(const char* name, PinType type) {
-    m_Outputs.emplace_back(new NodePin(NodeManager::CountWidgetID(), name, type, PinKind::Output));
+    auto newPin = new NodePin(NodeManager::CountWidgetID(), name, type, PinKind::Output);
+    m_Outputs.emplace_back(newPin);
     m_Outputs.back()->SetNode(this);
+    NodeManager::AddPin(m_ID, newPin);
 }
 
 //==========================================================================
@@ -36,14 +42,17 @@ void Node::AddOutput(const char* name, PinType type) {
 #include "Component_Transform.h"
 #include "Editor.h"
 
-ObjectNode::ObjectNode() : Node("Cube Object") {
+ObjectNode::ObjectNode() : Node("Object") {
     // ゲームオブジェクトを生成して管理
 	// TODO [otokawa]:これはObject生成の仮実装。
 
     m_pObject = new Object();
 
-    m_pObject->SetName("Node Managed Cube");
+    m_pObject->SetName("Object");
+    m_Name = m_pObject->GetName();
     m_pObject->AddComponent<Transform>();
+
+    m_IsSpatialNode = true;
 
     // 入力ピン: 位置情報を受け取る
     AddInput("Pos X", PinType::Float);
@@ -78,6 +87,15 @@ void ObjectNode::Update() {
     // transform->SetPosition(Vector4O(x, y, z, 1.0f));
 }
 
+void ObjectNode::DrawNodeUI()
+{
+    ImGui::Text("%s", m_Name.c_str());
+    ImGui::SetNextItemWidth(std::max(50.0f, ImGui::CalcTextSize(m_Name.c_str()).x + 20.0f));
+    if (InputTextString("##name", &m_Name)) {
+        m_pObject->SetName(m_Name);
+	}
+}
+
 FloatNode::FloatNode() : Node("Number") {
     AddOutput("Value", PinType::Float);
 }
@@ -89,4 +107,30 @@ void FloatNode::DrawNodeUI() {
     ImGui::PopID();
     ImGui::PopItemWidth();
     ImGui::Text("%s", m_Name.c_str());
+}
+
+//==========================================================================
+// ヘルパー関数
+//==========================================================================
+
+
+bool InputTextString(const char* label, std::string* str, ImGuiInputTextFlags flags) {
+    struct Funcs {
+        static int ResizeCallback(ImGuiInputTextCallbackData* data) {
+            if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
+                std::string* str = (std::string*)data->UserData;
+                IM_ASSERT(str->c_str() == data->Buf);
+                str->resize(data->BufTextLen);
+                data->Buf = (char*)str->c_str();
+            }
+            return 0;
+        }
+    };
+
+    flags |= ImGuiInputTextFlags_CallbackResize;
+
+    ImGui::PushID((void*)str);
+    auto edited = ImGui::InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, Funcs::ResizeCallback, (void*)str);
+    ImGui::PopID();
+    return edited;
 }

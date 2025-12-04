@@ -739,7 +739,12 @@ void Editor::Draw() {
 		else
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f)); // 通常のオブジェクトの色
 
-		if (ImGui::Button(object->GetName().c_str())){
+		if (object->GetName().empty()) {
+			if (ImGui::Button("   ")) {
+				m_pSelectedObject = object;
+			}
+		}
+		else if (ImGui::Button(object->GetName().c_str())){
 			m_pSelectedObject = object;// 選択されたオブジェクトを更新
 		}
 		object->RightClickMenu();

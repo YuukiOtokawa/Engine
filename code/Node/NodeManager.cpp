@@ -9,6 +9,8 @@ namespace ed = ax::NodeEditor;
 
 int NodeManager::m_NextLinkId = NODEMANAGER_ID_BASE;
 
+std::map<int, std::vector<NodePin*>> NodeManager::m_PinMap;
+
 void NodeManager::BackgroundContextMenu()
 {
 
@@ -21,12 +23,116 @@ void NodeManager::BackgroundContextMenu()
         if (ImGui::MenuItem("Add Float Node")) {
             CreateNode<FloatNode>(m_ContextMenuPos);
         }
-		if (ImGui::MenuItem("Add Object Node")) {
+        if (ImGui::MenuItem("Add Object Node")) {
             CreateNode<ObjectNode>(m_ContextMenuPos);
         }
         // 他のノードタイプの追加メニューもここに追加可能
         ImGui::EndPopup();
     }
+}
+
+void NodeManager::NodeContextMenu()
+{
+    if (m_ContextNodeID.Get() == 0 && ShowNodeContextMenu(&m_ContextNodeID))
+    {
+        ImGui::OpenPopup("Node Context Menu");
+    }
+
+    if (ImGui::BeginPopup("Node Context Menu"))
+    {
+        if (ImGui::MenuItem("Delete Node")){
+            RemoveNode(m_ContextNodeID);
+
+        }
+        ImGui::EndPopup();
+    }
+    else if (m_ContextNodeID.Get() != 0) {
+        m_ContextNodeID = 0;
+    }
+}
+
+void NodeManager::NodeEditorOptions()
+{
+    ViewCameraDirectionGizmo();
+}
+
+void NodeManager::ChangeNodeEditorViewMode()
+{
+    m_IsCameraAbove ^= 1;
+    for (auto node : m_Nodes) {
+        if (!node->m_IsSpatialNode) continue;
+
+        SetNodePosition(
+            NodeId(node->GetID()),
+            m_IsCameraAbove ? node->GetPositionXZ() : node->GetPositionXY()
+        );
+    }
+}
+
+void NodeManager::ViewCameraDirectionGizmo()
+{
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
+
+//==========================================================================
+// ギズモのパラメータ設定
+//==========================================================================
+
+    float size = 80.0f;     // ギズモのサイズ
+    ImVec2 padding = ImVec2(10.0f,20.0f);
+
+    auto windowPos = ImGui::GetWindowPos();
+    auto windowSize = ImGui::GetWindowSize();
+
+	// ギズモを配置する位置 = エディター領域の右上
+    ImVec2 basePos = ImVec2(
+        windowPos.x + windowSize.x - size - padding.x,
+        windowPos.y + padding.y
+    );
+
+	auto center = ImVec2(basePos.x + size * 0.5f, basePos.y + size * 0.5f);
+	float axisLen = size * 0.35f; // 描画する軸の長さ
+
+    ImGui::SetCursorScreenPos(basePos);
+
+    bool clicked = ImGui::InvisibleButton("GizmoButton", ImVec2(size, size));
+    bool isHovered = ImGui::IsItemHovered();
+
+	// 軸の色設定
+	ImU32 colorX = IM_COL32(255, 0, 0, 255);   // X軸 - 赤
+	ImU32 colorY = IM_COL32(0, 255, 0, 255);   // Y軸 - 緑
+	ImU32 colorZ = IM_COL32(0, 0, 255, 255);   // Z軸 - 青
+
+    // テキスト表示
+	ImU32 textColor = IM_COL32(255, 255, 255, 255);
+    // 背景
+	ImU32 bgColor = isHovered ? IM_COL32(60,60,70,225) : IM_COL32(30, 30, 30, 200);  // 半透明の黒
+
+//==========================================================================
+// ギズモ描画
+//==========================================================================
+
+    // ギズモの背景四角形を描画
+    drawList->AddRectFilled(basePos, ImVec2(basePos.x + size, basePos.y + size), bgColor, 5.0f);
+    
+	// X軸 常に右を向いているし常に映る
+    drawList->AddLine(center, ImVec2(center.x + axisLen, center.y), colorX, 3.0f);
+    drawList->AddText(ImVec2(center.x + axisLen + 2, center.y - 7), textColor, "X");
+
+    if (m_IsCameraAbove) {
+        // 上から見た座標軸 => Z軸が上方向に見える
+        drawList->AddLine(center, ImVec2(center.x, center.y - axisLen), colorZ, 3.0f);
+        drawList->AddText(ImVec2(center.x - 4, center.y - axisLen - 2), textColor, "Z");
+    
+    }
+    else {
+        // 手前から見た座標軸 => Y軸が上方向に見える
+        drawList->AddLine(center, ImVec2(center.x, center.y - axisLen), colorY, 3.0f);
+        drawList->AddText(ImVec2(center.x - 4, center.y - axisLen - 2), textColor, "Y");
+    }
+	
+
+    if (clicked)
+        ChangeNodeEditorViewMode();
 }
 
 NodeManager::NodeManager() : m_EditorContext(nullptr) {
@@ -82,17 +188,21 @@ void NodeManager::Draw() {
 
     // ノードの描画
     for (Node* node : m_Nodes) {
-        BeginNode(node->GetID());
+        BeginNode(NodeId(node->GetID()));
             node->DrawNodeUI(); // ノードのコンテンツを描画
             // 各ピンの描画
             for (auto& pin : node->GetInputs()) {
                 BeginPin(pin->GetID(), PinKind::Input);
-                ImGui::Text("<- %s", pin->GetName().c_str()); // 仮の表示
+                ImGui::Text("<-"); // 仮の表示
                 EndPin();
+                ImGui::SameLine();
+                ImGui::Text("%s", pin->GetName().c_str());
             }
             for (auto& pin : node->GetOutputs()) {
+                ImGui::Text("%s", pin->GetName().c_str());
+                ImGui::SameLine();
                 BeginPin(pin->GetID(), PinKind::Output);
-                ImGui::Text("%s ->", pin->GetName().c_str()); // 仮の表示
+                ImGui::Text("->"); // 仮の表示
                 EndPin();
             }
         EndNode();
@@ -109,9 +219,13 @@ void NodeManager::Draw() {
         if (QueryNewLink(&inputPinId, &outputPinId)) {
             if (inputPinId && outputPinId) {
                 // PinKindが正しいか確認 (Input -> Output または Output -> Input)
+                
+                
                 // この辺りのロジックは imgui-node-editor のサンプルを参考に実装
-                if (AcceptNewItem()) {
-                    AddLink(inputPinId.Get(), outputPinId.Get());
+                if (CheckPinKind(inputPinId.Get(), outputPinId.Get())) {
+                    if (AcceptNewItem()) {
+                        AddLink(inputPinId.Get(), outputPinId.Get());
+                    }
                 }
             }
         }
@@ -138,10 +252,23 @@ void NodeManager::Draw() {
     // ノードエディターのコンテキストメニュー
     BackgroundContextMenu();
 
+    NodeContextMenu();
+    NodeEditorOptions();
+
     Resume();
 
 
     End();
+
+    for (auto node : m_Nodes) {
+        if (m_IsCameraAbove) {
+            node->SetPositionXZ(GetNodePosition(NodeId(node->GetID())));
+        }
+        else {
+            node->SetPositionXY(GetNodePosition(NodeId(node->GetID())));
+		}
+    }
+
     ImGui::End();
 
     SetCurrentEditor(nullptr);
@@ -155,14 +282,25 @@ void NodeManager::AddNode(Node* node) {
     }
 }
 
-void NodeManager::RemoveNode(Node* node) {
-    if (node) {
-        m_Nodes.erase(std::remove(m_Nodes.begin(), m_Nodes.end(), node), m_Nodes.end());
-        delete node; // メモリ解放
+void NodeManager::RemoveNode(NodeId id) {
+    for (auto node = m_Nodes.begin(); node != m_Nodes.end(); ++node) {
+        if ((*node)->m_ID == id.Get()) {
+            
+            // TODO [otokawa]:ピンとかリンクの情報もここで消去
+
+            // ノードに属するピンを消去
+            m_PinMap.erase((*node)->m_ID);
+
+
+            delete* node;
+            m_Nodes.erase(node);
+            break;
+        }
     }
 }
 
 void NodeManager::AddLink(int startPinId, int endPinId) {
+    
     m_Links.emplace_back(new NodePinLink(m_NextLinkId++, startPinId, endPinId));
 }
 
@@ -170,6 +308,33 @@ void NodeManager::RemoveLink(int linkId) {
     m_Links.erase(std::remove_if(m_Links.begin(), m_Links.end(),
         [linkId](const NodePinLink* link) { return link->GetID() == linkId; }),
         m_Links.end());
+}
+
+bool NodeManager::CheckPinKind(int inputPinId, int outputPinId)
+{
+    PinKind in, out;
+    for (auto pair : m_PinMap) {
+        for (auto pin : pair.second) {
+            if (pin->GetID() == inputPinId) {
+                in = pin->GetKind();
+                goto INPUT_FINDED;
+            }
+        }
+    }
+    return false; //そもそもピンがない
+
+INPUT_FINDED:
+    for (auto pair : m_PinMap) {
+        for (auto pin : pair.second) {
+            if (pin->GetID() == outputPinId) {
+                if (in != pin->GetKind())
+                    return true;    // PinKindが不一致 => 接続してよい
+                else
+                    return false;   // PinKindが一致 => 接続できない
+            }
+        }
+    }
+    return false; //そもそもピンがない
 }
 
 // 実際の値の伝播ロジックはより複雑になるため、ここでは省略

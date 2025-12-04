@@ -35,6 +35,7 @@ public:
     int GetID() const { return m_PinID; }
     std::string GetName() const { return m_Name; }
     void SetNode(Node* node) { m_Node = node; }
+    PinKind GetKind() const { return m_Kind; }
 };
 
 class Node;
