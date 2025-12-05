@@ -12,8 +12,11 @@
 
 #include "Component_CameraPostProcess.h"
 
+#include "ComponentFactory.h"
+
 #include "MainEngine.h"
 #include "Editor.h"
+#include "Material.h"
 
 //==========================================================================
 // メンバ関数定義
@@ -55,14 +58,16 @@ CameraPostProcess::CameraPostProcess()
 
 	// 垂直方向のガウシアンブラー用マテリアル
 	Material* material = new Material();
-	material->SetVertexShaderKey("GaussianVS_V");
+	material->SetVertexShaderKey("vertex");  // 既存の頂点シェーダーを使用
 	material->SetPixelShaderKey("GaussianPS_V");
+	material->SetTextureEnable(true);
 	m_pPostProcessMaterial[0] = material;
 
 	// 水平方向のガウシアンブラー用マテリアル
 	material = new Material();
-	material->SetVertexShaderKey("GaussianVS_H");
+	material->SetVertexShaderKey("vertex");  // 既存の頂点シェーダーを使用
 	material->SetPixelShaderKey("GaussianPS_H");
+	material->SetTextureEnable(true);
 	m_pPostProcessMaterial[1] = material;
 
 	// 3つ目のマテリアル（予備）

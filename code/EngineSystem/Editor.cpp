@@ -268,25 +268,21 @@ void Editor::Draw() {
 
 		if (usePostProcess) {
 			// ポストプロセスを適用
-			// Pass 0: PostProcess[0] → PostProcess[1] (垂直ブラー)
 			renderCore->SetWeight(postProcess->GetWeight());
 			renderCore->SetWorldViewProjection2D();
 			renderCore->SetRasterizerState2D();
 
+			// Pass 0: PostProcess[0] → PostProcess[1] (垂直ブラー)
 			auto material0 = postProcess->GetPostProcessMaterial(0);
 			if (material0) {
-				renderCore->BeginPostProcess(1);
 				material0->SetShader();
-				material0->DrawMaterial();
 				renderCore->DrawFullScreenQuad(renderCore->GetPostProcessRTV(1), renderCore->GetPostProcessSRV(0));
 			}
 
 			// Pass 1: PostProcess[1] → GameView (水平ブラー)
 			auto material1 = postProcess->GetPostProcessMaterial(1);
 			if (material1) {
-				renderCore->BeginGameView();
 				material1->SetShader();
-				material1->DrawMaterial();
 				renderCore->DrawFullScreenQuad(renderCore->GetGameViewRTV(), renderCore->GetPostProcessSRV(1));
 			}
 
@@ -295,7 +291,7 @@ void Editor::Draw() {
 
 		renderCore->ResetRenderTarget();
 		renderCore->ResetViewPort();
-		renderCore->BufferClear();
+		renderCore->BufferClear(); 
 
 	}
 

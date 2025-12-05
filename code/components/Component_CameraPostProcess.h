@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 //
 // カメラポストプロセスコンポーネント[Component_CameraPostProcess.h]
 //
@@ -14,12 +14,12 @@
 
 #include "Component.h"
 #include "VectorO.h"
-#include "Material.h"
 
 //==========================================================================
 // クラス定義
 //==========================================================================
 
+class Material;
 class CameraPostProcess : public Component
 {
 private:
@@ -39,6 +39,8 @@ public:
     void Start() override;
     void Update() override;
     void DrawGUI() override;
+
+    void InitializeTag() override {}
 
     /// @brief ポストプロセスが有効かどうかを取得します。
     /// @return 有効な場合true

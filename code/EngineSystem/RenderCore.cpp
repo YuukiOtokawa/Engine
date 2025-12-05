@@ -1009,7 +1009,7 @@ void RenderCore::InitializeFullScreenQuad()
 	HRESULT hr = m_pDevice->CreateBuffer(&bd, &initData, &m_pFullScreenQuadVB);
 	if (FAILED(hr)) {
 		// エラーハンドリング
-		MessageBox(NULL, L"フルスクリーンクアッドの頂点バッファ作成に失敗しました", L"Error", MB_OK);
+		MessageBox(NULL, "フルスクリーンクアッドの頂点バッファ作成に失敗しました", "Error", MB_OK);
 	}
 }
 

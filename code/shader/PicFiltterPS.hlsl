@@ -1,4 +1,13 @@
-float4 main() : SV_TARGET
+#include "common.hlsl"
+
+Texture2D g_Texture : register(t0); //0番テクスチャ model.cpp PSSetShaderResourcesの第一引数に対応
+SamplerState g_SamplerState : register(s0); //テクスチャの取得の仕方 rennderer.cpp PSSetSamplersの第一引数に対応
+
+void main(in PS_IN In, out float4 outDiffuse : SV_Target)
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+
+    outDiffuse = g_Texture.Sample(g_SamplerState, In.TexCoord);
+
+    outDiffuse *= In.Diffuse;
 }
+
