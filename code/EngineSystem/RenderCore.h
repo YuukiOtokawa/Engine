@@ -123,6 +123,9 @@ private:
     ID3D11ShaderResourceView* m_pGameViewSRV = {};
     Texture* m_pGameViewTexture = {};
 
+    // フルスクリーンクアッド用頂点バッファ
+    ID3D11Buffer* m_pFullScreenQuadVB = nullptr;
+
 	/// @brief レンダーターゲットビューを作成します。
 	void CreateRenderTargetView();
 
@@ -331,12 +334,29 @@ public:
         return m_PostProcessTexture[n];
     }
 
+    ID3D11RenderTargetView* GetPostProcessRTV(int n = 0) {
+        if (n >= 0 && n < 3)
+            return m_pPostProcessRTV[n];
+        return nullptr;
+    }
+
+    ID3D11ShaderResourceView* GetPostProcessSRV(int n = 0) {
+        if (n >= 0 && n < 3)
+            return m_pPostProcessSRV[n];
+        return nullptr;
+    }
+
+    ID3D11RenderTargetView* GetGameViewRTV() {
+        return m_pGameViewRTV;
+    }
+
     void SetWeight(float* weight);
     void CreatePostProcessBuffer();
     void CreateSceneGameViewBuffer();
 
     void BeginSceneView();
     void BeginGameView();
+    void BeginPostProcess(int n);
 
     void BeginDepth();
 
@@ -346,6 +366,14 @@ public:
     Texture* GetGameViewTexture() {
         return m_pGameViewTexture;
     }
+
+    /// @brief フルスクリーンクアッド用頂点バッファを初期化します。
+    void InitializeFullScreenQuad();
+
+    /// @brief ポストプロセス用フルスクリーンクアッドを描画します。
+    /// @param renderTargetView 描画先のレンダーターゲットビュー
+    /// @param shaderResourceView 入力テクスチャのシェーダーリソースビュー
+    void DrawFullScreenQuad(ID3D11RenderTargetView* renderTargetView, ID3D11ShaderResourceView* shaderResourceView);
 
 };
 

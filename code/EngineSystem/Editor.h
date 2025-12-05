@@ -57,8 +57,6 @@ private:
 	// エディターウィンドウのリスト
 	std::list<EditorWindow*> m_EditorWindows;
 
-    Object* m_pPostProcessSprite;
-
 	// GUIのポインタ
 	GUI* m_pGUI = nullptr;
     ParticleManager* m_pParticleManager = nullptr;

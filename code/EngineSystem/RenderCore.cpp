@@ -95,6 +95,7 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	TextureLoad(L"asset/texture/Default_White.png");
 	CreatePostProcessBuffer();
 	CreateSceneGameViewBuffer();
+	InitializeFullScreenQuad();
 
 	CreateVertexShader("cso/vertexShader.cso", "vertex");
 }
@@ -137,6 +138,8 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 		SAFE_RELEASE(m_pPostProcessRTV[i]);
 		SAFE_RELEASE(m_pPostProcessSRV[i]);
 	}
+
+	SAFE_RELEASE(m_pFullScreenQuadVB);
 }
 
 void RenderCore::BufferClear()
@@ -957,4 +960,80 @@ void RenderCore::SetParameter(Vector4O position)
 void RenderCore::SetWeight(float* weight)
 {
 	m_pDeviceContext->UpdateSubresource(m_pWeightBuffer, 0, NULL, &weight[0], 0, 0);
+}
+
+void RenderCore::InitializeFullScreenQuad()
+{
+	// フルスクリーンクアッド用の頂点データ（SpriteMeshと同じ構造）
+	VERTEX vertices[4] = {
+		// vertex[0]: 左上
+		{
+			Vector3O(-1.0f, 1.0f, 0.0f),
+			Vector3O(0.0f, 0.0f, -1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector2O(0.0f, 0.0f)
+		},
+		// vertex[1]: 右上
+		{
+			Vector3O(1.0f, 1.0f, 0.0f),
+			Vector3O(0.0f, 0.0f, -1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector2O(1.0f, 0.0f)
+		},
+		// vertex[2]: 左下
+		{
+			Vector3O(-1.0f, -1.0f, 0.0f),
+			Vector3O(0.0f, 0.0f, -1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector2O(0.0f, 1.0f)
+		},
+		// vertex[3]: 右下
+		{
+			Vector3O(1.0f, -1.0f, 0.0f),
+			Vector3O(0.0f, 0.0f, -1.0f),
+			Vector4O(1.0f, 1.0f, 1.0f, 1.0f),
+			Vector2O(1.0f, 1.0f)
+		}
+	};
+
+	// 頂点バッファを作成
+	D3D11_BUFFER_DESC bd = {};
+	bd.ByteWidth = sizeof(VERTEX) * 4;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = vertices;
+
+	HRESULT hr = m_pDevice->CreateBuffer(&bd, &initData, &m_pFullScreenQuadVB);
+	if (FAILED(hr)) {
+		// エラーハンドリング
+		MessageBox(NULL, L"フルスクリーンクアッドの頂点バッファ作成に失敗しました", L"Error", MB_OK);
+	}
+}
+
+void RenderCore::BeginPostProcess(int n)
+{
+	BeginPE(n);
+}
+
+void RenderCore::DrawFullScreenQuad(ID3D11RenderTargetView* renderTargetView, ID3D11ShaderResourceView* shaderResourceView)
+{
+	// レンダーターゲットを設定
+	m_pDeviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
+
+	// 入力テクスチャを設定
+	m_pDeviceContext->PSSetShaderResources(0, 1, &shaderResourceView);
+
+	// 頂点バッファを設定
+	UINT stride = sizeof(VERTEX);
+	UINT offset = 0;
+	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pFullScreenQuadVB, &stride, &offset);
+
+	// プリミティブトポロジーを設定
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	// 描画
+	m_pDeviceContext->Draw(4, 0);
 }

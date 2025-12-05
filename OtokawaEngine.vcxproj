@@ -220,6 +220,7 @@
     <ClCompile Include="code\components\Collider.cpp" />
     <ClCompile Include="code\components\Component.cpp" />
     <ClCompile Include="code\components\Component_Camera.cpp" />
+    <ClCompile Include="code\components\Component_CameraPostProcess.cpp" />
     <ClCompile Include="code\components\Component_CubeMesh.cpp" />
     <ClCompile Include="code\components\Component_InputSystem.cpp" />
     <ClCompile Include="code\components\Component_MeshFilter.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="code\components\Collider.h" />
     <ClInclude Include="code\components\Component.h" />
     <ClInclude Include="code\components\Component_Camera.h" />
+    <ClInclude Include="code\components\Component_CameraPostProcess.h" />
     <ClInclude Include="code\components\Component_CubeMesh.h" />
     <ClInclude Include="code\components\Component_InputSystem.h" />
     <ClInclude Include="code\components\Component_MeshFilter.h" />

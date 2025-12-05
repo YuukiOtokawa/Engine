@@ -42,8 +42,7 @@
 
 #include "Pack.h"
 
-#include "PostProcessTexture.h"
-#include "PostProcessRenderer.h"
+#include "Component_CameraPostProcess.h"
 
 #include "SystemLog.h"
 #include "TimeSystem.h"
@@ -172,29 +171,6 @@ void Editor::Initialize() {
 	m_pProjectWindow->Initialize("scripts", "OtokawaEngine.vcxproj");
 
 	m_pEditorCamera = GetObject("EditorCamera");
-
-
-	m_pPostProcessSprite = new Object(false);
-	m_pPostProcessSprite->SetName("PostProcess");
-
-	auto transform = m_pPostProcessSprite->AddComponent<Transform>(false);
-	transform->SetPosition({ 0.0f, 0.0f, 0.0f });
-	//transform->SetScale({ 100.0f, 100.0f, 1.0f });
-	transform->SetScale({ 960.0f, 540.0f, 1.0f });
-	auto mesh = m_pPostProcessSprite->AddComponent<SpriteMesh>(false);
-	auto renderer = m_pPostProcessSprite->AddComponent<PostProcessRenderer>(false);
-
-	Material* material = new Material();
-	material->SetVertexShaderKey("unlit");
-	material->SetPixelShaderKey("unlit");
-	material->SetTextureEnable(true);
-	material->SetTexture(0); // デフォルトの白テクスチャを設定
-	renderer->SetMaterial(material);
-
-	auto renderTextureComp = m_pPostProcessSprite->AddComponent<PostProcessTexture>(false);
-
-	m_pPostProcessSprite->SetTag(GameObjectTag::SystemTag);
-	m_pPostProcessSprite->SetLayer(GameObjectLayer::SpriteLayer);
 }
 
 void Editor::Update() {
@@ -276,8 +252,47 @@ void Editor::Draw() {
 
 	// GameView用の描画（activeCameraを使用）
 	if (currentCam) {
-		renderCore->BeginGameView();
+		// カメラにポストプロセスコンポーネントがあるかチェック
+		auto postProcess = currentCam->GetComponent<CameraPostProcess>();
+		bool usePostProcess = postProcess && postProcess->IsEnabled();
+
+		if (usePostProcess) {
+			// ポストプロセス使用時: PostProcessバッファに描画
+			renderCore->BeginPostProcess(0);
+		} else {
+			// 通常描画: GameViewバッファに直接描画
+			renderCore->BeginGameView();
+		}
+
 		DrawGame(currentCam);
+
+		if (usePostProcess) {
+			// ポストプロセスを適用
+			// Pass 0: PostProcess[0] → PostProcess[1] (垂直ブラー)
+			renderCore->SetWeight(postProcess->GetWeight());
+			renderCore->SetWorldViewProjection2D();
+			renderCore->SetRasterizerState2D();
+
+			auto material0 = postProcess->GetPostProcessMaterial(0);
+			if (material0) {
+				renderCore->BeginPostProcess(1);
+				material0->SetShader();
+				material0->DrawMaterial();
+				renderCore->DrawFullScreenQuad(renderCore->GetPostProcessRTV(1), renderCore->GetPostProcessSRV(0));
+			}
+
+			// Pass 1: PostProcess[1] → GameView (水平ブラー)
+			auto material1 = postProcess->GetPostProcessMaterial(1);
+			if (material1) {
+				renderCore->BeginGameView();
+				material1->SetShader();
+				material1->DrawMaterial();
+				renderCore->DrawFullScreenQuad(renderCore->GetGameViewRTV(), renderCore->GetPostProcessSRV(1));
+			}
+
+			renderCore->SetRasterizerState3D();
+		}
+
 		renderCore->ResetRenderTarget();
 		renderCore->ResetViewPort();
 		renderCore->BufferClear();
