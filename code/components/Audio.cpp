@@ -58,5 +58,27 @@ void Audio::DrawGUI()
 	}
 	ImGui::Checkbox("Loop", &m_Loop);
 
+	if (ImGui::Button("Play One Shot")) {
+		PlayOneShot();
+	}
+
+
+	float pos, length;
+	if (m_FileID.FileID != 0) {
+		auto file = AudioManager::GetAudioData(m_FileID.FileID);
+		XAUDIO2_VOICE_STATE state;
+		file->pSourceVoice->GetState(&state);
+		pos = state.SamplesPlayed;
+		length = file->length / (float)file->pFormat->nBlockAlign / file->pFormat->nSamplesPerSec;
+		pos = pos / (float)file->pFormat->nSamplesPerSec;
+	}
+	else {
+		pos = 0.0f;
+		length = 1.0f;
+	}
+
+	ImGui::BeginDisabled();
+	ImGui::SliderFloat("Seek Bar", &pos, 0.0f, length, "%.1f");
+	ImGui::EndDisabled();
 }
 

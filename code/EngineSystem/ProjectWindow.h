@@ -95,6 +95,8 @@ private:
     /// @brief アイコンテクスチャを解放
     void ReleaseIconTextures();
 
+    void GrabFileIcon(FileEntry entry);
+
 private:
     std::string m_rootPath;             // scriptsフォルダのパス
     FileEntry m_rootEntry;              // ルートエントリ
@@ -123,6 +125,9 @@ private:
     ID3D11ShaderResourceView* m_pCppIcon = nullptr;
     ID3D11ShaderResourceView* m_pHeaderIcon = nullptr;
     ID3D11ShaderResourceView* m_pPrefabIcon = nullptr;
+    ID3D11ShaderResourceView* m_pMeshIcon = nullptr;
+    ID3D11ShaderResourceView* m_pTextureIcon = nullptr;
+    ID3D11ShaderResourceView* m_pSoundIcon = nullptr;
 
     // アイコンサイズ
     float m_iconSize = 64.0f;

@@ -77,7 +77,6 @@ int APIENTRY WinMain(
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-
 	auto mainEngine = MainEngine::GetInstance();
 
 	mainEngine->Initialize(hInstance, hPrevInstance, lpCmdLine, nCmdShow);

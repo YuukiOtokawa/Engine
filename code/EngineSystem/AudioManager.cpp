@@ -23,6 +23,7 @@ std::list<AudioData*> AudioManager::m_Datas;
 
 AudioManager::AudioManager()
 {
+	MFStartup(MF_VERSION, MFSTARTUP_FULL);
 	// Initialize XAudio2
 	HRESULT hr = XAudio2Create(&m_pXAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	if (FAILED(hr)) {
@@ -55,6 +56,7 @@ AudioManager::~AudioManager()
 		m_pXAudio2->Release();
 		m_pXAudio2 = nullptr;
 	}
+	MFShutdown();
 }
 
 AudioDataFileID AudioManager::Load(std::string fileName)
@@ -171,7 +173,7 @@ AudioDataFileID AudioManager::Load(std::string fileName)
 		data->position = pos;
 		data->pSourceVoice = pSourceVoice;
 		data->fileName = fileName;
-		data->numSamples = len / pWaveFormat->nBlockAlign;
+		data->pFormat = pWaveFormat;
 		m_Datas.push_back(data);
 	}
 
@@ -198,7 +200,7 @@ void AudioManager::Play(int fileID, float volume, bool loop)
 		buf.LoopCount = loop ? XAUDIO2_LOOP_INFINITE : 1;
 		buf.LoopBegin = 0;
 
-		buf.LoopLength = data->numSamples;
+		buf.LoopLength = data->length / data->pFormat->nBlockAlign;
 
 		data->pSourceVoice->SubmitSourceBuffer(&buf);
 

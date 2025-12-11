@@ -13,7 +13,7 @@ public:
     UINT position = 0;
     IXAudio2SourceVoice* pSourceVoice = nullptr;
     std::string fileName;
-    int numSamples;
+    WAVEFORMATEX* pFormat;
 };
 
 struct AudioDataFileID {
@@ -32,8 +32,8 @@ private:
     static std::list<AudioData*> m_Datas;
     AudioManager();
 
-    static AudioData* GetAudioData(int fileID);
 public:
+    static AudioData* GetAudioData(int fileID);
     static AudioManager* GetInstance()
     {
         if (!m_Instance)

@@ -123,7 +123,10 @@ void ProjectWindow::ScanDirectory(const std::string& path, FileEntry& entry)
                     // ソースファイルとPrefabを表示（.cpp, .h, .hpp, .c, .prefab）
                     std::string ext = item.path().extension().string();
                     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-                    if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c" || ext == ".prefab") {
+                    if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c" || ext == ".prefab" ||
+                        ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp"||
+                        ext == ".wav" || ext == ".mp3" || ext == ".ogg" || 
+                        ext == ".obj" || ext == ".fbx") {
                         files.push_back(child);
                     }
                 }
@@ -710,6 +713,51 @@ void ProjectWindow::LoadIconTextures()
 		&m_pPrefabIcon
 	);
 
+    // メッシュアイコン
+    LoadFromWICFile(
+        L"EngineResource/Mesh.png",
+        WIC_FLAGS_NONE,
+        &metadata,
+        image
+	);
+    CreateShaderResourceView(
+        device,
+        image.GetImages(),
+        image.GetImageCount(),
+        metadata,
+        &m_pMeshIcon
+    );
+
+	// テクスチャアイコン
+    LoadFromWICFile(
+        L"EngineResource/Texture.png",
+        WIC_FLAGS_NONE,
+        &metadata,
+        image
+	);
+    CreateShaderResourceView(
+        device,
+        image.GetImages(),
+        image.GetImageCount(),
+        metadata,
+        &m_pTextureIcon
+	);
+
+    // サウンドアイコン
+    LoadFromWICFile(
+        L"EngineResource/Sound.png",
+        WIC_FLAGS_NONE,
+        &metadata,
+        image
+    );
+    CreateShaderResourceView(
+        device,
+        image.GetImages(),
+        image.GetImageCount(),
+        metadata,
+        &m_pSoundIcon
+	);
+
     EngineConsole::Log("ProjectWindow: アイコンテクスチャを読み込みました");
 }
 
@@ -730,6 +778,24 @@ void ProjectWindow::ReleaseIconTextures()
     if (m_pPrefabIcon) {
         m_pPrefabIcon->Release();
         m_pPrefabIcon = nullptr;
+    }
+}
+
+void ProjectWindow::GrabFileIcon(FileEntry entry)
+{
+    if (!entry.isDirectory) {
+        std::string ext = fs::path(entry.fullPath).extension().string();
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+        if (ext == ".prefab") {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("PREFAB_FILE", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text("Prefab: %s", entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+
     }
 }
 
@@ -859,6 +925,15 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
         else if (ext == ".prefab") {
             icon = m_pPrefabIcon;
         }
+        else if (ext == ".obj") {
+            icon = m_pMeshIcon;
+        }
+		else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp") {
+            icon = m_pTextureIcon;
+        }
+        else if (ext == ".wav" || ext == ".mp3" || ext == ".ogg") {
+            icon = m_pSoundIcon;
+        }
     }
 
     // アイコン描画
@@ -909,19 +984,7 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
     }
 
     // Prefabファイルのドラッグ&ドロップソース
-    if (!entry.isDirectory) {
-        std::string ext = fs::path(entry.fullPath).extension().string();
-        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-        if (ext == ".prefab") {
-            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
-                // ペイロードとしてファイルパスを設定
-                ImGui::SetDragDropPayload("PREFAB_FILE", entry.fullPath.c_str(), entry.fullPath.size() + 1);
-                // ドラッグ中の表示
-                ImGui::Text("Prefab: %s", entry.name.c_str());
-                ImGui::EndDragDropSource();
-            }
-        }
-    }
+    GrabFileIcon(entry);
 
     // 右クリックメニュー
     if (ImGui::BeginPopupContextItem()) {
