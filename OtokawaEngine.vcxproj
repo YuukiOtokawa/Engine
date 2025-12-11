@@ -369,6 +369,7 @@
     <ClInclude Include="code\DataManager\Prefab.h" />
     <ClInclude Include="code\DataManager\FBXImporter.h" />
     <ClInclude Include="code\DataManager\OBJLoader.h" />
+    <ClInclude Include="code\DataManager\StringConverter.h" />
     <ClInclude Include="code\DataManager\VertexIndex.h" />
     <ClInclude Include="code\EngineSystem\AudioManager.h" />
     <ClInclude Include="code\EngineSystem\CollisionManager.h" />

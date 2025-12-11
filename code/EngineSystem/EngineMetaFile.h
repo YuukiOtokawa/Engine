@@ -38,6 +38,7 @@ enum ClassID {
     CID_Canvas,
     CID_UIImageMesh,
     CID_UIImage,
+    CID_AudioData,
 };
 
 class EngineMetaFile
@@ -50,8 +51,11 @@ protected:
     static int m_FileIDCounter; // ファイルIDのカウンター
 
 public:
-    EngineMetaFile(ClassID id = CID_None) : m_ClassID(id) {
-        m_FileID = m_FileIDCounter++;
+    EngineMetaFile(ClassID id = CID_None, int fileID = -1) : m_ClassID(id) {
+        if (fileID == -1)
+            m_FileID = m_FileIDCounter++;
+        else
+            m_FileID = fileID;
     }
 
     void CreateEngineMetaFile(ClassID classID, int fileID) {

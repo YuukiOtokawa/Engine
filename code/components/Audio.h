@@ -1,20 +1,20 @@
 ﻿#pragma once
 #include "Component.h"
 
-#include <xaudio2.h>
+#include "AudioManager.h"
 
 class Audio :
     public Component
 {
 private:
 
-    IXAudio2SourceVoice* m_pSourceVoice{};
-    BYTE* m_pAudioData{};
+    AudioDataFileID m_FileID;
 
     int m_iLength{};
     int m_iPosition{};
     bool m_Loop = true;
     int m_LoopCount = 0;
+    float m_Volume = 1.0f;
 
 public:
     DECLARE_COMPONENT(Audio)
@@ -31,12 +31,20 @@ public:
 
     void LoadAudio(const char* filename);
     void Release();
-    void Play(bool loop = false);
+    void Play();
+    void PlayOneShot();
     void Stop();
     void Pause();
     void Resume();
     void SetVolume(float volume) {
-        m_pSourceVoice->SetVolume(volume);
+        if (volume < 0.0f)
+            m_Volume = 0.0f;
+        else if (volume > 1.0f)
+            m_Volume = 1.0f;
+        else
+            m_Volume = volume;
     }
+
+    void DrawGUI() override;
 };
 

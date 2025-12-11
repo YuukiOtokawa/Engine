@@ -173,4 +173,3 @@ namespace ComponentTag {
 	};
 #undef X
 }
-

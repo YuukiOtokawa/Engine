@@ -816,6 +816,7 @@ void ProjectWindow::DrawGridView()
 
 bool ProjectWindow::DrawGridItem(const FileEntry& entry)
 {
+    // TODO [otokawa]:関数細分化しようね
     bool doubleClicked = false;
 
     ImGui::PushID(entry.fullPath.c_str());

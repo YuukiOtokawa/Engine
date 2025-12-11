@@ -1,120 +1,62 @@
 ﻿#include "Audio.h"
 
-#include "AudioManager.h"
+
+#include "MainEngine.h"
 
 REGISTER_COMPONENT(Audio)
 
 void Audio::LoadAudio(const char *filename)
 {
-	int index = -1;
-
-	WAVEFORMATEX waveFormat = {};
-
-	{
-		HMMIO hmmio = NULL;
-		MMIOINFO mmioinfo = { 0 };
-		MMCKINFO riffchunkinfo = { 0 };
-		MMCKINFO datachunkinfo = { 0 };
-		MMCKINFO mmckinfo = { 0 };
-		UINT32 buflen;
-		LONG readlen;
-
-
-		hmmio = mmioOpen((LPSTR)filename, &mmioinfo, MMIO_READ);
-		assert(hmmio);//falseなら止まる
-
-		riffchunkinfo.fccType = mmioFOURCC('W', 'A', 'V', 'E');
-		mmioDescend(hmmio, &riffchunkinfo, NULL, MMIO_FINDRIFF);
-
-		mmckinfo.ckid = mmioFOURCC('f', 'm', 't', ' ');
-		mmioDescend(hmmio, &mmckinfo, &riffchunkinfo, MMIO_FINDCHUNK);
-
-		if (mmckinfo.cksize >= sizeof(WAVEFORMATEX))
-		{
-			mmioRead(hmmio, (HPSTR)&waveFormat, sizeof(waveFormat));
-		}
-		else
-		{
-			PCMWAVEFORMAT pcmwf = { 0 };
-			mmioRead(hmmio, (HPSTR)&pcmwf, sizeof(pcmwf));
-			memset(&waveFormat, 0x00, sizeof(waveFormat));
-			memcpy(&waveFormat, &pcmwf, sizeof(pcmwf));
-			waveFormat.cbSize = 0;
-		}
-		mmioAscend(hmmio, &mmckinfo, 0);
-
-		datachunkinfo.ckid = mmioFOURCC('d', 'a', 't', 'a');
-		mmioDescend(hmmio, &datachunkinfo, &riffchunkinfo, MMIO_FINDCHUNK);
-
-
-
-		buflen = datachunkinfo.cksize;
-		m_pAudioData = new unsigned char[buflen];
-		readlen = mmioRead(hmmio, (HPSTR)m_pAudioData, buflen);
-
-
-		m_iLength = readlen;
-		m_iPosition = readlen / waveFormat.nBlockAlign;
-
-
-		mmioClose(hmmio, 0);
-	}
-
-	AudioManager::GetInstance()->GetXAudio2()->CreateSourceVoice(&m_pSourceVoice, &waveFormat);
-	assert(m_pSourceVoice); // falseなら止まる
+	auto data = AudioManager::GetInstance()->Load(filename);
+	m_FileID = data;
 }
 
 void Audio::Release()
 {
-	m_pSourceVoice->Stop();
-	m_pSourceVoice->DestroyVoice();
-
-	delete[] m_pAudioData;
-	m_pAudioData = nullptr;
+	AudioManager::GetInstance()->Stop(m_FileID.FileID);
 }
 
-void Audio::Play(bool loop)
+void Audio::Play()
 {
-	m_pSourceVoice->Stop();
-	m_pSourceVoice->FlushSourceBuffers();
+	AudioManager::GetInstance()->Play(m_FileID.FileID, m_Volume, m_Loop);
+}
 
-	XAUDIO2_BUFFER buffer = {};
-
-	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
-	buffer.AudioBytes = m_iLength;
-	buffer.pAudioData = m_pAudioData;
-	buffer.PlayBegin = 0;
-	buffer.PlayLength = m_iPosition;
-
-	if (loop) {
-		buffer.LoopBegin = 0;
-		buffer.LoopLength = m_iPosition;
-		buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
-	}
-
-	m_pSourceVoice->SubmitSourceBuffer(&buffer);
-	m_pSourceVoice->Start();
+void Audio::PlayOneShot()
+{
+	AudioManager::GetInstance()->Play(m_FileID.FileID, m_Volume);
 }
 
 void Audio::Stop()
 {
-	if (m_pSourceVoice) {
-		m_pSourceVoice->Stop();
-		m_pSourceVoice->FlushSourceBuffers();
-	}
+	AudioManager::GetInstance()->Stop(m_FileID.FileID);
 }
 
 void Audio::Pause()
 {
-	if (m_pSourceVoice) {
-		m_pSourceVoice->Stop();
-	}
+	AudioManager::GetInstance()->Pause(m_FileID.FileID);
 }
 
 void Audio::Resume()
 {
-	if (m_pSourceVoice) {
-		m_pSourceVoice->Start();
+	AudioManager::GetInstance()->Resume(m_FileID.FileID);
+}
+
+void Audio::DrawGUI()
+{
+	ImGui::Text("Audio Component");
+	ImGui::Separator();
+	ImGui::Text("File Name: %s", m_FileID.fileName.c_str());
+	if (ImGui::Button("Load Audio")) {
+		std::string filePath = OpenImportFileDialog();
+		if (!filePath.empty()) {
+			LoadAudio(filePath.c_str());
+		}
 	}
+	float volume = m_Volume;
+	if (ImGui::SliderFloat("Volume", &volume, 0.0f, 1.0f)) {
+		SetVolume(volume);
+	}
+	ImGui::Checkbox("Loop", &m_Loop);
+
 }
 

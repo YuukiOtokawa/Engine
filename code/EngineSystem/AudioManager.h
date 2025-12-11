@@ -2,6 +2,25 @@
 
 #include <xaudio2.h>
 
+#include <list>
+
+#include "EngineMetaFile.h"
+
+class AudioData : public EngineMetaFile {
+public:
+    UINT32 length = 0;
+    UCHAR* data;
+    UINT position = 0;
+    IXAudio2SourceVoice* pSourceVoice = nullptr;
+    std::string fileName;
+    int numSamples;
+};
+
+struct AudioDataFileID {
+    std::string fileName;
+    int FileID;
+};
+
 class AudioManager
 {
 private:
@@ -9,7 +28,11 @@ private:
     static IXAudio2MasteringVoice* m_pMasteringVoice;
 
     static AudioManager* m_Instance;
+
+    static std::list<AudioData*> m_Datas;
     AudioManager();
+
+    static AudioData* GetAudioData(int fileID);
 public:
     static AudioManager* GetInstance()
     {
@@ -22,9 +45,17 @@ public:
 
     ~AudioManager();
 
+    // Media Foundationを使用した音声ファイルの読み込み
+    static AudioDataFileID Load(std::string fileName);
+
     static IXAudio2* GetXAudio2()
     {
         return m_pXAudio2;
     }
+
+    static void Play(int fileID, float volume, bool loop = false);
+    static void Stop(int fileID);
+    static void Pause(int fileID);
+    static void Resume(int fileID);
 };
 

@@ -803,6 +803,9 @@
     <ClInclude Include="code\EngineSystem\InspectorWindow.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="code\DataManager\StringConverter.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="code\shader\limLightingPS.hlsl">
