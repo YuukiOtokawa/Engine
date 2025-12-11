@@ -155,8 +155,9 @@ void ProjectWindow::ScanDirectory(const std::string& path, FileEntry& entry)
     }
 }
 
-void ProjectWindow::Draw()
+void ProjectWindow::Render()
 {
+	ImGui::Begin("Project");
     // ツールバー
     // 戻るボタン
     bool canGoBack = (m_currentPath != m_rootPath);
@@ -305,6 +306,8 @@ void ProjectWindow::Draw()
         }
         ImGui::EndPopup();
     }
+
+    ImGui::End();
 }
 
 void ProjectWindow::DrawFileEntry(FileEntry& entry)

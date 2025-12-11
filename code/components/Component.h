@@ -73,8 +73,6 @@ public:
 	/// @brief コンポーネントを更新する純粋仮想関数です。
 	virtual void Update() = 0;
 
-	/// @brief 図形やオブジェクトを描画するための仮想関数です。
-	virtual void Draw() {}
 
 	/// @brief GUI を描画するための仮想関数です。
 	virtual void DrawGUI() {}

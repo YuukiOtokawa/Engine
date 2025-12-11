@@ -12,7 +12,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-
+#include "IRenderable.h"
 #define COMPONENT_NAME(ComponentType) \
 	return #ComponentType;
 
@@ -77,7 +77,11 @@ void Object::OnCollision()
 }
 void Object::Draw() {
 	for (auto& component : m_Components) {
-		component->Draw();
+		auto renderer = dynamic_cast<IRenderable*>(component);
+
+		if (renderer) {
+			renderer->Draw();
+		}
 	}
 	if (m_IsDrawable == false) return;
 	if (HasChild())

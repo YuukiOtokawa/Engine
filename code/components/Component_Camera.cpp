@@ -35,7 +35,7 @@ void Camera::Update() {
 	
 }
 
-void Camera::Draw() {
+void Camera::SetCamera() {
 	// 描画領域のサイズを取得
 	Vector2O clientSize = MainEngine::GetInstance()->GetRenderCore()->GetClientSize();
 

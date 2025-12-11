@@ -32,7 +32,7 @@ private:
 public:
 	DECLARE_COMPONENT(UIImage)
 
-	UIImage() {
+	UIImage() : Renderer(RenderQueue::Overlay) {
 		m_ClassID = CID_UIImage;
 		m_pMaterial = new Material();
 	}

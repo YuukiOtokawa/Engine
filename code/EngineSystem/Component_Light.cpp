@@ -18,7 +18,7 @@ void Light::InitializeTag()
 	owner->SetDrawable(false);
 }
 
-void Light::Draw()
+void Light::SetLight()
 {
 	auto renderer = MainEngine::GetInstance()->GetRenderCore();
 

@@ -14,6 +14,8 @@
 
 #include "Renderer.h"
 
+#include "IRenderable.h"
+
 
 //==========================================================================
 // クラス定義
@@ -26,12 +28,7 @@ public:
     DECLARE_COMPONENT(MeshRenderer)
 
     // コンストラクタ。
-    MeshRenderer() {
-        m_ClassID = CID_Component_MeshRenderer;
-        // 継承関係のため、ここでマテリアルを直接newする。
-        // もしくは、基底クラスのコンストラクタで初期化することも可能。
-        m_pMaterial = new Material();
-    }
+    MeshRenderer();
 
     void Update() override;
     void Render() override; // ここにメインの描画ロジックを記述します

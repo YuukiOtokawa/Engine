@@ -74,7 +74,7 @@ public:
     }
 
     void InitializeTag() override;
-    void Draw() override;
+    void SetLight();
     static void DrawGeneralLight();
     void DrawGUI() override;
 

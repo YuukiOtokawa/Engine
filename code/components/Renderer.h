@@ -1,12 +1,15 @@
 ﻿#pragma once
 #include "Component.h"
+#include "IRenderable.h"
 
 #include "../EngineSystem/Material.h"
+
+#include "RenderQueueManager.h"
 
 class MeshFilter;
 
 class Renderer :
-    public Component
+    public Component, public IRenderable
 {
 protected:
     Material* m_pMaterial = nullptr;
@@ -14,6 +17,8 @@ protected:
     bool m_bCastShadows = true;
 
 public:
+    Renderer(RenderQueue queue) : IRenderable(queue) {}
+
     // 適切なクリーンアップのための仮想デストラクタ
     virtual ~Renderer() = default;
 

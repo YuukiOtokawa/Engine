@@ -13,7 +13,13 @@
 #include "MainEngine.h"
 #include "RenderCore.h"
 
+
+#include "RenderQueueManager.h"
 REGISTER_COMPONENT(Canvas)
+
+Canvas::Canvas() : IRenderable(RenderQueue::Overlay) {
+	m_ClassID = CID_Canvas;
+}
 
 void Canvas::Update() {
 	// スクリーンサイズを更新

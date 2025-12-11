@@ -20,6 +20,9 @@
 
 #include "ImGuizmo.h"
 
+#include "GUIWindow.h"
+
+#include "ProjectWindow.h"
 
 //==========================================================================
 // 名前空間定義
@@ -31,7 +34,13 @@ ImFont* GUI::m_pCurrentFont = nullptr;
 
 GUI* GUI::m_pInstance = nullptr;
 
-int GUI::m_GUIWidgetIDCounter = 0;
+GUIWindow* GUI::m_GameViewWindow = nullptr;
+GUIWindow* GUI::m_EditorViewWindow = nullptr;
+GUIWindow* GUI::m_SystemMonitorWindow = nullptr;
+GUIWindow* GUI::m_ConsoleWindow = nullptr;
+GUIWindow* GUI::m_ProjectWindow = nullptr;
+GUIWindow* GUI::m_InspectorWindow = nullptr;
+GUIWindow* GUI::m_HierarchyWindow = nullptr;
 
 //==========================================================================
 // メンバ関数
@@ -53,6 +62,8 @@ void GUI::Initialize() {
 	m_pFontObjectName = io.Fonts->AddFontFromFileTTF("asset\\font\\SourceHanCodeJP.ttc", 24.0f, &fontConfig);
 
 	io.Fonts->Build();
+
+	dynamic_cast<ProjectWindow*>(m_ProjectWindow)->Initialize("scripts", "OtokawaEngine.vcxproj");
 
 }
 
@@ -88,47 +99,39 @@ void GUI::StartImGui()
 
 	ImGui::DockSpace(m_DockSpaceID, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-	//if (m_IsFirstFrame) {
-	//	m_IsFirstFrame = false;
-
-	//	ImGui::DockBuilderRemoveNode(m_DockSpaceID);
-	//	ImGui::DockBuilderAddNode(m_DockSpaceID, ImGuiDockNodeFlags_DockSpace);
-	//	ImGui::DockBuilderSetNodeSize(m_DockSpaceID, viewport->Size);
-
-	//	ImGuiID dockMainID = m_DockSpaceID;
-	//	// 右にInspector
-	//	ImGuiID dockInspectorID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Right, 0.25f, nullptr, &dockMainID);
-	//	// 左にHierarchy
-	//	ImGuiID dockHierarchyID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Left, 0.25f, nullptr, &dockMainID);
-	//	// 下にConsole（全幅）
-	//	ImGuiID dockConsoleID = ImGui::DockBuilderSplitNode(dockMainID, ImGuiDir_Down, 0.25f, nullptr, &dockMainID);
-	//	// Consoleの上にScene View
-	//	ImGuiID dockSceneViewID = dockMainID;
-	//	// Scene Viewの左下にSystem Monitor
-	//	ImGuiID dockSystemMonitorID = ImGui::DockBuilderSplitNode(dockConsoleID, ImGuiDir_Left, 0.5f, nullptr, &dockConsoleID);
-
-	//	ImGui::DockBuilderDockWindow("Inspector", dockInspectorID);
-	//	ImGui::DockBuilderDockWindow("Hierarchy", dockHierarchyID);
-	//	ImGui::DockBuilderDockWindow("Scene View", dockSceneViewID);
-	//	ImGui::DockBuilderDockWindow("Game View", dockSceneViewID);
-	//	ImGui::DockBuilderDockWindow("System Monitor", dockSystemMonitorID);
-	//	ImGui::DockBuilderDockWindow("Console", dockConsoleID);
-
-	//	ImGui::DockBuilderFinish(m_DockSpaceID);
-	//}
 
 
 	ImGui::End();
 
 	auto camera = Editor::GetInstance()->GetActiveCamera()->GetComponent<Camera>();
 
-	//m_pNodeEditor->Render();
-
-
-	//ImGuizmo::Manipulate((float*)&camera->GetView(), (float*)&camera->GetProjection(), ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, (float*)&Editor::GetInstance()->GetActiveCamera()->GetComponent<Transform>()->GetWorldMatrix(), nullptr, nullptr);
 }
 
-void GUI::StartToolbar()
+void GUI::DrawGUI()
+{
+	// ツールバー（再生/停止ボタン）
+	DrawToolbar();
+
+	DrawSceneView();
+	DrawGameView();
+
+	//システムモニターウィンドウ
+	DrawSystemMonitorWindow();
+
+	//プロジェクトウィンドウ
+	DrawProjectWindow();
+
+	//インスペクターウィンドウ
+	DrawInspectorWindow();
+
+	//コンソールウィンドウ
+	DrawConsoleWindow();
+
+	//ヒエラルキウィンドウ
+	DrawHierarchyWindow();
+}
+
+void GUI::DrawToolbar()
 {
 	// ツールバーウィンドウ
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -176,73 +179,45 @@ void GUI::StartToolbar()
 	ImGui::PopStyleVar();
 }
 
-void GUI::StartHierarchy() {
-	if (m_IsFirstFrameHierarchy) {
-		m_IsFirstFrameHierarchy = false;
-	}
 
-	Begin("Hierarchy");
+void GUI::DrawGameView()
+{
+	m_GameViewWindow->Render();
 }
 
-void GUI::StartInspector()
+void GUI::DrawSceneView()
 {
-	if (m_IsFirstFrameInspector) {
-		m_IsFirstFrameInspector = false;
-	}
-
-	Begin("Inspector");
+	m_EditorViewWindow->Render();
+	
 }
 
-void GUI::StartSceneView()
+void GUI::DrawSystemMonitorWindow()
 {
-	if (m_IsFirstFrameSceneView) {
-		m_IsFirstFrameSceneView = false;
-	}
-
-	Begin("Scene View", ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	m_SystemMonitorWindow->Render();
 }
 
-void GUI::StartGameView()
+void GUI::DrawProjectWindow()
 {
-	if (m_IsFirstFrameGameView)
-		m_IsFirstFrameGameView = false;
-
-	Begin("Game View", ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	m_ProjectWindow->Render();
 }
 
-void GUI::StartSystemMonitor()
+void GUI::DrawInspectorWindow()
 {
-	if (m_IsFirstFrameSystemMonitor) {
-		m_IsFirstFrameSystemMonitor = false;
-	}
-	Begin("System Monitor");
+	m_InspectorWindow->Render();
 }
 
-void GUI::StartConsole()
+void GUI::DrawConsoleWindow()
 {
-	if (m_IsFirstFrameSystemMonitor) {
-		m_IsFirstFrameSystemMonitor = false;
-	}
-	Begin("Console");
+	m_ConsoleWindow->Render();
 }
 
-void GUI::StartProjectWindow()
+void GUI::DrawHierarchyWindow()
 {
-	if (m_IsFirstFrameProjectWindow) {
-		m_IsFirstFrameProjectWindow = false;
-	}
-	Begin("Project");
+	m_HierarchyWindow->Render();
 }
 
 void GUI::EndWindow() {
-	//ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(0.0f, 0.0f), ImVec2(1920.0f, 1080.0f),1);
 	ImGui::End();
-
-
-
-	//const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
-	//System::GetDirectXManager()->GetDeviceContext()->OMSetRenderTargets(1, &m_mainRenderTargetView, nullptr);
-	//System::GetDirectXManager()->GetDeviceContext()->ClearRenderTargetView(m_mainRenderTargetView, clear_color_with_alpha);
 }
 
 void GUI::EndImGui()
@@ -294,9 +269,32 @@ void GUI::SetItemPadding()
 	ImGui::GetStyle().WindowPadding = ImVec2(0.0f, 0.0f);
 }
 
-void GUI::Begin(const char* name, ImGuiWindowFlags flag)
+bool GUI::BeginWindow(const char* name, ImGuiWindowFlags flag)
 {
 	SetWindowPadding();
-	ImGui::Begin(name, nullptr, flag);
+	bool isOpen;
+	ImGui::Begin(name, &isOpen, flag);
 	SetItemPadding();
+
+	return isOpen;
 }
+
+#include "GameViewWindow.h"
+#include "EditorViewWindow.h"
+#include "SystemMonitorWindow.h"
+#include "ConsoleWindow.h"
+#include "ProjectWindow.h"
+#include "InspectorWindow.h"
+#include "HierarchyWindow.h"
+
+GUI::GUI()
+{
+	m_GameViewWindow = new GameViewWindow();
+	m_EditorViewWindow = new EditorViewWindow();
+	m_SystemMonitorWindow = new SystemMonitorWindow();
+	m_ConsoleWindow = new ConsoleWindow();
+	m_ProjectWindow = new ProjectWindow();
+	m_InspectorWindow = new InspectorWindow();
+	m_HierarchyWindow = new HierarchyWindow();
+}
+

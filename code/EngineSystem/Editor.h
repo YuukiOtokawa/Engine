@@ -54,8 +54,6 @@ private:
 
     std::list<VertexIndex*> m_VertexIndices; // 頂点とインデックスのリスト
     std::list<Material*> m_Materials; // マテリアルのリスト
-	// エディターウィンドウのリスト
-	std::list<EditorWindow*> m_EditorWindows;
 
 	// GUIのポインタ
 	GUI* m_pGUI = nullptr;
@@ -94,10 +92,15 @@ private:
     std::string m_NextSceneName = "";
 
     bool m_isSceneViewHovered = false;
-    bool m_isGameViewHovered = false;
 
 	// ImGuizmo操作モード (0=移動, 1=回転, 2=スケール)
 	int m_GizmoOperation = 0;
+
+    void UpdateAllObjects();
+    void DeleteMarkedObjects();
+
+    void DrawGameViewRTV();
+    void DrawSceneViewRTV();
 
 public:
 	/// @brief エディタークラスのシングルトンインスタンスを取得します。
@@ -156,6 +159,10 @@ public:
     void SetActiveCamera(Object* camera);
 
 	Object* GetActiveCamera() const { return m_pActiveCamera; }
+    Object* GetEditorCamera() const { return m_pEditorCamera; }
+
+    Object* GetSelectedObject() const { return m_pSelectedObject; }
+    void SetSelectedObject(Object* object) { m_pSelectedObject = object; }
 
     int AddMaterial(Material* material);
     int AddVertexIndex(VertexIndex* vertexIndex);
@@ -198,6 +205,7 @@ public:
     /// @brief 編集中のPrefabオブジェクトを取得
     /// @return 編集中のPrefabオブジェクト
     Object* GetEditingPrefabObject() const { return m_pEditingPrefabObject; }
+    std::string GetEditingPrefabPath() const { return m_editingPrefabPath; }
 
     bool GetIsSceneViewHovered() const { return m_isSceneViewHovered; }
 

@@ -68,7 +68,7 @@ public:
     /// @brief コンポーネントの状態を更新します。
     void Update() override;
 	/// @brief 描画処理を実行します。
-	void Draw() override;
+    void SetCamera();
   
 	void DrawGUI() override;
 	/// @brief タグを初期化します。

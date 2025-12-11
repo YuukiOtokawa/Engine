@@ -3,7 +3,7 @@
 #include "Component_Transform.h"
 #include "MainEngine.h"
 
-void Billboard::Draw() {
+void Billboard::Update() {
 	auto transform = owner->GetComponent<Transform>();
 
 	XMMATRIX scale, angle, translation;

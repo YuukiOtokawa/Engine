@@ -108,7 +108,7 @@ void MeshField::CreateBuffer()
 	hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
 }
 
-MeshField::MeshField()
+MeshField::MeshField() : Renderer(RenderQueue::Geometry)
 {
 	m_ClassID = CID_Component_MeshField;
 	m_pMaterial = new Material();

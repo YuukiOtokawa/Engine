@@ -286,7 +286,6 @@ public:
 
     Vector3O XYZ() const { return Vector3O(x, y, z); }
 
-
     static Vector4O Zero() { return Vector4O(0.0f, 0.0f, 0.0f, 0.0f); }
     static Vector4O One() { return Vector4O(1.0f, 1.0f, 1.0f, 1.0f); }
     static Vector4O Up() { return Vector4O(0.0f, 1.0f, 0.0f, 0.0f); }

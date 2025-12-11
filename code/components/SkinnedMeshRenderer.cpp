@@ -16,7 +16,7 @@ XMMATRIX ConvertMatrix(const aiMatrix4x4& from) {
 	return XMMatrixTranspose(to);
 }
 
-SkinnedMeshRenderer::SkinnedMeshRenderer()
+SkinnedMeshRenderer::SkinnedMeshRenderer() : Renderer(RenderQueue::Geometry)
 {
 	m_ClassID = CID_Component_SkinnedMeshRenderer;
 

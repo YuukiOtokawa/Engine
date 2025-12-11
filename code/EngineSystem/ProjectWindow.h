@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "GUIWindow.h"
+
 #include "EngineAPI.h"
 #include "VCProjectManager.h"
 #include <string>
@@ -27,7 +29,7 @@ struct FileEntry {
     std::vector<FileEntry> children; // 子エントリ
 };
 
-class OTOKAWA_API ProjectWindow
+class OTOKAWA_API ProjectWindow : public GUIWindow
 {
 public:
     ProjectWindow();
@@ -45,7 +47,7 @@ public:
     void Refresh();
 
     /// @brief ウィンドウの描画
-    void Draw();
+    void Render() override;
 
     /// @brief ルートパスを取得
     const std::string& GetRootPath() const { return m_rootPath; }

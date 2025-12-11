@@ -18,10 +18,6 @@ void Transform::Update() {
 
 }
 
-void Transform::Draw() {
-
-}
-
 void Transform::DrawGUI() {
 	ImGui::Indent();
 	if (ImGui::InputFloat3("Position", &m_Position.x, "%.2f") && owner->GetObjectNode() != nullptr) {

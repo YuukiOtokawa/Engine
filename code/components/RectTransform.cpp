@@ -18,11 +18,6 @@ void RectTransform::Update() {
 	Transform::Update();
 }
 
-void RectTransform::Draw() {
-	// 基底クラスの描画処理
-	Transform::Draw();
-}
-
 void RectTransform::DrawGUI() {
 	ImGui::Indent();
 

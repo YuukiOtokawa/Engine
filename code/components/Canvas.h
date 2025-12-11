@@ -15,6 +15,7 @@
 
 #include "Component.h"
 #include "VectorO.h"
+#include "IRenderable.h"
 
 //==========================================================================
 // 列挙型定義
@@ -30,7 +31,8 @@ enum class RenderMode {
 // クラス定義
 //==========================================================================
 
-class Canvas : public Component
+class IRenderable;
+class Canvas : public Component, public IRenderable
 {
 private:
 	// レンダーモード
@@ -45,9 +47,7 @@ private:
 public:
 	DECLARE_COMPONENT(Canvas)
 
-	Canvas() {
-		m_ClassID = CID_Canvas;
-	}
+    Canvas();
 
 	/// @brief オブジェクトの状態を更新します。
 	void Update() override;

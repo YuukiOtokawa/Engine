@@ -7,7 +7,6 @@ public:
     Billboard() : SpriteMesh() {
         m_ClassID = CID_Billboard;
     }
-    void Draw() override;
 
     virtual void SetOwner(Object* obj) override {
         SpriteMesh::SetOwner(obj);
@@ -17,5 +16,7 @@ public:
     void InitializeTag() override {
         owner->SetTag(GameObjectTagLayer::BillBoardTag);
     }
+
+    void Update() override;
 };
 
