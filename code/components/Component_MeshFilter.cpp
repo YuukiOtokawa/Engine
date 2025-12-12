@@ -46,8 +46,17 @@ void MeshFilter::DrawGUI() {
 		ImGui::Text("No VertexIndex assigned.");
 	}
 
-	if (ImGui::Button("Set Mesh", ImVec2(150.0f, 30.0f)))
-		GetMesh(this);
+	if (ImGui::Button("Set Mesh", ImVec2(150.0f, 30.0f))) {
+		std::string filePath = OpenImportFileDialog();
+		if (filePath != "")
+			GetMesh(this, filePath);
+	}
+
+	auto path = GetDropPath("MESH");
+	if (path != "") {
+		GetMesh(this, path);
+	}
+
 
 	ImGui::Unindent();
 }

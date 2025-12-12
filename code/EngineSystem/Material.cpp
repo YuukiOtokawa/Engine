@@ -84,66 +84,82 @@ void Material::DrawGUI() {
 	ID3D11ShaderResourceView** srv;
 	ImGui::Text("Texture");
 	srv = renderer->GetTexture(m_TextureFileID);
-	if (srv != nullptr) {
-		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
-		if (ImGui::IsItemClicked()) {
-			// クリックされた場合、編集モードに入る
-			auto filename = OpenImportFileDialog();
-
-			if (filename != "") {
-				m_TextureFileID = renderer->TextureLoad(std::wstring(filename.begin(),filename.end()));
-			}
-		}
-
-		auto path = GetDropPath("TEXTURE");
-		if (path != "") {
-			m_TextureFileID = renderer->TextureLoad(std::wstring(path.begin(), path.end()));
-		}
-
+	if (srv == nullptr) {
+		m_TextureFileID = 0;
 	}
+	ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+	if (ImGui::IsItemClicked()) {
+		// クリックされた場合、編集モードに入る
+		auto filename = OpenImportFileDialog();
+
+		if (filename != "") {
+			m_TextureFileID = renderer->TextureLoad(std::wstring(filename.begin(),filename.end()));
+		}
+	}
+
+	auto path = GetDropPath("TEXTURE");
+	if (path != "") {
+		m_TextureFileID = renderer->TextureLoad(std::wstring(path.begin(), path.end()));
+	}
+
 
 
 
 	ImGui::Text("Bump Map");
 	srv = renderer->GetTexture(m_BumpTextureFileID);
-	if (srv != nullptr) {
-		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
-		if (ImGui::IsItemClicked()) {
-			// クリックされた場合、編集モードに入る
-			auto filename = OpenImportFileDialog();
+	if (srv == nullptr) {
+		m_BumpTextureFileID = 0;
+	}
+	ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+	if (ImGui::IsItemClicked()) {
+		// クリックされた場合、編集モードに入る
+		auto filename = OpenImportFileDialog();
 
-			if (filename != "") {
-				m_BumpTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
-			}
+		if (filename != "") {
+			m_BumpTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
 		}
+	}
+	path = GetDropPath("TEXTURE");
+	if (path != "") {
+		m_BumpTextureFileID = renderer->TextureLoad(std::wstring(path.begin(), path.end()));
 	}
 
 	ImGui::Text("Toon Texture");
 	srv = renderer->GetTexture(m_ToonTextureFileID);
-	if (srv != nullptr) {
-		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
-		if (ImGui::IsItemClicked()) {
-			// クリックされた場合、編集モードに入る
-			auto filename = OpenImportFileDialog();
+	if (srv == nullptr) {
+		m_ToonTextureFileID = 0;
+	}
+	ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+	if (ImGui::IsItemClicked()) {
+		// クリックされた場合、編集モードに入る
+		auto filename = OpenImportFileDialog();
 
-			if (filename != "") {
-				m_ToonTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
-			}
+		if (filename != "") {
+			m_ToonTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
 		}
+	}
+	path = GetDropPath("TEXTURE");
+	if (path != "") {
+		m_ToonTextureFileID = renderer->TextureLoad(std::wstring(path.begin(), path.end()));
 	}
 
 	ImGui::Text("Enviroment Texture");
 	srv = renderer->GetTexture(m_EnvTextureFileID);
-	if (srv != nullptr) {
-		ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
-		if (ImGui::IsItemClicked()) {
-			// クリックされた場合、編集モードに入る
-			auto filename = OpenImportFileDialog();
+	if (srv == nullptr) {
+		m_EnvTextureFileID = 0;
+	}
+	ImGui::Image((ImTextureID)*srv, ImVec2(300, 300));
+	if (ImGui::IsItemClicked()) {
+		// クリックされた場合、編集モードに入る
+		auto filename = OpenImportFileDialog();
 
-			if (filename != "") {
-				m_EnvTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
-			}
+		if (filename != "") {
+			m_EnvTextureFileID = renderer->TextureLoad(std::wstring(filename.begin(), filename.end()));
 		}
+	}
+	path = GetDropPath("TEXTURE");
+	if (path != "") {
+		m_EnvTextureFileID = renderer->TextureLoad(std::wstring(path.begin(), path.end()));
 	}
 }
 

@@ -54,6 +54,8 @@ void AddComponentPopup(Object* object)
 
 		ImGui::EndPopup();
 	}
+
+
 }
 
 #include "CSVImporter.h"
@@ -63,10 +65,8 @@ void AddComponentPopup(Object* object)
 
 #include "Component_MeshFilter.h"
 #include <filesystem>
-void GetMesh(MeshFilter* meshFilter)
+void GetMesh(MeshFilter* meshFilter, std::string filePath)
 {
-	std::string filePath = OpenImportFileDialog();
-
 	// ファイルパスオブジェクト
 	std::filesystem::path path(filePath);
 

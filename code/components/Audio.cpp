@@ -52,6 +52,11 @@ void Audio::DrawGUI()
 			LoadAudio(filePath.c_str());
 		}
 	}
+	auto path = GetDropPath("SOUND");
+	if (path != "") {
+		LoadAudio(path.c_str());
+	}
+
 	float volume = m_Volume;
 	if (ImGui::SliderFloat("Volume", &volume, 0.0f, 1.0f)) {
 		SetVolume(volume);
@@ -64,7 +69,7 @@ void Audio::DrawGUI()
 
 
 	float pos, length;
-	if (m_FileID.FileID != 0) {
+	if (m_FileID.FileID > 0) {
 		auto file = AudioManager::GetAudioData(m_FileID.FileID);
 		XAUDIO2_VOICE_STATE state;
 		file->pSourceVoice->GetState(&state);

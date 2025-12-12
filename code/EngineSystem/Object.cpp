@@ -12,6 +12,8 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "ScriptComponent.h"
+
 #include "IRenderable.h"
 #define COMPONENT_NAME(ComponentType) \
 	return #ComponentType;
@@ -172,6 +174,22 @@ void Object::DrawGUI(){
 
 	AddComponentPopup(this);
 
+	auto path = GetDropPath("SCRIPT");
+	if (path != "") {
+		// ファイルパスオブジェクト
+		std::filesystem::path pathObj(path);
+
+		// 拡張子を削除
+		std::string fileName = pathObj.stem().string();
+
+		auto* scriptComp = AddComponent<ScriptComponent>();
+
+		Script* newScript = ScriptFactory::GetInstance().CreateScript(fileName);
+
+		if (newScript && scriptComp) {
+			scriptComp->SetScript(newScript);
+		}
+	}
 }
 
 void Object::RightClickMenu()

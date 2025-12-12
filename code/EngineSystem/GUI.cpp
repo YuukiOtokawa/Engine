@@ -63,7 +63,7 @@ void GUI::Initialize() {
 
 	io.Fonts->Build();
 
-	dynamic_cast<ProjectWindow*>(m_ProjectWindow)->Initialize("scripts", "OtokawaEngine.vcxproj");
+	dynamic_cast<ProjectWindow*>(m_ProjectWindow)->Initialize("C:\\Users\\yuuki\\Desktop\\OtokawaEngine\\scripts", "OtokawaEngine.vcxproj");
 
 }
 
