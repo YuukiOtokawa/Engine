@@ -50,6 +50,7 @@ protected:
 
     static int m_FileIDCounter; // ファイルIDのカウンター
 
+    std::string GetDropPath(std::string fileType);
 public:
     EngineMetaFile(ClassID id = CID_None, int fileID = -1) : m_ClassID(id) {
         if (fileID == -1)

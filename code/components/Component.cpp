@@ -13,3 +13,4 @@ void Component::RightClickMenu()
 		ImGui::EndPopup();
 	}
 }
+

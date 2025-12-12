@@ -38,6 +38,7 @@ protected:
 	// コンポーネントのタグ
 	Tag tag = NoComponent;
 
+
 public:
     // コンポーネントの所有者オブジェクト
 	Object* owner = nullptr;

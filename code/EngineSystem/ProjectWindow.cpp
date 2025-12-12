@@ -789,13 +789,48 @@ void ProjectWindow::GrabFileIcon(FileEntry entry)
         if (ext == ".prefab") {
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
                 // ペイロードとしてファイルパスを設定
-                ImGui::SetDragDropPayload("PREFAB_FILE", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                ImGui::SetDragDropPayload("PREFAB", entry.fullPath.c_str(), entry.fullPath.size() + 1);
                 // ドラッグ中の表示
-                ImGui::Text("Prefab: %s", entry.name.c_str());
+                ImGui::Text(entry.name.c_str());
                 ImGui::EndDragDropSource();
             }
         }
-
+        else if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c") {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("SCRIPT", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+        else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp") {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("TEXTURE", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+        else if (ext == ".obj" || ext == ".fbx") {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("MESH", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+		else if (ext == ".wav" || ext == ".mp3" || ext == ".ogg") {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("SOUND", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
     }
 }
 

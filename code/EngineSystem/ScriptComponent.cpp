@@ -68,12 +68,16 @@ void ScriptComponent::DrawGUI()
 				}
 
 				// ドラッグ&ドロップのターゲット
-				if (ImGui::BeginDragDropTarget()) {
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB_FILE")) {
-						const char* droppedPath = static_cast<const char*>(payload->Data);
-						prefabAsset->SetPath(std::string(droppedPath));
-					}
-					ImGui::EndDragDropTarget();
+				//if (ImGui::BeginDragDropTarget()) {
+				//	if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB_FILE")) {
+				//		const char* droppedPath = static_cast<const char*>(payload->Data);
+				//		prefabAsset->SetPath(std::string(droppedPath));
+				//	}
+				//	ImGui::EndDragDropTarget();
+				//}
+				auto path = GetDropPath("PREFAB");
+				if (path != "") {
+					prefabAsset->SetPath(path);
 				}
 
 				// クリアボタン

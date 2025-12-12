@@ -94,7 +94,15 @@ void Material::DrawGUI() {
 				m_TextureFileID = renderer->TextureLoad(std::wstring(filename.begin(),filename.end()));
 			}
 		}
+
+		auto path = GetDropPath("TEXTURE");
+		if (path != "") {
+			m_TextureFileID = renderer->TextureLoad(std::wstring(path.begin(), path.end()));
+		}
+
 	}
+
+
 
 	ImGui::Text("Bump Map");
 	srv = renderer->GetTexture(m_BumpTextureFileID);
