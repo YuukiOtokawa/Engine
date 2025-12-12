@@ -51,7 +51,7 @@ void MeshRenderer::Render() {
 	if (!transform) return;
 	XMMATRIX scale, angle, translation;
 	{
-		if (owner->IsChild()) {
+		if (owner->IsChild() && owner->GetParent()->GetComponent<Transform>()) {
 			/// 子オブジェクトのtransformは親オブジェクトからの相対位置であるため、親オブジェクトのTransformを考慮
 			auto parentTransform = owner->GetParent()->GetComponent<Transform>();
 

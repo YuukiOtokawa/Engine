@@ -442,7 +442,7 @@ void Prefab::CollectExportData(Object* object, std::list<EngineMetaFile*>& expor
     }
 
     // 子オブジェクトも再帰的に収集
-    for (Object* child : object->GetChildren()) {
+    for (Object* child : *object->GetChildren()) {
         CollectExportData(child, exportList);
     }
 }

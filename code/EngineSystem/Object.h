@@ -179,7 +179,11 @@ public:
 		m_iIndexCount = count;
 	}
 
+    // parent == nullptr で親子関係解消
     void SetParent(Object* parent) {
+        if (m_pParent) {
+            m_pParent->DeleteChild(this);
+        }
         m_pParent = parent;
         m_IsChild = (parent != nullptr);
     }
@@ -190,6 +194,11 @@ public:
             m_Children.push_back(child);
         }
     }
+    void DeleteChild(Object* child) {
+        if (child) {
+            m_Children.remove(child);
+        }
+    }
 
     bool HasChild() {
         return !m_Children.empty();
@@ -198,8 +207,8 @@ public:
     Object* GetParent() const {
         return m_pParent;
     }
-    std::list<Object*>& GetChildren() {
-        return m_Children;
+    std::list<Object*>* GetChildren() {
+        return &m_Children;
     }
 
     void SetOpened(bool isOpened) {

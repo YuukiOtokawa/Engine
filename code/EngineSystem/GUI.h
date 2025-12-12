@@ -55,7 +55,6 @@ private:
     static void SetWindowPadding();
     static void SetItemPadding();
 
-
     // DirectX 11のレンダリングターゲットビュー
 	ID3D11RenderTargetView* m_mainRenderTargetView = nullptr;
 

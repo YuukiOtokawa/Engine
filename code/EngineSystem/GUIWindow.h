@@ -6,10 +6,13 @@
 
 #include "imgui.h"
 
+#include "Object.h"
 class GUIWindow {
 protected:
     bool m_IsOpen = true;
-    
+
+    std::string GetDropPath(std::string fileType);
+    Object* GetDropIterator(std::string fileType);
 public:
     virtual void Render() = 0;
 
@@ -28,5 +31,6 @@ protected:
 public:
 
     void Render() override = 0;
+
 
 };

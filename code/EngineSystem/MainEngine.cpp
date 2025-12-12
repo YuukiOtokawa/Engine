@@ -420,7 +420,7 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			new Object();
 			break;
 		case ID_FILE_SAVE: // 保存
-			SceneExporter::Export(m_pEditor->GetObjects());
+			SceneExporter::Export(*m_pEditor->GetObjects());
 			break;
 		case ID_FILE_LOAD: // 読み込み
 		{

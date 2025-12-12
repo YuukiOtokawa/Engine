@@ -37,10 +37,6 @@ public:
 		m_pMaterial = new Material();
 	}
 
-	~UIImage() override {
-		if (m_pMaterial) delete m_pMaterial;
-	}
-
 	/// @brief オブジェクトの状態を更新します。
 	void Update() override;
 

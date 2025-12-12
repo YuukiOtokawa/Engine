@@ -149,7 +149,7 @@ public:
 	/// @return 見つかった場合は対応するObjectポインタ、見つからない場合はnullptrを返します。
     Object* GetObject(const std::string& name);
 
-    std::list<Object*>& GetObjects() { return m_Objects; }
+    std::list<Object*>* GetObjects() { return &m_Objects; }
     void SetObjects(const std::list<Object*>& objects) { m_Objects = objects; }
 
     Object* GetObjectByFileID(int fileID);
