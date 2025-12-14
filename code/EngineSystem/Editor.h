@@ -76,6 +76,9 @@ private:
     Object* m_pEditingPrefabObject = nullptr;    // 編集中のPrefabオブジェクト
     std::string m_editingPrefabPath = "";        // 編集中のPrefabファイルパス
 
+    // デファードレンダリング関連
+    bool m_useDeferredRendering = false;         // デファードレンダリングを使用するかどうか
+
 	/// @brief Editor クラスのシングルトンパターンデフォルトコンストラクタです。
 	Editor() = default;
 	Editor(const Editor&) = delete;
@@ -210,6 +213,10 @@ public:
     bool GetIsSceneViewHovered() const { return m_isSceneViewHovered; }
 
     NodeManager* GetNodeManager() const { return m_pNodeManager; } // NodeManagerのゲッターを追加
+
+    // デファードレンダリング関連
+    void SetUseDeferredRendering(bool use) { m_useDeferredRendering = use; }
+    bool GetUseDeferredRendering() const { return m_useDeferredRendering; }
 };
 
 void Main();

@@ -123,6 +123,11 @@ private:
     ID3D11ShaderResourceView* m_pGameViewSRV = {};
     Texture* m_pGameViewTexture = {};
 
+    // GBuffer用のレンダーテクスチャ（デファードレンダリング）
+    ID3D11RenderTargetView* m_pGBufferRTV[3] = {}; // [0]=Diffuse, [1]=Normal, [2]=WorldPosition
+    ID3D11ShaderResourceView* m_pGBufferSRV[3] = {};
+    Texture* m_pGBufferTexture[3] = {};
+
     // フルスクリーンクアッド用頂点バッファ
     ID3D11Buffer* m_pFullScreenQuadVB = nullptr;
 
@@ -349,16 +354,26 @@ public:
     ID3D11RenderTargetView* GetGameViewRTV() {
         return m_pGameViewRTV;
     }
+    ID3D11RenderTargetView* GetSceneViewRTV() {
+        return m_pSceneViewRTV;
+    }
 
     void SetWeight(float* weight);
     void CreatePostProcessBuffer();
     void CreateSceneGameViewBuffer();
+    void CreateGBuffer();
 
     void BeginSceneView();
     void BeginGameView();
     void BeginPostProcess(int n);
 
     void BeginDepth();
+
+    // デファードレンダリング用の関数
+    void BeginDeferredGeometryPass();
+    void BeginDeferredLightingPass();
+    ID3D11ShaderResourceView* GetGBufferSRV(int n);
+    Texture* GetGBufferTexture(int n);
 
     Texture* GetSceneViewTexture() {
         return m_pSceneViewTexture;

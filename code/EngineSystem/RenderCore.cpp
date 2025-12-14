@@ -95,6 +95,7 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	TextureLoad(L"asset/texture/Default_White.png");
 	CreatePostProcessBuffer();
 	CreateSceneGameViewBuffer();
+	CreateGBuffer();
 	InitializeFullScreenQuad();
 
 	CreateVertexShader("cso/vertexShader.cso", "vertex");
@@ -137,6 +138,11 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	for (int i = 0;i<3;i++) {
 		SAFE_RELEASE(m_pPostProcessRTV[i]);
 		SAFE_RELEASE(m_pPostProcessSRV[i]);
+	}
+
+	for (int i = 0; i < 3; i++) {
+		SAFE_RELEASE(m_pGBufferRTV[i]);
+		SAFE_RELEASE(m_pGBufferSRV[i]);
 	}
 
 	SAFE_RELEASE(m_pFullScreenQuadVB);
@@ -259,6 +265,18 @@ void RenderCore::ReleaseRenderTargets()
 		m_pGameViewSRV->Release();
 		m_pGameViewSRV = nullptr;
 	}
+
+	// GBufferを解放
+	for (int i = 0; i < 3; i++) {
+		if (m_pGBufferRTV[i]) {
+			m_pGBufferRTV[i]->Release();
+			m_pGBufferRTV[i] = nullptr;
+		}
+		if (m_pGBufferSRV[i]) {
+			m_pGBufferSRV[i]->Release();
+			m_pGBufferSRV[i] = nullptr;
+		}
+	}
 }
 
 void RenderCore::RecreateRenderTargets()
@@ -277,6 +295,9 @@ void RenderCore::RecreateRenderTargets()
 
 	// シーン/ゲームビューバッファを再作成
 	CreateSceneGameViewBuffer();
+
+	// GBufferを再作成
+	CreateGBuffer();
 
 	// レンダーターゲットを設定
 	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
@@ -526,6 +547,75 @@ void RenderCore::CreateSceneGameViewBuffer()
 	pSceneTexture->Release();
 	pGameTexture->Release();
 }
+
+void RenderCore::CreateGBuffer()
+{
+	// GBuffer用のテクスチャを作成（3つ: Diffuse + Normal + WorldPosition）
+	ID3D11Texture2D* pGBufferTexture[3] = {};
+	D3D11_TEXTURE2D_DESC td = {};
+
+	td.Width = (UINT)m_ClientSize.x;
+	td.Height = (UINT)m_ClientSize.y;
+	td.MipLevels = 1;
+	td.ArraySize = 1;
+	td.SampleDesc.Count = 1;
+	td.SampleDesc.Quality = 0;
+	td.Usage = D3D11_USAGE_DEFAULT;
+	td.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	td.CPUAccessFlags = 0;
+	td.MiscFlags = 0;
+
+	// GBuffer[0]: Diffuse用（R8G8B8A8）
+	td.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	HRESULT hr = m_pDevice->CreateTexture2D(&td, NULL, &pGBufferTexture[0]);
+
+	// GBuffer[1]: Normal用（R8G8B8A8）
+	td.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	hr = m_pDevice->CreateTexture2D(&td, NULL, &pGBufferTexture[1]);
+
+	// GBuffer[2]: WorldPosition用（R32G32B32A32_FLOAT - 高精度が必要）
+	td.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	hr = m_pDevice->CreateTexture2D(&td, NULL, &pGBufferTexture[2]);
+
+	// RenderTargetViewを作成
+	D3D11_RENDER_TARGET_VIEW_DESC rtvd = {};
+	rtvd.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+	rtvd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	hr = m_pDevice->CreateRenderTargetView(pGBufferTexture[0], &rtvd, &m_pGBufferRTV[0]);
+	hr = m_pDevice->CreateRenderTargetView(pGBufferTexture[1], &rtvd, &m_pGBufferRTV[1]);
+
+	rtvd.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	hr = m_pDevice->CreateRenderTargetView(pGBufferTexture[2], &rtvd, &m_pGBufferRTV[2]);
+
+	// ShaderResourceViewを作成
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd = {};
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MipLevels = 1;
+
+	srvd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	hr = m_pDevice->CreateShaderResourceView(pGBufferTexture[0], &srvd, &m_pGBufferSRV[0]);
+	hr = m_pDevice->CreateShaderResourceView(pGBufferTexture[1], &srvd, &m_pGBufferSRV[1]);
+
+	srvd.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	hr = m_pDevice->CreateShaderResourceView(pGBufferTexture[2], &srvd, &m_pGBufferSRV[2]);
+
+	// Textureオブジェクトを作成
+	for (int i = 0; i < 3; i++) {
+		Texture* texture = new Texture();
+		texture->width = m_ClientSize.x;
+		texture->height = m_ClientSize.y;
+		texture->shaderResourceView = m_pGBufferSRV[i];
+		texture->toExport = false;
+		m_pGBufferTexture[i] = texture;
+	}
+
+	// テクスチャリソースを解放
+	pGBufferTexture[0]->Release();
+	pGBufferTexture[1]->Release();
+	pGBufferTexture[2]->Release();
+}
+
 void RenderCore::BeginSceneView()
 {
 	m_pDeviceContext->OMSetRenderTargets(1, &m_pSceneViewRTV, m_pDepthStencilView);
@@ -1020,11 +1110,25 @@ void RenderCore::BeginPostProcess(int n)
 
 void RenderCore::DrawFullScreenQuad(ID3D11RenderTargetView* renderTargetView, ID3D11ShaderResourceView* shaderResourceView)
 {
-	// レンダーターゲットを設定
+	// レンダーターゲットを設定（深度バッファはnullptr = 深度テスト無効）
 	m_pDeviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
+
+	// 深度テストを無効にする
+	m_pDeviceContext->OMSetDepthStencilState(m_pDepthStencilStateDepthDisable, 1);
 
 	// 入力テクスチャを設定
 	m_pDeviceContext->PSSetShaderResources(0, 1, &shaderResourceView);
+
+	// 頂点シェーダーを設定（既に設定済みのvertexシェーダーを使用）
+	SetVertexShader("vertex");
+
+	// ワールド・ビュー・プロジェクション行列を単位行列に設定
+	XMMATRIX identity = XMMatrixIdentity();
+	SetTranslationMatrix(identity);
+	SetAngleMatrix(identity);
+	SetScaleMatrix(identity);
+	SetViewMatrix(identity);
+	SetProjectionMatrix(identity);
 
 	// 頂点バッファを設定
 	UINT stride = sizeof(VERTEX);
@@ -1036,4 +1140,43 @@ void RenderCore::DrawFullScreenQuad(ID3D11RenderTargetView* renderTargetView, ID
 
 	// 描画
 	m_pDeviceContext->Draw(4, 0);
+
+	// 深度テストを元に戻す
+	m_pDeviceContext->OMSetDepthStencilState(m_pDepthStencilStateDepthEnable, 1);
+}
+
+void RenderCore::BeginDeferredGeometryPass()
+{
+	// GBufferを複数のレンダーターゲットとして設定
+	ID3D11RenderTargetView* rtvs[3] = { m_pGBufferRTV[0], m_pGBufferRTV[1], m_pGBufferRTV[2] };
+	m_pDeviceContext->OMSetRenderTargets(3, rtvs, m_pDepthStencilView);
+
+	// GBufferをクリア
+	float clearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	m_pDeviceContext->ClearRenderTargetView(m_pGBufferRTV[0], clearColor);
+	m_pDeviceContext->ClearRenderTargetView(m_pGBufferRTV[1], clearColor);
+	m_pDeviceContext->ClearRenderTargetView(m_pGBufferRTV[2], clearColor);
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 255);
+}
+
+void RenderCore::BeginDeferredLightingPass()
+{
+	// GBufferのSRVをシェーダーリソースとして設定
+	m_pDeviceContext->PSSetShaderResources(0, 1, &m_pGBufferSRV[0]); // Diffuse
+	m_pDeviceContext->PSSetShaderResources(1, 1, &m_pGBufferSRV[1]); // Normal
+	m_pDeviceContext->PSSetShaderResources(2, 1, &m_pGBufferSRV[2]); // WorldPosition
+}
+
+ID3D11ShaderResourceView* RenderCore::GetGBufferSRV(int n)
+{
+	if (n >= 0 && n < 3)
+		return m_pGBufferSRV[n];
+	return nullptr;
+}
+
+Texture* RenderCore::GetGBufferTexture(int n)
+{
+	if (n >= 0 && n < 3)
+		return m_pGBufferTexture[n];
+	return nullptr;
 }

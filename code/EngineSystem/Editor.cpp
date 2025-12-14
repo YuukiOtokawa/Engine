@@ -56,6 +56,7 @@
 #include "SceneImporter.h"
 #include "ScriptComponent.h"
 #include "Prefab.h"
+#include "RenderQueueManager.h"
 
 Editor* Editor::m_pInstance;
 
@@ -124,17 +125,46 @@ void Editor::DrawGameViewRTV()
 		auto postProcess = currentCam->GetComponent<CameraPostProcess>();
 		bool usePostProcess = postProcess && postProcess->IsEnabled();
 
-		if (usePostProcess) {
-			// ポストプロセス使用時: PostProcessバッファに描画
-			renderCore->BeginPostProcess(0);
+		// デファードレンダリングを使用する場合
+		if (m_useDeferredRendering) {
+			// ジオメトリパス: GBufferに描画
+			renderCore->BeginDeferredGeometryPass();
+			renderCore->SetPixelShader("DeferredGeometry");
+			RenderQueueManager::SetDeferredRendering(true); // デファードモード有効化
+			DrawGame(currentCam);
+			RenderQueueManager::SetDeferredRendering(false); // デファードモード無効化
+
+			// ライティングパス: GBufferから光源計算して結果を出力
+			// ポストプロセスがある場合はPostProcess[0]に、ない場合はGameViewに直接描画
+			if (usePostProcess) {
+				renderCore->BeginPostProcess(0);
+			}
+			else {
+				renderCore->BeginGameView();
+			}
+
+			renderCore->SetWorldViewProjection2D();
+			renderCore->SetRasterizerState2D();
+			renderCore->SetPixelShader("DeferredLighting");
+			renderCore->BeginDeferredLightingPass();
+			renderCore->DrawFullScreenQuad(usePostProcess ? renderCore->GetPostProcessRTV(0) : renderCore->GetGameViewRTV(), renderCore->GetGBufferSRV(0));
+			// ポストプロセスがある場合は、この後ポストプロセスが適用されるので、ここではラスタライザーステートを戻さない
 		}
 		else {
-			// 通常描画: GameViewバッファに直接描画
-			renderCore->BeginGameView();
+			// フォワードレンダリング
+			if (usePostProcess) {
+				// ポストプロセス使用時: PostProcessバッファに描画
+				renderCore->BeginPostProcess(0);
+			}
+			else {
+				// 通常描画: GameViewバッファに直接描画
+				renderCore->BeginGameView();
+			}
+
+			DrawGame(currentCam);
 		}
 
-		DrawGame(currentCam);
-
+		// ポストプロセス処理（デファードレンダリングの光源計算の後に適用）
 		if (usePostProcess) {
 			// ポストプロセスを適用
 			renderCore->SetWeight(postProcess->GetWeight());
@@ -157,6 +187,10 @@ void Editor::DrawGameViewRTV()
 
 			renderCore->SetRasterizerState3D();
 		}
+		else if (m_useDeferredRendering) {
+			// デファードレンダリングでポストプロセスがない場合は、ラスタライザーステートを3Dに戻す
+			renderCore->SetRasterizerState3D();
+		}
 
 		renderCore->ResetRenderTarget();
 		renderCore->ResetViewPort();
@@ -175,7 +209,17 @@ void Editor::DrawSceneViewRTV()
 	if (currentCam)
 		currentCam->GetComponent<Camera>()->SetCamera();
 
-	renderCore->BeginSceneView();
+	// デファードレンダリングを使用する場合
+	if (m_useDeferredRendering) {
+		// ジオメトリパス: GBufferに描画
+		renderCore->BeginDeferredGeometryPass();
+		renderCore->SetPixelShader("DeferredGeometry");
+		RenderQueueManager::SetDeferredRendering(true); // デファードモード有効化
+	}
+	else {
+		// フォワードレンダリング
+		renderCore->BeginSceneView();
+	}
 
 	for (auto& object : m_Objects) {
 		if (object->GetTag() == GameObjectTagLayer::LightTag) {
@@ -270,6 +314,21 @@ void Editor::DrawSceneViewRTV()
 	}
 
 	RenderQueueManager::Render(currentCam->GetComponent<Camera>());
+
+	// デファードレンダリングのライティングパス（ジオメトリパスの後に実行）
+	if (m_useDeferredRendering) {
+		RenderQueueManager::SetDeferredRendering(false); // デファードモード無効化
+
+		// GBufferから光源計算してSceneViewに描画
+		renderCore->BeginSceneView();
+		renderCore->SetWorldViewProjection2D();
+		renderCore->SetRasterizerState2D();
+		renderCore->SetPixelShader("DeferredLighting");
+		renderCore->BeginDeferredLightingPass();
+		renderCore->DrawFullScreenQuad(renderCore->GetSceneViewRTV(), renderCore->GetGBufferSRV(0));
+		// ライティングパス完了後、ラスタライザーステートを3Dに戻す
+		renderCore->SetRasterizerState3D();
+	}
 }
 
 //==========================================================================
@@ -374,7 +433,11 @@ void Editor::Initialize() {
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/WavePS.cso", "Wave");
 
 		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/EnvMapPS.cso", "Enviroment");
-		
+
+		// デファードレンダリング用シェーダー
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredGeometry.cso", "DeferredGeometry");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredLighting.cso", "DeferredLighting");
+
 	}
 
 	Main();
@@ -385,6 +448,8 @@ void Editor::Initialize() {
 	// プロジェクトウィンドウの初期化
 
 	m_pEditorCamera = GetObject("EditorCamera");
+
+	SetUseDeferredRendering(true);
 }
 
 void Editor::Update() {

@@ -7,6 +7,7 @@
 #include "Component_Camera.h"
 
 std::map<RenderQueue, std::vector<RenderableEntry>> RenderQueueManager::renderQueues;
+bool RenderQueueManager::s_useDeferredRendering = false;
 
 void RenderQueueManager::SetCamera(RenderQueue queue)
 {
@@ -32,7 +33,7 @@ void RenderQueueManager::SetCamera(RenderQueue queue)
 void RenderQueueManager::Render(Camera* camera)
 {
 	for (auto& [queue, renderables] : renderQueues) {
-		
+
 		if (queue != RenderQueue::Overlay) {
 			MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
 			camera->SetCamera();
@@ -41,8 +42,20 @@ void RenderQueueManager::Render(Camera* camera)
 			MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
 			MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
 		}
+
+		// デファードレンダリング時は、各オブジェクトの描画前にDeferredGeometryシェーダーを設定
+		if (s_useDeferredRendering && queue != RenderQueue::Overlay) {
+			MainEngine::GetInstance()->GetRenderCore()->SetPixelShader("DeferredGeometry");
+		}
+
 		for (auto& renderable : renderables) {
 			renderable.renderable->Draw();
+
+			// デファードレンダリング時は、各オブジェクトの描画後にシェーダーを再設定
+			// （各マテリアルが独自のシェーダーを設定してしまうため）
+			if (s_useDeferredRendering && queue != RenderQueue::Overlay) {
+				MainEngine::GetInstance()->GetRenderCore()->SetPixelShader("DeferredGeometry");
+			}
 		}
 	}
 }

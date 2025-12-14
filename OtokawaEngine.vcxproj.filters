@@ -892,5 +892,7 @@
     <FxCompile Include="code\shader\ProjectionShadow1PS.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="code\shader\DeferredGeometry.hlsl" />
+    <FxCompile Include="code\shader\DeferredLighting.hlsl" />
   </ItemGroup>
 </Project>

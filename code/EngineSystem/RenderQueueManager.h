@@ -20,9 +20,10 @@ struct RenderableEntry {
 class Camera;
 
 class RenderQueueManager {
-    
+
     static std::map<RenderQueue, std::vector<RenderableEntry>> renderQueues;
     static void SetCamera(RenderQueue queue);
+    static bool s_useDeferredRendering; // デファードレンダリングモード
 public:
     static void RegisterRenderQueue(IRenderable* renderable, float dist, RenderQueue queue) {
         renderQueues[queue].push_back(RenderableEntry(renderable,dist));
@@ -32,5 +33,13 @@ public:
 
     static void BeginFrame() {
         renderQueues.clear();
+    }
+
+    static void SetDeferredRendering(bool enabled) {
+        s_useDeferredRendering = enabled;
+    }
+
+    static bool IsDeferredRendering() {
+        return s_useDeferredRendering;
     }
 };

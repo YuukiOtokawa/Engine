@@ -124,7 +124,7 @@ void EditorViewWindow::CalcMatrix()
 			currentMousePos.x - lastMousePos.x,
 			currentMousePos.y - lastMousePos.y
 		);
-		float rotationSpeed = 0.01f; // 回転速度の調整
+		float rotationSpeed = 0.001f; // 回転速度の調整 : マウス感度
 		auto transform = camera->owner->GetComponent<Transform>();
 		transform->SetRotation(transform->GetRotation() + Vector4O(-delta.y * rotationSpeed, delta.x * rotationSpeed, 0.0f));
 		// カメラのTargetを視線方向に合わせる
