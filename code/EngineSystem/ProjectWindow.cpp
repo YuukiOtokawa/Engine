@@ -160,7 +160,7 @@ void ProjectWindow::ScanDirectory(const std::string& path, FileEntry& entry)
 
 void ProjectWindow::Render()
 {
-	ImGui::Begin("Project");
+    if (!StartWindow("Project")) return;
     // ツールバー
     // 戻るボタン
     bool canGoBack = (m_currentPath != m_rootPath);

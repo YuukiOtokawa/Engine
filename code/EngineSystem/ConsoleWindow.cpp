@@ -5,7 +5,7 @@
 
 void ConsoleWindow::Render()
 {
-	ImGui::Begin("Console");
+	if (!StartWindow("Console")) return;
 	// EngineConsoleのDrawメソッドを呼び出す
 	EngineConsole::Draw();
 	ImGui::End();

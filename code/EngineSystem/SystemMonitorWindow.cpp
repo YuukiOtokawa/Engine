@@ -7,7 +7,7 @@
 
 void SystemMonitorWindow::Render()
 {
-    ImGui::Begin("System Monitor");
+    if (!StartWindow("System Monitor")) return;
 
     Time::DrawFPSGraph();
 	SystemMonitor::Draw();

@@ -135,7 +135,14 @@ BEGIN
     END
     POPUP "Window"
     BEGIN
-        MENUITEM "Node Window",                 ID_WINDOW_NEWWINDOW
+        MENUITEM "Node Editor",                 ID_WINDOW_NODEEDITOR
+        MENUITEM "Hierarchy",                   ID_WINDOW_HIERARCHY
+        MENUITEM "Inspector",                   ID_WINDOW_INSPECTOR
+        MENUITEM "Scene View",                  ID_WINDOW_SCENEVIEW
+        MENUITEM "Game View",                   ID_WINDOW_GAMEVIEW
+        MENUITEM "Project",                     ID_WINDOW_PROJECT
+        MENUITEM "Console",                     ID_WINDOW_CONSOLE
+        MENUITEM "SystemMonitor",               ID_WINDOW_SYSTEMMONITOR
     END
 END
 

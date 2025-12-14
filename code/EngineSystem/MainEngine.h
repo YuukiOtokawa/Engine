@@ -106,6 +106,9 @@ private:
     void RCCppUpdate();
     void RCCppFinalize();
 
+    bool FileCommand(WPARAM param);
+    bool WindowCommand(WPARAM param);
+
 public:
 
     /// @brief MainEngine クラスのシングルトンインスタンスを取得します。

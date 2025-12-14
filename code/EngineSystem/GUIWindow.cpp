@@ -4,16 +4,18 @@
 
 #include "Object.h"
 
-void GUIWindow::StartWindow(std::string windowName, ImGuiWindowFlags flag)
+bool GUIWindow::StartWindow(std::string windowName, ImGuiWindowFlags flag)
 {
-	if (!m_IsOpen) return;
+	if (!m_IsOpen) return false;
 
 	m_IsOpen = GUI::BeginWindow(windowName.c_str(), flag);
 
 	if (!m_IsOpen) {
 		ImGui::End();
-		return;
+		return false;
 	}
+
+	return true;
 }
 
 std::string GUIWindow::GetDropPath(std::string fileType)

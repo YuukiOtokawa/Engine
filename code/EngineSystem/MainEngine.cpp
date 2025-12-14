@@ -201,6 +201,51 @@ void MainEngine::RCCppFinalize()
 	delete g_pSystemTable->pRuntimeObjectSystem;
 }
 
+bool MainEngine::FileCommand(WPARAM param)
+{
+	switch (LOWORD(param))
+	{
+	case ID_FILE_ADDOBJECT: // オブジェクト追加
+		new Object();
+		break;
+	case ID_FILE_SAVE: // 保存
+		SceneExporter::Export(*m_pEditor->GetObjects());
+		break;
+	case ID_FILE_LOAD: // 読み込み
+	{
+		auto filePath = OpenImportFileDialog();
+		if (filePath != "") {
+			Editor::GetInstance()->OpenScene(filePath);
+		}
+	}
+	break;
+	case ID_FILE_EXIT: // 終了
+		if (MessageBoxA(m_hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
+			DestroyWindow(m_hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
+		}
+		return false; // DefWindowProc関数にメッセージを流さず終了することによって何もなかったことにする
+	default:
+		break;
+	}
+
+	return true;
+}
+
+bool MainEngine::WindowCommand(WPARAM param)
+{
+	switch (LOWORD(param))
+	{
+	case ID_WINDOW_NODEEDITOR:
+	{
+		GUI::GetInstance()->SetNodeEditorVisible();
+	}
+	default:
+		break;
+	}
+
+	return true;
+}
+
 int MainEngine::SystemLoop()
 {
 	while (WM_QUIT != m_Message.message) {
@@ -414,36 +459,11 @@ LRESULT MainEngine::Proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message) {
 		break;
 	case WM_COMMAND:
-		switch (LOWORD(wParam))
-		{
-		case ID_FILE_ADDOBJECT: // オブジェクト追加
-			new Object();
-			break;
-		case ID_FILE_SAVE: // 保存
-			SceneExporter::Export(*m_pEditor->GetObjects());
-			break;
-		case ID_FILE_LOAD: // 読み込み
-		{
-			auto filePath = OpenImportFileDialog();
-			if (filePath != "") {
-				Editor::GetInstance()->OpenScene(filePath);
-			}
-		}
-			break;
-		case ID_FILE_EXIT: // 終了
-			if (MessageBoxA(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
-				DestroyWindow(hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
-			}
-			return 0; // DefWindowProc関数にメッセージを流さず終了することによって何もなかったことにする
-		case ID_WINDOW_NEWWINDOW:
-		{
-			GUI::GetInstance()->SetNodeEditorVisible();
-            // テスト用のObjectNodeを追加
-            //Editor::GetInstance()->GetNodeManager()->AddNode(new ObjectNode());
-		}
-		default:
-			break;
-		}
+		// return true: call DefWindowProc()
+		if (!FileCommand(wParam))
+			return 0;
+		if (!WindowCommand(wParam))
+			return 0;
 		break;
 
 	case WM_CLOSE:

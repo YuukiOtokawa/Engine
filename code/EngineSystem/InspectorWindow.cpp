@@ -5,7 +5,7 @@
 
 void InspectorWindow::Render()
 {
-	ImGui::Begin("Inspector");
+	if (!StartWindow("Inspector")) return;
 
 	auto editor = Editor::GetInstance();
 

@@ -76,7 +76,7 @@ void HierarchyWindow::DropChild(std::list<Object*>* objectList, Object* parent)
 
 void HierarchyWindow::Render()
 {
-	ImGui::Begin("Hierarchy");
+	if (!StartWindow("Hierarchy")) return;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 

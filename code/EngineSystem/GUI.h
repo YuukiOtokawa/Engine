@@ -18,6 +18,10 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
+enum class WindowType {
+    
+};
+
 class NodeEditor;
 class GUIWindow;
 

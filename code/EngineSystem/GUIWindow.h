@@ -18,7 +18,7 @@ public:
 
     void OpenWindow() { m_IsOpen = true; }
 
-    void StartWindow(std::string windowName, ImGuiWindowFlags flag = ImGuiWindowFlags_None);
+    bool StartWindow(std::string windowName, ImGuiWindowFlags flag = ImGuiWindowFlags_None);
 };
 
 class ViewWindow : public GUIWindow {
