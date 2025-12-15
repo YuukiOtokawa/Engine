@@ -15,26 +15,30 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     float3 normal = encodedNormal.rgb * 2.0 - 1.0;
     normal = normalize(normal);
 
-    // ライトの方向（ライトが向いている方向の逆）
-    float3 lightDir = -normalize(Light.DirectionalLight.direction.xyz);
+    // ベクトル定義（全て「点から外」に向かうベクトルに統一）
+    float3 lightDir = normalize(Light.PointLight.position.xyz - worldPos.xyz); // 点 -> ライト
+    float3 viewDir = normalize(CameraPosition.xyz - worldPos.xyz);             // 点 -> カメラ
 
-    // ディフューズ（ランバートの法則）
-    float diffuseIntensity = max(dot(normal, lightDir), 0.0);
-    diffuseIntensity = saturate(diffuseIntensity);
+    float3 diffuseColor = float3(0, 0, 0);
+    float3 specularColor = float3(0, 0, 0);
 
-    // スペキュラ（Blinn-Phong）
-    float3 viewDir = normalize(CameraPosition.xyz - worldPos.xyz);
-    float3 halfDir = normalize(lightDir + viewDir);
-    float specularIntensity = pow(max(dot(normal, halfDir), 0.0), Shininess);
-    specularIntensity = saturate(specularIntensity) * SpecularPower;
+    if (Light.PointLight.enable)
+    {
+        // 拡散反射 (Lambert)
+        float NdotL = saturate(dot(normal, lightDir));
+        diffuseColor = Light.PointLight.diffuse.rgb * diffuse.rgb * NdotL;
+
+        // スペキュラ (Blinn-Phong)
+        float3 halfDir = normalize(lightDir + viewDir);
+        float NdotH = saturate(dot(normal, halfDir));
+        float specularFactor = pow(NdotH, Shininess);
+        specularColor = Light.PointLight.diffuse.rgb * specularFactor * SpecularPower;
+    }
 
     // アンビエントライト
     float3 ambient = Light.AmbientColor.rgb * diffuse.rgb;
 
     // 最終カラー = アンビエント + ディフューズ + スペキュラ
-    float3 diffuseColor = Light.DirectionalLight.diffuse.rgb * diffuse.rgb * diffuseIntensity;
-    float3 specularColor = Light.DirectionalLight.diffuse.rgb * specularIntensity;
-
     outDiffuse.rgb = ambient + diffuseColor + specularColor;
     outDiffuse.a = diffuse.a;
 }

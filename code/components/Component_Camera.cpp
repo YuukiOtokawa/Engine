@@ -75,6 +75,13 @@ void Camera::DrawGUI() {
 		Editor::GetInstance()->SetActiveCamera(owner);
 	ImGui::InputFloat3("Target", &m_Target.x, "%.2f");
 	ImGui::InputFloat("Fov", &m_Fov);
+	if (Editor::GetInstance()->GetUseDeferredRendering()){
+		for (int i = 0; i < 3; i++) {
+			auto gbuffer = MainEngine::GetInstance()->GetRenderCore()->GetGBufferSRV(i);
+			if (gbuffer)
+				ImGui::Image((ImTextureID)gbuffer, ImVec2(300, 300));
+		}
+	}
 	ImGui::Unindent();
 }
 
