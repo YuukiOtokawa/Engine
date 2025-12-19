@@ -29,8 +29,9 @@ Object::Object(bool editable) : EngineMetaFile(CID_Object) {
 
 Object::~Object()
 {
+	auto editor = Editor::GetInstance();
 	for (Component* component : m_Components) {
-		delete component; // Clean up dynamically allocated components
+		editor->DeleteComponent(component);
 		component = nullptr;
 	}
 }

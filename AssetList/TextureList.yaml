@@ -11,3 +11,17 @@ textures:
     filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Miss.png
   - fileID: 28
     filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\Default_White.png
+  - fileID: 28
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\Default_White.png
+  - fileID: 52
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\ThisIsPicture.png
+  - fileID: 46
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Good.png
+  - fileID: 55
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Great.png
+  - fileID: 64
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Miss.png
+  - fileID: 73
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Perfect.png
+  - fileID: 46
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\qwantani_sunrise_puresky.jpg

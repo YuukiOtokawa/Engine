@@ -17,6 +17,7 @@
 #include "FrameWork.h"
 
 #include "EngineMetaFile.h"
+#include "EngineAPI.h"
 
 // 名前空間定義
 
@@ -25,7 +26,7 @@ using namespace GameObjectTagLayer;
 class ObjectNode;
 
 class Component; // Forward declaration of Component class
-class Object : public EngineMetaFile
+class OTOKAWA_API Object : public EngineMetaFile
 {
 private:
 	// コンポーネントのリスト

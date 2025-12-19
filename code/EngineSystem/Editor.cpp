@@ -449,7 +449,7 @@ void Editor::Initialize() {
 
 	m_pEditorCamera = GetObject("EditorCamera");
 
-	SetUseDeferredRendering(true);
+	SetUseDeferredRendering(false);
 }
 
 void Editor::Update() {
@@ -502,6 +502,8 @@ void Editor::Draw() {
 		m_pNodeManager->Draw();
 	}
 
+	auto editCam = m_pEditorCamera->GetComponent<Camera>();
+	GUI::SetMatrix(editCam->GetProjection(), editCam->GetView());
 
 	GUI::DrawGUI();
 
@@ -649,6 +651,13 @@ void Editor::Stop()
 	if (!m_isPlaying) {
 		EngineConsole::LogWarning("Editor::Stop: 再生中ではありません");
 		return;
+	}
+
+	for (auto& comps : m_Components) {
+		for (auto& comp : comps.second){
+			comp->End();
+		}
+
 	}
 
 	EngineConsole::Log("Editor::Stop: シーンを復元中...");

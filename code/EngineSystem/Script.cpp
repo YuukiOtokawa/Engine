@@ -55,6 +55,27 @@ void Script::Export(YAML::Emitter& out) {
                 break;
             }
 
+            case PropertyType::TEXT: {
+                TextFileInfo* text = static_cast<TextFileInfo*>(prop.Data);
+                out << YAML::Value << YAML::BeginSeq << text->filename << text->filepath << YAML::EndSeq;
+                break;
+            }
+            case PropertyType::CSV: {
+                CSVFileInfo* csv = static_cast<CSVFileInfo*>(prop.Data);
+                out << YAML::Value << YAML::BeginSeq << csv->filename << csv->filepath << YAML::EndSeq;
+                break;
+            }
+            case PropertyType::YAML: {
+                YAMLFileInfo* yaml = static_cast<YAMLFileInfo*>(prop.Data);
+                out << YAML::Value << YAML::BeginSeq << yaml->filename << yaml->filepath << YAML::EndSeq;
+                break;
+            }
+            case PropertyType::SOUND: {
+                SoundFileInfo* sound = static_cast<SoundFileInfo*>(prop.Data);
+                out << YAML::Value << YAML::BeginSeq << sound->filename << sound->filepath << YAML::EndSeq;
+                break;
+            }
+
            
             case PropertyType::METAFILE:
                 // METAFILE は未実装
@@ -128,6 +149,33 @@ void Script::Import(YAML::Node& node) {
                 std::string path = node[prop.Name].as<std::string>();
                 prefabAsset->SetPath(path);
                 break;
+            }
+            case PropertyType::TEXT: {
+                TextFileInfo* text = static_cast<TextFileInfo*>(prop.Data);
+                auto info = node[prop.Name];
+                text->filename = info[0].as<std::string>();
+                text->filepath = info[1].as<std::string>();
+            }
+
+            case PropertyType::CSV: {
+                CSVFileInfo* text = static_cast<CSVFileInfo*>(prop.Data);
+                auto info = node[prop.Name];
+                text->filename = info[0].as<std::string>();
+                text->filepath = info[1].as<std::string>();
+            }
+
+            case PropertyType::YAML: {
+                YAMLFileInfo* text = static_cast<YAMLFileInfo*>(prop.Data);
+                auto info = node[prop.Name];
+                text->filename = info[0].as<std::string>();
+                text->filepath = info[1].as<std::string>();
+            }
+
+            case PropertyType::SOUND: {
+                SoundFileInfo* text = static_cast<SoundFileInfo*>(prop.Data);
+                auto info = node[prop.Name];
+                text->filename = info[0].as<std::string>();
+                text->filepath = info[1].as<std::string>();
             }
 
             case PropertyType::METAFILE:

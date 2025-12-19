@@ -29,6 +29,7 @@ private:
 	Vector4O m_Position = Vector4O(0.0f,0.0f,0.0f);
 	// 回転（ピッチ、ヨー、ロール）
 	Vector4O m_Rotation = Vector4O(0.0f, 0.0f, 0.0f);
+    Vector4O m_Quaternion = Vector4O(0.0f, 0.0f, 0.0f, 1.0f);
 	// スケール（X, Y, Z）
 	Vector4O m_Scale = Vector4O(1.0f, 1.0f, 1.0f);
 
@@ -65,7 +66,21 @@ public:
 	void SetPosition(Vector4O position) { m_Position = position; }
 	/// @brief 回転を設定します。
 	/// @param rotation 設定する回転値。
-	void SetRotation(Vector4O rotation) { m_Rotation = rotation; }
+	void SetRotation(Vector4O rotation) {
+        m_Rotation = rotation;
+        // Euler角からQuaternionに同期
+        Vector4O radians = m_Rotation * (XM_PI / 180.0f);
+        XMVECTOR quatv = XMQuaternionRotationRollPitchYaw(radians.x, radians.y, radians.z);
+        XMFLOAT4 quat;
+        XMStoreFloat4(&quat, quatv);
+        m_Quaternion = quat;
+    }
+    void SetQuaternion(Vector4O quaternion) {
+        m_Quaternion = quaternion;
+        // QuaternionからEuler角に同期
+        Vector4O radians = VOQuaternionToEuler(m_Quaternion);
+        m_Rotation = radians * (180.0f / XM_PI);
+    }
 	/// @brief スケール値を設定します。
 	/// @param scale 設定するスケール値。
 	void SetScale(Vector4O scale) { m_Scale = scale; }
@@ -76,6 +91,7 @@ public:
 	/// @brief 現在の回転を表す Vector4O オブジェクトを取得します。
 	/// @return 現在の回転を表す Vector4O 型の値。
 	Vector4O GetRotation() { return m_Rotation; }
+    Vector4O GetQuaternion() { return m_Quaternion; }
 	/// @brief スケール値を取得します。
 	/// @return オブジェクトのスケールを表す Vector4O 型の値。
 	Vector4O GetScale() { return m_Scale; }

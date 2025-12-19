@@ -2,10 +2,10 @@
 
 #include <list>
 #include "Object.h"
-class CSVImporter
+class OTOKAWA_API CSVImporter
 {
 public:
-    static std::list<Object*> Import(std::string filePath);
+    static std::list<std::list<std::string>> Import(std::string filePath);
 
     static int ImportMesh(std::string filePath);
 

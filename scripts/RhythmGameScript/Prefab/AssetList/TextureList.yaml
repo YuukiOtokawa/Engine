@@ -1,0 +1,15 @@
+textures:
+  - fileID: 25
+    filePath: asset/texture/sura.jpg
+  - fileID: 26
+    filePath: asset/texture/Normal.bmp
+  - fileID: 42
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Perfect.png
+  - fileID: 64
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Miss.png
+  - fileID: 66
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Great.png
+  - fileID: 67
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\HitEffect\Good.png
+  - fileID: 83
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\Default_White.png

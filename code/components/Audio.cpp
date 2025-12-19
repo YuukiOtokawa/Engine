@@ -29,6 +29,7 @@ void Audio::PlayOneShot()
 void Audio::Stop()
 {
 	AudioManager::GetInstance()->Stop(m_FileID.FileID);
+	m_iPosition = 0;
 }
 
 void Audio::Pause()
@@ -65,6 +66,10 @@ void Audio::DrawGUI()
 
 	if (ImGui::Button("Play One Shot")) {
 		PlayOneShot();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Stop")) {
+		Stop();
 	}
 
 

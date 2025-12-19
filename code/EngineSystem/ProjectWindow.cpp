@@ -19,6 +19,17 @@
 
 #include "DirectXTex.h"
 
+const std::string scriptExtentions = ".cpp,.h,.hpp,.c";
+const std::string prefabExtentions = ".prefab";
+const std::string meshExtentions = ".obj,.fbx";
+const std::string textureExtentions = ".png,.jpg,.jpeg,.bmp";
+const std::string soundExtentions = ".wav,.mp3,.ogg";
+const std::string textExtentions = ".txt";
+const std::string csvExtentions = ".csv";
+const std::string yamlExtentions = ".yaml,.yml";
+const std::string jsonExtentions = ".json";
+const std::string extentionList = scriptExtentions + prefabExtentions + meshExtentions + textureExtentions + soundExtentions + textExtentions + csvExtentions + yamlExtentions + jsonExtentions;
+
 ProjectWindow::ProjectWindow()
     : m_showContextMenu(false)
     , m_showRenameDialog(false)
@@ -47,7 +58,8 @@ void ProjectWindow::Initialize(const std::string& rootPath, const std::string& v
 
     // vcxprojパスが指定されている場合、VCProjectManagerを初期化
     if (!vcxprojPath.empty()) {
-        if (!m_vcProjectManager.Initialize(vcxprojPath)) {
+		fs::path vcxprojFullPath = fs::absolute(vcxprojPath);
+        if (!m_vcProjectManager.Initialize(vcxprojFullPath.string())) {
             EngineConsole::LogWarning("ProjectWindow: VCProjectManagerの初期化に失敗しました");
         }
     }
@@ -123,10 +135,7 @@ void ProjectWindow::ScanDirectory(const std::string& path, FileEntry& entry)
                     // ソースファイルとPrefabを表示（.cpp, .h, .hpp, .c, .prefab）
                     std::string ext = item.path().extension().string();
                     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-                    if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c" || ext == ".prefab" ||
-                        ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp"||
-                        ext == ".wav" || ext == ".mp3" || ext == ".ogg" || 
-                        ext == ".obj" || ext == ".fbx") {
+					if (extentionList.find(ext) != std::string::npos) {
                         files.push_back(child);
                     }
                 }
@@ -461,6 +470,8 @@ void ProjectWindow::CreateNewScript(const std::string& directory)
         headerFile << "public:\n";
         headerFile << "    void Start() override;\n";
         headerFile << "    void Update() override;\n";
+        headerFile << "\n";
+        headerFile << "    const char* GetScriptName() const override;\n";
         headerFile << "};\n";
         headerFile.close();
     }
@@ -469,6 +480,7 @@ void ProjectWindow::CreateNewScript(const std::string& directory)
     std::ofstream cppFile(cppPath);
     if (cppFile.is_open()) {
         cppFile << "#include \"" << scriptName << ".h\"\n\n";
+        cppFile << "#include \"" << "ScriptFactory" << ".h\"\n\n";
         cppFile << "REGISTER_SCRIPT(" << scriptName << ")\n\n";
         cppFile << "void " << scriptName << "::Start()\n";
         cppFile << "{\n";
@@ -559,7 +571,26 @@ void ProjectWindow::DeleteEntry(const std::string& path)
                 }
             }
 
-            EngineConsole::Log("ProjectWindow: ファイルを削除しました: %s", path.c_str());
+            // プロジェクトからも削除
+            if (!m_vcProjectManager.GetProjectPath().empty()) {
+                // .h/.hpp/.cpp/.c ファイルの場合、プロジェクトから削除
+                if (ext == ".h" || ext == ".hpp" || ext == ".cpp" || ext == ".c") {
+                    // ヘッダーとソースの両方を削除
+                    bool removed = false;
+                    if (fs::exists(headerPath)) {
+                        removed = m_vcProjectManager.RemoveSourceFiles(headerPath) || removed;
+                    }
+                    if (fs::exists(cppPath)) {
+                        removed = m_vcProjectManager.RemoveSourceFiles(cppPath) || removed;
+                    }
+                    
+                    if (removed) {
+                        EngineConsole::Log("ProjectWindow: Visual Studioプロジェクトからファイルを削除しました");
+                    } else {
+                        EngineConsole::LogWarning("ProjectWindow: Visual Studioプロジェクトからのファイル削除に失敗しました");
+                    }
+                }
+            }
         }
     }
     catch (const fs::filesystem_error& e) {
@@ -786,7 +817,7 @@ void ProjectWindow::GrabFileIcon(FileEntry entry)
     if (!entry.isDirectory) {
         std::string ext = fs::path(entry.fullPath).extension().string();
         std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-        if (ext == ".prefab") {
+        if (prefabExtentions.find(ext) != std::string::npos) {
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
                 // ペイロードとしてファイルパスを設定
                 ImGui::SetDragDropPayload("PREFAB", entry.fullPath.c_str(), entry.fullPath.size() + 1);
@@ -795,7 +826,7 @@ void ProjectWindow::GrabFileIcon(FileEntry entry)
                 ImGui::EndDragDropSource();
             }
         }
-        else if (ext == ".cpp" || ext == ".h" || ext == ".hpp" || ext == ".c") {
+        else if (scriptExtentions.find(ext) != std::string::npos) {
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
                 // ペイロードとしてファイルパスを設定
                 ImGui::SetDragDropPayload("SCRIPT", entry.fullPath.c_str(), entry.fullPath.size() + 1);
@@ -804,7 +835,7 @@ void ProjectWindow::GrabFileIcon(FileEntry entry)
                 ImGui::EndDragDropSource();
             }
         }
-        else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp") {
+        else if (textureExtentions.find(ext) != std::string::npos) {
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
                 // ペイロードとしてファイルパスを設定
                 ImGui::SetDragDropPayload("TEXTURE", entry.fullPath.c_str(), entry.fullPath.size() + 1);
@@ -813,7 +844,7 @@ void ProjectWindow::GrabFileIcon(FileEntry entry)
                 ImGui::EndDragDropSource();
             }
         }
-        else if (ext == ".obj" || ext == ".fbx") {
+        else if (meshExtentions.find(ext) != std::string::npos) {
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
                 // ペイロードとしてファイルパスを設定
                 ImGui::SetDragDropPayload("MESH", entry.fullPath.c_str(), entry.fullPath.size() + 1);
@@ -822,7 +853,43 @@ void ProjectWindow::GrabFileIcon(FileEntry entry)
                 ImGui::EndDragDropSource();
             }
         }
-		else if (ext == ".wav" || ext == ".mp3" || ext == ".ogg") {
+		else if (soundExtentions.find(ext) != std::string::npos) {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("SOUND", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+        else if (textExtentions.find(ext) != std::string::npos) {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("TEXT", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+        else if (csvExtentions.find(ext) != std::string::npos) {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("CSV", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+        else if (yamlExtentions.find(ext) != std::string::npos) {
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                // ペイロードとしてファイルパスを設定
+                ImGui::SetDragDropPayload("YAML", entry.fullPath.c_str(), entry.fullPath.size() + 1);
+                // ドラッグ中の表示
+                ImGui::Text(entry.name.c_str());
+                ImGui::EndDragDropSource();
+            }
+        }
+        else if (soundExtentions.find(ext) != std::string::npos) {
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
                 // ペイロードとしてファイルパスを設定
                 ImGui::SetDragDropPayload("SOUND", entry.fullPath.c_str(), entry.fullPath.size() + 1);
@@ -960,7 +1027,7 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
         else if (ext == ".prefab") {
             icon = m_pPrefabIcon;
         }
-        else if (ext == ".obj") {
+        else if (ext == ".obj" ||  ext == ".fbx") {
             icon = m_pMeshIcon;
         }
 		else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp") {
@@ -968,6 +1035,9 @@ bool ProjectWindow::DrawGridItem(const FileEntry& entry)
         }
         else if (ext == ".wav" || ext == ".mp3" || ext == ".ogg") {
             icon = m_pSoundIcon;
+        }
+		else if (ext == ".csv" || ext == ".txt" || ext == ".yaml" || ext == ".yml") {
+            // テキストファイルアイコン（未実装）
         }
     }
 

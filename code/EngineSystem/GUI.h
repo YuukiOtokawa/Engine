@@ -18,6 +18,8 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
+#include "FrameWork.h"
+
 enum class WindowType {
     
 };
@@ -107,5 +109,6 @@ public:
         return m_pInstance;
     }
 
+    static void SetMatrix(XMMATRIX proj, XMMATRIX view);
 };
 

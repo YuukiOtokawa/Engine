@@ -20,11 +20,14 @@ const double HIT_MISS = 0.500;
 
 void PlayerControl::Start()
 {
+    // スクリプトのインスタンスはScriptComponent型でやってくるのでキャストが必要
+    // 要改善点
     gameManager = dynamic_cast<GameManager*>(Editor::GetInstance()->GetObject("GameManager")->GetComponent<ScriptComponent>()->GetScriptInstance());
 }
 
 void PlayerControl::Update()
 {
+    // 入力検知システム
 	auto keyboard = Editor::GetInstance()->GetObject("InputSystem")->GetComponent<InputSystem>()->GetKeyboard();
 
 
@@ -35,6 +38,7 @@ void PlayerControl::Update()
 }
 
 void PlayerControl::Import(YAML::Node& node) {
+    // yaml-cppを使用してデータの読み書き
     if (node["speed"]) {
         m_Speed = node["speed"].as<float>();
     }
@@ -70,22 +74,22 @@ void PlayerControl::Hit()
 
         if (minDiff <= HIT_PERFECT)
         {
-            EngineConsole::Log("PERFECT!");
+            EngineConsole::Log("PERFECT! diff : %f", minDiff);
             gameManager->Perfect();
         }
         else if (minDiff <= HIT_GREAT)
         {
-            EngineConsole::Log("GREAT!");
+            EngineConsole::Log("GREAT! diff : %f", minDiff);
             gameManager->Great();
         }
         else if (minDiff <= HIT_GOOD)
         {
-            EngineConsole::Log("GOOD!");
+            EngineConsole::Log("GOOD! diff : %f", minDiff);
             gameManager->Good();
         }
         else
         {
-            EngineConsole::Log("MISS!!!");
+            EngineConsole::Log("MISS!!! diff : %f", minDiff);
             gameManager->Miss();
         }
         gameManager->RemoveNotes(targetNote);

@@ -1,27 +1,68 @@
-#include "GameManager.h"
+ï»¿#include "GameManager.h"
 #include "ScriptFactory.h"
 
+// å¿…è¦ãªã‚‚ã®ã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
+// å¾Œã€…å¿…è¦ãªãã—ãŸã„
 #include "Component_Transform.h"
+
+#include "CSVImporter.h"
+
+#include "Audio.h"
+
+#include "Script.h"
 
 REGISTER_SCRIPT(GameManager)
 
 void GameManager::Start()
 {
+	auto list = CSVImporter::Import(noteDataFile.filepath);
+
+	spawnNoteInfos.clear();
+
+	for (auto line : list) {
+		auto it = line.begin();
+		if (it == line.end()) continue;
+		float spawnTime = std::stof(*it);
+		++it;
+		if (it == line.end()) continue;
+		float toTargetTime = std::stof(*it);
+		spawnNoteInfos.push_back({ spawnTime, toTargetTime });
+	}
+
+	// spawnNoteInfosã‚’spawnTimeã§ã‚½ãƒ¼ãƒˆ
+	std::sort(spawnNoteInfos.begin(), spawnNoteInfos.end(),
+		[](const SpawnNoteInfo& a, const SpawnNoteInfo& b) {
+			return a.spawnTime < b.spawnTime;
+			  });
+
+	nextSpawnIt = spawnNoteInfos.begin();
+	spawnInterval = 0.0f;
+
+	auto audioComp = gameobject->GetComponent<Audio>();
+	audioComp->LoadAudio(soundFile.filepath.c_str());
+	audioComp->SetVolume(0.5f);
+	audioComp->PlayOneShot();
 }
 
 void GameManager::Update()
 {
-	spawnInterval -= Time::DeltaTime();
-	if (spawnInterval <= 0.0f) {
-		SpawnNote(2.0); // 2•bæ‚ÉƒXƒ|[ƒ“
-		spawnInterval = 0.5f; // Ÿ‚ÌƒXƒ|[ƒ“‚Ü‚Å‚ÌƒCƒ“ƒ^[ƒoƒ‹‚ğƒŠƒZƒbƒg
+	spawnInterval += Time::DeltaTime();
+	if (nextSpawnIt != spawnNoteInfos.end()) {
+		while (spawnInterval >= nextSpawnIt->spawnTime) {
+			SpawnNote(nextSpawnIt->toTargetTime);
+			++nextSpawnIt;
+			if (nextSpawnIt == spawnNoteInfos.end()) {
+				break;
+			}
+		}
 	}
 
-	// removeList‚É“ü‚Á‚Ä‚¢‚éƒm[ƒc‚ğíœ
+	// removeListã«å…¥ã£ã¦ã„ã‚‹ãƒãƒ¼ãƒ„ã‚’å‰Šé™¤
 	for (auto& note : removeList) {
 		auto it = std::find(notes.begin(), notes.end(), note);
 		if (it != notes.end()) {
 			notes.erase(it);
+			// Destroy()ã§ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤
 			note->gameobject->Destroy();
 		}
 	}
@@ -30,7 +71,8 @@ void GameManager::Update()
 		if (!note->IsActive()) continue;
 
 		if (note->GetRemainedTime() < -0.2) {
-			// TODO [otokawa]: Miss”»’è
+			// TODO [otokawa]: Missåˆ¤å®š
+			// Debug.Log()
 			EngineConsole::Log("TimeOver!!!");
 			RemoveNotes(note);
 		}
@@ -48,13 +90,6 @@ void GameManager::SpawnNote(double spawnAheadTime)
 	auto currentTime = Time::ElapsedTime();
 	auto targetTime = currentTime + spawnAheadTime;
 
-	//auto object = new Object();
-
-	// TODO [otokawa]:ƒXƒNƒŠƒvƒg’Ç‰Áˆ—ŠÈ’P‚É‚µ‚½‚¢‚Ë
-	//auto script = object->AddComponent<ScriptComponent>();
-	//auto note = dynamic_cast<Notes*>(ScriptFactory::GetInstance().CreateScript("Notes"));
-	//object->AddComponent<Transform>();
-	//script->SetScript(note);
 	auto note = notePrefab.Instantiate();
 	auto instance = dynamic_cast<Notes*>(note->GetComponent<ScriptComponent>()->GetScriptInstance());
 	instance->SetParameter(nextNoteID++, spawnAheadTime, true);

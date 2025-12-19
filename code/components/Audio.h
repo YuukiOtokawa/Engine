@@ -18,7 +18,9 @@ private:
 
 public:
     DECLARE_COMPONENT(Audio)
-    Audio() = default;
+    Audio() {
+        m_ClassID = CID_AudioData;
+    }
     ~Audio() = default;
 
     void InitializeTag() override {
@@ -27,7 +29,20 @@ public:
 
     void Update() override {}
 
-    void ExportComponent(YAML::Emitter& out) override {}
+    void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "fileName" << YAML::Value << m_FileID.fileName;
+        out << YAML::Key << "volume" << YAML::Value << m_Volume;
+    }
+    void ImportFile(YAML::Node& node) override {
+        if (node["fileID"]) {
+            m_FileID.fileName = node["fileName"].as<std::string>();
+        }
+        if (node["volume"]) {
+            m_Volume = node["volume"].as<float>();
+        }
+    }
+
+    void End() override { Stop(); }
 
     void LoadAudio(const char* filename);
     void Release();

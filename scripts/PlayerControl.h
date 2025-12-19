@@ -6,6 +6,7 @@ class GameManager;
 class PlayerControl :
     public Script
 {
+    // 他スクリプトのポインタも持てる
     GameManager* gameManager = nullptr;
     float m_Speed = 1.0f;
     float m_JumpForce = 1.0f;

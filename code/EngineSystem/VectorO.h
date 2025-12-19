@@ -386,3 +386,56 @@ public:
 
     auto operator ()(const float x, const float y = 0.0f, const float z = 0.0f, const float w = 0.0f) -> Vector4O& { this->x = x; this->y = y; this->z = z; this->w = w; return *this; }
 };
+
+// QuaternionからEuler角(ラジアン)への変換関数
+inline Vector4O VOQuaternionToEuler(const Vector4O& q) {
+    Vector4O euler;
+
+    // Roll (x軸回転)
+    float sinr_cosp = 2.0f * (q.w * q.x + q.y * q.z);
+    float cosr_cosp = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
+    euler.x = atan2f(sinr_cosp, cosr_cosp);
+
+    // Pitch (y軸回転)
+    float sinp = 2.0f * (q.w * q.y - q.z * q.x);
+    if (fabsf(sinp) >= 1.0f)
+        euler.y = copysignf(XM_PI / 2.0f, sinp); // ジンバルロック時は±90度
+    else
+        euler.y = asinf(sinp);
+
+    // Yaw (z軸回転)
+    float siny_cosp = 2.0f * (q.w * q.z + q.x * q.y);
+    float cosy_cosp = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
+    euler.z = atan2f(siny_cosp, cosy_cosp);
+
+    euler.w = 0.0f;
+    return euler;
+}
+
+//inline void DecomposeMatrixClean(const XMMATRIX& matrix, Vector3O& outT, XMVECTOR outR, Vector3O& outS) {
+//    XMFLOAT3 t;
+//    XMStoreFloat3(&t, matrix.r[3]);
+//    outT = t;
+//
+//    XMFLOAT3 col0, col1, col2;
+//    XMStoreFloat3(&col0, matrix.r[0]);
+//    XMStoreFloat3(&col1, matrix.r[1]);
+//    XMStoreFloat3(&col2, matrix.r[2]);
+//
+//    outS = Vector3O(
+//        Vector3O(col0).Length(),
+//        Vector3O(col1).Length(),
+//        Vector3O(col2).Length()
+//    );
+//
+//    outS.Normalize();
+//
+//    XMMATRIX rotM = XMMatrixIdentity();
+//    
+//    rotM.r[0] = XMLoadFloat4(&XMFLOAT4(col0.x, col0.y, col0.z, 0.0f));
+//    rotM.r[1] = XMLoadFloat4(&XMFLOAT4(col1.x, col1.y, col1.z, 0.0f));
+//    rotM.r[2] = XMLoadFloat4(&XMFLOAT4(col2.x, col2.y, col2.z, 0.0f));
+//
+//    outR = XMQuaternionRotationMatrix(rotM);
+//
+//}

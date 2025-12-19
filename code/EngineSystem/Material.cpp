@@ -165,9 +165,6 @@ void Material::DrawGUI() {
 
 void Material::ImportFile(YAML::Node& node)
 {
-	if (node["specularPower"]) {
-		m_Material.SpecularPower = node["specularPower"].as<float>();
-	}
 	if (node["vertexShader"]) {
 		m_VertexShader = node["vertexShader"].as<std::string>();
 	}
@@ -180,11 +177,63 @@ void Material::ImportFile(YAML::Node& node)
 	if (node["bumpTextureFileID"]) {
 		m_BumpTextureFileID = node["bumpTextureFileID"].as<int>();
 	}
+
+	// m_Materialの内容をインポート
+	if (node["material"]) {
+		auto material = node["material"];
+		if (material["textureEnable"]) {
+			m_Material.textureEnable = material["textureEnable"].as<bool>();
+		}
+		if (material["shininess"]) {
+			m_Material.shininess = material["shininess"].as<float>();
+		}
+		if (material["specularPower"]) {
+			m_Material.SpecularPower = material["specularPower"].as<float>();
+		}
+		if (material["rgbShift"]) {
+			m_Material.RGBShift = material["rgbShift"].as<float>();
+		}
+		if (material["ambient"]) {
+			auto ambient = material["ambient"];
+			m_Material.ambient.x = ambient[0].as<float>();
+			m_Material.ambient.y = ambient[1].as<float>();
+			m_Material.ambient.z = ambient[2].as<float>();
+			m_Material.ambient.w = ambient[3].as<float>();
+		}
+		if (material["diffuse"]) {
+			auto diffuse = material["diffuse"];
+			m_Material.diffuse.x = diffuse[0].as<float>();
+			m_Material.diffuse.y = diffuse[1].as<float>();
+			m_Material.diffuse.z = diffuse[2].as<float>();
+			m_Material.diffuse.w = diffuse[3].as<float>();
+		}
+		if (material["specular"]) {
+			auto specular = material["specular"];
+			m_Material.specular.x = specular[0].as<float>();
+			m_Material.specular.y = specular[1].as<float>();
+			m_Material.specular.z = specular[2].as<float>();
+			m_Material.specular.w = specular[3].as<float>();
+		}
+		if (material["emissive"]) {
+			auto emissive = material["emissive"];
+			m_Material.emissive.x = emissive[0].as<float>();
+			m_Material.emissive.y = emissive[1].as<float>();
+			m_Material.emissive.z = emissive[2].as<float>();
+			m_Material.emissive.w = emissive[3].as<float>();
+		}
+		if (material["mosaicSize"]) {
+			m_Material.MosaicSize = material["mosaicSize"].as<float>();
+		}
+		if (material["blockSize"]) {
+			auto blockSize = material["blockSize"];
+			m_Material.BlockSize.x = blockSize[0].as<float>();
+			m_Material.BlockSize.y = blockSize[1].as<float>();
+		}
+	}
 }
 
 void Material::ExportFile(YAML::Emitter& out)
 {
-	out << YAML::Key << "specularPower" << YAML::Value << m_Material.SpecularPower;
 	out << YAML::Key << "vertexShader" << YAML::Value << m_VertexShader;
 	out << YAML::Key << "pixelShader" << YAML::Value << m_PixelShader;
 
@@ -201,6 +250,25 @@ void Material::ExportFile(YAML::Emitter& out)
 		out << m_BumpTextureFileID;
 	else
 		out << exist;
+
+	// m_Materialの内容を出力
+	out << YAML::Key << "material" << YAML::Value << YAML::BeginMap;
+	out << YAML::Key << "textureEnable" << YAML::Value << (bool)m_Material.textureEnable;
+	out << YAML::Key << "shininess" << YAML::Value << m_Material.shininess;
+	out << YAML::Key << "specularPower" << YAML::Value << m_Material.SpecularPower;
+	out << YAML::Key << "rgbShift" << YAML::Value << m_Material.RGBShift;
+	out << YAML::Key << "ambient" << YAML::Value << YAML::Flow << YAML::BeginSeq 
+		<< m_Material.ambient.x << m_Material.ambient.y << m_Material.ambient.z << m_Material.ambient.w << YAML::EndSeq;
+	out << YAML::Key << "diffuse" << YAML::Value << YAML::Flow << YAML::BeginSeq 
+		<< m_Material.diffuse.x << m_Material.diffuse.y << m_Material.diffuse.z << m_Material.diffuse.w << YAML::EndSeq;
+	out << YAML::Key << "specular" << YAML::Value << YAML::Flow << YAML::BeginSeq 
+		<< m_Material.specular.x << m_Material.specular.y << m_Material.specular.z << m_Material.specular.w << YAML::EndSeq;
+	out << YAML::Key << "emissive" << YAML::Value << YAML::Flow << YAML::BeginSeq 
+		<< m_Material.emissive.x << m_Material.emissive.y << m_Material.emissive.z << m_Material.emissive.w << YAML::EndSeq;
+	out << YAML::Key << "mosaicSize" << YAML::Value << m_Material.MosaicSize;
+	out << YAML::Key << "blockSize" << YAML::Value << YAML::Flow << YAML::BeginSeq 
+		<< m_Material.BlockSize.x << m_Material.BlockSize.y << YAML::EndSeq;
+	out << YAML::EndMap;
 }
 
 void Material::SetVertexShaderKey(std::string key)

@@ -876,7 +876,7 @@ ID3D11ShaderResourceView** RenderCore::GetTexture(int index)
 			return &it->shaderResourceView;
 		}
 	}
-	return nullptr;
+	return &m_Textures.at(0)->shaderResourceView;
 }
 
 int RenderCore::GetTextureWidth(int index)

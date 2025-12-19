@@ -6,6 +6,7 @@
 class NotesManager :
     public Script
 {
+    // スクリプトもC++なのでコンテナも使える
     std::vector<Notes> notes;
     int nextNoteID = 0;
 

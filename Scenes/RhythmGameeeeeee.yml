@@ -1,0 +1,161 @@
+objects:
+  - classID: 1
+    fileID: 17
+    name: InputSystem
+    tag: 0
+    layer: 3
+    components:
+      - 18
+  - classID: 8
+    fileID: 18
+    tag: 10
+  - classID: 1
+    fileID: 19
+    name: EditorCamera
+    tag: 2
+    layer: 1
+    components:
+      - 20
+      - 21
+  - classID: 3
+    fileID: 20
+    tag: 0
+    position: [-8.60528755, -0.253521442, -8.32637596, 0]
+    rotation: [-0.20799993, 0.641999841, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 11
+    fileID: 21
+    tag: 0
+    isActiveCamera: false
+    target: [-8.01939583, -0.460024774, -7.54273891, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 22
+    name: GameCamera
+    tag: 0
+    layer: 2
+    components:
+      - 23
+      - 24
+  - classID: 3
+    fileID: 23
+    tag: 0
+    position: [0, 5, -7.5, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 10
+    fileID: 24
+    tag: 0
+    isActiveCamera: true
+    target: [0, 0, 0, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 33
+    name: DirectionalLight
+    tag: 8
+    layer: 2
+    components:
+      - 34
+      - 35
+  - classID: 3
+    fileID: 34
+    tag: 0
+    position: [0, 10, 0, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 9
+    fileID: 35
+    tag: 0
+    type: 0
+    direction: [0, -1, 0, 0]
+    diffuse: [1, 1, 1, 1]
+  - classID: 1
+    fileID: 36
+    name: GameManager
+    tag: 3
+    layer: 2
+    components:
+      - 38
+      - 39
+  - classID: 17
+    fileID: 38
+    tag: 9
+    scriptName: GameManager
+    spawnInterval: 0
+    notePrefab: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\Prefab\Note.prefab
+    perfectPrefab: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\Prefab\Perfect.prefab
+    greatPrefab: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\Prefab\Great.prefab
+    goodPrefab: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\Prefab\Good.prefab
+    missPrefab: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\Prefab\Miss.prefab
+    noteDataFile:
+      - TestDoc.csv
+      - C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\TestDoc.csv
+    soundFile:
+      - maou_14_shining_star.mp3
+      - C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\maou_14_shining_star.mp3
+    Lag: 0
+    BPM: 120
+  - classID: 25
+    fileID: 39
+    tag: 0
+    fileName: ""
+    volume: 1
+  - classID: 1
+    fileID: 37
+    name: Player
+    tag: 3
+    layer: 2
+    components:
+      - 40
+  - classID: 17
+    fileID: 40
+    tag: 9
+    scriptName: PlayerControl
+    speed: 1
+    jumpForce: 1
+  - classID: 1
+    fileID: 41
+    name: Target
+    tag: 3
+    layer: 2
+    components:
+      - 42
+      - 43
+      - 44
+  - classID: 3
+    fileID: 42
+    tag: 0
+    position: [0, 0, 0, 0]
+    rotation: [166.786804, -19.2704411, 5.03712654, 0]
+    scale: [2.52999997, 2.52999997, 2.52999997, 0]
+  - classID: 4
+    fileID: 43
+    tag: 0
+    vertexIndexFileID: 47
+  - classID: 5
+    fileID: 44
+    tag: 0
+    materialFileID: 48
+  - classID: 2
+    fileID: 48
+    vertexShader: unlit
+    pixelShader: unlit
+    textureFileID: 28
+    bumpTextureFileID: 28
+    material:
+      textureEnable: true
+      shininess: 250
+      specularPower: 50
+      rgbShift: 0.5
+      ambient: [1, 1, 1, 1]
+      diffuse: [1, 0.939999998, 1, 1]
+      specular: [0.5, 0.5, 0.5, 1]
+      emissive: [0, 0, 0, 0]
+      mosaicSize: 1.5
+      blockSize: [32, 32]

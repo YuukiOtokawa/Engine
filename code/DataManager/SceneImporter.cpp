@@ -33,6 +33,7 @@
 #include "Canvas.h"
 #include "UIImageMesh.h"
 #include "UIImage.h"
+#include "Audio.h"
 
 #include "OBJLoader.h"
 
@@ -349,6 +350,8 @@ EngineMetaFile* SceneImporter::CreateObject(ClassID classID)
 			return new UIImageMesh();
 		case CID_UIImage:
 			return new UIImage();
+		case CID_AudioData:
+			return new Audio();
 		case CID_None:
 		default:
 			return nullptr;

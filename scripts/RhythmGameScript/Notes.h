@@ -1,13 +1,14 @@
-#pragma once
+ï»¿#pragma once
 #include "Script.h"
 class Notes :
     public Script
 {
     int noteID = -1;
-    double targetTime = 0.0; // ƒm[ƒg‚ªƒqƒbƒg‚·‚é—\’è‚ÌŠÔi•bj
+    double targetTime = 0.0; // ãƒãƒ¼ãƒˆãŒãƒ’ãƒƒãƒˆã™ã‚‹äºˆå®šã®æ™‚é–“ï¼ˆç§’ï¼‰
     double remainedTime = 0.0;
-    bool isActive = true;    // ƒm[ƒg‚ªƒAƒNƒeƒBƒu‚©‚Ç‚¤‚©
+    bool isActive = true;    // ãƒãƒ¼ãƒˆãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹ã©ã†ã‹
 
+    // ã‚¼ãƒ­åˆæœŸåŒ–ã—ã¦ã¾ã™
     Vector3O direction = Vector3O::Zero();
 public:
     Notes() {

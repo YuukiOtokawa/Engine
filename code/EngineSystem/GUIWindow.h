@@ -32,5 +32,10 @@ public:
 
     void Render() override = 0;
 
+    void SetMatrix(XMMATRIX projMat, XMMATRIX viewMat) {
+        m_ProjectionMatrix = projMat;
+        m_ViewMatrix = viewMat;
+    }
+
 
 };

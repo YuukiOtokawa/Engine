@@ -6,8 +6,12 @@
 
 #include <chrono>
 #include <thread>
+#include "EngineAPI.h"
 
-class Time {
+//std::chronoを使用して正確に計測
+// はじめて使うので効率化も必要かも
+
+class OTOKAWA_API Time {
 
     static DWORD m_FrameCount; // フレームカウント
 

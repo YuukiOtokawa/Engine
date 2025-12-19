@@ -45,6 +45,7 @@
 #include "Canvas.h"
 #include "UIImageMesh.h"
 #include "UIImage.h"
+#include "MainEngine.h"
 
 #include "FBXImporter.h"
 #include "OBJLoader.h"
@@ -239,7 +240,7 @@ Object* Prefab::Import(const std::string& filePath)
         if (prefabData["textures"]) {
             for (const auto& textureInfo : prefabData["textures"]) {
                 int fileID = textureInfo["fileID"].as<int>();
-                std::string texturePath = textureInfo["filePath"].as<std::string>();
+                std::string texturePath = textureInfo["filePath"].as<std::string>();;
 
                 int len = MultiByteToWideChar(CP_UTF8, 0, texturePath.c_str(), -1, nullptr, 0);
                 std::wstring wideStringFilePath;

@@ -24,4 +24,12 @@
         AddProperty(name, PropertyType::METAFILE, &type); \
     } else if constexpr (std::is_same_v<decltype(type), PrefabAsset>) { \
         AddProperty(name, PropertyType::PREFAB, &type); \
+    } else if constexpr (std::is_same_v<decltype(type), TextFileInfo>) { \
+        AddProperty(name, PropertyType::TEXT, &type); \
+    } else if constexpr (std::is_same_v<decltype(type), CSVFileInfo>) { \
+        AddProperty(name, PropertyType::CSV, &type); \
+    } else if constexpr (std::is_same_v<decltype(type), YAMLFileInfo>) { \
+        AddProperty(name, PropertyType::YAML, &type); \
+    } else if constexpr (std::is_same_v<decltype(type), SoundFileInfo>) { \
+        AddProperty(name, PropertyType::SOUND, &type); \
     }

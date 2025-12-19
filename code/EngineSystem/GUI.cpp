@@ -248,6 +248,11 @@ void GUI::SetFontObjectName()
 void GUI::SetNodeEditorVisible() {
 }
 
+void GUI::SetMatrix(XMMATRIX proj, XMMATRIX view)
+{
+	dynamic_cast<ViewWindow*>(m_EditorViewWindow)->SetMatrix(proj, view);
+}
+
 void GUI::CreateRenderTarget() {
 	ID3D11Texture2D* pBackBuffer;
 	MainEngine::GetInstance()->GetRenderCore()->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));

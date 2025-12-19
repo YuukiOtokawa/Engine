@@ -74,10 +74,11 @@ void MeshRenderer::Render() {
 		else {
 			auto objectScale = transform->GetScale();
 			auto objectRotation = transform->GetRotation().ToRadian();
+			auto quat = transform->GetQuaternion().ToFloat4();
 			auto objectPosition = transform->GetPosition();
 
 			scale = XMMatrixScaling(objectScale.x, objectScale.y, objectScale.z);
-			angle = XMMatrixRotationRollPitchYaw(objectRotation.x, objectRotation.y, objectRotation.z);
+			angle = XMMatrixRotationQuaternion(XMLoadFloat4(quat));
 			translation = XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
 		}
 

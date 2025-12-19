@@ -19,6 +19,8 @@ void HitEffectControl::Update()
 		gameobject->Destroy();
 	}
 }
+
+
 void HitEffectControl::Import(YAML::Node& node)
 {
 }

@@ -127,7 +127,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>code\Node;code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;scripts\RhythmGameScript;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scripts\TestRhythm;code\Node;code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;scripts\RhythmGameScript;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -465,6 +465,7 @@
     <ClInclude Include="scripts\Title.h" />
     <ClInclude Include="scripts\TornadoParticle.h" />
     <ClInclude Include="WaveMeshField.h" />
+    <ClInclude Include="scripts\TestRhythm\TestScript.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="code\shader\blinnPhongPS.hlsl">

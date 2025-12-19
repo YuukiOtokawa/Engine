@@ -11,6 +11,7 @@
 #include "ObjectInterfacePerModule.h"
 
 #include "yaml.h"
+#include "EngineAPI.h"
 
 enum ClassID {
     CID_None = 0, // 0は予約済み
@@ -41,7 +42,24 @@ enum ClassID {
     CID_AudioData,
 };
 
-class EngineMetaFile
+struct TextFileInfo {
+    std::string filename;
+    std::string filepath;
+} typedef TextFile;
+struct CSVFileInfo {
+    std::string filename;
+    std::string filepath;
+} typedef CSVFile;
+struct YAMLFileInfo {
+    std::string filename;
+    std::string filepath;
+} typedef YAMLFile;
+struct SoundFileInfo {
+    std::string filename;
+    std::string filepath;
+};
+
+class OTOKAWA_API EngineMetaFile
 {
 protected:
 
@@ -51,6 +69,7 @@ protected:
     static int m_FileIDCounter; // ファイルIDのカウンター
 
     std::string GetDropPath(std::string fileType);
+    std::string GetTextDropPath(std::string fileType);
 public:
     EngineMetaFile(ClassID id = CID_None, int fileID = -1) : m_ClassID(id) {
         if (fileID == -1)

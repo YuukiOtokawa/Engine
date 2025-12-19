@@ -77,6 +77,45 @@ bool VCProjectManager::AddSourceFiles(const std::string& cppPath, const std::str
     return true;
 }
 
+bool VCProjectManager::RemoveSourceFiles(const std::string& filePath)
+{
+    // プロジェクトファイルを読み込む
+    if (!LoadProject()) {
+        return false;
+    }
+
+    // 相対パスに変換
+    std::string relativePath = GetRelativePath(filePath);
+
+    // 拡張子を取得
+    fs::path path(filePath);
+    std::string ext = path.extension().string();
+    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+    bool modified = false;
+
+    // ファイルの種類に応じて削除
+    if (ext == ".cpp" || ext == ".c") {
+        if (RemoveClCompileEntry(m_projectContent, relativePath)) {
+            EngineConsole::Log("VCProjectManager: .cppファイルをプロジェクトから削除しました: %s", relativePath.c_str());
+            modified = true;
+        }
+    }
+    else if (ext == ".h" || ext == ".hpp") {
+        if (RemoveClIncludeEntry(m_projectContent, relativePath)) {
+            EngineConsole::Log("VCProjectManager: .hファイルをプロジェクトから削除しました: %s", relativePath.c_str());
+            modified = true;
+        }
+    }
+
+    // 変更があれば保存
+    if (modified) {
+        return SaveProject();
+    }
+
+    return false;
+}
+
 bool VCProjectManager::AddIncludeDirectory(const std::string& dirPath)
 {
     // プロジェクトファイルを読み込む
@@ -288,6 +327,102 @@ bool VCProjectManager::AddClIncludeEntry(std::string& content, const std::string
 
     // 挿入
     content.insert(insertPos, newEntry);
+
+    return true;
+}
+
+bool VCProjectManager::RemoveClCompileEntry(std::string& content, const std::string& relativePath)
+{
+    // <ClCompile Include="relativePath" /> または <ClCompile Include="relativePath"></ClCompile> を検索
+    std::string searchPattern = "<ClCompile Include=\"" + relativePath + "\"";
+    size_t pos = content.find(searchPattern);
+
+    if (pos == std::string::npos) {
+        EngineConsole::LogWarning("VCProjectManager: ClCompileエントリが見つかりませんでした: %s", relativePath.c_str());
+        return false;
+    }
+
+    // エントリの開始位置（行の先頭）を見つける
+    size_t lineStart = content.rfind('\n', pos);
+    if (lineStart == std::string::npos) {
+        lineStart = 0;
+    } else {
+        lineStart++; // 改行の次の文字から
+    }
+
+    // エントリの終了位置を見つける
+    size_t lineEnd = content.find("/>", pos);
+    if (lineEnd == std::string::npos) {
+        // 閉じタグ形式の場合
+        lineEnd = content.find("</ClCompile>", pos);
+        if (lineEnd != std::string::npos) {
+            lineEnd += std::string("</ClCompile>").length();
+        }
+    } else {
+        lineEnd += 2; // "/>" の長さ
+    }
+
+    if (lineEnd == std::string::npos) {
+        EngineConsole::LogError("VCProjectManager: ClCompileエントリの終了位置が見つかりませんでした");
+        return false;
+    }
+
+    // 次の改行まで含めて削除
+    size_t nextNewline = content.find('\n', lineEnd);
+    if (nextNewline != std::string::npos) {
+        lineEnd = nextNewline + 1;
+    }
+
+    // エントリを削除
+    content.erase(lineStart, lineEnd - lineStart);
+
+    return true;
+}
+
+bool VCProjectManager::RemoveClIncludeEntry(std::string& content, const std::string& relativePath)
+{
+    // <ClInclude Include="relativePath" /> または <ClInclude Include="relativePath"></ClInclude> を検索
+    std::string searchPattern = "<ClInclude Include=\"" + relativePath + "\"";
+    size_t pos = content.find(searchPattern);
+
+    if (pos == std::string::npos) {
+        EngineConsole::LogWarning("VCProjectManager: ClIncludeエントリが見つかりませんでした: %s", relativePath.c_str());
+        return false;
+    }
+
+    // エントリの開始位置（行の先頭）を見つける
+    size_t lineStart = content.rfind('\n', pos);
+    if (lineStart == std::string::npos) {
+        lineStart = 0;
+    } else {
+        lineStart++; // 改行の次の文字から
+    }
+
+    // エントリの終了位置を見つける
+    size_t lineEnd = content.find("/>", pos);
+    if (lineEnd == std::string::npos) {
+        // 閉じタグ形式の場合
+        lineEnd = content.find("</ClInclude>", pos);
+        if (lineEnd != std::string::npos) {
+            lineEnd += std::string("</ClInclude>").length();
+        }
+    } else {
+        lineEnd += 2; // "/>" の長さ
+    }
+
+    if (lineEnd == std::string::npos) {
+        EngineConsole::LogError("VCProjectManager: ClIncludeエントリの終了位置が見つかりませんでした");
+        return false;
+    }
+
+    // 次の改行まで含めて削除
+    size_t nextNewline = content.find('\n', lineEnd);
+    if (nextNewline != std::string::npos) {
+        lineEnd = nextNewline + 1;
+    }
+
+    // エントリを削除
+    content.erase(lineStart, lineEnd - lineStart);
 
     return true;
 }

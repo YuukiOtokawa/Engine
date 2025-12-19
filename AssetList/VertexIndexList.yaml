@@ -1,3 +1,6 @@
-- fileID: 24
+- fileID: 55
   name: ICOSphereWireFrame.obj
-  filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\model\ICOSphereWireFrame.obj
+  filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\ICOSphereWireFrame.obj
+- fileID: 67
+  name: sky.obj
+  filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\sky.obj

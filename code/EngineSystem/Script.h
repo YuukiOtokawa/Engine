@@ -29,6 +29,10 @@ enum class PropertyType {
     DOUBLE,
     PREFAB,
     TEXTURE,
+    SOUND,
+    TEXT,
+    CSV,
+    YAML,
     // 他の型も必要に応じて追加
 };
 

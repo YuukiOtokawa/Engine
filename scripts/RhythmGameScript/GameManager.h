@@ -6,6 +6,11 @@
 
 #include "PrefabAsset.h"
 
+struct SpawnNoteInfo {
+    float spawnTime;
+    float toTargetTime; // 目標時間までの時間
+};
+
 class GameManager :
     public Script
 {
@@ -26,8 +31,20 @@ class GameManager :
     PrefabAsset goodPrefab = {};
     PrefabAsset missPrefab = {};
 
+    CSVFile noteDataFile = { "","" };
+
+    std::vector<SpawnNoteInfo> spawnNoteInfos;
+    std::vector<SpawnNoteInfo>::iterator nextSpawnIt;
+
+    SoundFileInfo soundFile = { "","" };
+
+    float soundPlayLag = 0.0f;
+    float BeatPerMin = 120.0f;
+
 public:
     GameManager() {
+        // unityの[SerializeField]のような役割
+        // 変数名とGUI上の表示名を渡す
         REGISTER_PROPERTY(spawnInterval, "spawnInterval");
         REGISTER_PROPERTY(notePrefab, "notePrefab");
         REGISTER_PROPERTY(perfectPrefab, "perfectPrefab");
@@ -35,6 +52,11 @@ public:
         REGISTER_PROPERTY(goodPrefab, "goodPrefab");
         REGISTER_PROPERTY(missPrefab, "missPrefab");
 
+        REGISTER_PROPERTY(noteDataFile, "noteDataFile");
+        REGISTER_PROPERTY(soundFile, "soundFile");
+
+        REGISTER_PROPERTY(soundPlayLag, "Lag");
+        REGISTER_PROPERTY(BeatPerMin, "BPM");
     }
 
     void Start() override;
@@ -44,6 +66,7 @@ public:
     //void Export(YAML::Emitter& node) override;
     const char* GetScriptName() const override;
 
+    // ここから下は自由なメンバー関数
 
     void SpawnNote(double targetTime);
 

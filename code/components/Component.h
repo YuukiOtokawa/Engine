@@ -61,6 +61,8 @@ public:
 
     virtual void Start() {}
 
+    virtual void End() {}
+
     virtual void OnDestroy() {}
 
     virtual void OnUpdate() {

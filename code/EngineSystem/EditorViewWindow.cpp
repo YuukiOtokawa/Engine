@@ -152,90 +152,99 @@ void EditorViewWindow::DrawGizmo()
 	auto selected = Editor::GetInstance()->GetSelectedObject();
 
 	// 選択中のオブジェクトにギズモを表示
-	if (selected) {
-		auto transform = selected->GetComponent<Transform>();
+	if (!selected) return;
+	auto transform = selected->GetComponent<Transform>();
 
-		if (transform) {
-			// キーボード入力で操作モードを切り替え (Scene Viewがホバーされている場合のみ)
-			if (m_IsHovered && !ImGuizmo::IsUsing() && !ImGui::IsKeyDown(ImGuiKey_MouseRight)) {
-				if (ImGui::IsKeyPressed(ImGuiKey_W)) {
-					m_GizmoOperation = ImGuizmo::OPERATION::TRANSLATE; // 移動モード
-				}
-				else if (ImGui::IsKeyPressed(ImGuiKey_E)) {
-					m_GizmoOperation = ImGuizmo::OPERATION::ROTATE; // 回転モード
-				}
-				else if (ImGui::IsKeyPressed(ImGuiKey_R)) {
-					m_GizmoOperation = ImGuizmo::OPERATION::SCALE; // スケールモード
-				}
-			}
-
-			// Transformからワールド行列を作成
-			XMMATRIX translationMatrix = XMMatrixTranslation(
-				transform->GetPosition().x,
-				transform->GetPosition().y,
-				transform->GetPosition().z
-			);
-			XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(
-				XMConvertToRadians(transform->GetRotation().x),
-				XMConvertToRadians(transform->GetRotation().y),
-				XMConvertToRadians(transform->GetRotation().z)
-			);
-			XMMATRIX scaleMatrix = XMMatrixScaling(
-				transform->GetScale().x,
-				transform->GetScale().y,
-				transform->GetScale().z
-			);
-			XMMATRIX worldMatrix = scaleMatrix * rotationMatrix * translationMatrix;
-
-			// 操作モードの選択
-			ImGuizmo::OPERATION operation;
-			switch (m_GizmoOperation) {
-			case 0:
-				operation = ImGuizmo::OPERATION::TRANSLATE;
-				break;
-			case 1:
-				operation = ImGuizmo::OPERATION::ROTATE;
-				break;
-			case 2:
-				operation = ImGuizmo::OPERATION::SCALE;
-				break;
-			default:
-				operation = ImGuizmo::OPERATION::TRANSLATE;
-				break;
-			}
-
-			// ImGuizmoでギズモを操作
-			// 回転時はLOCALモードを使用してジンバルロックを軽減
-			ImGuizmo::MODE mode = (operation == ImGuizmo::OPERATION::ROTATE)
-				? ImGuizmo::MODE::LOCAL
-				: ImGuizmo::MODE::WORLD;
-
-			ImGuizmo::Manipulate(
-				(float*)&m_ViewMatrix,
-				(float*)&m_ProjectionMatrix,
-				operation,
-				mode,
-				(float*)&worldMatrix,
-				nullptr,
-				nullptr
-			);
-
-			// ギズモで変更された行列から位置、回転、スケールを抽出
-			if (ImGuizmo::IsUsing()) {
-				float position[3], rotation[3], scale[3];
-				ImGuizmo::DecomposeMatrixToComponents(
-					(float*)&worldMatrix,
-					position,
-					rotation,
-					scale
-				);
-
-				// Transformに反映
-				transform->SetPosition(Vector4O(position[0], position[1], position[2]));
-				transform->SetRotation(Vector4O(rotation[0], rotation[1], rotation[2]));
-				transform->SetScale(Vector4O(scale[0], scale[1], scale[2]));
-			}
+	if (!transform) return;
+	// キーボード入力で操作モードを切り替え (Scene Viewがホバーされている場合のみ)
+	if (m_IsHovered && !ImGuizmo::IsUsing() && !ImGui::IsKeyDown(ImGuiKey_MouseRight)) {
+		if (ImGui::IsKeyPressed(ImGuiKey_W)) {
+			m_GizmoOperation = ImGuizmo::OPERATION::TRANSLATE; // 移動モード
+		}
+		else if (ImGui::IsKeyPressed(ImGuiKey_E)) {
+			m_GizmoOperation = ImGuizmo::OPERATION::ROTATE; // 回転モード
+		}
+		else if (ImGui::IsKeyPressed(ImGuiKey_R)) {
+			m_GizmoOperation = ImGuizmo::OPERATION::SCALE; // スケールモード
 		}
 	}
+
+	// Quaternionから回転行列を作成（ジンバルロック回避）
+	XMVECTOR quat = XMLoadFloat4(transform->GetQuaternion().ToFloat4());
+	XMMATRIX rotationMatrix = XMMatrixRotationQuaternion(quat);
+			
+	XMMATRIX translationMatrix = XMMatrixTranslation(
+		transform->GetPosition().x,
+		transform->GetPosition().y,
+		transform->GetPosition().z
+	);
+			
+	XMMATRIX scaleMatrix = XMMatrixScaling(
+		transform->GetScale().x,
+		transform->GetScale().y,
+		transform->GetScale().z
+	);
+	XMMATRIX worldMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
+	// 操作前の行列を保存
+	XMMATRIX oldWorldMatrix = worldMatrix;
+
+	// 操作モードの選択
+	ImGuizmo::OPERATION operation;
+	switch (m_GizmoOperation) {
+	case 0:
+		operation = ImGuizmo::OPERATION::TRANSLATE;
+		break;
+	case 1:
+		operation = ImGuizmo::OPERATION::ROTATE;
+		break;
+	case 2:
+		operation = ImGuizmo::OPERATION::SCALE;
+		break;
+	default:
+		operation = ImGuizmo::OPERATION::TRANSLATE;
+		break;
+	}
+
+	// ImGuizmoでギズモを操作
+	ImGuizmo::MODE mode = (m_GizmoOperation == ImGuizmo::OPERATION::ROTATE)
+		? ImGuizmo::MODE::LOCAL
+		: ImGuizmo::MODE::WORLD;
+
+	ImGuizmo::Manipulate(
+		(float*)&m_ViewMatrix,
+		(float*)&m_ProjectionMatrix,
+		m_GizmoOperation,
+		mode,
+		(float*)&worldMatrix,
+		nullptr,
+		nullptr
+	);
+
+	// ギズモで変更された行列から位置、回転、スケールを抽出
+	if (ImGuizmo::IsUsing()) {
+
+		// 操作の種類に応じて処理を分岐
+		XMVECTOR outScale, outRot, outTrans;
+		XMFLOAT3 newScale, newPos;
+		XMFLOAT4 newRot;
+
+		if (XMMatrixDecompose(&outScale, &outRot, &outTrans, worldMatrix)) {
+
+			XMStoreFloat3(&newPos, outTrans);
+			XMStoreFloat4(&newRot, outRot);
+
+			transform->SetPosition(newPos);
+			transform->SetQuaternion(newRot);
+
+			if (m_GizmoOperation == ImGuizmo::SCALE) {
+				XMStoreFloat3(&newScale, outScale);
+				transform->SetScale(newScale);
+			}
+		}
+
+	}
+		
+	
 }
 

@@ -1,44 +1,51 @@
 prefabName: Note
 version: 1
 vertexIndices:
-  - fileID: 42
-    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\model\box.obj
-textures:
   - fileID: 58
-    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\asset\texture\ThisIsPicture.png
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\sphere_smooth.obj
 objects:
   - classID: 1
-    fileID: 51
+    fileID: 30
     name: Note
     tag: 0
     layer: 2
     components:
-      - 52
-      - 53
-      - 54
-      - 59
+      - 31
+      - 32
+      - 33
+      - 36
   - classID: 3
-    fileID: 52
+    fileID: 31
     tag: 0
-    position: [0, 0, 0, 0]
-    rotation: [0, 0, 0, 0]
+    position: [0, 3.18368983, 0, 0]
+    rotation: [-0, 0, -0, 0]
     scale: [1, 1, 1, 0]
   - classID: 4
-    fileID: 53
+    fileID: 32
     tag: 0
-    vertexIndexFileID: 42
+    vertexIndexFileID: 58
   - classID: 5
-    fileID: 54
+    fileID: 33
     tag: 0
-    materialFileID: 56
+    materialFileID: 35
   - classID: 2
-    fileID: 56
-    specularPower: 50
+    fileID: 35
     vertexShader: unlit
     pixelShader: unlit
-    textureFileID: 58
-    bumpTextureFileID: 0
+    textureFileID: 36
+    bumpTextureFileID: 28
+    material:
+      textureEnable: true
+      shininess: 96.0784302
+      specularPower: 50
+      rgbShift: 0.5
+      ambient: [1, 1, 1, 1]
+      diffuse: [0.600000024, 1, 1, 1]
+      specular: [0.5, 0.5, 0.5, 1]
+      emissive: [0, 0, 0, 0]
+      mosaicSize: 1.5
+      blockSize: [32, 32]
   - classID: 17
-    fileID: 59
+    fileID: 36
     tag: 9
     scriptName: Notes
