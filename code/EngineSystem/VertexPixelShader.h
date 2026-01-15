@@ -1,11 +1,12 @@
 #pragma once
 
 #include "IShader.h"
+#include "RenderCore.h"
 
 using namespace EngineCoreSystem;
 
 class VertexPixelShader : public IShader {
-    friend class EngineCoreSystem::RenderCore;
+    friend class RenderCore;
 
     ID3D11VertexShader* m_pVertexShader = nullptr;
     ID3D11PixelShader* m_pPixelShader = nullptr;

@@ -7,7 +7,7 @@ using namespace EngineCoreSystem;
 
 class ComputeShader : public IShader {
 
-    friend class EngineCoreSystem::RenderCore;
+    friend class RenderCore;
 
     ID3D11ComputeShader* m_pComputeShader = nullptr;
 

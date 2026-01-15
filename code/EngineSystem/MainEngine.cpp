@@ -54,7 +54,6 @@
 #include "ScriptFactory.h"
 #include "ScriptDirectoryWatcher.h"
 
-
 constexpr auto WINDOW_CREATE_FAILED = -1;
 
 MainEngine* MainEngine::m_pInstance = nullptr;
@@ -372,7 +371,8 @@ int MainEngine::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR l
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 
 	// レンダラーの初期化
-	m_pRenderer = new RenderCore(m_hWnd);
+	RenderCore::m_Handle = m_hWnd;
+	m_pRenderer = RenderCore::GetInstance();
 
 	// エディターの初期化
 	m_pEditor = Editor::GetInstance();
@@ -554,19 +554,33 @@ void MainEngine::GetWindowsInfo()
 	GetSystemInfo(&sysInfo);
 }
 
-#include <ShObjIdl.h> // IFileOpenDialog
 #include <locale>
 #include <codecvt>
 
-std::string OpenImportFileDialog()
+const COMDLG_FILTERSPEC defaultSpec[] =
 {
-    //auto rs = DialogBox(m_hInstance, MAKEINTRESOURCE(IDD_DIALOG1), m_hWnd, FilePathDialogProc);
+	{ L"YAMLファイル (*.yml)", L"*.yml" },
+	{ L"テキストファイル (*.txt)", L"*.txt" },
+	{ L"すべてのファイル (*.*)", L"*.*" },
+};
+
+std::string OpenImportFileDialog(const COMDLG_FILTERSPEC* pFilterSpecs = nullptr, UINT filterCount = 0)
+{
 	IFileOpenDialog* pFileOpenDialog = nullptr;
 	auto rs = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpenDialog));
 	if (FAILED(rs)) {
 		pFileOpenDialog->Release();
 		return "";
 	}
+
+	// フィルターが指定されている場合はそれを使用、なければデフォルトを使用
+	if (pFilterSpecs != nullptr && filterCount > 0) {
+		pFileOpenDialog->SetFileTypes(filterCount, pFilterSpecs);
+	}
+	else {
+		pFileOpenDialog->SetFileTypes(ARRAYSIZE(defaultSpec), defaultSpec);
+	}
+
 	rs = pFileOpenDialog->Show(NULL);
 	if (FAILED(rs)) {
 		pFileOpenDialog->Release();
@@ -582,19 +596,16 @@ std::string OpenImportFileDialog()
 	rs = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 	pFileOpenDialog->Release();
 	pItem->Release();
-	//std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	//std::string narrow_str = converter.to_bytes(pszFilePath);
 
 	// 代替: WideCharToMultiByte を使って wstring → string 変換
 	int len = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, nullptr, 0, nullptr, nullptr);
 	std::string narrow_str;
 	if (len > 0) {
-	    narrow_str.resize(len - 1); // null終端を除く
-	    WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &narrow_str[0], len, nullptr, nullptr);
+		narrow_str.resize(len - 1); // null終端を除く
+		WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &narrow_str[0], len, nullptr, nullptr);
 	}
 	return narrow_str;
 }
-
 std::string OpenExportFileDialog()
 {
 	IFileSaveDialog* pFileSaveDialog = nullptr;
@@ -607,15 +618,9 @@ std::string OpenExportFileDialog()
 	pFileSaveDialog->SetDefaultExtension(L"yml");
 
 	// COM_FILTERSPEC構造体の配列を定義
-	const COMDLG_FILTERSPEC rgSpec[] =
-	{
-		{ L"YAMLファイル (*.yml)", L"*.yml" },
-		{ L"テキストファイル (*.txt)", L"*.txt" },
-		{ L"すべてのファイル (*.*)", L"*.*" },
-	};
 
 	// SetFileTypesでファイルの種類を設定
-	rs = pFileSaveDialog->SetFileTypes(ARRAYSIZE(rgSpec), rgSpec);
+	rs = pFileSaveDialog->SetFileTypes(ARRAYSIZE(defaultSpec), defaultSpec);
 
 	if (FAILED(rs)) {
 		pFileSaveDialog->Release();

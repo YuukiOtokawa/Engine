@@ -30,6 +30,8 @@
 #include "VertexPixelShader.h"
 #include "ComputeShader.h"
 
+using namespace EngineCoreSystem;
+
 namespace EngineCoreSystem {
 
     //==========================================================================
@@ -54,6 +56,7 @@ namespace EngineCoreSystem {
     class RenderCore
     {
     private:
+        friend class MainEngine;
         static RenderCore* m_pInstance;
 
         // DirectX 11 関連のポインタ

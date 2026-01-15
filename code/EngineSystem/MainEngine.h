@@ -18,6 +18,7 @@
 #include "ObjectInterfacePerModule.h"
 
 #include "EngineAPI.h"
+#include <ShObjIdl.h> // IFileOpenDialog
 
 #include "yaml.h"
 
@@ -27,8 +28,9 @@
 #pragma comment(lib, "yaml-cpp.lib")
 #endif // DEBUG
 
+using namespace EngineCoreSystem;
 
-std::string OpenImportFileDialog();
+std::string OpenImportFileDialog(const COMDLG_FILTERSPEC* pFilterSpecs = nullptr, UINT filterCount = 0);
 std::string OpenExportFileDialog();
 
 
