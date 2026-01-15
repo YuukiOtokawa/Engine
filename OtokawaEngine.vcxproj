@@ -74,6 +74,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)build\intermediates\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)</OutDir>
@@ -123,11 +124,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;OTOKAWA_ENGINE_EXPORTS;%(PreprocessorDefinitions);YAML_CPP_DLL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;OTOKAWA_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>scripts\TestRhythm;code\Node;code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;scripts\RhythmGameScript;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scripts\TestRhythm;code\kissfft-master;code\Node;code\yaml-cpp-master\include\yaml-cpp;code;code\Aurora\RuntimeObjectSystem;code\CompileSystem;scripts\RhythmGameScript;resource;code\Aurora\RuntimeCompiler;code\DirectXTex-main\DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -157,12 +158,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;OTOKAWA_ENGINE_EXPORTS;%(PreprocessorDefinitions);YAML_CPP_DLL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;USE_WINDOWS_FILE_CHANGE_NOTIFIER;OTOKAWA_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>code\yaml-cpp;code\ImGuiUser;code\CompileSystem;resource;DirectXTex;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>code;code\Aurora\Systems;code\Node;code\Aurora\RuntimeObjectSystem;code\kissfft-master;code\yaml-cpp-master\include\yaml-cpp;code\ImGuiUser;code\Aurora\RuntimeCompiler;resource;code\shader;code\input;code\imgui;code\DataManager;code\components;code\assimp;code\EngineSystem;scripts;scripts\RhythmGameScript;code\DirectXTex-main\DirectXTex</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -170,8 +171,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex.lib;d3d11.lib;Winmm.lib;ole32.lib;uuid.lib;advapi32.lib;ws2_32.lib;RuntimeCompiler_VS2010.lib;RuntimeObjectSystem.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>code\DirectXTex-main\DirectXTex\Bin\Desktop_2022\x64\Release;code\yaml-cpp;code\CompileSystem;%(AdditionalLibraryDirectories);build\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Xinput.lib;DXGI.lib;DirectXTex.lib;d3d11.lib;Winmm.lib;ole32.lib;uuid.lib;advapi32.lib;ws2_32.lib;RuntimeCompiler_VS2010.lib;RuntimeObjectSystem.lib;yaml-cpp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>code\DirectXTex-main\DirectXTex\Bin\Desktop_2022\x64\Release;code\yaml-cpp-master\build\Release;%(AdditionalLibraryDirectories);build\x64\Release</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)build\x64\Debug\$(TargetName).lib</ImportLibrary>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -251,6 +252,7 @@
     <ClCompile Include="code\EngineSystem\CollisionManager.cpp" />
     <ClCompile Include="code\EngineSystem\ComponentFactory.cpp" />
     <ClCompile Include="code\EngineSystem\Component_Light.cpp" />
+    <ClCompile Include="code\EngineSystem\ComputeShader.cpp" />
     <ClCompile Include="code\EngineSystem\ConsoleWindow.cpp" />
     <ClCompile Include="code\EngineSystem\Editor.cpp" />
     <ClCompile Include="code\EngineSystem\EditorView.cpp" />
@@ -265,6 +267,7 @@
     <ClCompile Include="code\EngineSystem\Inspector.cpp" />
     <ClCompile Include="code\EngineSystem\InspectorWindow.cpp" />
     <ClCompile Include="code\EngineSystem\IRenderable.cpp" />
+    <ClCompile Include="code\EngineSystem\IShader.cpp" />
     <ClCompile Include="code\EngineSystem\MainEngine.cpp" />
     <ClCompile Include="code\EngineSystem\Material.cpp" />
     <ClCompile Include="code\EngineSystem\Object.cpp" />
@@ -297,6 +300,11 @@
     <ClCompile Include="code\input\Gamepad.cpp" />
     <ClCompile Include="code\input\Keyboard.cpp" />
     <ClCompile Include="code\input\Mouse.cpp" />
+    <ClCompile Include="code\kissfft-master\kfc.c" />
+    <ClCompile Include="code\kissfft-master\kiss_fft.c" />
+    <ClCompile Include="code\kissfft-master\kiss_fftnd.c" />
+    <ClCompile Include="code\kissfft-master\kiss_fftndr.c" />
+    <ClCompile Include="code\kissfft-master\kiss_fftr.c" />
     <ClCompile Include="code\Node\BooleanNode.cpp" />
     <ClCompile Include="code\Node\ComparisonNode.cpp" />
     <ClCompile Include="code\Node\IfNode.cpp" />
@@ -326,6 +334,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="scripts\Score.cpp" />
+    <ClCompile Include="scripts\Title\TitlePool.cpp" />
     <ClCompile Include="WaveMeshField.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +384,7 @@
     <ClInclude Include="code\EngineSystem\CollisionManager.h" />
     <ClInclude Include="code\EngineSystem\ComponentFactory.h" />
     <ClInclude Include="code\EngineSystem\Component_Light.h" />
+    <ClInclude Include="code\EngineSystem\ComputeShader.h" />
     <ClInclude Include="code\EngineSystem\ConsoleWindow.h" />
     <ClInclude Include="code\EngineSystem\Editor.h" />
     <ClInclude Include="code\EngineSystem\EditorView.h" />
@@ -391,6 +401,7 @@
     <ClInclude Include="code\EngineSystem\Inspector.h" />
     <ClInclude Include="code\EngineSystem\InspectorWindow.h" />
     <ClInclude Include="code\EngineSystem\IRenderable.h" />
+    <ClInclude Include="code\EngineSystem\IShader.h" />
     <ClInclude Include="code\EngineSystem\MainEngine.h" />
     <ClInclude Include="code\EngineSystem\Material.h" />
     <ClInclude Include="code\EngineSystem\MathO.h" />
@@ -429,6 +440,12 @@
     <ClInclude Include="code\input\Gamepad.h" />
     <ClInclude Include="code\input\Keyboard.h" />
     <ClInclude Include="code\input\Mouse.h" />
+    <ClInclude Include="code\kissfft-master\kfc.h" />
+    <ClInclude Include="code\kissfft-master\kiss_fft.h" />
+    <ClInclude Include="code\kissfft-master\kiss_fftnd.h" />
+    <ClInclude Include="code\kissfft-master\kiss_fftndr.h" />
+    <ClInclude Include="code\kissfft-master\kiss_fftr.h" />
+    <ClInclude Include="code\kissfft-master\kiss_fft_log.h" />
     <ClInclude Include="code\Node\BooleanNode.h" />
     <ClInclude Include="code\Node\ComparisonNode.h" />
     <ClInclude Include="code\Node\IfNode.h" />
@@ -464,6 +481,7 @@
     <ClInclude Include="scripts\Score.h" />
     <ClInclude Include="scripts\Title.h" />
     <ClInclude Include="scripts\TornadoParticle.h" />
+    <ClInclude Include="scripts\Title\TitlePool.h" />
     <ClInclude Include="WaveMeshField.h" />
     <ClInclude Include="scripts\TestRhythm\TestScript.h" />
   </ItemGroup>
@@ -473,11 +491,13 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\bumpPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -488,6 +508,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\DeferredGeometry.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -495,6 +516,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\DeferredLighting.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -502,6 +524,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\EnvMapPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -509,61 +532,73 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\GaussianPS_H.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\GaussianPS_V.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\grayscalePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\hemisphereLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\limLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\mosaicPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\PBRPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\pixelLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\pixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\pointLightingBlinnPhongPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\PosterisePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\ProjectionShadow1PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -571,6 +606,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\ProjectionShadowPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -578,50 +614,62 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\RGBShiftPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\spotLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\stealthPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\toon1PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\toon2PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\unlitColorPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\unlitTexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\vertexDirectionalLightingPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\vertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="code\shader\WavePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -629,6 +677,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableDebuggingInformation>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

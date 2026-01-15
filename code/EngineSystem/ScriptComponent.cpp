@@ -289,4 +289,7 @@ void ScriptComponent::DrawGUI()
 			break;
 		}
 	}
+
+	// スクリプト固有のカスタムGUI描画
+	m_ScriptInstance->DrawCustomGUI();
 }

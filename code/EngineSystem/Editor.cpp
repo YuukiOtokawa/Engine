@@ -360,10 +360,11 @@ Editor::~Editor()
 		delete object;
 	}
 	m_Objects.clear();
-	for (auto& material : m_Materials) {
-		if (material)
-			delete material;
-	}
+	m_Components.clear();
+	//for (auto& material : m_Materials) {
+	//	if (material)
+	//		delete material;
+	//}
 	m_Materials.clear();
 	if (m_pInstance) {
 		m_pInstance = nullptr;
@@ -385,58 +386,58 @@ void Editor::Initialize() {
 	{
 		// TODO [otokawa]:csoファイルまとめてロードしたいね
 		//光源計算無し
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/unlitTexturePS.cso", "unlit");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/unlitTexturePS.hlsl", "unlit");
 
 		//頂点ライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/vertexDirectionalLightingPS.cso", "directional");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/vertexDirectionalLightingPS.hlsl", "directional");
 
 		//ピクセルライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pixelLightingPS.cso", "pixel");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pixelLightingPS.hlsl", "pixel");
 
 		//BlinnPhongライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/blinnPhongPS.cso", "BlinnPhong");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/blinnPhongPS.hlsl", "BlinnPhong");
 
 		//半球ライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/hemisphereLightingPS.cso", "hemisphere");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/hemisphereLightingPS.hlsl", "hemisphere");
 
 		//点光源ライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pointLightingBlinnPhongPS.cso", "pointLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pointLightingBlinnPhongPS.hlsl", "pointLight");
 
 		//スポットライトライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/spotLightingPS.cso", "spotLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/spotLightingPS.hlsl", "spotLight");
 
 		//リムライトライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/limLightingPS.cso", "limLight");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/limLightingPS.hlsl", "limLight");
 
 		//法線マップ
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/bumpPS.cso", "normal");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/bumpPS.hlsl", "normal");
 
 		//Cook-Torranceライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/cookPS.cso", "CookTorrance");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/cookPS.hlsl", "CookTorrance");
 
 		//Cook-Torranceライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PBRPS.cso", "PBR");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PBRPS.hlsl", "PBR");
 
 		//トゥーンシェーダー
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon1PS.cso", "toon1");
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon2PS.cso", "toon2");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon1PS.hlsl", "toon1");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon2PS.hlsl", "toon2");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/mosaicPS.cso", "mosaic");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/mosaicPS.hlsl", "mosaic");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/RGBShiftPS.cso", "RGBShift");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/RGBShiftPS.hlsl", "RGBShift");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PosterisePS.cso", "Posterise");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PosterisePS.hlsl", "Posterise");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_V.cso", "GaussianPS_V");
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_H.cso", "GaussianPS_H");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_V.hlsl", "GaussianPS_V");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_H.hlsl", "GaussianPS_H");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/WavePS.cso", "Wave");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/WavePS.hlsl", "Wave");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/EnvMapPS.cso", "Enviroment");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/EnvMapPS.hlsl", "Enviroment");
 
 		// デファードレンダリング用シェーダー
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredGeometry.cso", "DeferredGeometry");
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredLighting.cso", "DeferredLighting");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredGeometry.hlsl", "DeferredGeometry");
+		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredLighting.hlsl", "DeferredLighting");
 
 	}
 

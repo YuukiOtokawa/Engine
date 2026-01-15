@@ -38,7 +38,7 @@
 
 #include "ProjectWindow.h"
 
-#include "Node/NodeManager.h" // NodeManagerをインクルード
+#include "NodeManager.h" // NodeManagerをインクルード
 
 //==========================================================================
 // クラス定義

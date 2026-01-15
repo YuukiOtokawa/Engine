@@ -1,0 +1,20 @@
+#pragma once
+
+#include <string>
+#include <d3d11.h>
+
+namespace EngineCoreSystem {
+
+    //==========================================================================
+    // インターフェース定義
+    //==========================================================================
+    class IShader
+    {
+    protected:
+        HRESULT CompileShader(const std::string& filePath, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** ppBlobOut);
+
+    public:
+        virtual ~IShader() = default;
+        virtual bool Load(std::string filePath, std::string entryPoint) = 0;
+    };
+}

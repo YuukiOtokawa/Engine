@@ -14,6 +14,7 @@ void main(in PS_IN In, out float4 outDiffuse : SV_Target)
     
     // 法線ベクトル
     float3 normal = normalize(In.Normal);
+    normal.y *= -1;
     
     // 反射ベクトル
     float3 reflectv = reflect(eyev, normal);

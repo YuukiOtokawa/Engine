@@ -66,6 +66,8 @@ public:
 
     virtual void Update() {}
 
+    virtual void DrawCustomGUI() {}
+
     virtual void Import(YAML::Node& node);
     virtual void Export(YAML::Emitter& out);
 

@@ -42,5 +42,12 @@ public:
             out << YAML::Key << "materialFileID" << YAML::Value << m_pMaterial->GetFileID();
         }
     }
+
+    void AddExportList() override {
+        SceneExporter::AddExportList(this);
+        if (m_pMaterial) {
+            SceneExporter::AddExportList(m_pMaterial);
+        }
+    }
 };
 

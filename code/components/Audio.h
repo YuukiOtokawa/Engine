@@ -8,7 +8,7 @@ class Audio :
 {
 private:
 
-    AudioDataFileID m_FileID;
+    AudioDataFileID m_FileID = {};
 
     int m_iLength{};
     int m_iPosition{};
@@ -36,6 +36,7 @@ public:
     void ImportFile(YAML::Node& node) override {
         if (node["fileID"]) {
             m_FileID.fileName = node["fileName"].as<std::string>();
+            LoadAudio(m_FileID.fileName.c_str());
         }
         if (node["volume"]) {
             m_Volume = node["volume"].as<float>();
@@ -61,5 +62,9 @@ public:
     }
 
     void DrawGUI() override;
+
+    AudioData* GetSourceVoice() {
+        return AudioManager::GetInstance()->GetAudioData(m_FileID.FileID);
+    }
 };
 

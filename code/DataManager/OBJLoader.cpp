@@ -71,7 +71,7 @@ void OBJLoader::Load(const char* FileName, Object* object)
 	object->GetComponent<MeshRenderer>()->SetMaterial(material);
 }
 
-int OBJLoader::Load(const char* FileName)
+int OBJLoader::Load(const char* FileName, int fileID)
 {
 	//コンポーネントが不足しているエラー表示
 
@@ -89,6 +89,9 @@ int OBJLoader::Load(const char* FileName)
 		m_ModelPool[FileName] = m_Model;
 
 	}
+
+	if (fileID != -1)
+		m_Model->pVertexIndex->SetFileID(fileID);
 
 	Editor::GetInstance()->AddVertexIndex(m_Model->pVertexIndex);
 

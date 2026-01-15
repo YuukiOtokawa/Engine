@@ -18,13 +18,19 @@
 
 #include "RenderCore.h"
 
+#include "StringConverter.h"
+
 #include <d3dcompiler.h>
 #include <io.h>
 #include "imgui.h"
 
+using namespace EngineCoreSystem;
+
 //==========================================================================
 // メンバ関数
 //==========================================================================
+
+RenderCore* RenderCore::m_pInstance = nullptr;
 
 RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	// Direct 3Dバージョンの定義
@@ -687,6 +693,7 @@ std::string RenderCore::CreateVertexShader(std::string filename, std::string key
 	return key;
 }
 
+
 std::string RenderCore::CreatePixelShader(std::string filename, std::string key)
 {
 	if (m_PixelShaders.find(key) != m_PixelShaders.end()) {
@@ -694,20 +701,25 @@ std::string RenderCore::CreatePixelShader(std::string filename, std::string key)
 		return key;
 	}
 
-	FILE* file;
+	ID3DBlob* pPSBlob = nullptr;
 
-	file = fopen(filename.c_str(), "rb");
-	assert(file);
+	CompileShaderFromFile(filename.c_str(), "PSMain", "ps_5_0", &pPSBlob);
 
-	long int fsize = _filelength(_fileno(file));
-	unsigned char* buffer = new unsigned char[fsize];
-	fread(buffer, fsize, 1, file);
-	fclose(file);
+	// csoを使用していた時のコードを残しておく
+	//FILE* file;
+
+	//file = fopen(filename.c_str(), "rb");
+	//assert(file);
+
+	//long int fsize = _filelength(_fileno(file));
+	//unsigned char* buffer = new unsigned char[fsize];
+	//fread(buffer, fsize, 1, file);
+	//fclose(file);
 
 
 	ID3D11PixelShader* pPixelShader = NULL;
 
-	HRESULT hr = m_pDevice->CreatePixelShader(buffer, fsize, NULL, &pPixelShader);
+	HRESULT hr = m_pDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &pPixelShader);
 
 	for (auto shader : m_PixelShaders) {
 		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
@@ -718,8 +730,62 @@ std::string RenderCore::CreatePixelShader(std::string filename, std::string key)
 
 
 	m_PixelShaders.emplace(key, pPixelShader);
-	delete[] buffer;
 
+	pPSBlob->Release();
+	//delete[] buffer;
+
+	return key;
+}
+
+std::string RenderCore::CreateComputeShader(std::string filename, std::string key)
+{
+	if (m_ComputeShaders.find(key) != m_ComputeShaders.end()) {
+		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
+		return key;
+	}
+
+	ID3DBlob* pCSBlob = nullptr;
+	CompileShaderFromFile(filename.c_str(), "CSMain", "cs_5_0", &pCSBlob);
+
+	ID3D11ComputeShader* pComputeShader = NULL;
+	HRESULT hr = m_pDevice->CreateComputeShader(pCSBlob->GetBufferPointer(), pCSBlob->GetBufferSize(), NULL, &pComputeShader);
+
+	for (auto shader : m_ComputeShaders) {
+		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
+		if (shader.second == pComputeShader) {
+			return shader.first;
+		}
+	}
+
+	m_ComputeShaders.emplace(key, pComputeShader);
+	pCSBlob->Release();
+
+	return key;
+}
+
+std::string RenderCore::CreateGeometryShader(std::string filename, std::string key)
+{
+	if (m_GeometryShaders.find(key) != m_GeometryShaders.end()) {
+		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
+		return key;
+	}
+
+	ID3DBlob* pGSBlob = nullptr;
+	CompileShaderFromFile(filename.c_str(), "GSMain", "gs_5_0", &pGSBlob);
+
+	ID3D11GeometryShader* pGeometryShader = NULL;
+	HRESULT hr = m_pDevice->CreateGeometryShader(pGSBlob->GetBufferPointer(), pGSBlob->GetBufferSize(), NULL, &pGeometryShader);
+
+	for (auto shader : m_GeometryShaders) {
+		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
+		if (shader.second == pGeometryShader) {
+			return shader.first;
+		}
+	}
+
+	m_GeometryShaders.emplace(key, pGeometryShader);
+	pGSBlob->Release();
+	
 	return key;
 }
 

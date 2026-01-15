@@ -34,15 +34,22 @@ public:
     void InitializeTag() override;
 
     void ExportComponent(YAML::Emitter& out) override {
+        out << YAML::Key << "materialFileID" << YAML::Value << m_pMaterial->GetFileID();
         out << YAML::Key << "vertexIndexFileID" << YAML::Value << m_VertexIndex.GetFileID();
         out << YAML::Key << "meshSizeX" << YAML::Value << m_MeshSize[0];
         out << YAML::Key << "meshSizeY" << YAML::Value << m_MeshSize[1];
 
         out << YAML::Key << "cellSize" << YAML::Value << YAML::Flow << YAML::BeginSeq
             << m_CellSize.x << m_CellSize.y << YAML::EndSeq;
+
     }
     void ImportFile(YAML::Node& node) override;
 
     float GetHeight(int x, int z);
+
+    void SetHeight(int x, int z, float height);
+    void SetHeight(int count, float height);
+
+    int GetVertexCount();
 };
 

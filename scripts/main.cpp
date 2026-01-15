@@ -68,40 +68,6 @@ void SetSceneGame()
 
 	}
 
-	auto texture = MainEngine::GetInstance()->GetRenderCore()->TextureLoad(L"asset/texture/sura.jpg");
-	auto bumpTexture = MainEngine::GetInstance()->GetRenderCore()->TextureLoad(L"asset/texture/Normal.bmp");
-	//平面オブジェクト作成
-	{
-		Object* plane = new Object();
-		plane->SetName("Plane1");
-		plane->AddComponent<Transform>();
-		plane->AddComponent<PlaneMesh>();
-		plane->AddComponent<MeshRenderer>();
-
-		MATERIAL material;
-		material.diffuse = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-		material.ambient = Vector4O(1.0f, 1.0f, 1.0f, 1.0f);
-		material.SpecularPower = 0.5f;
-
-		LIGHT light;
-		light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
-		light.Ambient = Vector4O(0.2f, 0.2f, 0.2f, 0.2f);
-		light.Direction = Vector3O(0.2f, -1.0f, -1.0f);
-		light.Position = Vector3O(0.0f, 2.0f, -0.5f);
-		light.PointLightRange = 100.0f;
-
-		plane->GetComponent<Transform>()->SetScale(Vector4O(20.0f, 1.0f, 20.0f));
-		plane->GetComponent<Transform>()->SetPosition(Vector4O(0.0f, -5.0f, 0.0f));
-		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetTexture(texture);
-		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
-		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetBumpTexture(bumpTexture);
-
-		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetMaterial(material);
-
-		plane->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("directional");
-
-	}
-
 	{
 		auto dirctionalLight = new Object();
 		dirctionalLight->SetName("DirectionalLight");
@@ -114,5 +80,7 @@ void SetSceneGame()
 
 		dirctionalLight->SetTag(GameObjectTagLayer::LightTag);
 	}
+
+	Editor::GetInstance()->OpenScene("Scenes/GY31_Title.yml");
 }
 

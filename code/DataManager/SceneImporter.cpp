@@ -34,6 +34,7 @@
 #include "UIImageMesh.h"
 #include "UIImage.h"
 #include "Audio.h"
+#include "MeshField.h"
 
 #include "OBJLoader.h"
 
@@ -44,6 +45,38 @@
 
 std::list<Object*> SceneImporter::Import(std::string filePath)
 {
+	//==========================================================================
+	// テクスチャデータの読み込み
+	//==========================================================================
+
+	{
+		std::ifstream textureList("AssetList\\TextureList.yaml");
+
+		if (!textureList.is_open()) {
+			throw std::runtime_error("Could not open file: TextureList.yaml");
+		}
+
+		YAML::Node textureListData = YAML::Load(textureList);
+		textureList.close();
+
+		if (textureListData["textures"]) {
+			for (const auto& textureinfo : textureListData["textures"]) {
+				int fileID = textureinfo["fileID"].as<int>();
+				std::string filePath = textureinfo["filePath"].as<std::string>();
+
+				int len = MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, nullptr, 0);
+				std::wstring wideStringFilePath;
+				if (len > 0) {
+					wideStringFilePath.resize(len - 1); // null終端を除く
+					MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, &wideStringFilePath[0], len);
+				}
+
+				MainEngine::GetInstance()->GetRenderCore()->TextureLoad(wideStringFilePath, fileID);
+			}
+		}
+	}
+
+
 	//==========================================================================
 	// 頂点情報の読み込み
 	//==========================================================================
@@ -107,44 +140,13 @@ std::list<Object*> SceneImporter::Import(std::string filePath)
 
 			if (extension == ".obj") {
 				OBJLoader objLoader;
-				objLoader.Load(path.c_str());
+				objLoader.Load(path.c_str(), fileID);
 			}
 
 
 		}
 	}
 
-TEXTURE_LOAD:
-	//==========================================================================
-	// テクスチャデータの読み込み
-	//==========================================================================
-
-	{
-		std::ifstream textureList("AssetList\\TextureList.yaml");
-
-		if (!textureList.is_open()) {
-			throw std::runtime_error("Could not open file: TextureList.yaml");
-		}
-
-		YAML::Node textureListData = YAML::Load(textureList);
-		textureList.close();
-
-		if (textureListData["textures"]) {
-			for (const auto& textureinfo : textureListData["textures"]) {
-				int fileID = textureinfo["fileID"].as<int>();
-				std::string filePath = textureinfo["filePath"].as<std::string>();
-
-				int len = MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, nullptr, 0);
-				std::wstring wideStringFilePath;
-				if (len > 0) {
-					wideStringFilePath.resize(len - 1); // null終端を除く
-					MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, &wideStringFilePath[0], len);
-				}
-
-				MainEngine::GetInstance()->GetRenderCore()->TextureLoad(wideStringFilePath, fileID);
-			}
-		}
-	}
 
 	//==========================================================================
 	// 他ファイルの読み込み
@@ -342,6 +344,8 @@ EngineMetaFile* SceneImporter::CreateObject(ClassID classID)
 			return new Particle();
 		case CID_Script:
 			return new ScriptComponent();
+		case CID_Component_MeshField:
+			return new MeshField();
 		case CID_RectTransform:
 			return new RectTransform();
 		case CID_Canvas:

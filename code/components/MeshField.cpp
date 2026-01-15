@@ -31,7 +31,7 @@ void MeshField::CreateMesh()
 				);
 				vertex[index].normal = Vector3O::Up();
 				vertex[index].texcoord = Vector2O(
-					x,y
+					x / (float)m_MeshSize[0] - 1, y / (float)m_MeshSize[1] - 1
 				);
 				vertex[index].color = Vector4O::One();
 
@@ -244,6 +244,9 @@ void MeshField::ImportFile(YAML::Node& node)
 	if (node["tag"]) {
 		tag = static_cast<Tag>(node["tag"].as<int>());
 	}
+	if (node["materialFileID"]) {
+		m_pMaterial = Editor::GetInstance()->GetMaterialByFileID(node["materialFileID"].as<int>());
+	}
 	if (node["vertexIndexFileID"]) {
 		int fileID = node["vertexIndexFileID"].as<int>();
 		// VertexIndexの読み込みが必要な場合、ここで実装
@@ -258,6 +261,8 @@ void MeshField::ImportFile(YAML::Node& node)
 		auto cellSize = node["cellSize"];
 		m_CellSize = Vector2O(cellSize[0].as<float>(), cellSize[1].as<float>());
 	}
+	CreateMesh();
+	CreateBuffer();
 }
 
 float MeshField::GetHeight(int x, int z)
@@ -267,5 +272,33 @@ float MeshField::GetHeight(int x, int z)
 		return 0.0f; // 範囲外の場合は0を返す
 	}
 	return m_VertexIndex.GetVertexInfo()[x * (int)m_MeshSize[1] + z].position.y;
+}
+
+void MeshField::SetHeight(int x, int z, float height)
+{
+	if (x < 0 || x >= m_MeshSize[0] || z < 0 || z >= m_MeshSize[1]) {
+		return; // 範囲外の場合は0を返す
+	}
+	auto v = m_VertexIndex.GetVertexInfo()[x * (int)m_MeshSize[1] + z];
+	v.position.y = height;
+
+	m_VertexIndex.SetVertexInfo(&v, (int)(x * (int)m_MeshSize[1] + z));
+	CreateBuffer();
+}
+
+void MeshField::SetHeight(int count, float height)
+{
+	if (count < 0 || count >= m_MeshSize[0] * m_MeshSize[1]) {
+		return; // 範囲外の場合は0を返す
+	}
+	auto v = m_VertexIndex.GetVertexInfo()[count];
+	v.position.y = height;
+	m_VertexIndex.SetVertexInfo(&v, count);
+	CreateBuffer();
+}
+
+int MeshField::GetVertexCount()
+{
+	return (int)(m_MeshSize[0] * m_MeshSize[1]);
 }
 

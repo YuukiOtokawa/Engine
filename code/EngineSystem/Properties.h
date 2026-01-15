@@ -33,3 +33,4 @@
     } else if constexpr (std::is_same_v<decltype(type), SoundFileInfo>) { \
         AddProperty(name, PropertyType::SOUND, &type); \
     }
+

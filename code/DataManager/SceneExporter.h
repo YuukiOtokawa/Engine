@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include "EngineAPI.h"
-#include "yaml.h"
+#include "yaml-cpp/yaml.h"
 
 class EngineMetaFile;
 class Object;
