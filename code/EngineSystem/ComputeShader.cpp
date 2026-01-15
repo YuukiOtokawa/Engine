@@ -3,16 +3,28 @@
 #include "RenderCore.h"
 #include "StringConverter.h"
 
+#include "EngineConsole.h"
+
 using namespace EngineCoreSystem;
 
-bool ComputeShader::Load(std::string filePath, std::string entryPoint)
+ComputeShader* ComputeShader::Load(std::string filePath, std::string entryPoint)
 {
-	if (RenderCore::GetInstance()->CheckComputeShaderDuplicate(GetFileNameFromFilePath(filePath))) {
-		//TODO:キーによって既存のシェーダーを取得してセットする処理
-
-		return true;
+	if (RenderCore::GetInstance()->CheckComputeShaderDuplicate(GetFileNameFromFilePath(filePath) + "::" + entryPoint)) {
+		return RenderCore::GetInstance()->GetComputeShader(GetFileNameFromFilePath(filePath) + "::" + entryPoint);
 	}
 
+	ComputeShader* computeShader = new ComputeShader();
+	if (!computeShader->LoadShader(filePath, entryPoint)) {
+		EngineConsole::LogError("Failed to load compute shader: %s", filePath.c_str());
+		delete computeShader;
+		return nullptr;
+	}
+
+	return computeShader;
+}
+
+bool ComputeShader::LoadShader(std::string filePath, std::string entryPoint)
+{
 	ID3DBlob* pCSBlob = nullptr;
 	if (CompileShader(filePath, entryPoint, "cs_5_0", &pCSBlob) != S_OK) {
 		return false;
@@ -21,7 +33,7 @@ bool ComputeShader::Load(std::string filePath, std::string entryPoint)
 	auto d = RenderCore::GetInstance()->GetDevice();
 	auto hr = d->CreateComputeShader(pCSBlob->GetBufferPointer(), pCSBlob->GetBufferSize(), NULL, &m_pComputeShader);
 
-	RenderCore::GetInstance()->AddComputeShader(GetFileNameFromFilePath(filePath), this);
+	RenderCore::GetInstance()->AddComputeShader(GetFileNameFromFilePath(filePath) + "::" + entryPoint, this);
 
 	pCSBlob->Release();
 

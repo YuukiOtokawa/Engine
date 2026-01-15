@@ -11,7 +11,7 @@ namespace EngineCoreSystem {
     class IShader
     {
     protected:
-        HRESULT CompileShader(const std::string& filePath, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** ppBlobOut);
+        static HRESULT CompileShader(const std::string& filePath, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** ppBlobOut);
 
     public:
         virtual ~IShader() = default;

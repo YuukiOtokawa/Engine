@@ -675,6 +675,26 @@ void EngineCoreSystem::RenderCore::AddComputeShader(std::string key, ComputeShad
 	m_ComputeShaders[key] = shader;
 }
 
+VertexPixelShader* EngineCoreSystem::RenderCore::GetVertexPixelShader(std::string key)
+{
+	for (auto it : m_VertexPixelShaders) {
+		if (it.first == key) {
+			return it.second;
+		}
+	}
+	return nullptr;
+}
+
+ComputeShader* EngineCoreSystem::RenderCore::GetComputeShader(std::string key)
+{
+	for (auto it : m_ComputeShaders) {
+		if (it.first == key) {
+			return it.second;
+		}
+	}
+	return nullptr;
+}
+
 ID3D11InputLayout* RenderCore::CreateInputLayout(unsigned char* pByteCode, long byteCodeLength)
 {
 	// 入力レイアウト生成
@@ -839,20 +859,6 @@ int RenderCore::GetTextureWidth(int index)
 int RenderCore::GetTextureHeight(int index)
 {
 	return m_Textures[index]->height;
-}
-
-void RenderCore::SetVertexShader(std::string key)
-{
-	if (m_CurrentVertexShaderKey == key) return;
-	m_pDeviceContext->VSSetShader(m_VertexShaders[key], NULL, 0);
-	m_CurrentVertexShaderKey = key;
-}
-
-void RenderCore::SetPixelShader(std::string key)
-{
-	if (m_CurrentPixelShaderKey == key) return;
-	m_pDeviceContext->PSSetShader(m_PixelShaders[key], NULL, 0);
-	m_CurrentPixelShaderKey = key;
 }
 
 void RenderCore::SetWorldViewProjection2D() {

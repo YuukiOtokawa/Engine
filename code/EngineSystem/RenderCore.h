@@ -220,6 +220,8 @@ namespace EngineCoreSystem {
         bool CheckComputeShaderDuplicate(std::string key);
         void AddVertexPixelShader(std::string key, VertexPixelShader* shader);
         void AddComputeShader(std::string key, ComputeShader* shader);
+        VertexPixelShader* GetVertexPixelShader(std::string key);
+        ComputeShader* GetComputeShader(std::string key);
 
         /// @brief シェーダーバイトコードからID3D11InputLayoutオブジェクトを作成します。
         /// @param pByteCode 入力レイアウトを記述するシェーダーバイトコードへのポインタ。
@@ -260,13 +262,6 @@ namespace EngineCoreSystem {
         /// @param index 高さを取得するテクスチャのインデックス。
         /// @return 指定したテクスチャの高さ（ピクセル単位）。
         int GetTextureHeight(int index);
-
-        /// @brief 指定されたキーに対応する頂点シェーダーを設定します。
-        /// @param key 設定する頂点シェーダーを識別する文字列キー。
-        void SetVertexShader(std::string key);
-        /// @brief 指定されたキーに対応するピクセルシェーダーを設定します。
-        /// @param key 設定するピクセルシェーダーを識別するためのキー。
-        void SetPixelShader(std::string key);
 
         std::vector<std::string> GetVertexShaderKeys() {
             std::vector<std::string> keys;

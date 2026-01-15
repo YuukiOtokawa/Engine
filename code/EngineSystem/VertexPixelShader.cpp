@@ -3,16 +3,28 @@
 #include "RenderCore.h"
 #include "StringConverter.h"
 
+#include "EngineConsole.h"
+
 using namespace EngineCoreSystem;
 
-bool VertexPixelShader::Load(std::string filePath, std::string vsEntryPoint, std::string psEntryPoint)
+VertexPixelShader* VertexPixelShader::Load(std::string filePath, std::string vsEntryPoint, std::string psEntryPoint)
 {
 	if (RenderCore::GetInstance()->CheckVertexPixelShaderDuplicate(GetFileNameFromFilePath(filePath))) {
-		//TODO:キーによって既存のシェーダーを取得してセットする処理
-
-		return true;
+		return RenderCore::GetInstance()->GetVertexPixelShader(GetFileNameFromFilePath(filePath));
 	}
 
+	VertexPixelShader* vspsShader = new VertexPixelShader();
+	if (!vspsShader->LoadShader(filePath, vsEntryPoint, psEntryPoint)) {
+		EngineConsole::LogError("Failed to load compute shader: %s", filePath.c_str());
+		delete vspsShader;
+		return nullptr;
+	}
+
+	return vspsShader;
+}
+
+bool VertexPixelShader::LoadShader(std::string filePath, std::string vsEntryPoint, std::string psEntryPoint)
+{
 	ID3DBlob* pVSBlob = nullptr;
 	if (CompileShader(filePath, vsEntryPoint, "vs_5_0", &pVSBlob) != S_OK) {
 		pVSBlob->Release();
