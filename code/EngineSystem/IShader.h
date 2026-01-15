@@ -15,6 +15,5 @@ namespace EngineCoreSystem {
 
     public:
         virtual ~IShader() = default;
-        virtual bool Load(std::string filePath, std::string entryPoint) = 0;
     };
 }

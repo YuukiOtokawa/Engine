@@ -7,11 +7,25 @@ using namespace EngineCoreSystem;
 
 bool ComputeShader::Load(std::string filePath, std::string entryPoint)
 {
-	if (CompileShader(filePath, entryPoint, "cs_5_0", (ID3DBlob**)&m_pComputeShader) != S_OK) {
+	if (RenderCore::GetInstance()->CheckComputeShaderDuplicate(GetFileNameFromFilePath(filePath))) {
+		//TODO:キーによって既存のシェーダーを取得してセットする処理
+
+		return true;
+	}
+
+	ID3DBlob* pCSBlob = nullptr;
+	if (CompileShader(filePath, entryPoint, "cs_5_0", &pCSBlob) != S_OK) {
 		return false;
 	}
 
-	RenderCore::GetInstance()->CreateComputeShader(filePath, GetFileNameFromFilePath(filePath));
+	auto d = RenderCore::GetInstance()->GetDevice();
+	auto hr = d->CreateComputeShader(pCSBlob->GetBufferPointer(), pCSBlob->GetBufferSize(), NULL, &m_pComputeShader);
+
+	RenderCore::GetInstance()->AddComputeShader(GetFileNameFromFilePath(filePath), this);
+
+	pCSBlob->Release();
+
+	return true;
 }
 
 void ComputeShader::Dispatch(int x, int y, int z)

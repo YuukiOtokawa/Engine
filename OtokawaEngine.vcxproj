@@ -286,6 +286,7 @@
     <ClCompile Include="code\EngineSystem\SystemLog.cpp" />
     <ClCompile Include="code\EngineSystem\SystemMonitor.cpp" />
     <ClCompile Include="code\EngineSystem\TimeSystem.cpp" />
+    <ClCompile Include="code\EngineSystem\VertexPixelShader.cpp" />
     <ClCompile Include="code\imgui\crude_json.cpp" />
     <ClCompile Include="code\imgui\imgui.cpp" />
     <ClCompile Include="code\imgui\ImGuizmo.cpp" />
@@ -426,6 +427,7 @@
     <ClInclude Include="code\EngineSystem\SystemMonitor.h" />
     <ClInclude Include="code\EngineSystem\TimeSystem.h" />
     <ClInclude Include="code\EngineSystem\VectorO.h" />
+    <ClInclude Include="code\EngineSystem\VertexPixelShader.h" />
     <ClInclude Include="code\imgui\imconfig.h" />
     <ClInclude Include="code\imgui\imgui.h" />
     <ClInclude Include="code\imgui\ImGuizmo.h" />

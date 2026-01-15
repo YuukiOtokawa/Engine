@@ -27,6 +27,9 @@
 
 #include "Component_Light.h"
 
+#include "VertexPixelShader.h"
+#include "ComputeShader.h"
+
 namespace EngineCoreSystem {
 
     //==========================================================================
@@ -98,20 +101,16 @@ namespace EngineCoreSystem {
         Vector2O m_ClientSize{ SCREEN_WIDTH_DEFAULT,SCREEN_HEIGHT_DEFAULT };
 
         // ウィンドウハンドル
-        HWND m_Handle;
+        static HWND m_Handle;
 
         // シェーダー管理
-        std::map<std::string, ID3D11VertexShader*> m_VertexShaders;
-        std::map<std::string, ID3D11PixelShader*> m_PixelShaders;
-        std::map<std::string, ID3D11GeometryShader*> m_GeometryShaders;
-        std::map<std::string, ID3D11ComputeShader*> m_ComputeShaders;
+        std::map<std::string, VertexPixelShader*> m_VertexPixelShaders;
+        std::map<std::string, ComputeShader*> m_ComputeShaders;
         // 入力レイアウト
         ID3D11InputLayout* m_pInputLayout = nullptr;
 
         // 使用中のシェーダーキー
-        std::string m_CurrentVertexShaderKey;
-        std::string m_CurrentPixelShaderKey;
-        std::string m_CurrentGeometryShaderKey;
+        std::string m_CurrentVertexPixelShaderKey;
         std::string m_CurrentComputeShaderKey;
 
         // テクスチャ管理
@@ -216,18 +215,12 @@ namespace EngineCoreSystem {
 
         std::vector<Texture*> GetTextureInfo();
 
-        /// @brief 指定されたファイル名とキーから頂点シェーダーを作成します。
-        /// @param filename 頂点シェーダーのソースコードが含まれるファイルの名前。
-        /// @param key シェーダーを識別または取得するためのキー。
-        /// @return 作成された頂点シェーダーのキー。
-        std::string CreateVertexShader(std::string filename, std::string key);
-        /// @brief 指定されたファイル名とキーからピクセルシェーダーを作成します。
-        /// @param filename ピクセルシェーダーのソースコードが含まれるファイルの名前。
-        /// @param key シェーダーを識別するためのキー。
-        /// @return 作成されたピクセルシェーダーの情報を含む文字列。
-        std::string CreatePixelShader(std::string filename, std::string key);
-        std::string CreateComputeShader(std::string filename, std::string key);
-        std::string CreateGeometryShader(std::string filename, std::string key);
+        // シェーダーキーによる重複読み込みチェック
+        bool CheckVertexPixelShaderDuplicate(std::string key);
+        bool CheckComputeShaderDuplicate(std::string key);
+        void AddVertexPixelShader(std::string key, VertexPixelShader* shader);
+        void AddComputeShader(std::string key, ComputeShader* shader);
+
         /// @brief シェーダーバイトコードからID3D11InputLayoutオブジェクトを作成します。
         /// @param pByteCode 入力レイアウトを記述するシェーダーバイトコードへのポインタ。
         /// @param byteCodeLength バイトコードの長さ（バイト単位）。
@@ -277,15 +270,7 @@ namespace EngineCoreSystem {
 
         std::vector<std::string> GetVertexShaderKeys() {
             std::vector<std::string> keys;
-            for (const auto& shader : m_VertexShaders) {
-                keys.push_back(shader.first);
-            }
-            return keys;
-        }
-
-        std::vector<std::string> GetPixelShaderKeys() {
-            std::vector<std::string> keys;
-            for (const auto& shader : m_PixelShaders) {
+            for (const auto& shader : m_VertexPixelShaders) {
                 keys.push_back(shader.first);
             }
             return keys;

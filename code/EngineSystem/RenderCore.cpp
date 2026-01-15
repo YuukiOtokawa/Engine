@@ -104,7 +104,6 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	CreateGBuffer();
 	InitializeFullScreenQuad();
 
-	CreateVertexShader("cso/vertexShader.cso", "vertex");
 }
 
  RenderCore::~RenderCore()
@@ -133,11 +132,11 @@ RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
 	SAFE_RELEASE(m_pParameterBuffer);
 	SAFE_RELEASE(m_pSamplerState);
 
-	for (auto& shader : m_VertexShaders) {
-		SAFE_RELEASE(shader.second);
+	for (auto& shader : m_VertexPixelShaders) {
+		delete shader.second;
 	}
-	for (auto& shader : m_PixelShaders) {
-		SAFE_RELEASE(shader.second);
+	for (auto& shader : m_ComputeShaders) {
+		delete shader.second;
 	}
 	SAFE_RELEASE(m_pInputLayout);
 
@@ -649,144 +648,31 @@ std::vector<Texture*> RenderCore::GetTextureInfo()
 	return m_Textures;
 }
 
-std::string RenderCore::CreateVertexShader(std::string filename, std::string key)
+bool RenderCore::CheckVertexPixelShaderDuplicate(std::string key)
 {
-	if (m_VertexShaders.find(key) != m_VertexShaders.end()) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		return key;
+	if (m_VertexPixelShaders.find(key) != m_VertexPixelShaders.end()) {
+		return true;
 	}
-
-	// コンパイルされたシェーダーファイルを開く
-	FILE* file;
-
-	file = fopen(filename.c_str(), "rb");
-	assert(file);
-
-	long int fsize = _filelength(_fileno(file));
-	unsigned char* buffer = new unsigned char[fsize];
-	fread(buffer, fsize, 1, file);
-	fclose(file);
-
-
-	// シェーダーを作成
-	ID3D11VertexShader* pVertexShader = NULL;
-
-	HRESULT hr = m_pDevice->CreateVertexShader(buffer, fsize, NULL, &pVertexShader);
-
-	for (auto shader : m_VertexShaders) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		if (shader.second == pVertexShader) {
-			return shader.first;
-		}
-	}
-
-	m_VertexShaders.emplace(key, pVertexShader);
-
-	// 入力レイアウトを作成
-	if (m_pInputLayout == nullptr) {
-		m_pInputLayout = CreateInputLayout(buffer, fsize);
-		m_pDeviceContext->IASetInputLayout(m_pInputLayout);
-	}
-
-	delete[] buffer;
-
-	return key;
+	return false;
 }
 
 
-std::string RenderCore::CreatePixelShader(std::string filename, std::string key)
-{
-	if (m_PixelShaders.find(key) != m_PixelShaders.end()) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		return key;
-	}
-
-	ID3DBlob* pPSBlob = nullptr;
-
-	CompileShaderFromFile(filename.c_str(), "PSMain", "ps_5_0", &pPSBlob);
-
-	// csoを使用していた時のコードを残しておく
-	//FILE* file;
-
-	//file = fopen(filename.c_str(), "rb");
-	//assert(file);
-
-	//long int fsize = _filelength(_fileno(file));
-	//unsigned char* buffer = new unsigned char[fsize];
-	//fread(buffer, fsize, 1, file);
-	//fclose(file);
-
-
-	ID3D11PixelShader* pPixelShader = NULL;
-
-	HRESULT hr = m_pDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &pPixelShader);
-
-	for (auto shader : m_PixelShaders) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		if (shader.second == pPixelShader) {
-			return shader.first;
-		}
-	}
-
-
-	m_PixelShaders.emplace(key, pPixelShader);
-
-	pPSBlob->Release();
-	//delete[] buffer;
-
-	return key;
-}
-
-std::string RenderCore::CreateComputeShader(std::string filename, std::string key)
+bool RenderCore::CheckComputeShaderDuplicate(std::string key)
 {
 	if (m_ComputeShaders.find(key) != m_ComputeShaders.end()) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		return key;
+		return true;
 	}
-
-	ID3DBlob* pCSBlob = nullptr;
-	CompileShaderFromFile(filename.c_str(), "CSMain", "cs_5_0", &pCSBlob);
-
-	ID3D11ComputeShader* pComputeShader = NULL;
-	HRESULT hr = m_pDevice->CreateComputeShader(pCSBlob->GetBufferPointer(), pCSBlob->GetBufferSize(), NULL, &pComputeShader);
-
-	for (auto shader : m_ComputeShaders) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		if (shader.second == pComputeShader) {
-			return shader.first;
-		}
-	}
-
-	m_ComputeShaders.emplace(key, pComputeShader);
-	pCSBlob->Release();
-
-	return key;
+	return false;
 }
 
-std::string RenderCore::CreateGeometryShader(std::string filename, std::string key)
+void EngineCoreSystem::RenderCore::AddVertexPixelShader(std::string key, VertexPixelShader* shader)
 {
-	if (m_GeometryShaders.find(key) != m_GeometryShaders.end()) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		return key;
-	}
+	m_VertexPixelShaders[key] = shader;
+}
 
-	ID3DBlob* pGSBlob = nullptr;
-	CompileShaderFromFile(filename.c_str(), "GSMain", "gs_5_0", &pGSBlob);
-
-	ID3D11GeometryShader* pGeometryShader = NULL;
-	HRESULT hr = m_pDevice->CreateGeometryShader(pGSBlob->GetBufferPointer(), pGSBlob->GetBufferSize(), NULL, &pGeometryShader);
-
-	for (auto shader : m_GeometryShaders) {
-		// すでに同じキーのシェーダーが存在する場合は、何もせずキーを返す
-		if (shader.second == pGeometryShader) {
-			return shader.first;
-		}
-	}
-
-	m_GeometryShaders.emplace(key, pGeometryShader);
-	pGSBlob->Release();
-	
-	return key;
+void EngineCoreSystem::RenderCore::AddComputeShader(std::string key, ComputeShader* shader)
+{
+	m_ComputeShaders[key] = shader;
 }
 
 ID3D11InputLayout* RenderCore::CreateInputLayout(unsigned char* pByteCode, long byteCodeLength)
