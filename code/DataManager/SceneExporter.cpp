@@ -230,7 +230,7 @@ void SceneExporter::ExportTextureInfoList()
             throw std::runtime_error("MainEngine instance is null");
         }
 
-        auto renderCore = mainEngine->GetRenderCore();
+        auto renderCore = RenderCore::GetInstance();
         if (!renderCore) {
             throw std::runtime_error("RenderCore is null");
         }

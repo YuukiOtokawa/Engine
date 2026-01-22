@@ -37,7 +37,7 @@ void Camera::Update() {
 
 void Camera::SetCamera() {
 	// 描画領域のサイズを取得
-	Vector2O clientSize = MainEngine::GetInstance()->GetRenderCore()->GetClientSize();
+	Vector2O clientSize = RenderCore::GetInstance()->GetClientSize();
 
 	//プロジェクション行列を作成
 	m_Projection =
@@ -58,10 +58,10 @@ void Camera::SetCamera() {
 	m_View = XMMatrixLookAtLH(pos, eyev, up);
 
 	//カメラ行列をセット
-	MainEngine::GetInstance()->GetRenderCore()->SetViewMatrix(m_View);
-	MainEngine::GetInstance()->GetRenderCore()->SetProjectionMatrix(m_Projection);
+	RenderCore::GetInstance()->SetViewMatrix(m_View);
+	RenderCore::GetInstance()->SetProjectionMatrix(m_Projection);
 	//カメラ座標セット
-	MainEngine::GetInstance()->GetRenderCore()->SetCamera(owner->GetComponent<Transform>()->GetPosition());
+	RenderCore::GetInstance()->SetCamera(owner->GetComponent<Transform>()->GetPosition());
 
 }
 
@@ -77,7 +77,7 @@ void Camera::DrawGUI() {
 	ImGui::InputFloat("Fov", &m_Fov);
 	if (Editor::GetInstance()->GetUseDeferredRendering()){
 		for (int i = 0; i < 3; i++) {
-			auto gbuffer = MainEngine::GetInstance()->GetRenderCore()->GetGBufferSRV(i);
+			auto gbuffer = RenderCore::GetInstance()->GetGBufferSRV(i);
 			if (gbuffer)
 				ImGui::Image((ImTextureID)gbuffer, ImVec2(300, 300));
 		}

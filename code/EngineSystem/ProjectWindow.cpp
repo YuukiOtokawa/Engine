@@ -679,7 +679,7 @@ void ProjectWindow::DrawIcon(bool isDirectory, const std::string& extension)
 
 void ProjectWindow::LoadIconTextures()
 {
-    auto device = MainEngine::GetInstance()->GetRenderCore()->GetDevice();
+    auto device = RenderCore::GetInstance()->GetDevice();
 
     TexMetadata metadata;
 	ScratchImage image;

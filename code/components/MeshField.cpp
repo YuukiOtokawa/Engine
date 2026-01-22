@@ -92,7 +92,7 @@ void MeshField::CreateBuffer()
 	ZeroMemory(&sd, sizeof(sd));
 	sd.pSysMem = vertices.data();
 
-	HRESULT hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
+	HRESULT hr = RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
 
 	auto indices = m_VertexIndex.GetIndexInfo();
 	// インデックスバッファ生成
@@ -105,7 +105,7 @@ void MeshField::CreateBuffer()
 	ZeroMemory(&sd, sizeof(sd));
 	sd.pSysMem = indices.data();
 
-	hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
+	hr = RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
 }
 
 MeshField::MeshField() : Renderer(RenderQueue::Geometry)
@@ -145,7 +145,7 @@ void MeshField::Render()
 	if (!m_pVertexBuffer || !m_pIndexBuffer) return;
 
 	// プリミティブトポロジ設定
-	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	RenderCore::GetInstance()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	// 行列計算
 	auto transform = owner->GetComponent<Transform>();
@@ -185,22 +185,22 @@ void MeshField::Render()
 		}
 	}
 
-	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
-	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
-	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+	RenderCore::GetInstance()->SetTranslationMatrix(translation);
+	RenderCore::GetInstance()->SetScaleMatrix(scale);
+	RenderCore::GetInstance()->SetAngleMatrix(angle);
 
 	m_pMaterial->SetShader();
 	m_pMaterial->DrawMaterial();
 
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
-	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	RenderCore::GetInstance()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
 	// インデックスバッファ設定
-	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	RenderCore::GetInstance()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// ポリゴン描画
-	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(m_NumIndices, 0, 0);
+	RenderCore::GetInstance()->GetDeviceContext()->DrawIndexed(m_NumIndices, 0, 0);
 
 }
 

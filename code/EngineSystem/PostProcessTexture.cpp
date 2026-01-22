@@ -54,7 +54,7 @@ void PostProcessTexture::Update()
 	//	m_pDepthStencilTexture = nullptr;
 	//}
 
-	//auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	//auto renderCore = RenderCore::GetInstance();
 
 	//{
 	//	D3D11_TEXTURE2D_DESC td = {};
@@ -118,7 +118,7 @@ void PostProcessTexture::Update()
 
 void PostProcessTexture::SetShaderResourceView(Texture* texture, int n)
 {
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 	if (m_pPostProcessTexture[n]) {
 		m_pPostProcessTexture[n] = texture;
 		auto renderer = owner->GetComponent<PostProcessRenderer>();

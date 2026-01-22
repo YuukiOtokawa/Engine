@@ -33,7 +33,7 @@ void UIImage::Render() {
 		return;
 	}
 
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 	if (!renderCore) return;
 
 	// Canvasコンポーネントを取得（親階層を遡って探す）

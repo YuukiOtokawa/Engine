@@ -62,7 +62,7 @@ void SpriteMesh::Update() {
 		Vector4O uvOffset = Vector4O(1.0f / m_uvRect.x, 1.0f / m_uvRect.y);
 
 		D3D11_MAPPED_SUBRESOURCE msr;
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+		RenderCore::GetInstance()->GetDeviceContext()->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
 		VERTEX* vertex = (VERTEX*)msr.pData;
 
@@ -94,7 +94,7 @@ void SpriteMesh::Update() {
 			Vector2O(uvOffset.x * (x + 1), uvOffset.y * (y + 1)),
 		};
 
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);
+		RenderCore::GetInstance()->GetDeviceContext()->Unmap(m_pVertexBuffer, 0);
 
 		m_newIndex = -1; // リセット
 	}
@@ -153,19 +153,19 @@ bool SpriteMesh::SetSpriteByIndex(int index)
 //	}
 //
 //	// ワールド行列を転置してシェーダーに送るための準備
-//	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
-//	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
-//	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+//	RenderCore::GetInstance()->SetTranslationMatrix(translation);
+//	RenderCore::GetInstance()->SetScaleMatrix(scale);
+//	RenderCore::GetInstance()->SetAngleMatrix(angle);
 //
 //	// シェーダーに頂点バッファを設定
 //	UINT stride = sizeof(VERTEX);
 //	UINT offset = 0;
-//	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+//	RenderCore::GetInstance()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 //
 //	// シェーダーにインデックスバッファを設定
-//	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+//	RenderCore::GetInstance()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 //
 //	// プリミティブトポロジを設定
-//	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
+//	RenderCore::GetInstance()->GetDeviceContext()->IASetPrimitiveTopology(m_PrimitiveTopology);
 //
 //}

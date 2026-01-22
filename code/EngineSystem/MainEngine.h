@@ -28,8 +28,6 @@
 #pragma comment(lib, "yaml-cpp.lib")
 #endif // DEBUG
 
-using namespace EngineCoreSystem;
-
 std::string OpenImportFileDialog(const COMDLG_FILTERSPEC* pFilterSpecs = nullptr, UINT filterCount = 0);
 std::string OpenExportFileDialog();
 
@@ -60,7 +58,7 @@ private:
 	};
 
 	// レンダラーとエディターのポインタ
-	RenderCore* m_pRenderer = nullptr;
+    RenderCore* m_pRenderer = nullptr;
 	Editor* m_pEditor = nullptr;
 
 	// ログファイルのポインタ
@@ -158,11 +156,8 @@ public:
 	/// @brief インスタンスハンドルを取得します。
 	/// @return 現在のインスタンスのハンドル（HINSTANCE型）を返します。
 	HINSTANCE GetInstanceHandle() { return m_hInstance; }
-	/// @brief レンダラーオブジェクトを取得します。
-	/// @return m_pRenderer へのポインタ。
-	RenderCore* GetRenderCore() { return m_pRenderer; }
 
-	static void ErrorMessage(std::string message, std::string title);
+    static void ErrorMessage(std::string message, std::string title);
 
 	void GetWindowsInfo();
 

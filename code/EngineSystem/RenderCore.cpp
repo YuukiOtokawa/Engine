@@ -24,15 +24,15 @@
 #include <io.h>
 #include "imgui.h"
 
-using namespace EngineCoreSystem;
-
 //==========================================================================
 // メンバ関数
 //==========================================================================
 
 RenderCore* RenderCore::m_pInstance = nullptr;
+HWND RenderCore::m_Handle = nullptr;
 
-RenderCore::RenderCore(HWND hWnd) : m_Handle(hWnd) {
+RenderCore::RenderCore(HWND hWnd) {
+	m_Handle = hWnd;
 	// Direct 3Dバージョンの定義
 	D3D_FEATURE_LEVEL feature_level = D3D_FEATURE_LEVEL_11_0;
 
@@ -665,17 +665,17 @@ bool RenderCore::CheckComputeShaderDuplicate(std::string key)
 	return false;
 }
 
-void EngineCoreSystem::RenderCore::AddVertexPixelShader(std::string key, VertexPixelShader* shader)
+void RenderCore::AddVertexPixelShader(std::string key, VertexPixelShader* shader)
 {
 	m_VertexPixelShaders[key] = shader;
 }
 
-void EngineCoreSystem::RenderCore::AddComputeShader(std::string key, ComputeShader* shader)
+void RenderCore::AddComputeShader(std::string key, ComputeShader* shader)
 {
 	m_ComputeShaders[key] = shader;
 }
 
-VertexPixelShader* EngineCoreSystem::RenderCore::GetVertexPixelShader(std::string key)
+VertexPixelShader* RenderCore::GetVertexPixelShader(std::string key)
 {
 	for (auto it : m_VertexPixelShaders) {
 		if (it.first == key) {
@@ -685,7 +685,7 @@ VertexPixelShader* EngineCoreSystem::RenderCore::GetVertexPixelShader(std::strin
 	return nullptr;
 }
 
-ComputeShader* EngineCoreSystem::RenderCore::GetComputeShader(std::string key)
+ComputeShader* RenderCore::GetComputeShader(std::string key)
 {
 	for (auto it : m_ComputeShaders) {
 		if (it.first == key) {
@@ -693,6 +693,16 @@ ComputeShader* EngineCoreSystem::RenderCore::GetComputeShader(std::string key)
 		}
 	}
 	return nullptr;
+}
+
+void RenderCore::CreateVertexPixelShader(std::string filePath, std::string key, std::string vsEntryPoint, std::string psEntryPoint)
+{
+	AddVertexPixelShader(key, VertexPixelShader::Load(filePath,vsEntryPoint,psEntryPoint));
+}
+
+void RenderCore::SetVertexPixelShader(std::string key)
+{
+	GetVertexPixelShader(key)->Bind();
 }
 
 ID3D11InputLayout* RenderCore::CreateInputLayout(unsigned char* pByteCode, long byteCodeLength)
@@ -1078,7 +1088,8 @@ void RenderCore::DrawFullScreenQuad(ID3D11RenderTargetView* renderTargetView, ID
 	m_pDeviceContext->PSSetShaderResources(0, 1, &shaderResourceView);
 
 	// 頂点シェーダーを設定（既に設定済みのvertexシェーダーを使用）
-	SetVertexShader("vertex");
+	// TODO: VPShader::Bind()
+	//SetVertexShader("vertex");
 
 	// ワールド・ビュー・プロジェクション行列を単位行列に設定
 	XMMATRIX identity = XMMatrixIdentity();

@@ -564,7 +564,7 @@ const COMDLG_FILTERSPEC defaultSpec[] =
 	{ L"すべてのファイル (*.*)", L"*.*" },
 };
 
-std::string OpenImportFileDialog(const COMDLG_FILTERSPEC* pFilterSpecs = nullptr, UINT filterCount = 0)
+std::string OpenImportFileDialog(const COMDLG_FILTERSPEC* pFilterSpecs, UINT filterCount)
 {
 	IFileOpenDialog* pFileOpenDialog = nullptr;
 	auto rs = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpenDialog));

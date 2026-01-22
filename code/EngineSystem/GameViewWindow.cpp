@@ -9,7 +9,7 @@ void GameViewWindow::Render()
 	if (!StartWindow("GameView", ImGuiWindowFlags_NoScrollbar)) return;
 
 
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	auto tex = renderCore->GetGameViewTexture();
 

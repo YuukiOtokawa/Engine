@@ -87,19 +87,19 @@ void MeshRenderer::Render() {
 	transform->SetTransformMatrix(translation);
 
     // 行列をレンダラーに設定する
-    MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
-    MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
-    MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+    RenderCore::GetInstance()->SetTranslationMatrix(translation);
+    RenderCore::GetInstance()->SetScaleMatrix(scale);
+    RenderCore::GetInstance()->SetAngleMatrix(angle);
 
     // 3. 頂点・インデックスバッファを設定する (MeshFilter::Draw()から移動)
     UINT stride = sizeof(VERTEX);
     UINT offset = 0;
-    MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &meshFilter->m_pVertexBuffer, &stride, &offset);
+    RenderCore::GetInstance()->GetDeviceContext()->IASetVertexBuffers(0, 1, &meshFilter->m_pVertexBuffer, &stride, &offset);
 	if (meshFilter->m_pIndexBuffer)
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(meshFilter->m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		RenderCore::GetInstance()->GetDeviceContext()->IASetIndexBuffer(meshFilter->m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
     // 4. プリミティブトポロジーを設定する (MeshFilter::Draw()から移動)
-    MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(meshFilter->m_PrimitiveTopology);
+    RenderCore::GetInstance()->GetDeviceContext()->IASetPrimitiveTopology(meshFilter->m_PrimitiveTopology);
 
     // 5. シェーダーとマテリアルのプロパティを設定する (すでにあなたのコードに記述されています)
 	auto ownerScale = transform->GetScale();
@@ -110,9 +110,9 @@ void MeshRenderer::Render() {
     // 6. 最終的な描画呼び出しを実行する
 	if (meshFilter->m_iVertexCount == 0) return;
 	if (meshFilter->m_iIndexCount == 0)
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Draw(meshFilter->m_iVertexCount, 0);
+		RenderCore::GetInstance()->GetDeviceContext()->Draw(meshFilter->m_iVertexCount, 0);
 	else
-	    MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(meshFilter->m_iIndexCount, 0, 0);
+	    RenderCore::GetInstance()->GetDeviceContext()->DrawIndexed(meshFilter->m_iIndexCount, 0, 0);
 }
 
 void MeshRenderer::RenderShadow()

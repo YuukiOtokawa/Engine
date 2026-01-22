@@ -255,8 +255,8 @@ void GUI::SetMatrix(XMMATRIX proj, XMMATRIX view)
 
 void GUI::CreateRenderTarget() {
 	ID3D11Texture2D* pBackBuffer;
-	MainEngine::GetInstance()->GetRenderCore()->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-	MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateRenderTargetView(pBackBuffer, nullptr, &m_mainRenderTargetView);
+	RenderCore::GetInstance()->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+	RenderCore::GetInstance()->GetDevice()->CreateRenderTargetView(pBackBuffer, nullptr, &m_mainRenderTargetView);
 	pBackBuffer->Release();
 }
 

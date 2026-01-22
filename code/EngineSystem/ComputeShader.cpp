@@ -5,8 +5,6 @@
 
 #include "EngineConsole.h"
 
-using namespace EngineCoreSystem;
-
 ComputeShader* ComputeShader::Load(std::string filePath, std::string entryPoint)
 {
 	if (RenderCore::GetInstance()->CheckComputeShaderDuplicate(GetFileNameFromFilePath(filePath) + "::" + entryPoint)) {

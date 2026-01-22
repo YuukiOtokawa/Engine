@@ -5,8 +5,6 @@
 
 #include "EngineConsole.h"
 
-using namespace EngineCoreSystem;
-
 VertexPixelShader* VertexPixelShader::Load(std::string filePath, std::string vsEntryPoint, std::string psEntryPoint)
 {
 	if (RenderCore::GetInstance()->CheckVertexPixelShaderDuplicate(GetFileNameFromFilePath(filePath))) {

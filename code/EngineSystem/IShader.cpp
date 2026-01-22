@@ -3,8 +3,6 @@
 #include <d3dcompiler.h>
 #include "StringConverter.h"
 
-using namespace EngineCoreSystem;
-
 HRESULT IShader::CompileShader(const std::string& filePath, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** ppBlobOut)
 {
 	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;

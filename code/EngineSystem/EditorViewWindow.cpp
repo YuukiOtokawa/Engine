@@ -14,7 +14,7 @@ void EditorViewWindow::Render()
 	StartWindow("SceneView", ImGuiWindowFlags_NoScrollbar);
 
 
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	auto tex = renderCore->GetSceneViewTexture();
 

@@ -22,8 +22,8 @@ void RenderQueueManager::SetCamera(RenderQueue queue)
 	case Transparent:
 		break;
 	case Overlay:
-		MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
-		MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+		RenderCore::GetInstance()->SetWorldViewProjection2D();
+		RenderCore::GetInstance()->SetRasterizerState2D();
 		break;
 	default:
 		break;
@@ -35,17 +35,17 @@ void RenderQueueManager::Render(Camera* camera)
 	for (auto& [queue, renderables] : renderQueues) {
 
 		if (queue != RenderQueue::Overlay) {
-			MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
+			RenderCore::GetInstance()->SetRasterizerState3D();
 			camera->SetCamera();
 		}
 		else {
-			MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
-			MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+			RenderCore::GetInstance()->SetWorldViewProjection2D();
+			RenderCore::GetInstance()->SetRasterizerState2D();
 		}
 
 		// デファードレンダリング時は、各オブジェクトの描画前にDeferredGeometryシェーダーを設定
 		if (s_useDeferredRendering && queue != RenderQueue::Overlay) {
-			MainEngine::GetInstance()->GetRenderCore()->SetPixelShader("DeferredGeometry");
+			RenderCore::GetInstance()->SetVertexPixelShader("DeferredGeometry");
 		}
 
 		for (auto& renderable : renderables) {
@@ -54,7 +54,7 @@ void RenderQueueManager::Render(Camera* camera)
 			// デファードレンダリング時は、各オブジェクトの描画後にシェーダーを再設定
 			// （各マテリアルが独自のシェーダーを設定してしまうため）
 			if (s_useDeferredRendering && queue != RenderQueue::Overlay) {
-				MainEngine::GetInstance()->GetRenderCore()->SetPixelShader("DeferredGeometry");
+				RenderCore::GetInstance()->SetVertexPixelShader("DeferredGeometry");
 			}
 		}
 	}

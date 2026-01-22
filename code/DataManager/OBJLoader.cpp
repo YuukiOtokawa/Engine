@@ -100,7 +100,7 @@ int OBJLoader::Load(const char* FileName, int fileID)
 
 MODEL_OBJ OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 {
-	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
+	RenderCore* renderer = RenderCore::GetInstance();
 
 	MODEL_OBJ modelObj;
 	LoadObj(FileName, &modelObj);
@@ -143,7 +143,7 @@ MODEL_OBJ OBJLoader::LoadModel(const char* FileName, MODEL* Model)
 			texture->filename = wc;
 			texture->toExport = false;
 
-			int texID = MainEngine::GetInstance()->GetRenderCore()->AddTexture(texture);
+			int texID = RenderCore::GetInstance()->AddTexture(texture);
 
 			Model->MaterialArray[i].SetTexture(texID);
 

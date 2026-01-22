@@ -104,7 +104,7 @@ void SkinnedMeshRenderer::InitializeBuffers() {
 			ZeroMemory(&sd, sizeof(sd));
 			sd.pSysMem = vertex;
 
-			HRESULT hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer[m]);
+			HRESULT hr = RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer[m]);
 
 			delete[] vertex;
 		}
@@ -136,7 +136,7 @@ void SkinnedMeshRenderer::InitializeBuffers() {
 			ZeroMemory(&sd, sizeof(sd));
 			sd.pSysMem = index;
 
-			MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer[m]);
+			RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer[m]);
 
 			delete[] index;
 		}
@@ -189,7 +189,7 @@ void SkinnedMeshRenderer::InitializeBuffers() {
 
 	}
 
-	auto device = MainEngine::GetInstance()->GetRenderCore()->GetDevice();
+	auto device = RenderCore::GetInstance()->GetDevice();
 
 	for (int i = 0; i < m_pAiScene->mNumTextures; i++) {
 		aiTexture* aitexture = m_pAiScene->mTextures[i];
@@ -214,7 +214,7 @@ void SkinnedMeshRenderer::InitializeBuffers() {
 		tex->height = metadata.height;
 		tex->toExport = false;
 
-		auto texFID = MainEngine::GetInstance()->GetRenderCore()->AddTexture(tex);
+		auto texFID = RenderCore::GetInstance()->AddTexture(tex);
 
 		m_pTextureFID->emplace(aitexture->mFilename.data, texFID);
 	}
@@ -245,7 +245,7 @@ void SkinnedMeshRenderer::UpdateBoneMatrix(aiNode* node, aiMatrix4x4 parentMatri
 void SkinnedMeshRenderer::GetTexture()
 {
 	if (!m_pAiScene) return;
-	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
+	RenderCore* renderer = RenderCore::GetInstance();
 	for (UINT i = 0; i < m_pAiScene->mNumTextures; i++)
 	{
 		aiTexture* aitexture = m_pAiScene->mTextures[i];
@@ -380,7 +380,7 @@ void SkinnedMeshRenderer::Update() {
 		aiMesh* mesh = m_pAiScene->mMeshes[m];
 
 		D3D11_MAPPED_SUBRESOURCE ms;
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Map(m_pVertexBuffer[m], 0, D3D11_MAP_WRITE_DISCARD, 0, &ms);
+		RenderCore::GetInstance()->GetDeviceContext()->Map(m_pVertexBuffer[m], 0, D3D11_MAP_WRITE_DISCARD, 0, &ms);
 
 		VERTEX* vertex = (VERTEX*)ms.pData;
 
@@ -420,7 +420,7 @@ void SkinnedMeshRenderer::Update() {
 			vertex[v].texcoord = Vector2O(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
 			vertex[v].color = Vector4O::One();
 		}
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Unmap(m_pVertexBuffer[m], 0);
+		RenderCore::GetInstance()->GetDeviceContext()->Unmap(m_pVertexBuffer[m], 0);
 	}
 
 	m_CurrentAnimationFrame++;
@@ -432,7 +432,7 @@ void SkinnedMeshRenderer::Render() {
 
 
 	// プリミティブトポロジ設定
-	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(
+	RenderCore::GetInstance()->GetDeviceContext()->IASetPrimitiveTopology(
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// マテリアル設定
@@ -479,9 +479,9 @@ void SkinnedMeshRenderer::Render() {
 	}
 
 	// 行列をレンダラーに設定する
-	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
-	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
-	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+	RenderCore::GetInstance()->SetTranslationMatrix(translation);
+	RenderCore::GetInstance()->SetScaleMatrix(scale);
+	RenderCore::GetInstance()->SetAngleMatrix(angle);
 
 
 	for (unsigned int m = 0; m < m_pAiScene->mNumMeshes; m++)
@@ -503,13 +503,13 @@ void SkinnedMeshRenderer::Render() {
 		// 頂点バッファ設定
 		UINT stride = sizeof(VERTEX);
 		UINT offset = 0;
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer[m], &stride, &offset);
+		RenderCore::GetInstance()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer[m], &stride, &offset);
 
 		// インデックスバッファ設定
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer[m], DXGI_FORMAT_R32_UINT, 0);
+		RenderCore::GetInstance()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer[m], DXGI_FORMAT_R32_UINT, 0);
 
 		// ポリゴン描画
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(mesh->mNumFaces * 3, 0, 0);
+		RenderCore::GetInstance()->GetDeviceContext()->DrawIndexed(mesh->mNumFaces * 3, 0, 0);
 	}
 }
 

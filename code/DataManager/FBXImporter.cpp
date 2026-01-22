@@ -116,7 +116,7 @@ void FBXImporter::LoadVertexIndex(std::string filename)
 
 void FBXImporter::LoadTexture(std::string filename)
 {
-	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
+	RenderCore* renderer = RenderCore::GetInstance();
 
 	for (UINT i = 0; i < m_Model->AiScene->mNumTextures; i++)
 	{
@@ -134,7 +134,7 @@ void FBXImporter::LoadTexture(std::string filename)
 			&metadata,
 			image
 		);
-		CreateShaderResourceView(MainEngine::GetInstance()->GetRenderCore()->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &srv);
+		CreateShaderResourceView(RenderCore::GetInstance()->GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &srv);
 		assert(srv);
 
 		Texture* texture = new Texture();
@@ -159,7 +159,7 @@ std::pair<const aiScene*, std::string> FBXImporter::LoadAnimation(std::string fi
 
 void FBXImporter::CreateMaterial()
 {
-	ID3D11Device* device = MainEngine::GetInstance()->GetRenderCore()->GetDevice();
+	ID3D11Device* device = RenderCore::GetInstance()->GetDevice();
 	// テクスチャ読み込み
 	for (UINT i = 0; i < m_Model->AiScene->mNumMeshes; i++) {
 		aiMaterial* aimaterial = m_Model->AiScene->mMaterials[m_Model->AiScene->mMeshes[i]->mMaterialIndex];

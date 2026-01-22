@@ -10,7 +10,7 @@ REGISTER_COMPONENT(RenderTexture)
 RenderTexture::RenderTexture() : Component() {
 	m_ClassID = CID_Component_RenderTexture;
 
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	{
 		D3D11_TEXTURE2D_DESC td = {};
@@ -130,7 +130,7 @@ void RenderTexture::Update()
 		m_pDepthStencilTexture = nullptr;
 	}
 
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	{
 		D3D11_TEXTURE2D_DESC td = {};
@@ -199,7 +199,7 @@ void RenderTexture::DrawRenderTexture()
 	if (m_pCamera == nullptr) {
 		return;
 	}
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	renderCore->GetDeviceContext()->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 

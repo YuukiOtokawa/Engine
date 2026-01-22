@@ -29,7 +29,7 @@ auto key_getter = [](void* data, int idx, const char** out_text) -> bool {
 
 void Material::DrawMaterial()
 {
-	auto renderer = MainEngine::GetInstance()->GetRenderCore();
+	auto renderer = RenderCore::GetInstance();
 
 	ID3D11ShaderResourceView** srv;
 	srv = renderer->GetTexture(m_TextureFileID);
@@ -52,14 +52,15 @@ void Material::DrawMaterial()
 }
 
 void Material::DrawGUI() {
-	RenderCore* renderer = MainEngine::GetInstance()->GetRenderCore();
+	RenderCore* renderer = RenderCore::GetInstance();
 	static int current_shader_index = 0;
 
-	auto keys = MainEngine::GetInstance()->GetRenderCore()->GetPixelShaderKeys();
-	current_shader_index = (int)std::distance(
-		keys.begin(),
-		std::find(keys.begin(), keys.end(), m_PixelShader)
-	);
+	// TODO:シェーダーキーのリストを取得
+	//auto keys = RenderCore::GetInstance()->GetPixelShaderKeys();
+	//current_shader_index = (int)std::distance(
+	//	keys.begin(),
+	//	std::find(keys.begin(), keys.end(), m_PixelShader)
+	//);
 
 	ImGui::Text("Material Properties");
 	ImGui::DragFloat("Shininess", &m_Material.shininess, 0.01f, 0.0f, 100.0f);
@@ -76,10 +77,11 @@ void Material::DrawGUI() {
 	//ImGui::DragFloat4("Ground Color", &m_Material.GroundColor.x, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat4("Ground Normal", &m_Material.GroundNormal.x, 0.01f, -1.0f, 1.0f);
 
-	if (ImGui::Combo("Shader", &current_shader_index, key_getter,
-		static_cast<void*>(&keys), keys.size())) {
-		m_PixelShader = keys[current_shader_index];
-	}
+	// TODO: ピクセルシェーダーコンボボックス
+	//if (ImGui::Combo("Shader", &current_shader_index, key_getter,
+	//	static_cast<void*>(&keys), keys.size())) {
+	//	m_PixelShader = keys[current_shader_index];
+	//}
 
 	ID3D11ShaderResourceView** srv;
 	ImGui::Text("Texture");
@@ -237,7 +239,7 @@ void Material::ExportFile(YAML::Emitter& out)
 	out << YAML::Key << "vertexShader" << YAML::Value << m_VertexShader;
 	out << YAML::Key << "pixelShader" << YAML::Value << m_PixelShader;
 
-	int exist = SceneExporter::CheckTextureFileNameExist(MainEngine::GetInstance()->GetRenderCore()->GetTextureFileName(m_TextureFileID));
+	int exist = SceneExporter::CheckTextureFileNameExist(RenderCore::GetInstance()->GetTextureFileName(m_TextureFileID));
 	out << YAML::Key << "textureFileID" << YAML::Value ;
 	if (exist == -1)
 		out << m_TextureFileID;
@@ -245,7 +247,7 @@ void Material::ExportFile(YAML::Emitter& out)
 		out << exist;
 	
 	out << YAML::Key << "bumpTextureFileID" << YAML::Value;
-	exist = SceneExporter::CheckTextureFileNameExist(MainEngine::GetInstance()->GetRenderCore()->GetTextureFileName(m_BumpTextureFileID));
+	exist = SceneExporter::CheckTextureFileNameExist(RenderCore::GetInstance()->GetTextureFileName(m_BumpTextureFileID));
 	if (exist == -1)
 		out << m_BumpTextureFileID;
 	else
@@ -283,7 +285,8 @@ void Material::SetPixelShaderKey(std::string key)
 
 void Material::SetShader()
 {
-	auto renderer = MainEngine::GetInstance()->GetRenderCore();
-	renderer->SetVertexShader("vertex");
-	renderer->SetPixelShader(m_PixelShader);
+	auto renderer = RenderCore::GetInstance();
+	//TODO:Shader::Bind()を呼ぶ
+	//renderer->SetVertexShader("vertex");
+	//renderer->SetPixelShader(m_PixelShader);
 }

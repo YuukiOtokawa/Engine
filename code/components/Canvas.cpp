@@ -13,7 +13,6 @@
 #include "MainEngine.h"
 #include "RenderCore.h"
 
-
 #include "RenderQueueManager.h"
 REGISTER_COMPONENT(Canvas)
 
@@ -23,7 +22,7 @@ Canvas::Canvas() : IRenderable(RenderQueue::Overlay) {
 
 void Canvas::Update() {
 	// スクリーンサイズを更新
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 	if (renderCore) {
 		m_ScreenSize = renderCore->GetClientSize();
 	}
@@ -78,7 +77,7 @@ void Canvas::ImportFile(YAML::Node& node) {
 }
 
 void Canvas::SetupCanvasProjection() {
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 	if (!renderCore) return;
 
 	switch (m_RenderMode) {

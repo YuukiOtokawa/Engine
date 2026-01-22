@@ -120,7 +120,7 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = vertices.data();
 
-		hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
+		hr = RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
 	}
 
 	if (indices.size() != 0)
@@ -137,7 +137,7 @@ void MeshFilter::SetVertexInfo(std::vector<VERTEX> vertices, std::vector<unsigne
 		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = indices.data();
 
-		hr = MainEngine::GetInstance()->GetRenderCore()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
+		hr = RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
 	}
 
 	m_PrimitiveTopology = m_pVertexIndex->GetPrimitiveTopology();

@@ -199,7 +199,7 @@ void CSVExporter::ExportTextureInfoList()
 		fileTextureData.close();
 	}
 
-	auto textureList = MainEngine::GetInstance()->GetRenderCore()->GetTextureInfo();
+	auto textureList = RenderCore::GetInstance()->GetTextureInfo();
 
 	auto fileTextureInfoList = std::ofstream("AssetList\\TextureList.csv");
 	for (const auto& texture : textureList)

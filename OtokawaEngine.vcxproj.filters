@@ -279,9 +279,6 @@
     <ClCompile Include="code\EngineSystem\ProjectWindow.cpp">
       <Filter>ソース ファイル\EngineSystem</Filter>
     </ClCompile>
-    <ClCompile Include="scripts\Score.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="code\EngineSystem\Script.cpp">
       <Filter>ソース ファイル\Script</Filter>
     </ClCompile>

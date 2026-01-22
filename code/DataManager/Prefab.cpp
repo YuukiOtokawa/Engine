@@ -84,7 +84,7 @@ bool Prefab::Export(Object* object, const std::string& filePath)
                 int textureID = material->GetTexture();
                 if (textureID > 0 && texturePaths.find(textureID) == texturePaths.end()) {
                     // RenderCoreからテクスチャパスを取得
-                    auto textureList = MainEngine::GetInstance()->GetRenderCore()->GetTextureInfo();
+                    auto textureList = RenderCore::GetInstance()->GetTextureInfo();
                     for (const auto& tex : textureList) {
                         if (tex && tex->GetFileID() == textureID) {
                             texturePaths[textureID] = tex->GetFileName();
@@ -249,7 +249,7 @@ Object* Prefab::Import(const std::string& filePath)
                     MultiByteToWideChar(CP_UTF8, 0, texturePath.c_str(), -1, &wideStringFilePath[0], len);
                 }
 
-                MainEngine::GetInstance()->GetRenderCore()->TextureLoad(wideStringFilePath, fileID);
+                RenderCore::GetInstance()->TextureLoad(wideStringFilePath, fileID);
             }
         }
 

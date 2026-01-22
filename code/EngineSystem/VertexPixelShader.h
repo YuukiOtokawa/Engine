@@ -1,9 +1,6 @@
 #pragma once
 
 #include "IShader.h"
-#include "RenderCore.h"
-
-using namespace EngineCoreSystem;
 
 class VertexPixelShader : public IShader {
     friend class RenderCore;
@@ -16,7 +13,7 @@ class VertexPixelShader : public IShader {
     void operator=(const VertexPixelShader&) = delete;
 public:
     virtual ~VertexPixelShader() = default;
-    VertexPixelShader* Load(std::string filePath, std::string vsEntryPoint = "vtx", std::string psEntryPoint = "pix");
+    static VertexPixelShader* Load(std::string filePath, std::string vsEntryPoint = "vtx", std::string psEntryPoint = "pix");
     bool LoadShader(std::string filePath, std::string vsEntryPoint = "vtx", std::string psEntryPoint = "pix");
     void Bind();
 };

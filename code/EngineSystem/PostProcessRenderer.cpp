@@ -76,7 +76,7 @@ void PostProcessRenderer::DrawPostProcess(int n)
 {
 	if (!m_bIsVisible) return;
 
-	MainEngine::GetInstance()->GetRenderCore()->SetWeight(&m_Weight[0]);
+	RenderCore::GetInstance()->SetWeight(&m_Weight[0]);
 
 	// 1. 所有者オブジェクトからMeshFilterコンポーネントを取得
 	auto meshFilter = owner->GetComponent<MeshFilter>();
@@ -128,20 +128,20 @@ void PostProcessRenderer::DrawPostProcess(int n)
 	}
 
 	// 行列をレンダラーに設定する
-	MainEngine::GetInstance()->GetRenderCore()->SetTranslationMatrix(translation);
-	MainEngine::GetInstance()->GetRenderCore()->SetScaleMatrix(scale);
-	MainEngine::GetInstance()->GetRenderCore()->SetAngleMatrix(angle);
+	RenderCore::GetInstance()->SetTranslationMatrix(translation);
+	RenderCore::GetInstance()->SetScaleMatrix(scale);
+	RenderCore::GetInstance()->SetAngleMatrix(angle);
 
 	// 3. 頂点・インデックスバッファを設定する (MeshFilter::Draw()から移動)
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
 
-	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetVertexBuffers(0, 1, vertexBuffer, &stride, &offset);
+	RenderCore::GetInstance()->GetDeviceContext()->IASetVertexBuffers(0, 1, vertexBuffer, &stride, &offset);
 	if (indexBuffer)
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		RenderCore::GetInstance()->GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// 4. プリミティブトポロジーを設定する (MeshFilter::Draw()から移動)
-	MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->IASetPrimitiveTopology(meshFilter->GetPrimitiveTopology());
+	RenderCore::GetInstance()->GetDeviceContext()->IASetPrimitiveTopology(meshFilter->GetPrimitiveTopology());
 
 	// 5. シェーダーとマテリアルのプロパティを設定する (すでにあなたのコードに記述されています)
 	auto ownerScale = transform->GetScale();
@@ -152,14 +152,14 @@ void PostProcessRenderer::DrawPostProcess(int n)
 	// 6. 最終的な描画呼び出しを実行する
 	if (meshFilter->GetVertexCount() == 0) return;
 	if (meshFilter->GetIndexCount() == 0)
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->Draw(meshFilter->GetVertexCount(), 0);
+		RenderCore::GetInstance()->GetDeviceContext()->Draw(meshFilter->GetVertexCount(), 0);
 	else
-		MainEngine::GetInstance()->GetRenderCore()->GetDeviceContext()->DrawIndexed(meshFilter->GetIndexCount(), 0, 0);
+		RenderCore::GetInstance()->GetDeviceContext()->DrawIndexed(meshFilter->GetIndexCount(), 0, 0);
 }
 
 void PostProcessRenderer::DrawGUI()
 {
-	//auto renderer = MainEngine::GetInstance()->GetRenderCore();
+	//auto renderer = RenderCore::GetInstance();
 	//if (m_pPostProcessMaterial[0])
 	//	ImGui::Image((ImTextureID)renderer->GetTexture(m_pPostProcessMaterial[0]->GetTexture()), ImVec2(300, 300));
 	//if (m_pPostProcessMaterial[1])

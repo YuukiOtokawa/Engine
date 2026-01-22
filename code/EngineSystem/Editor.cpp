@@ -30,7 +30,6 @@
 
 #include "OBJLoader.h"
 
-#include "Player.h"
 #include "PlayerCamera.h"
 
 //#include "Bullet.h"
@@ -40,7 +39,6 @@
 #include "imgui.h"
 #include "ImGuizmo.h"
 
-#include "Pack.h"
 
 #include "Component_CameraPostProcess.h"
 
@@ -107,7 +105,7 @@ void Editor::DeleteMarkedObjects()
 void Editor::DrawGameViewRTV()
 {
 	RenderQueueManager::BeginFrame();
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	//使用するカメラを設定
 	Object* currentCam = nullptr;
@@ -129,7 +127,7 @@ void Editor::DrawGameViewRTV()
 		if (m_useDeferredRendering) {
 			// ジオメトリパス: GBufferに描画
 			renderCore->BeginDeferredGeometryPass();
-			renderCore->SetPixelShader("DeferredGeometry");
+			renderCore->SetVertexPixelShader("DeferredGeometry");
 			RenderQueueManager::SetDeferredRendering(true); // デファードモード有効化
 			DrawGame(currentCam);
 			RenderQueueManager::SetDeferredRendering(false); // デファードモード無効化
@@ -145,7 +143,7 @@ void Editor::DrawGameViewRTV()
 
 			renderCore->SetWorldViewProjection2D();
 			renderCore->SetRasterizerState2D();
-			renderCore->SetPixelShader("DeferredLighting");
+			renderCore->SetVertexPixelShader("DeferredLighting");
 			renderCore->BeginDeferredLightingPass();
 			renderCore->DrawFullScreenQuad(usePostProcess ? renderCore->GetPostProcessRTV(0) : renderCore->GetGameViewRTV(), renderCore->GetGBufferSRV(0));
 			// ポストプロセスがある場合は、この後ポストプロセスが適用されるので、ここではラスタライザーステートを戻さない
@@ -202,7 +200,7 @@ void Editor::DrawGameViewRTV()
 void Editor::DrawSceneViewRTV()
 {
 	RenderQueueManager::BeginFrame();
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	//使用するカメラの行列情報を登録
 	Object* currentCam = m_pEditorCamera;
@@ -213,7 +211,7 @@ void Editor::DrawSceneViewRTV()
 	if (m_useDeferredRendering) {
 		// ジオメトリパス: GBufferに描画
 		renderCore->BeginDeferredGeometryPass();
-		renderCore->SetPixelShader("DeferredGeometry");
+		renderCore->SetVertexPixelShader("DeferredGeometry");
 		RenderQueueManager::SetDeferredRendering(true); // デファードモード有効化
 	}
 	else {
@@ -265,7 +263,7 @@ void Editor::DrawSceneViewRTV()
 			}
 		}
 	}
-	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	RenderCore::GetInstance()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
 			if (!object->GetComponent<Transform>())
@@ -283,7 +281,7 @@ void Editor::DrawSceneViewRTV()
 	m_pParticleManager->DrawParticles();
 
 	// 2D描画
-	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+	RenderCore::GetInstance()->SetWorldViewProjection2D();
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::SpriteLayer) {
 			if (object->GetTag() == GameObjectTag::SystemTag)
@@ -301,8 +299,8 @@ void Editor::DrawSceneViewRTV()
 	}
 
 	// UI描画（最前面）
-	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
-	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	RenderCore::GetInstance()->SetWorldViewProjection2D();
+	RenderCore::GetInstance()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::UILayer) {
 			float dist = (currentCam->GetComponent<Transform>()->GetPosition().XYZ() - object->GetComponent<Transform>()->GetPosition().XYZ()).Length();
@@ -323,7 +321,7 @@ void Editor::DrawSceneViewRTV()
 		renderCore->BeginSceneView();
 		renderCore->SetWorldViewProjection2D();
 		renderCore->SetRasterizerState2D();
-		renderCore->SetPixelShader("DeferredLighting");
+		renderCore->SetVertexPixelShader("DeferredLighting");
 		renderCore->BeginDeferredLightingPass();
 		renderCore->DrawFullScreenQuad(renderCore->GetSceneViewRTV(), renderCore->GetGBufferSRV(0));
 		// ライティングパス完了後、ラスタライザーステートを3Dに戻す
@@ -386,58 +384,58 @@ void Editor::Initialize() {
 	{
 		// TODO [otokawa]:csoファイルまとめてロードしたいね
 		//光源計算無し
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/unlitTexturePS.hlsl", "unlit");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/unlitTexturePS.hlsl", "unlit");
 
 		//頂点ライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/vertexDirectionalLightingPS.hlsl", "directional");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/vertexDirectionalLightingPS.hlsl", "directional");
 
 		//ピクセルライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pixelLightingPS.hlsl", "pixel");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/pixelLightingPS.hlsl", "pixel");
 
 		//BlinnPhongライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/blinnPhongPS.hlsl", "BlinnPhong");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/blinnPhongPS.hlsl", "BlinnPhong");
 
 		//半球ライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/hemisphereLightingPS.hlsl", "hemisphere");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/hemisphereLightingPS.hlsl", "hemisphere");
 
 		//点光源ライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/pointLightingBlinnPhongPS.hlsl", "pointLight");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/pointLightingBlinnPhongPS.hlsl", "pointLight");
 
 		//スポットライトライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/spotLightingPS.hlsl", "spotLight");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/spotLightingPS.hlsl", "spotLight");
 
 		//リムライトライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/limLightingPS.hlsl", "limLight");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/limLightingPS.hlsl", "limLight");
 
 		//法線マップ
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/bumpPS.hlsl", "normal");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/bumpPS.hlsl", "normal");
 
 		//Cook-Torranceライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/cookPS.hlsl", "CookTorrance");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/cookPS.hlsl", "CookTorrance");
 
 		//Cook-Torranceライティング
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PBRPS.hlsl", "PBR");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/PBRPS.hlsl", "PBR");
 
 		//トゥーンシェーダー
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon1PS.hlsl", "toon1");
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/toon2PS.hlsl", "toon2");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/toon1PS.hlsl", "toon1");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/toon2PS.hlsl", "toon2");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/mosaicPS.hlsl", "mosaic");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/mosaicPS.hlsl", "mosaic");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/RGBShiftPS.hlsl", "RGBShift");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/RGBShiftPS.hlsl", "RGBShift");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/PosterisePS.hlsl", "Posterise");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/PosterisePS.hlsl", "Posterise");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_V.hlsl", "GaussianPS_V");
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/GaussianPS_H.hlsl", "GaussianPS_H");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/GaussianPS_V.hlsl", "GaussianPS_V");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/GaussianPS_H.hlsl", "GaussianPS_H");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/WavePS.hlsl", "Wave");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/WavePS.hlsl", "Wave");
 
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/EnvMapPS.hlsl", "Enviroment");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/EnvMapPS.hlsl", "Enviroment");
 
 		// デファードレンダリング用シェーダー
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredGeometry.hlsl", "DeferredGeometry");
-		MainEngine::GetInstance()->GetRenderCore()->CreatePixelShader("cso/DeferredLighting.hlsl", "DeferredLighting");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/DeferredGeometry.hlsl", "DeferredGeometry");
+		RenderCore::GetInstance()->CreateVertexPixelShader("cso/DeferredLighting.hlsl", "DeferredLighting");
 
 	}
 
@@ -477,7 +475,7 @@ void Editor::Update() {
 #include "RenderTexture.h"
 void Editor::Draw() {
 
-	auto renderCore = MainEngine::GetInstance()->GetRenderCore();
+	auto renderCore = RenderCore::GetInstance();
 
 	for (auto renderTextureComponent : m_Components[CID_Component_RenderTexture]) {
 		static_cast<RenderTexture*>(renderTextureComponent)->DrawRenderTexture();
@@ -494,7 +492,7 @@ void Editor::Draw() {
 	//==========================================================================
 
 	renderCore->BufferClear();
-	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+	RenderCore::GetInstance()->SetWorldViewProjection2D();
 
 	//ImGuiの初期化
 	m_pGUI->StartImGui();
@@ -513,7 +511,7 @@ void Editor::Draw() {
 	m_pGUI->EndImGui();
 
 	// レンダリングバッファの内容を画面に表示
-	MainEngine::GetInstance()->GetRenderCore()->BufferPresent();
+	RenderCore::GetInstance()->BufferPresent();
 
 }
 
@@ -568,7 +566,7 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 				//object->Draw();
 		}
 	}
-	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	RenderCore::GetInstance()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetTag() == GameObjectLayer::BillBoardLayer) {
 			if (!object->GetComponent<Transform>())
@@ -586,7 +584,7 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	m_pParticleManager->DrawParticles();
 
 	// 2D描画
-	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
+	RenderCore::GetInstance()->SetWorldViewProjection2D();
 	for (auto& object : objects) {
 		if (renderTexture && object == renderTexture) continue;
 		if (object->GetTag() == GameObjectLayer::SpriteLayer) {
@@ -603,8 +601,8 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 	}
 
 	// UI描画（最前面）
-	MainEngine::GetInstance()->GetRenderCore()->SetWorldViewProjection2D();
-	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState2D();
+	RenderCore::GetInstance()->SetWorldViewProjection2D();
+	RenderCore::GetInstance()->SetRasterizerState2D();
 	for (auto& object : objects) {
 		if (object->GetLayer() == GameObjectLayer::UILayer) {
 			auto renderable = object->GetComponent<IRenderable>();
@@ -614,7 +612,7 @@ void Editor::DrawGame(Object* camera, Object* renderTexture)
 		}
 	}
 
-	MainEngine::GetInstance()->GetRenderCore()->SetRasterizerState3D();
+	RenderCore::GetInstance()->SetRasterizerState3D();
 
 	RenderQueueManager::Render(camera->GetComponent<Camera>());
 
@@ -844,7 +842,7 @@ void Editor::ResetScene()
 	m_Materials.clear();
 	m_VertexIndices.clear();
 	EngineMetaFile::ResetFileIDCounter();
-	MainEngine::GetInstance()->GetRenderCore()->ResetTexture();
+	RenderCore::GetInstance()->ResetTexture();
 }
 
 void Editor::SetActiveCamera(Object* camera)

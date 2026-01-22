@@ -71,7 +71,7 @@ std::list<Object*> SceneImporter::Import(std::string filePath)
 					MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, &wideStringFilePath[0], len);
 				}
 
-				MainEngine::GetInstance()->GetRenderCore()->TextureLoad(wideStringFilePath, fileID);
+				RenderCore::GetInstance()->TextureLoad(wideStringFilePath, fileID);
 			}
 		}
 	}
