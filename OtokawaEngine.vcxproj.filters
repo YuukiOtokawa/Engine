@@ -101,6 +101,7 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="code\shader\common.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource\FilePathDialog.rc">
@@ -951,5 +952,6 @@
     </FxCompile>
     <FxCompile Include="code\shader\DeferredGeometry.hlsl" />
     <FxCompile Include="code\shader\DeferredLighting.hlsl" />
+    <FxCompile Include="code\shader\filter.hlsl" />
   </ItemGroup>
 </Project>

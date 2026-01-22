@@ -28,8 +28,7 @@ class Material : public EngineMetaFile
 {
 private:
     // シェーダーキー
-    std::string m_VertexShader{};
-    std::string m_PixelShader{};
+    std::string m_VertexPixelShader{};
 
     // マテリアルとテクスチャ番号
     MATERIAL m_Material;
@@ -46,8 +45,7 @@ public:
     /// @brief Material クラスのデフォルトコンストラクタです。
     Material() {
         m_ClassID = CID_Material;
-        m_VertexShader = "unlit";
-        m_PixelShader = "unlit";
+        m_VertexPixelShader = "unlit";
     }
     /// @brief Material クラスのデストラクタです。
     ~Material() = default;
@@ -63,11 +61,7 @@ public:
 
     /// @brief 頂点シェーダーのキーを設定します。
     /// @param key 設定する頂点シェーダーのキー。
-    void SetVertexShaderKey(std::string key);
-    /// @brief ピクセルシェーダーのキーを設定します。
-    /// @param key 設定するピクセルシェーダーのキー。
-    void SetPixelShaderKey(std::string key);
-
+    void SetVertexPixelShaderKey(std::string key);
     void SetShader();
 
     /// @brief 繝�繧ｯ繧ｹ繝√Ε繧定ｨｭ螳壹＠縺ｾ縺吶�
@@ -84,10 +78,7 @@ public:
 
     /// @brief 鬆らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励ｒ蜿門ｾ励＠縺ｾ縺吶�
     /// @return 譬ｼ邏阪＆繧後※縺�繧矩�らせ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励�
-    std::string GetVertexShader() const { return m_VertexShader; }
-    /// @brief 繝斐け繧ｻ繝ｫ繧ｷ繧ｧ繝ｼ繝繝ｼ縺ｮ譁�蟄怜�励ｒ蜿門ｾ励＠縺ｾ縺吶�
-    /// @return 繝斐け繧ｻ繝ｫ繧ｷ繧ｧ繝ｼ繝繝ｼ繧定｡ｨ縺� std::string 蝙九�ｮ蛟､縲�
-    std::string GetPixelShader() const { return m_PixelShader; }
+    std::string GetVertexPixelShader() const { return m_VertexPixelShader; }
 
     void SetStartIndex(unsigned int startIndex) { StartIndex = startIndex; }
     void SetIndexNum(unsigned int indexNum) { IndexNum = indexNum; }

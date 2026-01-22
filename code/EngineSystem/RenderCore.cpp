@@ -132,10 +132,7 @@ RenderCore::RenderCore(HWND hWnd) {
 	SAFE_RELEASE(m_pParameterBuffer);
 	SAFE_RELEASE(m_pSamplerState);
 
-	for (auto& shader : m_VertexPixelShaders) {
-		delete shader.second;
-	}
-	for (auto& shader : m_ComputeShaders) {
+	for (auto& shader : m_Shaders) {
 		delete shader.second;
 	}
 	SAFE_RELEASE(m_pInputLayout);
@@ -648,38 +645,31 @@ std::vector<Texture*> RenderCore::GetTextureInfo()
 	return m_Textures;
 }
 
-bool RenderCore::CheckVertexPixelShaderDuplicate(std::string key)
+bool RenderCore::CheckShaderDuplicate(std::string key)
 {
-	if (m_VertexPixelShaders.find(key) != m_VertexPixelShaders.end()) {
+	if (m_Shaders.find(key) != m_Shaders.end()) {
 		return true;
 	}
 	return false;
 }
 
-
-bool RenderCore::CheckComputeShaderDuplicate(std::string key)
-{
-	if (m_ComputeShaders.find(key) != m_ComputeShaders.end()) {
-		return true;
-	}
-	return false;
-}
 
 void RenderCore::AddVertexPixelShader(std::string key, VertexPixelShader* shader)
 {
-	m_VertexPixelShaders[key] = shader;
+	m_Shaders[key] = shader;
 }
 
 void RenderCore::AddComputeShader(std::string key, ComputeShader* shader)
 {
-	m_ComputeShaders[key] = shader;
+	m_Shaders[key] = shader;
 }
 
 VertexPixelShader* RenderCore::GetVertexPixelShader(std::string key)
 {
-	for (auto it : m_VertexPixelShaders) {
-		if (it.first == key) {
-			return it.second;
+	for (auto it : m_Shaders) {
+		if (it.first == key && it.second->GetClassID() == CID_VertexPixelShader) {
+			
+			return static_cast<VertexPixelShader*>(it.second);
 		}
 	}
 	return nullptr;
@@ -687,9 +677,9 @@ VertexPixelShader* RenderCore::GetVertexPixelShader(std::string key)
 
 ComputeShader* RenderCore::GetComputeShader(std::string key)
 {
-	for (auto it : m_ComputeShaders) {
-		if (it.first == key) {
-			return it.second;
+	for (auto it : m_Shaders) {
+		if (it.first == key && it.second->GetClassID() == CID_ComputeShader) {
+			return static_cast<ComputeShader*>(it.second);
 		}
 	}
 	return nullptr;
@@ -697,7 +687,7 @@ ComputeShader* RenderCore::GetComputeShader(std::string key)
 
 void RenderCore::CreateVertexPixelShader(std::string filePath, std::string key, std::string vsEntryPoint, std::string psEntryPoint)
 {
-	AddVertexPixelShader(key, VertexPixelShader::Load(filePath,vsEntryPoint,psEntryPoint));
+	AddVertexPixelShader(key, VertexPixelShader::Load(filePath));
 }
 
 void RenderCore::SetVertexPixelShader(std::string key)

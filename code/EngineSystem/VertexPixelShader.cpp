@@ -5,34 +5,28 @@
 
 #include "EngineConsole.h"
 
-VertexPixelShader* VertexPixelShader::Load(std::string filePath, std::string vsEntryPoint, std::string psEntryPoint)
+VertexPixelShader* VertexPixelShader::Load(std::string filePath)
 {
 	if (RenderCore::GetInstance()->CheckVertexPixelShaderDuplicate(GetFileNameFromFilePath(filePath))) {
 		return RenderCore::GetInstance()->GetVertexPixelShader(GetFileNameFromFilePath(filePath));
 	}
 
 	VertexPixelShader* vspsShader = new VertexPixelShader();
-	if (!vspsShader->LoadShader(filePath, vsEntryPoint, psEntryPoint)) {
-		EngineConsole::LogError("Failed to load compute shader: %s", filePath.c_str());
-		delete vspsShader;
-		return nullptr;
-	}
-
-	return vspsShader;
+	vspsShader->LoadShader(filePath);
 }
 
-bool VertexPixelShader::LoadShader(std::string filePath, std::string vsEntryPoint, std::string psEntryPoint)
+void VertexPixelShader::LoadShader(std::string filePath)
 {
 	ID3DBlob* pVSBlob = nullptr;
-	if (CompileShader(filePath, vsEntryPoint, "vs_5_0", &pVSBlob) != S_OK) {
+	if (CompileShader(filePath, "vtx", "vs_5_0", &pVSBlob) != S_OK) {
 		pVSBlob->Release();
-		return false;
+		return;
 	}
 	ID3DBlob* pPSBlob = nullptr;
-	if (CompileShader(filePath, psEntryPoint, "ps_5_0", &pPSBlob) != S_OK) {
+	if (CompileShader(filePath, "pix", "ps_5_0", &pPSBlob) != S_OK) {
 		pVSBlob->Release();
 		pPSBlob->Release();
-		return false;
+		return;
 	}
 	auto d = RenderCore::GetInstance()->GetDevice();
 	auto hr = d->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &m_pVertexShader);
@@ -41,7 +35,7 @@ bool VertexPixelShader::LoadShader(std::string filePath, std::string vsEntryPoin
 	RenderCore::GetInstance()->AddVertexPixelShader(GetFileNameFromFilePath(filePath), this);
 	pVSBlob->Release();
 	pPSBlob->Release();
-	return true;
+	return;
 }
 
 void VertexPixelShader::Bind()

@@ -103,8 +103,7 @@ private:
 
 
     // シェーダー管理
-    std::map<std::string, VertexPixelShader*> m_VertexPixelShaders;
-    std::map<std::string, ComputeShader*> m_ComputeShaders;
+    std::map<std::string, IShader*> m_Shaders;
     // 入力レイアウト
     ID3D11InputLayout* m_pInputLayout = nullptr;
 
@@ -218,8 +217,7 @@ public:
     std::vector<Texture*> GetTextureInfo();
 
     // シェーダーキーによる重複読み込みチェック
-    bool CheckVertexPixelShaderDuplicate(std::string key);
-    bool CheckComputeShaderDuplicate(std::string key);
+    bool CheckShaderDuplicate(std::string key);
     void AddVertexPixelShader(std::string key, VertexPixelShader* shader);
     void AddComputeShader(std::string key, ComputeShader* shader);
     VertexPixelShader* GetVertexPixelShader(std::string key);
@@ -268,9 +266,10 @@ public:
     /// @return 指定したテクスチャの高さ（ピクセル単位）。
     int GetTextureHeight(int index);
 
-    std::vector<std::string> GetVertexShaderKeys() {
+    std::vector<std::string> GetVertexPixelShaderKeys() {
         std::vector<std::string> keys;
-        for (const auto& shader : m_VertexPixelShaders) {
+        for (const auto& shader : m_Shaders) {
+            if (shader.second->GetClassID() == CID_VertexPixelShader)
             keys.push_back(shader.first);
         }
         return keys;

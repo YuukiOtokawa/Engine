@@ -1,5 +1,3 @@
-#pragma target 5.0
-
 cbuffer TranslationBuffer : register(b0)
 {
     matrix Translation;
@@ -12,7 +10,7 @@ cbuffer ScaleBuffer : register(b2)
 {
     matrix Scale;
 }
-cbuffer ViewBuffer : register(b3) 
+cbuffer ViewBuffer : register(b3)
 {
     matrix View;
 }
@@ -116,4 +114,3 @@ cbuffer WeightBuffer : register(b9)
 {
     float Weight[8];
 };
-

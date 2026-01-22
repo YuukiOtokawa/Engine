@@ -5,37 +5,33 @@
 
 #include "EngineConsole.h"
 
-ComputeShader* ComputeShader::Load(std::string filePath, std::string entryPoint)
+ComputeShader* ComputeShader::Load(std::string filePath)
 {
-	if (RenderCore::GetInstance()->CheckComputeShaderDuplicate(GetFileNameFromFilePath(filePath) + "::" + entryPoint)) {
-		return RenderCore::GetInstance()->GetComputeShader(GetFileNameFromFilePath(filePath) + "::" + entryPoint);
+	if (RenderCore::GetInstance()->CheckComputeShaderDuplicate(GetFileNameFromFilePath(filePath))) {
+		return RenderCore::GetInstance()->GetComputeShader(GetFileNameFromFilePath(filePath));
 	}
 
 	ComputeShader* computeShader = new ComputeShader();
-	if (!computeShader->LoadShader(filePath, entryPoint)) {
-		EngineConsole::LogError("Failed to load compute shader: %s", filePath.c_str());
-		delete computeShader;
-		return nullptr;
-	}
+	computeShader->LoadShader(filePath);
 
 	return computeShader;
 }
 
-bool ComputeShader::LoadShader(std::string filePath, std::string entryPoint)
+void ComputeShader::LoadShader(std::string filePath)
 {
 	ID3DBlob* pCSBlob = nullptr;
-	if (CompileShader(filePath, entryPoint, "cs_5_0", &pCSBlob) != S_OK) {
-		return false;
+	if (CompileShader(filePath, "com", "cs_5_0", &pCSBlob) != S_OK) {
+		return;
 	}
 
 	auto d = RenderCore::GetInstance()->GetDevice();
 	auto hr = d->CreateComputeShader(pCSBlob->GetBufferPointer(), pCSBlob->GetBufferSize(), NULL, &m_pComputeShader);
 
-	RenderCore::GetInstance()->AddComputeShader(GetFileNameFromFilePath(filePath) + "::" + entryPoint, this);
+	RenderCore::GetInstance()->AddComputeShader(GetFileNameFromFilePath(filePath), this);
 
 	pCSBlob->Release();
 
-	return true;
+	return;
 }
 
 void ComputeShader::Dispatch(int x, int y, int z)

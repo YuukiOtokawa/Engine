@@ -40,6 +40,8 @@ enum ClassID {
     CID_UIImageMesh,
     CID_UIImage,
     CID_AudioData,
+    CID_VertexPixelShader,
+    CID_ComputeShader,
 };
 
 struct TextFileInfo {

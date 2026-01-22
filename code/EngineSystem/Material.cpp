@@ -167,11 +167,8 @@ void Material::DrawGUI() {
 
 void Material::ImportFile(YAML::Node& node)
 {
-	if (node["vertexShader"]) {
-		m_VertexShader = node["vertexShader"].as<std::string>();
-	}
-	if (node["pixelShader"]) {
-		m_PixelShader = node["pixelShader"].as<std::string>();
+	if (node["vertexPixelShader"]) {
+		m_VertexPixelShader = node["vertexPixelShader"].as<std::string>();
 	}
 	if (node["textureFileID"]) {
 		m_TextureFileID = node["textureFileID"].as<int>();
@@ -236,8 +233,7 @@ void Material::ImportFile(YAML::Node& node)
 
 void Material::ExportFile(YAML::Emitter& out)
 {
-	out << YAML::Key << "vertexShader" << YAML::Value << m_VertexShader;
-	out << YAML::Key << "pixelShader" << YAML::Value << m_PixelShader;
+	out << YAML::Key << "vertexPixelShader" << YAML::Value << m_VertexPixelShader;
 
 	int exist = SceneExporter::CheckTextureFileNameExist(RenderCore::GetInstance()->GetTextureFileName(m_TextureFileID));
 	out << YAML::Key << "textureFileID" << YAML::Value ;
@@ -273,20 +269,13 @@ void Material::ExportFile(YAML::Emitter& out)
 	out << YAML::EndMap;
 }
 
-void Material::SetVertexShaderKey(std::string key)
+void Material::SetVertexPixelShaderKey(std::string key)
 {
-	m_VertexShader = key;
-}
-
-void Material::SetPixelShaderKey(std::string key)
-{
-	m_PixelShader = key;
+	m_VertexPixelShader = key;
 }
 
 void Material::SetShader()
 {
 	auto renderer = RenderCore::GetInstance();
-	//TODO:Shader::Bind()を呼ぶ
-	//renderer->SetVertexShader("vertex");
-	//renderer->SetPixelShader(m_PixelShader);
+	renderer->GetVertexPixelShader(m_VertexPixelShader)->Bind();
 }

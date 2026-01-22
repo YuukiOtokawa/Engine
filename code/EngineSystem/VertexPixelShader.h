@@ -8,12 +8,12 @@ class VertexPixelShader : public IShader {
     ID3D11VertexShader* m_pVertexShader = nullptr;
     ID3D11PixelShader* m_pPixelShader = nullptr;
 
-    VertexPixelShader() = default;
     VertexPixelShader(const VertexPixelShader&) = delete;
     void operator=(const VertexPixelShader&) = delete;
 public:
+    VertexPixelShader() { m_ClassID = CID_VertexPixelShader; }
     virtual ~VertexPixelShader() = default;
-    static VertexPixelShader* Load(std::string filePath, std::string vsEntryPoint = "vtx", std::string psEntryPoint = "pix");
-    bool LoadShader(std::string filePath, std::string vsEntryPoint = "vtx", std::string psEntryPoint = "pix");
+    static VertexPixelShader* Load(std::string filePath);
+    void LoadShader(std::string filePath) override;
     void Bind();
 };
