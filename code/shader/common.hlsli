@@ -108,6 +108,7 @@ cbuffer MaterialBuffer : register(b8)
     float2 BlockSize;
     // モザイクの中心位置
     // ぽスタライズの段階数
+    
 };
 
 cbuffer WeightBuffer : register(b9)

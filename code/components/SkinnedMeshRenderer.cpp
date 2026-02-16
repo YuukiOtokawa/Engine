@@ -21,8 +21,7 @@ SkinnedMeshRenderer::SkinnedMeshRenderer() : Renderer(RenderQueue::Geometry)
 	m_ClassID = CID_Component_SkinnedMeshRenderer;
 
 	m_pMaterial = new Material();
-	m_pMaterial->SetVertexShaderKey("unlit");
-	m_pMaterial->SetPixelShaderKey("unlit");
+	m_pMaterial->SetVertexPixelShaderKey("unlit");
 
 	MATERIAL material;
 	m_pMaterial->SetMaterial(material);

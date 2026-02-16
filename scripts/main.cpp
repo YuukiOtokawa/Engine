@@ -71,6 +71,19 @@ void SetSceneGame()
 		dirctionalLight->SetTag(GameObjectTagLayer::LightTag);
 	}
 
-	Editor::GetInstance()->OpenScene("Scenes/GY31_Title.yml");
+	{
+		auto torus = new Object();
+		torus->SetName("Torus");
+		auto transform = torus->AddComponent<Transform>();
+		auto meshFilter = torus->AddComponent<MeshFilter>();
+		auto meshRenderer = torus->AddComponent<MeshRenderer>();
+
+		auto objLoader = new OBJLoader();
+		meshFilter->SetMesh(objLoader->Load("scripts\\RhythmGameScript\\asset\\torus.obj"));
+
+
+	}
+
+	//Editor::GetInstance()->OpenScene("Scenes/GY31_Title.yml");
 }
 

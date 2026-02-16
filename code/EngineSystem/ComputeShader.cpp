@@ -7,13 +7,16 @@
 
 ComputeShader* ComputeShader::Load(std::string filePath)
 {
-	if (RenderCore::GetInstance()->CheckComputeShaderDuplicate(GetFileNameFromFilePath(filePath))) {
+	if (RenderCore::GetInstance()->CheckShaderDuplicate(GetFileNameFromFilePath(filePath))) {
 		return RenderCore::GetInstance()->GetComputeShader(GetFileNameFromFilePath(filePath));
 	}
 
 	ComputeShader* computeShader = new ComputeShader();
 	computeShader->LoadShader(filePath);
-
+	if (!computeShader->m_isLoaded) {
+		delete computeShader;
+		computeShader = nullptr;
+	}
 	return computeShader;
 }
 
@@ -21,6 +24,7 @@ void ComputeShader::LoadShader(std::string filePath)
 {
 	ID3DBlob* pCSBlob = nullptr;
 	if (CompileShader(filePath, "com", "cs_5_0", &pCSBlob) != S_OK) {
+		if (pCSBlob) pCSBlob->Release();
 		return;
 	}
 
@@ -30,7 +34,7 @@ void ComputeShader::LoadShader(std::string filePath)
 	RenderCore::GetInstance()->AddComputeShader(GetFileNameFromFilePath(filePath), this);
 
 	pCSBlob->Release();
-
+	m_isLoaded = true;
 	return;
 }
 

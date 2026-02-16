@@ -42,6 +42,7 @@ enum ClassID {
     CID_AudioData,
     CID_VertexPixelShader,
     CID_ComputeShader,
+    CID_GeometryShader,
 };
 
 struct TextFileInfo {

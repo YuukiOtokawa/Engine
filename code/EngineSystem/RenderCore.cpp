@@ -99,6 +99,7 @@ RenderCore::RenderCore(HWND hWnd) {
 	m_pDeviceContext->OMSetDepthStencilState(m_pDepthStencilStateDepthEnable, 1);
 	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 	TextureLoad(L"asset/texture/Default_White.png");
+
 	CreatePostProcessBuffer();
 	CreateSceneGameViewBuffer();
 	CreateGBuffer();
@@ -653,9 +654,16 @@ bool RenderCore::CheckShaderDuplicate(std::string key)
 	return false;
 }
 
+void RenderCore::AddShaderAssetList(std::string key, std::string filePath)
+{
+	
+}
+
 
 void RenderCore::AddVertexPixelShader(std::string key, VertexPixelShader* shader)
 {
+	if (!shader) return;
+	if (!shader->m_isLoaded) return;
 	m_Shaders[key] = shader;
 }
 
@@ -664,30 +672,73 @@ void RenderCore::AddComputeShader(std::string key, ComputeShader* shader)
 	m_Shaders[key] = shader;
 }
 
+void RenderCore::AddGeometryShader(std::string key, GeometryShader* shader) {
+	if (!shader) return;
+	if (!shader->m_isLoaded) return;
+	m_Shaders[key] = shader;
+}
+
 VertexPixelShader* RenderCore::GetVertexPixelShader(std::string key)
 {
 	for (auto it : m_Shaders) {
-		if (it.first == key && it.second->GetClassID() == CID_VertexPixelShader) {
+		if (!it.second) continue;
+		if (it.first == GetFileNameFromFilePath(key) && it.second->GetClassID() == CID_VertexPixelShader) {
 			
 			return static_cast<VertexPixelShader*>(it.second);
 		}
 	}
-	return nullptr;
+	
+	CreateVertexPixelShader(key,GetFileNameFromFilePath(key));
+	
+	auto vp = static_cast<VertexPixelShader*>(m_Shaders[GetFileNameFromFilePath(key)]);
+	
+	if (vp)
+		return vp;
+	else {
+		return static_cast<VertexPixelShader*>(m_Shaders["error"]);
+	}
 }
 
 ComputeShader* RenderCore::GetComputeShader(std::string key)
 {
 	for (auto it : m_Shaders) {
-		if (it.first == key && it.second->GetClassID() == CID_ComputeShader) {
+		if (it.first == GetFileNameFromFilePath(key) && it.second->GetClassID() == CID_ComputeShader) {
 			return static_cast<ComputeShader*>(it.second);
 		}
 	}
 	return nullptr;
 }
 
+GeometryShader* RenderCore::GetGeometryShader(std::string key) {
+	for (auto it : m_Shaders) {
+		if (!it.second) continue;
+		if (it.first == GetFileNameFromFilePath(key) && it.second->GetClassID() == CID_GeometryShader) {
+			return static_cast<GeometryShader*>(it.second);
+		}
+	}
+	
+	CreateGeometryShader(key,GetFileNameFromFilePath(key));
+	
+	auto vp = static_cast<GeometryShader*>(m_Shaders[GetFileNameFromFilePath(key)]);
+	
+	if (vp)
+		return vp;
+	else {
+		return nullptr;
+	}
+}
+
 void RenderCore::CreateVertexPixelShader(std::string filePath, std::string key, std::string vsEntryPoint, std::string psEntryPoint)
 {
 	AddVertexPixelShader(key, VertexPixelShader::Load(filePath));
+}
+
+void RenderCore::CreateGeometryShader(std::string filePath, std::string key, std::string entryPoint) {
+	AddGeometryShader(key,GeometryShader::Load(filePath));
+}
+
+void RenderCore::CreateComputeShader(std::string filePath, std::string key, std::string entryPoint) {
+	AddGeometryShader(key,GeometryShader::Load(filePath));
 }
 
 void RenderCore::SetVertexPixelShader(std::string key)
@@ -747,10 +798,12 @@ void RenderCore::CreateConstantBuffer()
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pViewBuffer);
 	m_pDeviceContext->VSSetConstantBuffers(3, 1, &m_pViewBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(3, 1, &m_pViewBuffer);
+	m_pDeviceContext->GSSetConstantBuffers(3, 1, &m_pViewBuffer);
 
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pProjectionBuffer);
 	m_pDeviceContext->VSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
+	m_pDeviceContext->GSSetConstantBuffers(4, 1, &m_pProjectionBuffer);
 
 	hBufferDesc.ByteWidth = sizeof(LIGHT_BUFFER);
 
@@ -763,6 +816,7 @@ void RenderCore::CreateConstantBuffer()
 	m_pDeviceContext->PSSetConstantBuffers(6, 1, &m_pCameraBuffer);
 
 	m_pDevice->CreateBuffer(&hBufferDesc, NULL, &m_pParameterBuffer);
+	m_pDeviceContext->VSSetConstantBuffers(7, 1, &m_pParameterBuffer);
 	m_pDeviceContext->PSSetConstantBuffers(7, 1, &m_pParameterBuffer);
 
 	hBufferDesc.ByteWidth = sizeof(MATERIAL);
@@ -1002,7 +1056,7 @@ void RenderCore::SetCamera(Vector4O position)
 
 void RenderCore::SetParameter(Vector4O position)
 {
-	GetDeviceContext()->UpdateSubresource(m_pCameraBuffer, 0, NULL, &position, 0, 0);
+	GetDeviceContext()->UpdateSubresource(m_pParameterBuffer, 0, NULL, &position, 0, 0);
 }
 
 void RenderCore::SetWeight(float* weight)

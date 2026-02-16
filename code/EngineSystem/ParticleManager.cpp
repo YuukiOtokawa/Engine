@@ -95,8 +95,7 @@ void ParticleManager::DrawParticles()
 	object->AddComponent<Billboard>();
 	object->AddComponent<MeshRenderer>();
 	object->GetComponent<Transform>()->SetScale(Vector4O(1.0f, 1.0f, 1.0f));
-    object->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexShaderKey("unlit");
-    object->GetComponent<MeshRenderer>()->GetMaterial()->SetPixelShaderKey("unlit");
+    object->GetComponent<MeshRenderer>()->GetMaterial()->SetVertexPixelShaderKey("unlit");
 	LIGHT light;
 	light.Diffuse = Vector4O(0.8f, 0.8f, 0.8f, 1.0f);
 	light.Ambient = Vector4O(0.1f, 0.1f, 0.1f, 1.0f);

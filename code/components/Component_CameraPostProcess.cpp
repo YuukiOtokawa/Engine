@@ -58,15 +58,13 @@ CameraPostProcess::CameraPostProcess()
 
 	// 垂直方向のガウシアンブラー用マテリアル
 	Material* material = new Material();
-	material->SetVertexShaderKey("vertex");  // 既存の頂点シェーダーを使用
-	material->SetPixelShaderKey("GaussianPS_V");
+	material->SetVertexPixelShaderKey("vertex");  // 既存の頂点シェーダーを使用
 	material->SetTextureEnable(true);
 	m_pPostProcessMaterial[0] = material;
 
 	// 水平方向のガウシアンブラー用マテリアル
 	material = new Material();
-	material->SetVertexShaderKey("vertex");  // 既存の頂点シェーダーを使用
-	material->SetPixelShaderKey("GaussianPS_H");
+	material->SetVertexPixelShaderKey("vertex");  // 既存の頂点シェーダーを使用
 	material->SetTextureEnable(true);
 	m_pPostProcessMaterial[1] = material;
 

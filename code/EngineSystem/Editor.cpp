@@ -382,60 +382,22 @@ void Editor::Initialize() {
 
 	// シェーダーの読み込み
 	{
-		// TODO [otokawa]:csoファイルまとめてロードしたいね
+		// TODO [otokawa]:デフォルトシェーダー以外削除
 		//光源計算無し
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/unlitTexturePS.hlsl", "unlit");
+		RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/errorShader.hlsl", "error");
+		RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/unlit.hlsl", "unlit");
 
-		//頂点ライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/vertexDirectionalLightingPS.hlsl", "directional");
+		RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/filter.hlsl", "filter");
+		RenderCore::GetInstance()->CreateVertexPixelShader("scripts/shader/Far.hlsl", "FarVPS");
+		RenderCore::GetInstance()->CreateVertexPixelShader("scripts/shader/ParticleVPS.hlsl", "ParticleVPS");
 
-		//ピクセルライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/pixelLightingPS.hlsl", "pixel");
-
-		//BlinnPhongライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/blinnPhongPS.hlsl", "BlinnPhong");
-
-		//半球ライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/hemisphereLightingPS.hlsl", "hemisphere");
-
-		//点光源ライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/pointLightingBlinnPhongPS.hlsl", "pointLight");
-
-		//スポットライトライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/spotLightingPS.hlsl", "spotLight");
-
-		//リムライトライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/limLightingPS.hlsl", "limLight");
-
-		//法線マップ
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/bumpPS.hlsl", "normal");
-
-		//Cook-Torranceライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/cookPS.hlsl", "CookTorrance");
-
-		//Cook-Torranceライティング
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/PBRPS.hlsl", "PBR");
-
-		//トゥーンシェーダー
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/toon1PS.hlsl", "toon1");
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/toon2PS.hlsl", "toon2");
-
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/mosaicPS.hlsl", "mosaic");
-
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/RGBShiftPS.hlsl", "RGBShift");
-
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/PosterisePS.hlsl", "Posterise");
-
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/GaussianPS_V.hlsl", "GaussianPS_V");
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/GaussianPS_H.hlsl", "GaussianPS_H");
-
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/WavePS.hlsl", "Wave");
-
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/EnvMapPS.hlsl", "Enviroment");
+		RenderCore::GetInstance()->CreateGeometryShader("scripts/shader/FarGS.hlsl", "FarGS");
+		RenderCore::GetInstance()->CreateGeometryShader("scripts/shader/ParticleGS.hlsl", "ParticleGS");
+		RenderCore::GetInstance()->CreateComputeShader("scripts/shader/compute.hlsl", "compute");
 
 		// デファードレンダリング用シェーダー
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/DeferredGeometry.hlsl", "DeferredGeometry");
-		RenderCore::GetInstance()->CreateVertexPixelShader("cso/DeferredLighting.hlsl", "DeferredLighting");
+		//RenderCore::GetInstance()->CreateVertexPixelShader("cso/DeferredGeometry.hlsl", "DeferredGeometry");
+		//RenderCore::GetInstance()->CreateVertexPixelShader("cso/DeferredLighting.hlsl", "DeferredLighting");
 
 	}
 

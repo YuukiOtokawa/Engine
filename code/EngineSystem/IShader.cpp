@@ -34,5 +34,6 @@ HRESULT IShader::CompileShader(const std::string& filePath, const std::string& e
 		return hr;
 	}
 	if (pErrorBlob) pErrorBlob->Release();
+
 	return S_OK;
 }

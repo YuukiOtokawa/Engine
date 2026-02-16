@@ -112,8 +112,7 @@ MeshField::MeshField() : Renderer(RenderQueue::Geometry)
 {
 	m_ClassID = CID_Component_MeshField;
 	m_pMaterial = new Material();
-	m_pMaterial->SetVertexShaderKey("unlit");
-	m_pMaterial->SetPixelShaderKey("unlit");
+	m_pMaterial->SetVertexPixelShaderKey("unlit");
 	MATERIAL material;
 	m_pMaterial->SetMaterial(material);
 
@@ -295,6 +294,19 @@ void MeshField::SetHeight(int count, float height)
 	v.position.y = height;
 	m_VertexIndex.SetVertexInfo(&v, count);
 	CreateBuffer();
+}
+
+void MeshField::SetHeight(std::vector<float> map)
+{
+	if (map.size() == m_MeshSize[0] * m_MeshSize[1]) {
+		for (int i = 0; i < map.size(); i++) {
+			auto v = m_VertexIndex.GetVertexInfo()[i];
+			v.position.y = map[i];
+			m_VertexIndex.SetVertexInfo(&v, i);
+		}
+
+		CreateBuffer();
+	}
 }
 
 int MeshField::GetVertexCount()

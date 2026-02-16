@@ -42,14 +42,12 @@ PostProcessRenderer::PostProcessRenderer() : MeshRenderer()
 	CalcGaussianWeight(0.0f);
 
 	Material* material = new Material();
-	material->SetVertexShaderKey("GaussianVS_V");
-	material->SetPixelShaderKey("GaussianPS_V");
+	material->SetVertexPixelShaderKey("GaussianVS_V");
 
 	m_pPostProcessMaterial[0] = material;
 
 	material = new Material();
-	material->SetVertexShaderKey("GaussianVS_H");
-	material->SetPixelShaderKey("GaussianPS_H");
+	material->SetVertexPixelShaderKey("GaussianVS_H");
 	m_pPostProcessMaterial[1] = material;
 }
 

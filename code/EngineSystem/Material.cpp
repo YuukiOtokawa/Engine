@@ -48,6 +48,7 @@ void Material::DrawMaterial()
 
 
 	renderer->SetMaterialBuffer(m_Material);
+	renderer->SetParameter(Vector4O((float)FurShell, (float)FurCount, 0.0f, 0.0f));
 
 }
 
@@ -73,15 +74,24 @@ void Material::DrawGUI() {
 	ImGui::DragFloat("MosaicSize", &m_Material.MosaicSize, 0.01f, 0.0f, 4.0f);
 	ImGui::DragFloat2("BlockSize", &m_Material.BlockSize.x, 0.1f, 1.0f, 512.0f);
 
+	// TODO:課題用応急 変数名治す
+	ImGui::InputFloat("FurShell", &FurShell);
+	ImGui::InputFloat("FurCount", &FurCount);
+
 	//ImGui::DragFloat4("Sky Color", &m_Material.SkyColor.x, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat4("Ground Color", &m_Material.GroundColor.x, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat4("Ground Normal", &m_Material.GroundNormal.x, 0.01f, -1.0f, 1.0f);
 
-	// TODO: ピクセルシェーダーコンボボックス
-	//if (ImGui::Combo("Shader", &current_shader_index, key_getter,
-	//	static_cast<void*>(&keys), keys.size())) {
-	//	m_PixelShader = keys[current_shader_index];
-	//}
+	ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
+
+	if (ImGui::InputText("VertexPixel", m_vpShaderNameBuffer, IM_ARRAYSIZE(m_vpShaderNameBuffer), flags)) {
+		
+		m_VertexPixelShader = m_vpShaderNameBuffer;
+	}
+	if (ImGui::InputText("Geometry", m_gShaderNameBuffer,IM_ARRAYSIZE(m_gShaderNameBuffer),flags)) {
+		m_GeometryShader = m_gShaderNameBuffer;
+	}
+
 
 	ID3D11ShaderResourceView** srv;
 	ImGui::Text("Texture");
@@ -272,10 +282,20 @@ void Material::ExportFile(YAML::Emitter& out)
 void Material::SetVertexPixelShaderKey(std::string key)
 {
 	m_VertexPixelShader = key;
+	strcpy_s(m_vpShaderNameBuffer, m_VertexPixelShader.c_str());
 }
 
 void Material::SetShader()
 {
 	auto renderer = RenderCore::GetInstance();
-	renderer->GetVertexPixelShader(m_VertexPixelShader)->Bind();
+	auto vp = renderer->GetVertexPixelShader(m_VertexPixelShader);
+	if (vp) vp->Bind();
+	
+	auto g = renderer->GetGeometryShader(m_GeometryShader);
+	
+	if (!g) {
+		GeometryShader::Unbind();
+	}else {
+		g->Bind();
+	}
 }

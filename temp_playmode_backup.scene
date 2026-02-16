@@ -1,0 +1,120 @@
+objects:
+  - classID: 1
+    fileID: 22
+    name: InputSystem
+    tag: 0
+    layer: 3
+    components:
+      - 23
+  - classID: 8
+    fileID: 23
+    tag: 10
+  - classID: 1
+    fileID: 24
+    name: EditorCamera
+    tag: 2
+    layer: 1
+    components:
+      - 25
+      - 26
+  - classID: 3
+    fileID: 25
+    tag: 0
+    position: [0, 5, -7.5, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 11
+    fileID: 26
+    tag: 0
+    isActiveCamera: false
+    target: [0, 0, 0, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 27
+    name: GameCamera
+    tag: 0
+    layer: 2
+    components:
+      - 28
+      - 29
+  - classID: 3
+    fileID: 28
+    tag: 0
+    position: [0, 5, -7.5, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 10
+    fileID: 29
+    tag: 0
+    isActiveCamera: true
+    target: [0, 0, 0, 0]
+    fov: 90
+    near: 0.100000001
+    far: 1000
+    up: [0, 1, 0, 0]
+  - classID: 1
+    fileID: 30
+    name: DirectionalLight
+    tag: 8
+    layer: 2
+    components:
+      - 31
+      - 32
+  - classID: 3
+    fileID: 31
+    tag: 0
+    position: [0, 10, 0, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 9
+    fileID: 32
+    tag: 0
+    type: 0
+    direction: [-0.5, -1, -0.5, 0]
+    diffuse: [1, 1, 1, 1]
+  - classID: 1
+    fileID: 33
+    name: Object
+    tag: 0
+    layer: 2
+    components:
+      - 34
+      - 35
+      - 39
+  - classID: 3
+    fileID: 34
+    tag: 0
+    position: [0, 0, 0, 0]
+    rotation: [0, 0, 0, 0]
+    scale: [1, 1, 1, 0]
+  - classID: 19
+    fileID: 35
+    tag: 0
+    materialFileID: 37
+    vertexIndexFileID: 36
+    meshSizeX: 17
+    meshSizeY: 17
+    cellSize: [1, 1]
+  - classID: 2
+    fileID: 37
+    vertexPixelShader: unlit
+    textureFileID: 52
+    bumpTextureFileID: 28
+    material:
+      textureEnable: true
+      shininess: 0
+      specularPower: 50
+      rgbShift: 0.5
+      ambient: [1, 1, 1, 1]
+      diffuse: [1, 1, 1, 1]
+      specular: [1, 1, 1, 1]
+      emissive: [1, 1, 1, 1]
+      mosaicSize: 1.5
+      blockSize: [32, 32]
+  - classID: 17
+    fileID: 39
+    tag: 9
+    scriptName: Fractal

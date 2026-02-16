@@ -49,6 +49,7 @@ public:
 
     void SetHeight(int x, int z, float height);
     void SetHeight(int count, float height);
+    void SetHeight(std::vector<float> map);
 
     int GetVertexCount();
 };

@@ -1,7 +1,7 @@
 ﻿// ========================================================
 //
 // メッシュフィルターコンポーネント基底クラス[Component_MeshFilter.h]
-// 
+//
 //									Date:20250520
 //									Author:Yuuki Otokawa
 // ========================================================
@@ -41,7 +41,6 @@ protected:
 
     VertexIndex* m_pVertexIndex = nullptr;
 
-    friend class MeshRenderer;
 public:
     DECLARE_COMPONENT(MeshFilter)
 	/// @brief MeshFilter のデフォルトコンストラクタです。

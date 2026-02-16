@@ -20,8 +20,6 @@ const double HIT_MISS = 0.500;
 
 void PlayerControl::Start()
 {
-    // スクリプトのインスタンスはScriptComponent型でやってくるのでキャストが必要
-    // 要改善点
     gameManager = dynamic_cast<GameManager*>(Editor::GetInstance()->GetObject("GameManager")->GetComponent<ScriptComponent>()->GetScriptInstance());
 }
 

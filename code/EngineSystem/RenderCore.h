@@ -1,7 +1,7 @@
 ﻿// ========================================================
 //
 // レンダラークラス[Renderer.h]
-// 
+//
 //									Date:20250514
 //									Author:Yuuki Otokawa
 // ========================================================
@@ -29,6 +29,7 @@
 
 #include "VertexPixelShader.h"
 #include "ComputeShader.h"
+#include "GeometryShader.h"
 
 
 //==========================================================================
@@ -109,6 +110,7 @@ private:
 
     // 使用中のシェーダーキー
     std::string m_CurrentVertexPixelShaderKey;
+    std::string m_CurrentGeometryShaderKey;
     std::string m_CurrentComputeShaderKey;
 
     // テクスチャ管理
@@ -218,11 +220,16 @@ public:
 
     // シェーダーキーによる重複読み込みチェック
     bool CheckShaderDuplicate(std::string key);
+    void AddShaderAssetList(std::string key, std::string filePath);
     void AddVertexPixelShader(std::string key, VertexPixelShader* shader);
     void AddComputeShader(std::string key, ComputeShader* shader);
+    void AddGeometryShader(std::string key, GeometryShader* shader);
     VertexPixelShader* GetVertexPixelShader(std::string key);
     ComputeShader* GetComputeShader(std::string key);
+    GeometryShader* GetGeometryShader(std::string key);
     void CreateVertexPixelShader(std::string filePath, std::string key, std::string vsEntryPoint = "vtx", std::string psEntryPoint = "pix");
+    void CreateGeometryShader(std::string filePath, std::string key, std::string entryPoint = "geo");
+    void CreateComputeShader(std::string filePath, std::string key, std::string entryPoint = "com");
 
     void SetVertexPixelShader(std::string key);
 

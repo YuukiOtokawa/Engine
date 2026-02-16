@@ -1,7 +1,7 @@
 ﻿// ========================================================
 //
 // マテリアルクラス[Material.h]
-// 
+//
 //									Date:	20250520
 //									Author:	Yuuki Otokawa
 // ========================================================
@@ -29,6 +29,9 @@ class Material : public EngineMetaFile
 private:
     // シェーダーキー
     std::string m_VertexPixelShader{};
+    std::string m_GeometryShader{};
+    char m_vpShaderNameBuffer[100];
+    char m_gShaderNameBuffer[100];
 
     // マテリアルとテクスチャ番号
     MATERIAL m_Material;
@@ -41,11 +44,19 @@ private:
     unsigned int	StartIndex = 0;
     unsigned int	IndexNum = 0;
 
+
 public:
+
+    // TODO: 課題用応急 変数名変える
+    float FurShell = 1;
+    float FurCount = 300;
+
     /// @brief Material クラスのデフォルトコンストラクタです。
     Material() {
         m_ClassID = CID_Material;
         m_VertexPixelShader = "unlit";
+        strcpy_s(m_vpShaderNameBuffer, m_VertexPixelShader.c_str());
+        strcpy_s(m_gShaderNameBuffer, m_GeometryShader.c_str());
     }
     /// @brief Material クラスのデストラクタです。
     ~Material() = default;
