@@ -38,6 +38,22 @@ struct PS_IN
     float3 LightPosition : POSITION1;
 };
 
+// VS→GS用の構造体（SV_POSITIONを使わない）
+struct VS_TO_GS
+{
+    float4 WorldPosition : POSITION0;
+    float3 Normal : NORMAL0;
+    float4 Diffuse : COLOR0;
+    float2 TexCoord : TEXCOORD0;
+};
+
+// パーティクル専用: VS→GS構造体
+struct PARTICLE_VS_TO_GS
+{
+    float3 WorldPosition : POSITION0;
+    float4 Diffuse : COLOR0;
+};
+
 struct DIRECTIONAL_LIGHT
 {
     bool enable;

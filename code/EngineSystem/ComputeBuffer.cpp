@@ -12,6 +12,14 @@ ComputeBuffer::~ComputeBuffer() {
     m_pUAVStructureBuffer->Release();
 }
 
+void ComputeBuffer::SetBuffer()
+{
+    if (m_pSRV)
+		RenderCore::GetInstance()->GetDeviceContext()->CSSetShaderResources(0, 1, &m_pSRV);
+	if (m_pUAV)
+		RenderCore::GetInstance()->GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_pUAV, nullptr);
+}
+
 void ComputeBuffer::CreateSRVStructureBuffer(UINT size, UINT count) {
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));

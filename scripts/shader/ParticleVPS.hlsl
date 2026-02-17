@@ -4,14 +4,11 @@ void vtx(in VS_IN In, out PS_IN Out)
 {
     matrix world;
     world = mul(mul(Scale, Angle), Translation);
-    
-    Out.Position = mul(float4(In.Position, 1.0f), world);
 
-    
-    Out.TexCoord = In.TexCoord;
+    float4 worldPos = mul(float4(In.Position, 1.0f), world);
+    Out.WorldPosition = worldPos.xyz;
     Out.Diffuse.rgb = In.Diffuse * diffuse;
     Out.Diffuse.a = In.Diffuse.a;
-    
 }
 
 Texture2D g_Texture : register(t0);

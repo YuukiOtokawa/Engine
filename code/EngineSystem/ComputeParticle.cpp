@@ -7,95 +7,34 @@ REGISTER_COMPONENT(ComputeParticle)
 
 void ComputeParticle::CreateMesh()
 {
-	// 頂点データとインデックスデータの生成
-	std::vector<VERTEX> vertex(4);
-
-	{
-		vertex[0].position = Vector3O(
-			0.0f,
-			0.0f,
-			0.0f
-		);
-		vertex[0].normal = Vector3O::Up();
-		vertex[0].texcoord = Vector2O(
-			0.0f, 0.0f
-		);
-		vertex[0].color = Vector4O::One();
-	}
-	{
-		vertex[1].position = Vector3O(
-			1.0f,
-			0.0f,
-			0.0f
-		);
-		vertex[1].normal = Vector3O::Up();
-		vertex[1].texcoord = Vector2O(
-			1.0f, 0.0f
-		);
-		vertex[1].color = Vector4O::One();
-	}
-	{
-		vertex[2].position = Vector3O(
-			0.0f,
-			1.0f,
-			0.0f
-		);
-		vertex[2].normal = Vector3O::Up();
-		vertex[2].texcoord = Vector2O(
-			0.0f, 1.0f
-		);
-		vertex[2].color = Vector4O::One();
-	}
-	{
-		vertex[3].position = Vector3O(
-			1.0f,
-			1.0f,
-			0.0f
-		);
-		vertex[3].normal = Vector3O::Up();
-		vertex[3].texcoord = Vector2O(
-			1.0f, 1.0f
-		);
-		vertex[3].color = Vector4O::One();
-	}
-
-
-	std::vector<UINT> index(4);
-	m_NumIndices = 4;
-	index[0] = 0;
-	index[1] = 1;
-	index[2] = 2;
-	index[3] = 3;
-
-
-	m_VertexIndex.SetVertexInfo(vertex);
-	m_VertexIndex.SetIndexInfo(index);
-	m_VertexIndex.SetName("ParticleMesh");
-	m_VertexIndex.SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	// パーティクルシステムでは各パーティクルを1点として描画するため、
+	// メッシュデータは不要（動的頂点バッファのみ使用）
+	m_NumIndices = m_NumParticles;
 }
 
 void ComputeParticle::CreateBuffer() {
 	// 既存のバッファがあれば解放
 	if (m_pVertexBuffer) {
 		m_pVertexBuffer->Release();
+		m_pVertexBuffer = nullptr;
 	}
 	if (m_pIndexBuffer) {
 		m_pIndexBuffer->Release();
+		m_pIndexBuffer = nullptr;
 	}
 
-	auto vertices = m_VertexIndex.GetVertexInfo();
-	// 頂点バッファ生成
-	if (vertices.empty()) return;
-
+	// パーティクル数分の動的頂点バッファを作成
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.ByteWidth = sizeof(VERTEX) * vertices.size();
+	bd.ByteWidth = sizeof(VERTEX) * m_NumParticles;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	
-	HRESULT hr = RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, NULL, &m_pVertexBuffer);
-	
+
+	// NULLで初期化（データはUpdate()で毎フレーム書き込む）
+	HRESULT hr = RenderCore::GetInstance()->GetDevice()->CreateBuffer(&bd, nullptr, &m_pVertexBuffer);
+
+	// パーティクルデータを初期化
 	for (int i=0;i<m_NumParticles;i++) {
 		m_Particles[i].Position = XMFLOAT4(0.0f,0.0f,0.0f,0.0f);
 		m_Particles[i].Acceleration = XMFLOAT4(0.0f,0.001f,0.0f,0.0f);
@@ -121,6 +60,7 @@ ComputeParticle::ComputeParticle() : Renderer(RenderQueue::Geometry) {
 	m_pBuffer->CreateSRVStructureBuffer(sizeof(PARTICLE), m_NumParticles);
 	m_pBuffer->CreateUAVStructureBuffer(sizeof(PARTICLE), m_NumParticles);
 
+	CreateMesh();
 	CreateBuffer();
 }
 
@@ -138,9 +78,8 @@ void ComputeParticle::Update() {
 		context->Unmap(m_pBuffer->GetSRVStructureBuffer(), 0);
 	}
 	{
-		auto srv = m_pBuffer->GetSRV();
-		if (srv)
-			context->CSSetShaderResources(0,1,&srv);
+		if (m_pBuffer)
+			m_pBuffer->SetBuffer();
 		if (!m_pComputeShader.empty())
 			RenderCore::GetInstance()->GetComputeShader(m_pComputeShader)->Dispatch(256,1,1);
 	}
@@ -218,25 +157,22 @@ void ComputeParticle::Render() {
     RenderCore::GetInstance()->SetScaleMatrix(scale);
     RenderCore::GetInstance()->SetAngleMatrix(angle);
 
-    // 3. 頂点・インデックスバッファを設定する (MeshFilter::Draw()から移動)
+    // 3. 頂点バッファを設定する
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
 	RenderCore::GetInstance()->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
-	// インデックスバッファ設定
-	RenderCore::GetInstance()->GetDeviceContext()->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-    // 4. プリミティブトポロジーを設定する (MeshFilter::Draw()から移動)
+    // 4. プリミティブトポロジーを設定する
     RenderCore::GetInstance()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
-    // 5. シェーダーとマテリアルのプロパティを設定する (すでにあなたのコードに記述されています)
+    // 5. シェーダーとマテリアルのプロパティを設定する
 	auto ownerScale = transform->GetScale();
 	m_pMaterial->GetMaterial()->Aspect = Vector2O(ownerScale.x,ownerScale.y);
 	m_pMaterial->SetShader();
 	m_pMaterial->DrawMaterial();
 
-
-	RenderCore::GetInstance()->GetDeviceContext()->DrawIndexed(m_NumIndices, 0, 0);
+	// パーティクル数分描画（インデックスバッファ不要）
+	RenderCore::GetInstance()->GetDeviceContext()->Draw(m_NumParticles, 0);
 
 	
 

@@ -13,6 +13,8 @@ public:
     ComputeBuffer();
     ~ComputeBuffer();
 
+    void SetBuffer();
+
     void CreateSRVStructureBuffer(UINT size, UINT count);
     void CreateUAVStructureBuffer(UINT size, UINT count);
 

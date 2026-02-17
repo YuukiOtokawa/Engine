@@ -738,7 +738,7 @@ void RenderCore::CreateGeometryShader(std::string filePath, std::string key, std
 }
 
 void RenderCore::CreateComputeShader(std::string filePath, std::string key, std::string entryPoint) {
-	AddGeometryShader(key,GeometryShader::Load(filePath));
+	AddComputeShader(key,ComputeShader::Load(filePath));
 }
 
 void RenderCore::SetVertexPixelShader(std::string key)
