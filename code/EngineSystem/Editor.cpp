@@ -385,15 +385,15 @@ void Editor::Initialize() {
 		// TODO [otokawa]:デフォルトシェーダー以外削除
 		//光源計算無し
 		RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/errorShader.hlsl", "error");
-		RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/unlit.hlsl", "unlit");
-
-		RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/filter.hlsl", "filter");
-		RenderCore::GetInstance()->CreateVertexPixelShader("scripts/shader/Far.hlsl", "FarVPS");
-		RenderCore::GetInstance()->CreateVertexPixelShader("scripts/shader/ParticleVPS.hlsl", "ParticleVPS");
-
-		RenderCore::GetInstance()->CreateGeometryShader("scripts/shader/FarGS.hlsl", "FarGS");
-		RenderCore::GetInstance()->CreateGeometryShader("scripts/shader/ParticleGS.hlsl", "ParticleGS");
-		RenderCore::GetInstance()->CreateComputeShader("scripts/shader/compute.hlsl", "compute");
+		// RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/unlit.hlsl", "unlit");
+		//
+		// RenderCore::GetInstance()->CreateVertexPixelShader("code/shader/filter.hlsl", "filter");
+		// RenderCore::GetInstance()->CreateVertexPixelShader("scripts/shader/Far.hlsl", "FarVPS");
+		// RenderCore::GetInstance()->CreateVertexPixelShader("scripts/shader/ParticleVPS.hlsl", "ParticleVPS");
+		//
+		// RenderCore::GetInstance()->CreateGeometryShader("scripts/shader/FarGS.hlsl", "FarGS");
+		// RenderCore::GetInstance()->CreateGeometryShader("scripts/shader/ParticleGS.hlsl", "ParticleGS");
+		// RenderCore::GetInstance()->CreateComputeShader("scripts/shader/compute.hlsl", "compute");
 
 		// デファードレンダリング用シェーダー
 		//RenderCore::GetInstance()->CreateVertexPixelShader("cso/DeferredGeometry.hlsl", "DeferredGeometry");

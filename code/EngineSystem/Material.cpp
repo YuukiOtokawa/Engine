@@ -13,6 +13,7 @@
 #include "Material.h"
 
 #include "MainEngine.h"
+#include "StringConverter.h"
 
 auto key_getter = [](void* data, int idx, const char** out_text) -> bool {
 	auto& keys = *static_cast<std::vector<std::string>*>(data);
@@ -86,11 +87,21 @@ void Material::DrawGUI() {
 
 	if (ImGui::InputText("VertexPixel", m_vpShaderNameBuffer, IM_ARRAYSIZE(m_vpShaderNameBuffer), flags)) {
 		
-		m_VertexPixelShader = m_vpShaderNameBuffer;
+		m_VertexPixelShader = GetFileNameFromFilePath(m_vpShaderNameBuffer);
 	}
+	ImGui::PushID(m_FileID * 255);
+	if (ImGui::ButtonEx("Compile")) {
+		RenderCore::GetInstance()->CreateVertexPixelShader(m_vpShaderNameBuffer, m_VertexPixelShader);
+	}
+	ImGui::PopID();
 	if (ImGui::InputText("Geometry", m_gShaderNameBuffer,IM_ARRAYSIZE(m_gShaderNameBuffer),flags)) {
-		m_GeometryShader = m_gShaderNameBuffer;
+		m_GeometryShader = GetFileNameFromFilePath(m_gShaderNameBuffer);
 	}
+	ImGui::PushID(m_FileID * 254);
+	if (ImGui::ButtonEx("Compile")) {
+		RenderCore::GetInstance()->CreateGeometryShader(m_gShaderNameBuffer, m_GeometryShader);
+	}
+	ImGui::PopID();
 
 
 	ID3D11ShaderResourceView** srv;
