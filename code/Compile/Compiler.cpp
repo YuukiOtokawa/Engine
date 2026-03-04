@@ -442,6 +442,7 @@ void GetPathsOfVisualStudioInstalls(std::vector<VSVersionInfo>* pVersions, Compi
 	// サポートされているVisual Studioのバージョン
 	VSVersionDiscoveryInfo VS_DISCOVERY_INFO[] =
 	{
+		{"18.0", "19.0", 1, true},	// Visual Studio 2026
 		{"17.0", "18.0", 1, true},	// Visual Studio 2022
 		{"16.0", "17.0", 1, true},	// Visual Studio 2019
 		{"15.0", "16.0", 1, true},	// Visual Studio 2017
@@ -464,9 +465,36 @@ void GetPathsOfVisualStudioInstalls(std::vector<VSVersionInfo>* pVersions, Compi
 	bool isMSCVersionFound = true; // 一つの偽ケースのみなのでデフォルトでtrue
 	switch (MSCVERSION)
 	{
+	case 2000: // VS 2026
+	case 2001:
+	case 2002:
+	case 2003:
+	case 2004:
+	case 2005:
+	case 2006:
+	case 2007:
+	case 2008:
+	case 2009:
+	case 2010:
+		startVersion = 0;
+		break;
 	case 1931: // VS 2022
 	case 1930:
-		startVersion = 0;
+	case 1932:
+	case 1933:
+	case 1934:
+	case 1935:
+	case 1936:
+	case 1937:
+	case 1938:
+	case 1939:
+	case 1940:
+	case 1941:
+	case 1942:
+	case 1943:
+	case 1944:
+	case 1950:
+		startVersion = 1;
 		break;
 	case 1929: // VS 2019
 	case 1928:
@@ -478,7 +506,7 @@ void GetPathsOfVisualStudioInstalls(std::vector<VSVersionInfo>* pVersions, Compi
 	case 1922:
 	case 1921:
 		case 1920:
-		startVersion = 1;
+		startVersion = 2;
 		break;
 	case 1916: // VS 2017
 	case 1915:
@@ -487,25 +515,25 @@ void GetPathsOfVisualStudioInstalls(std::vector<VSVersionInfo>* pVersions, Compi
 	case 1912:
 	case 1911:
 	case 1910:
-		startVersion = 2;
-		break;
-	case 1900:	// VS 2015
 		startVersion = 3;
 		break;
-	case 1800:	// VS 2013
+	case 1900:	// VS 2015
 		startVersion = 4;
 		break;
-	case 1700:	// VS 2012
+	case 1800:	// VS 2013
 		startVersion = 5;
 		break;
-	case 1600:	// VS 2010
+	case 1700:	// VS 2012
 		startVersion = 6;
 		break;
-	case 1500:	// VS 2008
+	case 1600:	// VS 2010
 		startVersion = 7;
 		break;
-	case 1400:	// VS 2005
+	case 1500:	// VS 2008
 		startVersion = 8;
+		break;
+	case 1400:	// VS 2005
+		startVersion = 9;
 		break;
 	default:
 		isMSCVersionFound = false;
@@ -516,6 +544,29 @@ void GetPathsOfVisualStudioInstalls(std::vector<VSVersionInfo>* pVersions, Compi
 		break;
 	}
 #endif // !defined __clang__
+
+	// 環境変数からVisual Studioのパスを取得
+	char vcInstallDir[MAX_PATH];
+	if (GetEnvironmentVariableA("VCINSTALLDIR", vcInstallDir, MAX_PATH) > 0)
+	{
+		VSVersionInfo vInfo;
+		vInfo.Path = vcInstallDir;
+		// VCINSTALLDIRは通常 "VC\Tools\MSVC\<version>\" を含むので、
+		// Auxiliary\Buildパスを構築
+		size_t len = vInfo.Path.length();
+		if (len > 0 && (vInfo.Path[len - 1] == '\\' || vInfo.Path[len - 1] == '/'))
+		{
+			vInfo.Path = vInfo.Path.substr(0, len - 1);
+		}
+		// VCINSTALLDIRが "...\VC\" の場合、Auxiliary\Buildを追加
+		vInfo.Path += "\\Auxiliary\\Build\\";
+		pVersions->push_back(vInfo);
+		if (pLogger)
+		{
+			pLogger->LogInfo("Visual Studio path found from VCINSTALLDIR: %s\n", vInfo.Path.c_str());
+		}
+		return; // 環境変数で見つかったので、これ以上検索しない
+	}
 
 	char value[MAX_PATH];
 	DWORD size = MAX_PATH;

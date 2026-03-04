@@ -106,7 +106,7 @@ bool MainEngine::RCCppInitialize()
 	FileSystemUtils::Path scriptIncludeDir = basePath.ParentPath().ParentPath() / "scripts";
 	FileSystemUtils::Path dataManagerDir = basePath.ParentPath() / "DataManager";
 	FileSystemUtils::Path componentDir = basePath.ParentPath() / "components";
-	FileSystemUtils::Path directXTex = basePath.ParentPath().ParentPath() / "DirectXTex";
+	FileSystemUtils::Path directXTex = basePath.ParentPath() / "DirectXTex-main" / "DirectXTex";
 	FileSystemUtils::Path externalDir = basePath.ParentPath().ParentPath() / "external";
 	FileSystemUtils::Path code = basePath.ParentPath();
 	FileSystemUtils::Path engineSystem = basePath.ParentPath() / "EngineSystem";

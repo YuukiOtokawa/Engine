@@ -219,6 +219,11 @@ void RenderCore::ResizeClient(int width, int height)
 
 void RenderCore::ReleaseRenderTargets()
 {
+	// デバイスコンテキストからレンダーターゲットの参照を解除
+	// これを行わないとResizeBuffers()が失敗する
+	m_pDeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+	m_pDeviceContext->Flush();
+
 	// レンダーターゲットビューを解放
 	if (m_pRenderTargetView) {
 		m_pRenderTargetView->Release();

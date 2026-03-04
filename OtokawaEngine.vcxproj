@@ -219,6 +219,7 @@
     </FxCompile>
     <None Include="scripts\shader\compute.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -354,13 +355,20 @@
     </ClCompile>
     <FxCompile Include="scripts\shader\Far.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="scripts\shader\FarGS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <None Include="scripts\shader\ParticleGS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <ClCompile Include="scripts\RhythmGameScript\PlayerTest.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="scripts\TestCompute.cpp" />
     <ClCompile Include="scripts\Title\TitlePool.cpp" />
     <ClCompile Include="WaveMeshField.cpp" />
@@ -514,6 +522,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="scripts\RhythmGameScript\PlayerTest.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="scripts\Score.h" />
     <ClInclude Include="scripts\TestCompute.h" />
     <ClInclude Include="scripts\Title.h" />
@@ -581,6 +593,7 @@
     </FxCompile>
     <FxCompile Include="scripts\shader\ParticleVPS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="scripts\shader\unlit.hlsl">
       <ObjectFileOutput>C:\Users\yuuki\Desktop\OtokawaEngine\\cso\%(Filename).cso</ObjectFileOutput>

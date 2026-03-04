@@ -370,9 +370,9 @@ void GetPathsOfVisualStudioInstalls( std::vector<VSVersionInfo>* pVersions, ICom
 					    {"SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VS7", "VC\\Auxiliary\\Build\\", NULL} };
 	int NUMVSKEYS = sizeof( VS_KEYS ) / sizeof( VSKey );
 
-    // supporting: VS2005, VS2008, VS2010, VS2011, VS2013, VS2015, VS2017, VS2019
+    // supporting: VS2005, VS2008, VS2010, VS2011, VS2013, VS2015, VS2017, VS2019, VS2022, VS2026
 	// See https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B#Internal_version_numbering for version info
-	VSVersionDiscoveryInfo VS_DISCOVERY_INFO[] = { {"8.0","9.0",0,false}, {"9.0","10.0",0,false}, {"10.0","11.0",0,false}, {"11.0","12.0",0,false}, {"12.0","13.0",0,false}, {"14.0","15.0",0,false}, {"15.0","16.0",1,true}, {"16.0","17.0",1,true}, {"17.0","18.0",1,true} };
+	VSVersionDiscoveryInfo VS_DISCOVERY_INFO[] = { {"8.0","9.0",0,false}, {"9.0","10.0",0,false}, {"10.0","11.0",0,false}, {"11.0","12.0",0,false}, {"12.0","13.0",0,false}, {"14.0","15.0",0,false}, {"15.0","16.0",1,true}, {"16.0","17.0",1,true}, {"17.0","18.0",1,true}, {"18.0","19.0",1,true} };
 
 
 	int NUMNAMESTOCHECK = sizeof( VS_DISCOVERY_INFO ) / sizeof( VSVersionDiscoveryInfo );
@@ -442,6 +442,19 @@ void GetPathsOfVisualStudioInstalls( std::vector<VSVersionInfo>* pVersions, ICom
 	case 1950: // VS 2022
 		startVersion = 8;
 		break;
+	case 2000: // VS 2026
+	case 2001: // VS 2026
+	case 2002: // VS 2026
+	case 2003: // VS 2026
+	case 2004: // VS 2026
+	case 2005: // VS 2026
+	case 2006: // VS 2026
+	case 2007: // VS 2026
+	case 2008: // VS 2026
+	case 2009: // VS 2026
+	case 2010: // VS 2026
+		startVersion = 9;
+		break;
 	default:
 		bMSCVersionFound = false;
 		if( pLogger )
@@ -454,6 +467,31 @@ void GetPathsOfVisualStudioInstalls( std::vector<VSVersionInfo>* pVersions, ICom
 	}
 #endif
 
+	// 環境変数からVisual Studioのパスを取得
+	char vcInstallDir[MAX_PATH];
+	if (GetEnvironmentVariableA("VCINSTALLDIR", vcInstallDir, MAX_PATH) > 0)
+	{
+		VSVersionInfo vInfo;
+		vInfo.Path = vcInstallDir;
+		// VCINSTALLDIRは通常 "VC\Tools\MSVC\<version>\" を含むので、
+		// Auxiliary\Buildパスを構築
+		size_t len = vInfo.Path.length();
+		if (len > 0 && (vInfo.Path[len - 1] == '\\' || vInfo.Path[len - 1] == '/'))
+		{
+			vInfo.Path = vInfo.Path.substr(0, len - 1);
+		}
+		// VCINSTALLDIRが "...\VC\" の場合、Auxiliary\Buildを追加
+		vInfo.Path += "\\Auxiliary\\Build\\";
+		pVersions->push_back(vInfo);
+		if (pLogger)
+		{
+			char logBuffer[512];
+			snprintf(logBuffer, sizeof(logBuffer), "Visual Studio path found from VCINSTALLDIR: %s\n", vInfo.Path.c_str());
+			EngineConsole::Log(logBuffer);
+			pLogger->LogInfo("Visual Studio path found from VCINSTALLDIR: %s\n", vInfo.Path.c_str());
+		}
+		return; // 環境変数で見つかったので、これ以上検索しない
+	}
 
 	char value[MAX_PATH];
 	DWORD size = MAX_PATH;
