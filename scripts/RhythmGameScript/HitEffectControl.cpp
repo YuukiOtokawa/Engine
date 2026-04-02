@@ -21,10 +21,4 @@ void HitEffectControl::Update()
 }
 
 
-void HitEffectControl::Import(YAML::Node& node)
-{
-}
-void HitEffectControl::Export(YAML::Emitter& node)
-{
-}
 REGISTERCLASS(HitEffectControl);

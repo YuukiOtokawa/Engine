@@ -55,6 +55,7 @@
 #include "ScriptComponent.h"
 #include "Prefab.h"
 #include "RenderQueueManager.h"
+#include "NodeManager.h" // NodeManagerをインクルード
 
 Editor* Editor::m_pInstance;
 

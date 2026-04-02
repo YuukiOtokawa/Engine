@@ -141,10 +141,4 @@ void Fractal::Update()
 {
 }
 
-void Fractal::Import(YAML::Node& node) {
-}
-
-void Fractal::Export(YAML::Emitter& node) {
-}
-
 REGISTERCLASS(Fractal);

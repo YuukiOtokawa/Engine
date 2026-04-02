@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <string>
 #include <vector>
@@ -13,9 +13,7 @@ struct ISimpleSerializer;
 class Object;
 
 // 前方宣言
-namespace YAML {
-    class Node;
-}
+// namespace YAML は削除済
 
 enum class PropertyType {
     INT,
@@ -42,6 +40,7 @@ struct Property {
     void* Data;
 };
 
+#include "EngineAPI.h"
 class ScriptI :public IObject { };
 
 class Script : public TInterface<IID_ENDInterfaceID, ScriptI>
@@ -68,8 +67,7 @@ public:
 
     virtual void DrawCustomGUI() {}
 
-    virtual void Import(YAML::Node& node);
-    virtual void Export(YAML::Emitter& out);
+    virtual void BindProperties() {} // 追加: プロパティ登録用の関数
 
     virtual const char* GetScriptName() const = 0;
 

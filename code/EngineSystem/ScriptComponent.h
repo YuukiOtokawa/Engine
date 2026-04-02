@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Component.h"
 #include "Script.h"
 #include "ComponentFactory.h"
@@ -45,26 +45,8 @@ public:
 
     void DrawGUI() override;
 
-    void ImportFile(YAML::Node& node) override {
-        if (node["tag"]) {
-            tag = static_cast<Tag>(node["tag"].as<int>());
-        }
-        if (node["scriptName"]) {
-            m_ScriptName = node["scriptName"].as<std::string>();
-            m_ScriptInstance = ScriptFactory::GetInstance().CreateScript(m_ScriptName);
-            if (m_ScriptInstance) {
-                m_ScriptInstance->gameobject = this->owner;
-                m_ScriptInstance->Import(node);
-            }
-        }
-    }
-
-    void ExportComponent(YAML::Emitter& out) override {
-        if (m_ScriptInstance) {
-            out << YAML::Key << "scriptName" << YAML::Value << m_ScriptInstance->GetScriptName();
-            m_ScriptInstance->Export(out);
-        }
-    }
+    void ImportFile(YAML::Node& node) override;
+    void ExportComponent(YAML::Emitter& out) override;
 
     void SetScript(Script* script) {
         m_ScriptInstance = script;

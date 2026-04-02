@@ -31,10 +31,4 @@ void Notes::Update()
 	);
 }
 
-void Notes::Import(YAML::Node& node) {
-}
-
-void Notes::Export(YAML::Emitter& node) {
-}
-
 REGISTERCLASS(Notes);

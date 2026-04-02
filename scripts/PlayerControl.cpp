@@ -35,21 +35,6 @@ void PlayerControl::Update()
 
 }
 
-void PlayerControl::Import(YAML::Node& node) {
-    // yaml-cppを使用してデータの読み書き
-    if (node["speed"]) {
-        m_Speed = node["speed"].as<float>();
-    }
-    if (node["jumpForce"]) {
-        m_JumpForce = node["jumpForce"].as<float>();
-    }
-}
-
-void PlayerControl::Export(YAML::Emitter& node) {
-    node << YAML::Key << "speed" << YAML::Value << m_Speed;
-    node << YAML::Key << "jumpForce" << YAML::Value << m_JumpForce;
-}
-
 void PlayerControl::Hit()
 {
     auto currentTime = Time::ElapsedTime();

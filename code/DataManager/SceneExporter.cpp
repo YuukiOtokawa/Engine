@@ -1,5 +1,8 @@
 ﻿#include "SceneExporter.h"
 
+#include <fstream>
+#include "yaml-cpp/yaml.h"
+
 #include "Object.h"
 #include "Component_Transform.h"
 #include "MainEngine.h"

@@ -7,7 +7,7 @@
 
 REGISTER_SCRIPT(PlayerTest)
 
-// ‚±‚ê‚ªƒXƒNƒŠƒvƒg‚ÌCPP
+// ï¿½ï¿½ï¿½ê‚ªï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½CPP
 void PlayerTest::Start()
 {
 	auto camera = Editor::GetInstance()->GetObject("GameCamera");
@@ -19,7 +19,7 @@ void PlayerTest::Update()
 {
 	auto keyboard = Editor::GetInstance()->GetObject("InputSystem")->GetComponent<InputSystem>()->GetKeyboard();
 	if (keyboard->GetKeyRepeat(KK_W)) {
-		cameraTransform->SetPosition(cameraTransform->GetPosition() + Vector3O(0, 0, speed));
+		cameraTransform->SetPosition(cameraTransform->GetPosition() + Vector3O(0, 0, speed) * 2);
 		playerTransform->SetPosition(playerTransform->GetPosition() + Vector3O(0, 0, speed));
 	}
 	if (keyboard->GetKeyRepeat(KK_S)) {
@@ -34,16 +34,6 @@ void PlayerTest::Update()
 		cameraTransform->SetPosition(cameraTransform->GetPosition() + Vector3O(speed, 0, 0));
 		playerTransform->SetPosition(playerTransform->GetPosition() + Vector3O(speed, 0, 0));
 	}
-}
-
-void PlayerTest::Import(YAML::Node& node) {
-	if (node["speed"]) {
-		speed = node["speed"].as<float>();
-	}
-}
-
-void PlayerTest::Export(YAML::Emitter& node) {
-	node << YAML::Key << "speed" << YAML::Value << speed;
 }
 
 REGISTERCLASS(PlayerTest);

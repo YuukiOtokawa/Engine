@@ -1,10 +1,8 @@
 ﻿#pragma once
 
 #include <list>
-#include <fstream>
-
+#include <string>
 #include "EngineAPI.h"
-#include "yaml-cpp/yaml.h"
 
 class EngineMetaFile;
 class Object;

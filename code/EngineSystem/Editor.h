@@ -38,12 +38,12 @@
 
 #include "ProjectWindow.h"
 
-#include "NodeManager.h" // NodeManagerをインクルード
 
 //==========================================================================
 // クラス定義
 //==========================================================================
 
+class NodeManager;
 class OTOKAWA_API Editor
 {
 private:

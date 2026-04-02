@@ -112,6 +112,7 @@ bool MainEngine::RCCppInitialize()
 	FileSystemUtils::Path engineSystem = basePath.ParentPath() / "EngineSystem";
 	FileSystemUtils::Path input = basePath.ParentPath() / "input";
 	FileSystemUtils::Path yaml = basePath.ParentPath() / "yaml-cpp-master" / "include" / "yaml-cpp";
+
 	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(basePath.c_str());
 	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(externalDir.c_str());
 	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(imguiIncludeDir.c_str());
@@ -126,8 +127,7 @@ bool MainEngine::RCCppInitialize()
 	g_pSystemTable->pRuntimeObjectSystem->AddIncludeDir(yaml.ParentPath().c_str());
 
 	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("build/x64/Debug");
-	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("code/yaml-cpp-master/build/Debug");
-	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("code/yaml-cpp-master/build/Release");
+
 #ifdef _DEBUG
 	g_pSystemTable->pRuntimeObjectSystem->AddLibraryDir("code/DirectXTex-main/DirectXTex/Bin/Desktop_2022/x64/Debug");
 #else
@@ -137,20 +137,14 @@ bool MainEngine::RCCppInitialize()
 
 	
 #ifdef _DEBUG
-	// 動的ランタイムライブラリを明示的に除外し、必要なライブラリのみリンク
 	g_pSystemTable->pRuntimeObjectSystem->SetAdditionalLinkOptions(
 		" OtokawaEngine.lib"
-		" yaml-cppd.lib"
-		" DirectXTex.lib"
 	);
 #else
 	g_pSystemTable->pRuntimeObjectSystem->SetAdditionalLinkOptions(
 		" OtokawaEngine.lib"
-		" yaml-cpp.lib"
-		" DirectXTex.lib"
 	);
 #endif
-
 	// 保留されたスクリプト登録を実行
 	ScriptFactory::RegisterAllPendingScripts();
 

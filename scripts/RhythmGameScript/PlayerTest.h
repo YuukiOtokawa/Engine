@@ -1,7 +1,7 @@
 #pragma once
 #include "Script.h"
 
-// これがスクリプトのヘッダー
+// 縺薙ｌ縺後せ繧ｯ繝ｪ繝励ヨ縺ｮ繝倥ャ繝繝ｼ
 class Transform;
 class PlayerTest :
     public Script
@@ -17,8 +17,6 @@ public:
     void Start() override;
     void Update() override;
 
-    void Import(YAML::Node& node) override;
-    void Export(YAML::Emitter& node) override;
     const char* GetScriptName() const override;
 };
 

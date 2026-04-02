@@ -1,0 +1,48 @@
+prefabName: Torus
+version: 1
+vertexIndices:
+  - fileID: 21620
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\ICOSphereWireFrame.obj
+textures:
+  - fileID: 23494
+    filePath: C:\Users\yuuki\Desktop\OtokawaEngine\scripts\RhythmGameScript\asset\field004.jpg
+objects:
+  - classID: 1
+    fileID: 29
+    name: Torus
+    tag: 0
+    layer: 2
+    components:
+      - 30
+      - 31
+      - 32
+  - classID: 3
+    fileID: 30
+    tag: 0
+    position: [2.8047235, -0.967600346, -1.01625013, 0]
+    rotation: [-65.7949142, 0, -0, 0]
+    scale: [18.4869995, 19.3209991, 13.6220026, 0]
+  - classID: 4
+    fileID: 31
+    tag: 0
+    vertexIndexFileID: 21620
+  - classID: 5
+    fileID: 32
+    tag: 0
+    materialFileID: 21621
+  - classID: 2
+    fileID: 21621
+    vertexPixelShader: unlit
+    textureFileID: 23494
+    bumpTextureFileID: 0
+    material:
+      textureEnable: true
+      shininess: 250
+      specularPower: 50
+      rgbShift: 0.5
+      ambient: [1, 1, 1, 1]
+      diffuse: [1, 0, 0.800023019, 1]
+      specular: [0.5, 0.5, 0.5, 1]
+      emissive: [0, 0, 0, 0]
+      mosaicSize: 1.5
+      blockSize: [32, 32]

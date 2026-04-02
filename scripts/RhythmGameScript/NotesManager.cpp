@@ -11,10 +11,4 @@ void NotesManager::Update()
 {
 }
 
-void NotesManager::Import(YAML::Node& node) {
-}
-
-void NotesManager::Export(YAML::Emitter& node) {
-}
-
 REGISTERCLASS(NotesManager);
